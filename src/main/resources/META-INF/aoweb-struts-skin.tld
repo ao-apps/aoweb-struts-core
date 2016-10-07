@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+	version="2.1">
+	<display-name>aoweb-struts-skin</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>skin</short-name>
+	<uri>https://www.aoindustries.com/aoweb-struts/core/skin-taglib/</uri>
+	<tag>
+		<description>Provides keywords to its KeywordsAttribute parent tag or the page overall if parent not found.</description>
+		<name>keywords</name>
+		<tag-class>com.aoindustries.website.skintags.KeywordsTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Provides a description to its DescriptionAttribute parent tag or the page overall if parent not found.</description>
+		<name>description</name>
+		<tag-class>com.aoindustries.website.skintags.DescriptionTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Provides an author to its AuthorAttribute parent tag or the page overall if parent not found.</description>
+		<name>author</name>
+		<tag-class>com.aoindustries.website.skintags.AuthorTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Provides a copyright to its CopyrightAttribute parent tag or the page overall if parent not found.</description>
+		<name>copyright</name>
+		<tag-class>com.aoindustries.website.skintags.CopyrightTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			Provides a path to its PathAttribute parent tag or the page overall if parent not found.
+			The path is relative to the root of the application.
+
+			Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
+			The path before the first ? will be encoded by this tag.  The preferred approach is to add any
+			necessary parameters using nested skin:param tags.
+		</description>
+		<name>path</name>
+		<tag-class>com.aoindustries.website.skintags.PathTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			Provides a meta to its MetasAttribute parent tag or the page overall if parent not found.
+			In precedence order, the content may be provided as:
+				1) Nested content tag
+				2) content attribute
+				3) Body
+		</description>
+		<name>meta</name>
+		<tag-class>com.aoindustries.website.skintags.MetaTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<description>The name of the meta information.  A nested name tag will override this value.</description>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Object</type>
+		</attribute>
+		<attribute>
+			<description>The content of the meta information.  A nested content tag will override this value.  A non-empty body may also provide the content.</description>
+			<name>content</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Content</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			Adds a link tag to this page.
+			In precedence order, the href may be provided as:
+				1) Nested content tag
+				2) href attribute
+				3) Body
+		</description>
+		<name>link</name>
+		<tag-class>com.aoindustries.website.skintags.LinkTag</tag-class>
+		<tei-class>com.aoindustries.website.skintags.LinkTagTEI</tei-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<description>The rel of the link.  A nested rel tag will override this value.</description>
+			<name>rel</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Object</type>
+		</attribute>
+		<attribute>
+			<description>
+				The href of the link.  A nested href tag will override this value.
+
+				Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
+				The path before the first ? will be encoded by this tag.  The preferred approach is to add any
+				necessary parameters using nested skin:param tags.
+			</description>
+			<name>href</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The type of the link tag.  A nested type tag will override this value.</description>
+			<name>type</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Object</type>
+		</attribute>
+		<attribute>
+			<description>
+				<![CDATA[
+					If provided, will enclose the link in an IE conditional comment.  This
+					is useful to include specific stylesheets for specific versions of IE.
+					The accepted values are:
+					<table>
+					  <tr><th>IE 6</th><td>Uses the link for IE 6 only.</td></tr>
+					  <tr><th>IE 7</th><td>Uses the link for IE 7 or IE 8 in compatibility mode.</td></tr>
+					  <tr><th>IE 8</th><td>Uses the link for IE 8 only.</td></tr>
+					</table>
+				]]>
+			</description>
+			<name>conditionalCommentExpression</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Provides a title to its TitleAttribute parent tag or the page overall if parent not found.</description>
+		<name>title</name>
+		<tag-class>com.aoindustries.website.skintags.TitleTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Provides a navImageAlt to its NavImageAltAttribute parent tag or the page overall if parent not found.</description>
+		<name>navImageAlt</name>
+		<tag-class>com.aoindustries.website.skintags.NavImageAltTag</tag-class>
+		<body-content>scriptless</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Adds a parent to the hierarchy above this page.</description>
+		<name>parent</name>
+		<tag-class>com.aoindustries.website.skintags.ParentTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The keywords of the parent.  A nested keywords tag will override this value.</description>
+			<name>keywords</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The description of the parent.  A nested description tag will override this value.</description>
+			<name>description</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The author of the parent.  A nested author tag will override this value.</description>
+			<name>author</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The copyright of the parent.  A nested copyright tag will override this value.</description>
+			<name>copyright</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The path of the parent.  A nested path tag will override this value.</description>
+			<name>path</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The title of the parent.  A nested title tag will override this value.</description>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The navImageAlt of the parent.  A nested navImageAlt tag will override this value.</description>
+			<name>navImageAlt</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Adds a child to the parent tag or at the same level as this page if no parent tag.</description>
+		<name>child</name>
+		<tag-class>com.aoindustries.website.skintags.ChildTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The keywords of the child.  A nested keywords tag will override this value.</description>
+			<name>keywords</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The description of the child.  A nested description tag will override this value.</description>
+			<name>description</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The author of the child.  A nested author tag will override this value.</description>
+			<name>author</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The copyright of the child.  A nested copyright tag will override this value.</description>
+			<name>copyright</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The path of the child.  A nested path tag will override this value.</description>
+			<name>path</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The title of the child.  A nested title tag will override this value.</description>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The navImageAlt of the child.  A nested navImageAlt tag will override this value.</description>
+			<name>navImageAlt</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Writes the skin between the HTML tags and the page content.</description>
+		<name>skin</name>
+		<tag-class>com.aoindustries.website.skintags.SkinTag</tag-class>
+		<tei-class>com.aoindustries.website.skintags.SkinTagTEI</tei-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>
+				<![CDATA[
+					Each page may request a specific layout from the skin implementation.  The currently
+					support values are:
+					<ul>
+						<li>
+							<code>normal</code> - This provides headers, footers, and full navigation.
+							This is the default layout if no layout is specified.
+						</li>
+						<li>
+							<code>minimal</code> - This provides a minimal layout without any page navigation
+							except headers and footers.  This provides maximum area for the page content
+							while still maintaining a consistent look and feel.
+						</li>
+					</ul>
+				]]>
+			</description>
+			<name>layout</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>The JavaScript that will be placed in the onload attribute of the body tag</description>
+			<name>onload</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Surrounds the body with a light area.</description>
+		<name>lightArea</name>
+		<tag-class>com.aoindustries.website.skintags.LightAreaTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>An optional width for the area</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>If true, will cause the contents of the area to not wrap, defaults to false.</description>
+			<name>nowrap</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Surrounds the body with a white area.</description>
+		<name>whiteArea</name>
+		<tag-class>com.aoindustries.website.skintags.WhiteAreaTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>An optional width for the area</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>If true, will cause the contents of the area to not wrap, defaults to false.</description>
+			<name>nowrap</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Sets the content type appropriately for the current locale.</description>
+		<name>setContentType</name>
+		<tag-class>com.aoindustries.website.skintags.SetContentTypeTag</tag-class>
+		<body-content>empty</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Writes the advanced content area with skin-provided formatting.  This is essentially a fancy way to make tables with skin-specific formatting and dividers.</description>
+		<name>content</name>
+		<tag-class>com.aoindustries.website.skintags.ContentTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The comma separated list of colspan between each downward pointing connector, defaults to "1"</description>
+			<name>colspans</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>An optional width for the content area</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Prints the content title line, must be nested in a content tag.</description>
+		<name>contentTitle</name>
+		<tag-class>com.aoindustries.website.skintags.ContentTitleTag</tag-class>
+		<body-content>JSP</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>Prints a line of content in a content area, must be nested in a content tag.</description>
+		<name>contentLine</name>
+		<tag-class>com.aoindustries.website.skintags.ContentLineTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The starting colspan, other colspan may be applied using contentVerticalDivider.  Defaults to 1.</description>
+			<name>colspan</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>int</type>
+		</attribute>
+		<attribute>
+			<description>The starting alignment, other alignments may be applied using contentVerticalDivider.</description>
+			<name>align</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>
+				The width for the content starting this line.  This should be formatted for use
+				in a style width: attribute, such as 100px or 33%.
+			</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>Indicates the line of content ends internal to the overall content area, this may be the case when a rowspan from a higher line is causing overlap.  Defaults to false.</description>
+			<name>endsInternal</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Prints a vertical divider within the content line, must be nested in a contentLine tag.</description>
+		<name>contentVerticalDivider</name>
+		<tag-class>com.aoindustries.website.skintags.ContentVerticalDividerTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>If true, will draw a visible separator and count as one in the overall line colspan.  When false, will not draw the separator and doesn't count in the overall line colspan.  Defaults to true.</description>
+			<name>visible</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<attribute>
+			<description>The colspan for this part of the line.  Defaults to 1.</description>
+			<name>colspan</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>int</type>
+		</attribute>
+		<attribute>
+			<description>The rowspan for this part of the line.  Defaults to 1.</description>
+			<name>rowspan</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>int</type>
+		</attribute>
+		<attribute>
+			<description>The alignment for this part of the line.</description>
+			<name>align</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>
+				The width for the content following the divider.  This should be formatted for use
+				in a style width: attribute, such as 100px or 33%.
+			</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Prints a horizontal divider line, must be nested in a content tag.</description>
+		<name>contentHorizontalDivider</name>
+		<tag-class>com.aoindustries.website.skintags.ContentHorizontalDividerTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>
+				Provides the comma-separated colspan and directions for the line, defaults to "1".
+				It is in the format "colspan,direction,colspan,direction,colspan" where each colspan is for that part of the line and each direction is either up, down, or upAndDown.
+			</description>
+			<name>colspansAndDirections</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>Indicates the line of content ends internal to the overall content area, this may be the case when a rowspan from a higher line is causing overlap.  Defaults to false.</description>
+			<name>endsInternal</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>Creates an auto index on a per-skin formatted basis.</description>
+		<name>autoIndex</name>
+		<tag-class>com.aoindustries.website.skintags.AutoIndexTag</tag-class>
+		<body-content>empty</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			A popup group will only have one popup within the group visible at a
+			time.  Opening a second popup will close the one that was first opened.
+		</description>
+		<name>popupGroup</name>
+		<tag-class>com.aoindustries.website.skintags.PopupGroupTag</tag-class>
+		<body-content>JSP</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			A popup will display extra information when the mouse is moved over
+			a link/image.
+			Popups must be nested inside a popupGroup.  Only one of the popups for
+			each popup group will be displayed at a time.
+		</description>
+		<name>popup</name>
+		<tag-class>com.aoindustries.website.skintags.PopupTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>An optional width for the popup</description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			Renders a close button/link/image for a popup.  Must be nested inside a
+			popup tag.
+		</description>
+		<name>popupClose</name>
+		<tag-class>com.aoindustries.website.skintags.PopupCloseTag</tag-class>
+		<body-content>empty</body-content>
+		<example />
+	</tag>
+	<tag>
+		<description>
+			Alternates between aoLightRow and aoDarkRow classes.
+		</description>
+		<name>lightDarkTableRow</name>
+		<tag-class>com.aoindustries.website.skintags.LightDarkTableRowTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>
+				The name of the page-scoped attribute that keeps the isDark Boolean flag.
+				Defaults to "LightDarkTableRowTag.isDark"
+			</description>
+			<name>pageAttributeId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<example />
+	</tag>
+</taglib>
