@@ -11,7 +11,6 @@ import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.JspTag;
 
 /**
  * Sets the copyright for the page.
@@ -32,13 +31,13 @@ public class CopyrightTag extends AutoEncodingBufferedTag {
 
 	@Override
 	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+		PageContext pageContext = (PageContext)getJspContext();
 		String copyright = capturedBody.trim().toString();
-		JspTag parent = findAncestorWithClass(this, CopyrightAttribute.class);
-		if(parent==null) {
-			PageAttributesBodyTag.getPageAttributes((PageContext)getJspContext()).setCopyright(copyright);
+		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
+		if(pageTag==null) {
+			PageAttributesBodyTag.getPageAttributes(pageContext).setCopyright(copyright);
 		} else {
-			CopyrightAttribute copyrightAttribute = (CopyrightAttribute)parent;
-			copyrightAttribute.setCopyright(copyright);
+			pageTag.setCopyright(copyright);
 		}
 	}
 }

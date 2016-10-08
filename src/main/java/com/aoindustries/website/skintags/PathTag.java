@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.JspTag;
 
 /**
  * Sets the path for a page or its PathAttribute parent.
@@ -50,12 +49,11 @@ public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute 
 		ServletResponse response = pageContext.getResponse();
 		String path = capturedBody.trim().toString();
 		path = HttpParametersUtils.addParams(path, params, response.getCharacterEncoding());
-		JspTag parent = findAncestorWithClass(this, PathAttribute.class);
-		if(parent==null) {
+		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
+		if(pageTag==null) {
 			PageAttributesBodyTag.getPageAttributes(pageContext).setPath(path);
 		} else {
-			PathAttribute pathAttribute = (PathAttribute)parent;
-			pathAttribute.setPath(path);
+			pageTag.setPath(path);
 		}
 	}
 }

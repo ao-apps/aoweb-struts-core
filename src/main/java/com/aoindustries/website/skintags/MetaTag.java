@@ -14,7 +14,6 @@ import com.aoindustries.taglib.NameAttribute;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.JspTag;
 
 /**
  * @author  AO Industries, Inc.
@@ -46,18 +45,18 @@ public class MetaTag extends AutoEncodingBufferedTag implements NameAttribute, C
 
 	@Override
 	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+		PageContext pageContext = (PageContext)getJspContext();
 		Object myContent = content;
 		if(myContent==null) myContent = capturedBody.trim().toString();
 		Meta meta = new Meta(
 			Coercion.toString(name),
 			Coercion.toString(myContent)
 		);
-		JspTag parent = findAncestorWithClass(this, MetasAttribute.class);
-		if(parent==null) {
-			PageAttributesBodyTag.getPageAttributes((PageContext)getJspContext()).addMeta(meta);
+		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
+		if(pageTag==null) {
+			PageAttributesBodyTag.getPageAttributes(pageContext).addMeta(meta);
 		} else {
-			MetasAttribute metasAttribute = (MetasAttribute)parent;
-			metasAttribute.addMeta(meta);
+			pageTag.addMeta(meta);
 		}
 	}
 }

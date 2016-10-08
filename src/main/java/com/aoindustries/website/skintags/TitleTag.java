@@ -11,7 +11,6 @@ import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.JspTag;
 
 /**
  * @author  AO Industries, Inc.
@@ -30,13 +29,13 @@ public class TitleTag extends AutoEncodingBufferedTag {
 
 	@Override
 	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+		PageContext pageContext = (PageContext)getJspContext();
 		String title = capturedBody.trim().toString();
-		JspTag parent = findAncestorWithClass(this, TitleAttribute.class);
-		if(parent==null) {
-			PageAttributesBodyTag.getPageAttributes((PageContext)getJspContext()).setTitle(title);
+		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
+		if(pageTag==null) {
+			PageAttributesBodyTag.getPageAttributes(pageContext).setTitle(title);
 		} else {
-			TitleAttribute titleAttribute = (TitleAttribute)parent;
-			titleAttribute.setTitle(title);
+			pageTag.setTitle(title);
 		}
 	}
 }
