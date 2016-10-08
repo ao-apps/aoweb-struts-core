@@ -16,8 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Shared the sessionid cookie between HTTP and HTTPS servers.
- * Also prevents the <code>;jsessionid</code> from being added for SEO purposes.
+ * Prevents the <code>;jsessionid</code> from being added for SEO purposes.
  * If the client doesn't support cookies:
  * <ol>
  *   <li>If this site supports more than one language, adds a language parameter if it doesn't exist.</li>
@@ -40,7 +39,7 @@ public class SessionFilter implements Filter {
 	) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		SessionResponseWrapper myresponse = new SessionResponseWrapper(httpRequest, (HttpServletResponse)response);
-		SessionRequestWrapper myrequest = new SessionRequestWrapper(httpRequest, myresponse);
+		SessionRequestWrapper myrequest = new SessionRequestWrapper(httpRequest);
 		chain.doFilter(myrequest, myresponse);
 		// Could improve the efficiency by removing temporary sessions proactively here
 		/*
