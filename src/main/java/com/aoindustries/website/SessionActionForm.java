@@ -10,7 +10,7 @@ package com.aoindustries.website;
  * any session form must provide when it is empty.  If all session forms are
  * empty, then the jsessionid will not be sent.
  *
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public interface SessionActionForm {
 

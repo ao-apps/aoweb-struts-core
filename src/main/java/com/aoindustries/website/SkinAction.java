@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Resolves the current skin, sets the request param skin, and calls subclass implementation.
  *
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public class SkinAction extends LocaleAction {
 

@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Sends a 403 error.
  *
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public class PermissionDeniedAction extends Action {
 

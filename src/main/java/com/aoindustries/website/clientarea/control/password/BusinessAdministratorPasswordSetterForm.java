@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
 /**
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public class BusinessAdministratorPasswordSetterForm extends ActionForm implements Serializable {
 

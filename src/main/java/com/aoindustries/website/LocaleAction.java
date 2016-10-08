@@ -22,7 +22,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Resolves the current locale, optionally changing it with any language parameters, sets the request param locale, and calls subclass implementation.
  *
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public class LocaleAction extends SiteSettingsAction {
 

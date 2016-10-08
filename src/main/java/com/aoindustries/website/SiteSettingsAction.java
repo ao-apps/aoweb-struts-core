@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Resolves the current SiteSettings, sets the request param siteSettings, and calls subclass implementation.
  *
- * @author Dan Armstrong &lt;dan@aoindustries.com&gt;
+ * @author AO Industries, Inc.
  */
 public class SiteSettingsAction extends Action {
 
