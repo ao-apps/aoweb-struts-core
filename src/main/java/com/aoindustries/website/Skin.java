@@ -116,7 +116,7 @@ abstract public class Skin {
 				return "https://"+req.getServerName()+":11156"+contextPath+"/";
 			} else {
 				// Non-SSL development area
-				return "http://"+req.getServerName()+":8081"+contextPath+"/";
+				return "http://"+req.getServerName()+":8086"+contextPath+"/";
 			}
 		} else {
 			if(req.isSecure()) {
