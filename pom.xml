@@ -61,14 +61,14 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 									<link>http://docs.oracle.com/javaee/6/api/</link>
 									<link>https://commons.apache.org/proper/commons-validator/javadocs/api-1.5.1/</link>
 									<link>http://tool.oschina.net/uploads/apidocs/struts-1.3.10/</link>
-									<link>https://www.aoindustries.com/docs/ao-credit-cards-api/</link>
-									<link>https://www.aoindustries.com/docs/ao-encoding/</link>
-									<link>https://www.aoindustries.com/docs/ao-io-buffer/</link>
-									<link>https://www.aoindustries.com/docs/ao-taglib/</link>
-									<link>https://www.aoindustries.com/docs/aocode-public/</link>
-									<link>https://www.aoindustries.com/docs/aoserv-client/</link>
-									<link>https://www.aoindustries.com/docs/aoserv-credit-cards/</link>
-									<link>https://www.aoindustries.com/docs/aoserv-daemon-client/</link>
+									<link>https://www.aoindustries.com/ao-credit-cards/api/apidocs/</link>
+									<link>https://www.aoindustries.com/ao-encoding/apidocs/</link>
+									<link>https://www.aoindustries.com/ao-io-buffer/apidocs/</link>
+									<link>https://www.aoindustries.com/ao-taglib/apidocs/</link>
+									<link>https://www.aoindustries.com/aocode-public/apidocs/</link>
+									<link>https://www.aoindustries.com/aoserv/client/apidocs/</link>
+									<link>https://www.aoindustries.com/aoserv/credit-cards/apidocs/</link>
+									<link>https://www.aoindustries.com/aoserv/daemon/client/apidocs/</link>
 								</links>
 							</configuration>
 						</plugin>
