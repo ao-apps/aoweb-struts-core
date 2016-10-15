@@ -4,7 +4,7 @@ Core API for legacy Struts-based site framework with [AOServ Platform](https://w
 ## Project Links
 * [Project Home](https://www.aoindustries.com/aoweb-struts/core/)
 * [API Docs](https://www.aoindustries.com/aoweb-struts/core/apidocs/)
-* [Maven Central Repository](http://search.maven.org/#search|gav|1|g:%22com.aoindustries%22%20AND%20a:%22aoweb-struts-core%22)
+* [Maven Central Repository](https://search.maven.org/#search|gav|1|g:%22com.aoindustries%22%20AND%20a:%22aoweb-struts-core%22)
 * [GitHub](https://github.com/aoindustries/aoweb-struts-core)
 
 ## Contact Us
