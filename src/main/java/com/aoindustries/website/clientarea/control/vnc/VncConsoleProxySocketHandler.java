@@ -139,7 +139,7 @@ public class VncConsoleProxySocketHandler {
 						} else {
 							// Connect and authenticate to the real VNC server before sending security result
 
-							// Connect through AOServ system
+							// Connect through AOServ Platform
 							AOServer.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
 							AOServDaemonConnector daemonConnector=AOServDaemonConnector.getConnector(
 								daemonAccess.getHost(),
