@@ -176,11 +176,14 @@ public class TextSkin extends Skin {
 				}
 			}
 			out.print("    <title>");
+			// No more page stack, just show current page only
+			/*
 			List<Parent> parents = pageAttributes.getParents();
 			for(Parent parent : parents) {
 				encodeTextInXhtml(parent.getTitle(), out);
 				out.print(" - ");
 			}
+			 */
 			encodeTextInXhtml(pageAttributes.getTitle(), out);
 			out.print("</title>\n"
 					+ "    <meta http-equiv='Content-Type' content='");
@@ -407,6 +410,7 @@ public class TextSkin extends Skin {
 			out.print(applicationResources.getMessage(locale, "TextSkin.currentLocation"));
 			out.print("</b><br />\n"
 					+ "          <div style='white-space:nowrap'>\n");
+			List<Parent> parents = pageAttributes.getParents();
 			for(Parent parent : parents) {
 				String navAlt = parent.getNavImageAlt();
 				String parentPath = parent.getPath();
