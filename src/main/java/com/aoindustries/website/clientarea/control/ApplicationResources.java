@@ -31,7 +31,7 @@ public final class ApplicationResources extends EditableResourceBundle {
 		super(
 			new Locale(""),
 			bundleSet,
-			new File(System.getProperty("user.home")+"/common/ao/cvswork/aoweb-struts/WEB-INF/classes/com/aoindustries/website/clientarea/control/ApplicationResources.properties")
+			new File(System.getProperty("user.home")+"/maven2/ao/aoweb-struts/aoweb-struts-webapp/src/main/java/classes/com/aoindustries/website/clientarea/control/ApplicationResources.properties")
 		);
 	}
 }
