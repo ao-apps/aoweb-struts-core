@@ -49,7 +49,7 @@ final public class SignupBusinessActionHelper {
 	 * Note: you probably want to use the RootAOServConnector to provide a more helpful list than a
 	 * default user connector.
 	 *
-	 * @see  RootAOServConnector
+	 * @see  SiteSettings#getRootAOServConnector()
 	 */
 	public static List<CountryOption> getCountryOptions(AOServConnector aoConn) throws IOException, SQLException {
 		// Build the list of countries

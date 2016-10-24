@@ -33,7 +33,7 @@ public class SkinAction extends LocaleAction {
 		if(
 			agent!=null
 			&& (
-				agent.toLowerCase().indexOf("lynx") != -1
+				agent.toLowerCase().contains("lynx")
 				|| agent.startsWith("BlackBerry")
 			)
 		) {
@@ -93,7 +93,7 @@ public class SkinAction extends LocaleAction {
 	 * Selects the <code>Skin</code>, sets the request attribute "skin", then the subclass execute method is invoked.
 	 * It also stores any "su" request for later processing by AuthenticatedAction.
 	 *
-	 * @see #execute(ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse,Locale,Skin)
+	 * @see #execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.website.SiteSettings, java.util.Locale, com.aoindustries.website.Skin) 
 	 */
 	@Override
 	final public ActionForward execute(
