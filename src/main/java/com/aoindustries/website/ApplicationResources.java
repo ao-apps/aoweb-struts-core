@@ -3,6 +3,7 @@
  * 7262 Bull Pen Cir, Mobile, Alabama, 36695, U.S.A.
  * All rights reserved.
  */
+// TODO: These top comments should be updated to recommended lgplv3 format like all other projects, here and other aoweb-struts modules.
 package com.aoindustries.website;
 
 import com.aoindustries.util.i18n.ApplicationResourcesAccessor;
