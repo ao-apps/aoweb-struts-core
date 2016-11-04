@@ -31,7 +31,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		@{parsedVersion.majorVersion}.@{parsedVersion.minorVersion}.@{parsedVersion.incrementalVersion}
 	</tlib-version>
 	<short-name>aoweb</short-name>
-	<uri>https://www.aoindustries.com/aoweb-struts/core/aoweb-taglib/</uri>
+	<uri>https://aoindustries.com/aoweb-struts/core/aoweb-taglib/</uri>
 	<tag>
 		<name>exists</name>
 		<tag-class>com.aoindustries.website.aowebtags.ExistsTag</tag-class>

@@ -31,7 +31,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		@{parsedVersion.majorVersion}.@{parsedVersion.minorVersion}.@{parsedVersion.incrementalVersion}
 	</tlib-version>
 	<short-name>skin</short-name>
-	<uri>https://www.aoindustries.com/aoweb-struts/core/skin-taglib/</uri>
+	<uri>https://aoindustries.com/aoweb-struts/core/skin-taglib/</uri>
 	<tag>
 		<description>Provides keywords to its KeywordsAttribute parent tag or the page overall if parent not found.</description>
 		<name>keywords</name>
