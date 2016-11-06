@@ -25,13 +25,14 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
-	<display-name>aoweb-struts-aoweb</display-name>
+	<description>@{project.description}</description>
+	<display-name>@{project.artifactId}</display-name>
 	<tlib-version>
 		<!-- Release: @{project.version} -->
 		@{parsedVersion.majorVersion}.@{parsedVersion.minorVersion}.@{parsedVersion.incrementalVersion}
 	</tlib-version>
 	<short-name>aoweb</short-name>
-	<uri>https://aoindustries.com/aoweb-struts/core/aoweb-taglib/</uri>
+	<uri>@{project.url}aoweb-taglib/</uri>
 	<tag>
 		<name>exists</name>
 		<tag-class>com.aoindustries.website.aowebtags.ExistsTag</tag-class>

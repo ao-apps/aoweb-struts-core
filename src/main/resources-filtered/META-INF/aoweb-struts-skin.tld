@@ -25,13 +25,14 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
-	<display-name>aoweb-struts-skin</display-name>
+	<description>@{project.description}</description>
+	<display-name>@{project.artifactId}</display-name>
 	<tlib-version>
 		<!-- Release: @{project.version} -->
 		@{parsedVersion.majorVersion}.@{parsedVersion.minorVersion}.@{parsedVersion.incrementalVersion}
 	</tlib-version>
 	<short-name>skin</short-name>
-	<uri>https://aoindustries.com/aoweb-struts/core/skin-taglib/</uri>
+	<uri>@{project.url}skin-taglib/</uri>
 	<tag>
 		<description>Provides keywords to its KeywordsAttribute parent tag or the page overall if parent not found.</description>
 		<name>keywords</name>
