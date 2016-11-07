@@ -38,28 +38,24 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<name>keywords</name>
 		<tag-class>com.aoindustries.website.skintags.KeywordsTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Provides a description to its DescriptionAttribute parent tag or the page overall if parent not found.</description>
 		<name>description</name>
 		<tag-class>com.aoindustries.website.skintags.DescriptionTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Provides an author to its AuthorAttribute parent tag or the page overall if parent not found.</description>
 		<name>author</name>
 		<tag-class>com.aoindustries.website.skintags.AuthorTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Provides a copyright to its CopyrightAttribute parent tag or the page overall if parent not found.</description>
 		<name>copyright</name>
 		<tag-class>com.aoindustries.website.skintags.CopyrightTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -73,7 +69,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<name>path</name>
 		<tag-class>com.aoindustries.website.skintags.PathTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -100,7 +95,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.Content</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -159,21 +153,18 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Provides a title to its TitleAttribute parent tag or the page overall if parent not found.</description>
 		<name>title</name>
 		<tag-class>com.aoindustries.website.skintags.TitleTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Provides a navImageAlt to its NavImageAltAttribute parent tag or the page overall if parent not found.</description>
 		<name>navImageAlt</name>
 		<tag-class>com.aoindustries.website.skintags.NavImageAltTag</tag-class>
 		<body-content>scriptless</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Adds a parent to the hierarchy above this page.</description>
@@ -229,7 +220,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Adds a child to the parent tag or at the same level as this page if no parent tag.</description>
@@ -285,7 +275,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Writes the skin between the HTML tags and the page content.</description>
@@ -323,7 +312,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Surrounds the body with a light area.</description>
@@ -344,7 +332,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Surrounds the body with a white area.</description>
@@ -365,14 +352,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Sets the content type appropriately for the current locale.</description>
 		<name>setContentType</name>
 		<tag-class>com.aoindustries.website.skintags.SetContentTypeTag</tag-class>
 		<body-content>empty</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Writes the advanced content area with skin-provided formatting.  This is essentially a fancy way to make tables with skin-specific formatting and dividers.</description>
@@ -393,14 +378,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Prints the content title line, must be nested in a content tag.</description>
 		<name>contentTitle</name>
 		<tag-class>com.aoindustries.website.skintags.ContentTitleTag</tag-class>
 		<body-content>JSP</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>Prints a line of content in a content area, must be nested in a content tag.</description>
@@ -438,7 +421,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Prints a vertical divider within the content line, must be nested in a contentLine tag.</description>
@@ -483,7 +465,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Prints a horizontal divider line, must be nested in a content tag.</description>
@@ -507,14 +488,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>Creates an auto index on a per-skin formatted basis.</description>
 		<name>autoIndex</name>
 		<tag-class>com.aoindustries.website.skintags.AutoIndexTag</tag-class>
 		<body-content>empty</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -524,7 +503,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<name>popupGroup</name>
 		<tag-class>com.aoindustries.website.skintags.PopupGroupTag</tag-class>
 		<body-content>JSP</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -543,7 +521,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -553,7 +530,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<name>popupClose</name>
 		<tag-class>com.aoindustries.website.skintags.PopupCloseTag</tag-class>
 		<body-content>empty</body-content>
-		<example />
 	</tag>
 	<tag>
 		<description>
@@ -572,6 +548,5 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
-		<example />
 	</tag>
 </taglib>
