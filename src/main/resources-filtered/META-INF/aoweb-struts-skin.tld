@@ -25,7 +25,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
-	<description>@{project.description}</description>
+	<description><![CDATA[
+		<p>@{project.description}</p>
+	]]></description>
 	<display-name>@{project.name} Skin Taglib</display-name>
 	<tlib-version>
 		<!-- Release: @{project.version} -->
@@ -34,62 +36,88 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<short-name>skin</short-name>
 	<uri>@{project.url}skin-taglib/</uri>
 	<tag>
-		<description>Provides keywords to its KeywordsAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides keywords to its KeywordsAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>keywords</name>
 		<tag-class>com.aoindustries.website.skintags.KeywordsTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>Provides a description to its DescriptionAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides a description to its DescriptionAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>description</name>
 		<tag-class>com.aoindustries.website.skintags.DescriptionTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>Provides an author to its AuthorAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides an author to its AuthorAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>author</name>
 		<tag-class>com.aoindustries.website.skintags.AuthorTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>Provides a copyright to its CopyrightAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides a copyright to its CopyrightAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>copyright</name>
 		<tag-class>com.aoindustries.website.skintags.CopyrightTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>
-			Provides a path to its PathAttribute parent tag or the page overall if parent not found.
-			The path is relative to the root of the application.
-
-			Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
-			The path before the first ? will be encoded by this tag.  The preferred approach is to add any
-			necessary parameters using nested skin:param tags.
-		</description>
+		<description><![CDATA[
+			<p>
+				Provides a path to its PathAttribute parent tag or the page overall if parent not found.
+				The path is relative to the root of the application.
+			</p>
+			<p>
+				Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
+				The path before the first ? will be encoded by this tag.  The preferred approach is to add any
+				necessary parameters using nested skin:param tags.
+			</p>
+		]]></description>
 		<name>path</name>
 		<tag-class>com.aoindustries.website.skintags.PathTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>
-			Provides a meta to its MetasAttribute parent tag or the page overall if parent not found.
-			In precedence order, the content may be provided as:
-				1) Nested content tag
-				2) content attribute
-				3) Body
-		</description>
+		<description><![CDATA[
+			<p>
+				Provides a meta to its MetasAttribute parent tag or the page overall if parent not found.
+				In precedence order, the content may be provided as:
+			</p>
+			<ol>
+				<li>Nested content tag</li>
+				<li>content attribute</li>
+				<li>Body</li>
+			</ol>
+		]]></description>
 		<name>meta</name>
 		<tag-class>com.aoindustries.website.skintags.MetaTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
-			<description>The name of the meta information.  A nested name tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The name of the meta information.
+					A nested name tag will override this value.
+				</p>
+			]]></description>
 			<name>name</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.Object</type>
 		</attribute>
 		<attribute>
-			<description>The content of the meta information.  A nested content tag will override this value.  A non-empty body may also provide the content.</description>
+			<description><![CDATA[
+				<p>
+					The content of the meta information.
+					A nested content tag will override this value.
+					A non-empty body may also provide the content.
+				</p>
+			]]></description>
 			<name>content</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -97,57 +125,77 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>
-			Adds a link tag to this page.
-			In precedence order, the href may be provided as:
-				1) Nested content tag
-				2) href attribute
-				3) Body
-		</description>
+		<description><![CDATA[
+			<p>
+				Adds a link tag to this page.
+				In precedence order, the href may be provided as:
+			</p>
+			<ol>
+				<li>Nested content tag</li>
+				<li>href attribute</li>
+				<li>Body</li>
+			</ol>
+		]]></description>
 		<name>link</name>
 		<tag-class>com.aoindustries.website.skintags.LinkTag</tag-class>
 		<tei-class>com.aoindustries.website.skintags.LinkTagTEI</tei-class>
 		<body-content>scriptless</body-content>
 		<attribute>
-			<description>The rel of the link.  A nested rel tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The rel of the link.
+					A nested rel tag will override this value.
+				</p>
+			]]></description>
 			<name>rel</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.Object</type>
 		</attribute>
 		<attribute>
-			<description>
-				The href of the link.  A nested href tag will override this value.
-
-				Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
-				The path before the first ? will be encoded by this tag.  The preferred approach is to add any
-				necessary parameters using nested skin:param tags.
-			</description>
+			<description><![CDATA[
+				<p>
+					The href of the link.
+					A nested href tag will override this value.
+				</p>
+				<p>
+					Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
+					The path before the first ? will be encoded by this tag.  The preferred approach is to add any
+					necessary parameters using nested skin:param tags.
+				</p>
+			]]></description>
 			<name>href</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The type of the link tag.  A nested type tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The type of the link tag.
+					A nested type tag will override this value.
+				</p>
+			]]></description>
 			<name>type</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.Object</type>
 		</attribute>
 		<attribute>
-			<description>
-				<![CDATA[
+			<description><![CDATA[
+				<p>
 					If provided, will enclose the link in an IE conditional comment.  This
 					is useful to include specific stylesheets for specific versions of IE.
 					The accepted values are:
-					<table>
-					  <tr><th>IE 6</th><td>Uses the link for IE 6 only.</td></tr>
-					  <tr><th>IE 7</th><td>Uses the link for IE 7 or IE 8 in compatibility mode.</td></tr>
-					  <tr><th>IE 8</th><td>Uses the link for IE 8 only.</td></tr>
-					</table>
-				]]>
-			</description>
+				</p>
+				<table>
+					<tbody>
+						<tr><th>IE 6</th><td>Uses the link for IE 6 only.</td></tr>
+						<tr><th>IE 7</th><td>Uses the link for IE 7 or IE 8 in compatibility mode.</td></tr>
+						<tr><th>IE 8</th><td>Uses the link for IE 8 only.</td></tr>
+					</tbody>
+				</table>
+			]]></description>
 			<name>conditionalCommentExpression</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -155,66 +203,107 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Provides a title to its TitleAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides a title to its TitleAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>title</name>
 		<tag-class>com.aoindustries.website.skintags.TitleTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>Provides a navImageAlt to its NavImageAltAttribute parent tag or the page overall if parent not found.</description>
+		<description><![CDATA[
+			<p>Provides a navImageAlt to its NavImageAltAttribute parent tag or the page overall if parent not found.</p>
+		]]></description>
 		<name>navImageAlt</name>
 		<tag-class>com.aoindustries.website.skintags.NavImageAltTag</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
-		<description>Adds a parent to the hierarchy above this page.</description>
+		<description><![CDATA[
+			<p>Adds a parent to the hierarchy above this page.</p>
+		]]></description>
 		<name>parent</name>
 		<tag-class>com.aoindustries.website.skintags.ParentTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>The keywords of the parent.  A nested keywords tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The keywords of the parent.
+					A nested keywords tag will override this value.
+				</p>
+			]]></description>
 			<name>keywords</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The description of the parent.  A nested description tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The description of the parent.
+					A nested description tag will override this value.
+				</p>
+			]]></description>
 			<name>description</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The author of the parent.  A nested author tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The author of the parent.
+					A nested author tag will override this value.
+				</p>
+			]]></description>
 			<name>author</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The copyright of the parent.  A nested copyright tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The copyright of the parent.
+					A nested copyright tag will override this value.
+				</p>
+			]]></description>
 			<name>copyright</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The path of the parent.  A nested path tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The path of the parent.
+					A nested path tag will override this value.
+				</p>
+			]]></description>
 			<name>path</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The title of the parent.  A nested title tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The title of the parent.
+					A nested title tag will override this value.
+				</p>
+			]]></description>
 			<name>title</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The navImageAlt of the parent.  A nested navImageAlt tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The navImageAlt of the parent.
+					A nested navImageAlt tag will override this value.
+				</p>
+			]]></description>
 			<name>navImageAlt</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -222,54 +311,91 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Adds a child to the parent tag or at the same level as this page if no parent tag.</description>
+		<description><![CDATA[
+			<p>Adds a child to the parent tag or at the same level as this page if no parent tag.</p>
+		]]></description>
 		<name>child</name>
 		<tag-class>com.aoindustries.website.skintags.ChildTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>The keywords of the child.  A nested keywords tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The keywords of the child.
+					A nested keywords tag will override this value.
+				</p>
+			]]></description>
 			<name>keywords</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The description of the child.  A nested description tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The description of the child.
+					A nested description tag will override this value.
+				</p>
+			]]></description>
 			<name>description</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The author of the child.  A nested author tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The author of the child.
+					A nested author tag will override this value.
+				</p>
+			]]></description>
 			<name>author</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The copyright of the child.  A nested copyright tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The copyright of the child.
+					A nested copyright tag will override this value.
+				</p>
+			]]></description>
 			<name>copyright</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The path of the child.  A nested path tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The path of the child.
+					A nested path tag will override this value.
+				</p>
+			]]></description>
 			<name>path</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The title of the child.  A nested title tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The title of the child.
+					A nested title tag will override this value.
+				</p>
+			]]></description>
 			<name>title</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The navImageAlt of the child.  A nested navImageAlt tag will override this value.</description>
+			<description><![CDATA[
+				<p>
+					The navImageAlt of the child.
+					A nested navImageAlt tag will override this value.
+				</p>
+			]]></description>
 			<name>navImageAlt</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -277,36 +403,40 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Writes the skin between the HTML tags and the page content.</description>
+		<description><![CDATA[
+			<p>Writes the skin between the HTML tags and the page content.</p>
+		]]></description>
 		<name>skin</name>
 		<tag-class>com.aoindustries.website.skintags.SkinTag</tag-class>
 		<tei-class>com.aoindustries.website.skintags.SkinTagTEI</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>
-				<![CDATA[
+			<description><![CDATA[
+				<p>
 					Each page may request a specific layout from the skin implementation.  The currently
 					support values are:
-					<ul>
-						<li>
-							<code>normal</code> - This provides headers, footers, and full navigation.
-							This is the default layout if no layout is specified.
-						</li>
-						<li>
-							<code>minimal</code> - This provides a minimal layout without any page navigation
-							except headers and footers.  This provides maximum area for the page content
-							while still maintaining a consistent look and feel.
-						</li>
-					</ul>
-				]]>
-			</description>
+				</p>
+				<ul>
+					<li>
+						<code>normal</code> - This provides headers, footers, and full navigation.
+						This is the default layout if no layout is specified.
+					</li>
+					<li>
+						<code>minimal</code> - This provides a minimal layout without any page navigation
+						except headers and footers.  This provides maximum area for the page content
+						while still maintaining a consistent look and feel.
+					</li>
+				</ul>
+			]]></description>
 			<name>layout</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>The JavaScript that will be placed in the onload attribute of the body tag</description>
+			<description><![CDATA[
+				<p>The JavaScript that will be placed in the onload attribute of the body tag.</p>
+			]]></description>
 			<name>onload</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -314,19 +444,25 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Surrounds the body with a light area.</description>
+		<description><![CDATA[
+			<p>Surrounds the body with a light area.</p>
+		]]></description>
 		<name>lightArea</name>
 		<tag-class>com.aoindustries.website.skintags.LightAreaTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>An optional width for the area</description>
+			<description><![CDATA[
+				<p>An optional width for the area.</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>If true, will cause the contents of the area to not wrap, defaults to false.</description>
+			<description><![CDATA[
+				<p>If true, will cause the contents of the area to not wrap, defaults to false.</p>
+			]]></description>
 			<name>nowrap</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -334,19 +470,25 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Surrounds the body with a white area.</description>
+		<description><![CDATA[
+			<p>Surrounds the body with a white area.</p>
+		]]></description>
 		<name>whiteArea</name>
 		<tag-class>com.aoindustries.website.skintags.WhiteAreaTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>An optional width for the area</description>
+			<description><![CDATA[
+				<p>An optional width for the area.</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>If true, will cause the contents of the area to not wrap, defaults to false.</description>
+			<description><![CDATA[
+				<p>If true, will cause the contents of the area to not wrap, defaults to false.</p>
+			]]></description>
 			<name>nowrap</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -354,25 +496,39 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Sets the content type appropriately for the current locale.</description>
+		<description><![CDATA[
+			<p>Sets the content type appropriately for the current locale.</p>
+		]]></description>
 		<name>setContentType</name>
 		<tag-class>com.aoindustries.website.skintags.SetContentTypeTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
-		<description>Writes the advanced content area with skin-provided formatting.  This is essentially a fancy way to make tables with skin-specific formatting and dividers.</description>
+		<description><![CDATA[
+			<p>
+				Writes the advanced content area with skin-provided formatting.
+				This is essentially a fancy way to make tables with skin-specific formatting and dividers.
+			</p>
+		]]></description>
 		<name>content</name>
 		<tag-class>com.aoindustries.website.skintags.ContentTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>The comma separated list of colspan between each downward pointing connector, defaults to "1"</description>
+			<description><![CDATA[
+				<p>
+					The comma separated list of colspan between each downward
+					pointing connector, defaults to "1".
+				</p>
+			]]></description>
 			<name>colspans</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>An optional width for the content area</description>
+			<description><![CDATA[
+				<p>An optional width for the content area.</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -380,42 +536,66 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Prints the content title line, must be nested in a content tag.</description>
+		<description><![CDATA[
+			<p>Prints the content title line, must be nested in a content tag.</p>
+		]]></description>
 		<name>contentTitle</name>
 		<tag-class>com.aoindustries.website.skintags.ContentTitleTag</tag-class>
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
-		<description>Prints a line of content in a content area, must be nested in a content tag.</description>
+		<description><![CDATA[
+			<p>
+				Prints a line of content in a content area.
+				Must be nested in a content tag.
+			</p>
+		]]></description>
 		<name>contentLine</name>
 		<tag-class>com.aoindustries.website.skintags.ContentLineTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>The starting colspan, other colspan may be applied using contentVerticalDivider.  Defaults to 1.</description>
+			<description><![CDATA[
+				<p>
+					The starting colspan, other colspan may be applied using contentVerticalDivider.
+					Defaults to 1.
+				</p>
+			]]></description>
 			<name>colspan</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>int</type>
 		</attribute>
 		<attribute>
-			<description>The starting alignment, other alignments may be applied using contentVerticalDivider.</description>
+			<description><![CDATA[
+				<p>
+					The starting alignment, other alignments may be applied using contentVerticalDivider.
+				</p>
+			]]></description>
 			<name>align</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>
-				The width for the content starting this line.  This should be formatted for use
-				in a style width: attribute, such as 100px or 33%.
-			</description>
+			<description><![CDATA[
+				<p>
+					The width for the content starting this line.  This should be formatted for use
+					in a style width: attribute, such as 100px or 33%.
+				</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>Indicates the line of content ends internal to the overall content area, this may be the case when a rowspan from a higher line is causing overlap.  Defaults to false.</description>
+			<description><![CDATA[
+				<p>
+					Indicates the line of content ends internal to the overall
+					content area, this may be the case when a rowspan from a higher
+					line is causing overlap.  Defaults to false.
+				</p>
+			]]></description>
 			<name>endsInternal</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -423,43 +603,65 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Prints a vertical divider within the content line, must be nested in a contentLine tag.</description>
+		<description><![CDATA[
+			<p>
+				Prints a vertical divider within the content line, must be nested in a contentLine tag.
+			</p>
+		]]></description>
 		<name>contentVerticalDivider</name>
 		<tag-class>com.aoindustries.website.skintags.ContentVerticalDividerTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<description>If true, will draw a visible separator and count as one in the overall line colspan.  When false, will not draw the separator and doesn't count in the overall line colspan.  Defaults to true.</description>
+			<description><![CDATA[
+				<p>
+					If true, will draw a visible separator and count as one in the
+					overall line colspan.  When false, will not draw the separator
+					and doesn't count in the overall line colspan.  Defaults to
+					true.
+				</p>
+			]]></description>
 			<name>visible</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
 		<attribute>
-			<description>The colspan for this part of the line.  Defaults to 1.</description>
+			<description><![CDATA[
+				<p>
+					The colspan for this part of the line.
+					Defaults to 1.
+				</p>
+			]]></description>
 			<name>colspan</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>int</type>
 		</attribute>
 		<attribute>
-			<description>The rowspan for this part of the line.  Defaults to 1.</description>
+			<description><![CDATA[
+				<p>The rowspan for this part of the line.  Defaults to 1.</p>
+			]]></description>
 			<name>rowspan</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>int</type>
 		</attribute>
 		<attribute>
-			<description>The alignment for this part of the line.</description>
+			<description><![CDATA[
+				<p>The alignment for this part of the line.</p>
+			]]></description>
 			<name>align</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>
-				The width for the content following the divider.  This should be formatted for use
-				in a style width: attribute, such as 100px or 33%.
-			</description>
+			<description><![CDATA[
+				<p>
+					The width for the content following the divider.  This should be formatted for use
+					in a style width: attribute, such as 100px or 33%.
+				</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -467,22 +669,34 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Prints a horizontal divider line, must be nested in a content tag.</description>
+		<description><![CDATA[
+			<p>
+				Prints a horizontal divider line, must be nested in a content tag.
+			</p>
+		]]></description>
 		<name>contentHorizontalDivider</name>
 		<tag-class>com.aoindustries.website.skintags.ContentHorizontalDividerTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>
-				Provides the comma-separated colspan and directions for the line, defaults to "1".
-				It is in the format "colspan,direction,colspan,direction,colspan" where each colspan is for that part of the line and each direction is either up, down, or upAndDown.
-			</description>
+			<description><![CDATA[
+				<p>
+					Provides the comma-separated colspan and directions for the line, defaults to "1".
+					It is in the format "colspan,direction,colspan,direction,colspan" where each colspan is for that part of the line and each direction is either up, down, or upAndDown.
+				</p>
+			]]></description>
 			<name>colspansAndDirections</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<description>Indicates the line of content ends internal to the overall content area, this may be the case when a rowspan from a higher line is causing overlap.  Defaults to false.</description>
+			<description><![CDATA[
+				<p>
+					Indicates the line of content ends internal to the overall content area, this may
+					be the case when a rowspan from a higher line is causing overlap.
+					Defaults to false.
+				</p>
+			]]></description>
 			<name>endsInternal</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -490,32 +704,40 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>Creates an auto index on a per-skin formatted basis.</description>
+		<description><![CDATA[
+			<p>Creates an auto index on a per-skin formatted basis.</p>
+		]]></description>
 		<name>autoIndex</name>
 		<tag-class>com.aoindustries.website.skintags.AutoIndexTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
-		<description>
-			A popup group will only have one popup within the group visible at a
-			time.  Opening a second popup will close the one that was first opened.
-		</description>
+		<description><![CDATA[
+			<p>
+				A popup group will only have one popup within the group visible at a
+				time.  Opening a second popup will close the one that was first opened.
+			</p>
+		]]></description>
 		<name>popupGroup</name>
 		<tag-class>com.aoindustries.website.skintags.PopupGroupTag</tag-class>
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
-		<description>
-			A popup will display extra information when the mouse is moved over
-			a link/image.
-			Popups must be nested inside a popupGroup.  Only one of the popups for
-			each popup group will be displayed at a time.
-		</description>
+		<description><![CDATA[
+			<p>
+				A popup will display extra information when the mouse is moved over
+				a link/image.
+				Popups must be nested inside a popupGroup.  Only one of the popups for
+				each popup group will be displayed at a time.
+			</p>
+		]]></description>
 		<name>popup</name>
 		<tag-class>com.aoindustries.website.skintags.PopupTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>An optional width for the popup</description>
+			<description><![CDATA[
+				<p>An optional width for the popup.</p>
+			]]></description>
 			<name>width</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -523,26 +745,32 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
-		<description>
-			Renders a close button/link/image for a popup.  Must be nested inside a
-			popup tag.
-		</description>
+		<description><![CDATA[
+			<p>
+				Renders a close button/link/image for a popup.  Must be nested inside a
+				popup tag.
+			</p>
+		]]></description>
 		<name>popupClose</name>
 		<tag-class>com.aoindustries.website.skintags.PopupCloseTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
-		<description>
-			Alternates between aoLightRow and aoDarkRow classes.
-		</description>
+		<description><![CDATA[
+			<p>
+				Alternates between aoLightRow and aoDarkRow classes.
+			</p>
+		]]></description>
 		<name>lightDarkTableRow</name>
 		<tag-class>com.aoindustries.website.skintags.LightDarkTableRowTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<description>
-				The name of the page-scoped attribute that keeps the isDark Boolean flag.
-				Defaults to "LightDarkTableRowTag.isDark"
-			</description>
+			<description><![CDATA[
+				<p>
+					The name of the page-scoped attribute that keeps the isDark Boolean flag.
+					Defaults to "LightDarkTableRowTag.isDark"
+				</p>
+			]]></description>
 			<name>pageAttributeId</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
