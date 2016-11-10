@@ -36,13 +36,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<packaging>jar</packaging>
 
 	<properties>
-		<bookPath>/${project.parent.artifactId}/core</bookPath>
 		<shortTitle>Core</shortTitle>
 		<description.html><![CDATA[Core API for legacy Struts-based site framework with <a target="_top" href="https://aoindustries.com/aoserv/">AOServ Platform</a> control panels.]]></description.html>
 	</properties>
 
 	<name>AOWeb Struts Core</name>
-	<url>https://aoindustries.com${bookPath}/</url><!-- Can't inherit due to multi-module -->
+	<url>https://aoindustries.com/${project.parent.artifactId}/core/</url>
 	<description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</description>
 	<inceptionYear>2007</inceptionYear>
 
