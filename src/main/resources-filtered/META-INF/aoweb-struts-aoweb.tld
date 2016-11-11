@@ -26,7 +26,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
 	<description><![CDATA[
-		<p>@{project.description}</p>
+		<p>@{description.html}</p>
 	]]></description>
 	<display-name>@{project.name} AOWeb Taglib</display-name>
 	<tlib-version>
@@ -86,9 +86,13 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					Supports three options:
-						none (the default) - executes the script directly in the body
-						before - executes the script before any existing onload script
-						after - executes the script after any existing onload script
+				</p>
+				<ol>
+					<li><code>none</code> (the default) - executes the script directly in the body</li>
+					<li><code>before</code> - executes the script before any existing onload script</li>
+					<li><code>after</code> - executes the script after any existing onload script</li>
+				</ol>
+				<p>
 					TODO: Consider renaming to something more generic and including option for ondomready event.
 				</p>
 			]]></description>
@@ -102,8 +106,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date.  The body should evaluate to the number of milliseconds since the Epoch.
-				If the body is empty, will print &amp;#160; as a placeholder.
-				This may optionally be placed into a scriptGroup tag to create a single large
+				If the body is empty, will print <code>&amp;#160;</code> as a placeholder.
+				This may optionally be placed into a <a href="@{project.url}aoweb-struts-aoweb.tld/tag-scriptGroup">&lt;aoweb:scriptGroup&gt;</a> tag to create a single large
 				script instead of many small scripts.
 			</p>
 		]]></description>
@@ -115,8 +119,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date and time.  The body should evaluate to the number of milliseconds since the Epoch.
-				If the body is empty, will print &amp;#160; as a placeholder.
-				This may optionally be placed into a scriptGroup tag to create a single large
+				If the body is empty, will print <code>&amp;#160;</code> as a placeholder.
+				This may optionally be placed into a <a href="@{project.url}aoweb-struts-aoweb.tld/tag-scriptGroup">&lt;aoweb:scriptGroup&gt;</a> tag to create a single large
 				script instead of many small scripts.
 			</p>
 		]]></description>
@@ -128,8 +132,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<description><![CDATA[
 			<p>
 				Prints a browser-local time.  The body should evaluate to the number of milliseconds since the Epoch.
-				If the body is empty, will print &amp;#160; as a placeholder.
-				This may optionally be placed into a scriptGroup tag to create a single large
+				If the body is empty, will print <code>&amp;#160;</code> as a placeholder.
+				This may optionally be placed into a <a href="@{project.url}aoweb-struts-aoweb.tld/tag-scriptGroup">&lt;aoweb:scriptGroup&gt;</a> tag to create a single large
 				script instead of many small scripts.
 			</p>
 		]]></description>

@@ -38,6 +38,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<properties>
 		<shortTitle>Core</shortTitle>
 		<description.html><![CDATA[Core API for legacy Struts-based site framework with <a target="_top" href="https://aoindustries.com/aoserv/">AOServ Platform</a> control panels.]]></description.html>
+		<javadoc.taglibReference><![CDATA[
+			<li><a target="_top" href="${project.url}aoweb-struts-aoweb.tld/">AOWeb Taglib Reference</a></li>
+			<li><a target="_top" href="${project.url}aoweb-struts-skin.tld/">Skin Taglib Reference</a></li>
+		]]></javadoc.taglibReference>
 	</properties>
 
 	<name>AOWeb Struts Core</name>

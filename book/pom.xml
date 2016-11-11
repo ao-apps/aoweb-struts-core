@@ -65,6 +65,65 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<tag>HEAD</tag>
 	</scm>
 
+	<build>
+		<plugins>
+			<!-- Add a copy of the taglib files from dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-aoweb-struts.tld</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.aoindustries</groupId>
+									<artifactId>aoweb-struts-core</artifactId>
+									<version>1.1.1-SNAPSHOT</version>
+									<type>jar</type>
+									<includes>
+										META-INF/aoweb-struts-aoweb.tld,
+										META-INF/aoweb-struts-skin.tld
+									</includes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-aoweb-struts.tld</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/dependency/META-INF</directory>
+									<includes>
+										<include>aoweb-struts-aoweb.tld</include>
+										<include>aoweb-struts-skin.tld</include>
+									</includes>
+								</resource>
+							</resources>
+							<!-- Put into META-INF/resources to be accessible as website content when jar included in WEB-INF/lib -->
+							<outputDirectory>${project.build.outputDirectory}/META-INF/resources/${project.parent.artifactId}/core</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>release</id>
@@ -81,6 +140,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 									<link>https://semanticcms.com/changelog/taglib/apidocs/</link>
 									<link>https://semanticcms.com/core/taglib/apidocs/</link>
 									<link>https://semanticcms.com/section/taglib/apidocs/</link>
+									<link>https://semanticcms.com/tag-reference/apidocs/</link>
 								</links>
 							</configuration>
 						</plugin>
@@ -147,6 +207,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<groupId>com.semanticcms</groupId>
 			<artifactId>semanticcms-section-taglib</artifactId>
 			<version>1.4.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.semanticcms</groupId>
+			<artifactId>semanticcms-tag-reference</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
