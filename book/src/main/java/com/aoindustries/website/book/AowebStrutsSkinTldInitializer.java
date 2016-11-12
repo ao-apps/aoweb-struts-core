@@ -7,32 +7,22 @@
 package com.aoindustries.website.book;
 
 import com.semanticcms.tagreference.TagReferenceInitializer;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collections;
 
 /**
  * @author  AO Industries, Inc.
  */
 public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 
-	private static final String TLD_BOOK = "/aoweb-struts/core";
-	private static final String TLD_PATH = "/aoweb-struts-skin.tld";
-	static final String TLD_SERVLET_PATH = TLD_BOOK + TLD_PATH;
-
-	private static final Map<String,String> additionalApiLinks = new LinkedHashMap<String,String>();
-	static {
-		additionalApiLinks.put("com.aoindustries.website.skintags.", "https://aoindustries.com/aoweb-struts/core/apidocs/");
-	}
-
 	public AowebStrutsSkinTldInitializer() {
 		super(
 			"AOWeb Struts Skin Taglib Reference",
 			"Skin Taglib Reference",
-			TLD_BOOK,
-			TLD_PATH,
+			"/aoweb-struts/core",
+			"/aoweb-struts-skin.tld",
 			"https://docs.oracle.com/javase/6/docs/api/",
 			"https://docs.oracle.com/javaee/6/api/",
-			additionalApiLinks
+			Collections.singletonMap("com.aoindustries.website.skintags.", "https://aoindustries.com/aoweb-struts/core/apidocs/")
 		);
 	}
 }
