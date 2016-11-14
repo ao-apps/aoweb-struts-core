@@ -26,9 +26,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 
 	<parent>
 		<groupId>com.aoindustries</groupId>
-		<artifactId>aoweb-struts</artifactId>
-		<version>1.1.1-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
+		<artifactId>ao-oss-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../../ao-oss-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>com.aoindustries</groupId>
@@ -40,15 +40,16 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<!-- These values are copied from the project being documented -->
 		<documented.groupId>com.aoindustries</documented.groupId>
 		<documented.artifactId>aoweb-struts-core</documented.artifactId>
-
 		<documented.name>AOWeb Struts Core</documented.name>
 		<documented.shortTitle>Core</documented.shortTitle>
-		<documented.url>https://aoindustries.com/${project.parent.artifactId}/core/</documented.url>
+		<documented.url>https://aoindustries.com/aoweb-struts/core/</documented.url>
 		<documented.description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</documented.description>
 		<documented.inceptionYear>2007</documented.inceptionYear>
-
 		<documented.scm.url>https://github.com/aoindustries/${documented.artifactId}</documented.scm.url>
 
+		<javadoc.breadcrumbs><![CDATA[<a target="_top" href="https://aoindustries.com/aoweb-struts/">AOWeb Struts</a>
+/ <a target="_top" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
+		<shortTitle>Core Book</shortTitle>
 		<description.html><![CDATA[Documentation for <a target="_top" href="${documented.url}">${documented.name}</a> in <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
 	</properties>
 
@@ -116,7 +117,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 								</resource>
 							</resources>
 							<!-- Put into META-INF/resources to be accessible as website content when jar included in WEB-INF/lib -->
-							<outputDirectory>${project.build.outputDirectory}/META-INF/resources/${project.parent.artifactId}/core</outputDirectory>
+							<outputDirectory>${project.build.outputDirectory}/META-INF/resources/aoweb-struts/core</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -212,6 +213,15 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<groupId>com.semanticcms</groupId>
 			<artifactId>semanticcms-tag-reference</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<!-- Dependency for dependencyversion-maven-plugin only -->
+		<dependency>
+			<groupId>com.aoindustries</groupId>
+			<artifactId>aoweb-struts-core</artifactId>
+			<version>1.1.1-SNAPSHOT</version>
+			<type>pom</type>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

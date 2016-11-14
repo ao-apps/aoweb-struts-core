@@ -26,8 +26,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 
 	<parent>
 		<groupId>com.aoindustries</groupId>
-		<artifactId>aoweb-struts</artifactId>
-		<version>1.1.1-SNAPSHOT</version>
+		<artifactId>ao-oss-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../ao-oss-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>com.aoindustries</groupId>
@@ -36,6 +37,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<packaging>jar</packaging>
 
 	<properties>
+		<javadoc.breadcrumbs><![CDATA[<a target="_top" href="https://aoindustries.com/aoweb-struts/">AOWeb Struts</a>
+/ <a target="_top" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
 		<shortTitle>Core</shortTitle>
 		<description.html><![CDATA[Core API for legacy Struts-based site framework with <a target="_top" href="https://aoindustries.com/aoserv/">AOServ Platform</a> control panels.]]></description.html>
 		<javadoc.taglibReference><![CDATA[
@@ -45,7 +48,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</properties>
 
 	<name>AOWeb Struts Core</name>
-	<url>https://aoindustries.com/${project.parent.artifactId}/core/</url>
+	<url>https://aoindustries.com/aoweb-struts/core/</url>
 	<description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</description>
 	<inceptionYear>2007</inceptionYear>
 
