@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,9 +26,9 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.PasswordChecker;
 import com.aoindustries.aoserv.client.PostgresUser;
 import com.aoindustries.aoserv.client.validator.PostgresUserId;
-import com.aoindustries.aoserv.client.validator.ValidationException;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.AuthenticatedAction;
 import java.io.IOException;
 import java.io.Serializable;
