@@ -106,9 +106,9 @@ public class GlobalPasswordSetterForm extends ActionForm implements Serializable
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.globalPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						String username = usernames.get(c);
+						UserId username = UserId.valueOf(usernames.get(c));
 						// Check the password strength
-						List<PasswordChecker.Result> results = PasswordChecker.checkPassword(UserId.valueOf(username), newPassword, PasswordChecker.PasswordStrength.STRICT);
+						List<PasswordChecker.Result> results = PasswordChecker.checkPassword(username, newPassword, PasswordChecker.PasswordStrength.STRICT);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

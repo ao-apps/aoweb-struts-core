@@ -118,13 +118,13 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.linuxAccountPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						String username = usernames.get(c);
+						UserId username = UserId.valueOf(usernames.get(c));
 						LinuxAccount la = aoConn.getLinuxAccounts().get(username);
 						if(la==null) {
 							throw new AssertionError("Unable to find LinuxAccount: "+username);
 						} else {
 							// Check the password strength
-							List<PasswordChecker.Result> results = LinuxAccount.checkPassword(UserId.valueOf(username), la.getType().getName(), newPassword);
+							List<PasswordChecker.Result> results = LinuxAccount.checkPassword(username, la.getType().getName(), newPassword);
 							if(PasswordChecker.hasResults(results)) {
 								errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 							}

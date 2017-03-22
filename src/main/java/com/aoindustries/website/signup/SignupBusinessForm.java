@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -75,75 +75,75 @@ public class SignupBusinessForm extends ActionForm implements Serializable, Sess
 		;
 	}
 
-	public String getBusinessName() {
+	final public String getBusinessName() {
 		return businessName;
 	}
 
-	public void setBusinessName(String businessName) {
+	final public void setBusinessName(String businessName) {
 		this.businessName = businessName.trim();
 	}
 
-	public String getBusinessPhone() {
+	final public String getBusinessPhone() {
 		return businessPhone;
 	}
 
-	public void setBusinessPhone(String businessPhone) {
+	final public void setBusinessPhone(String businessPhone) {
 		this.businessPhone = businessPhone.trim();
 	}
 
-	public String getBusinessFax() {
+	final public String getBusinessFax() {
 		return businessFax;
 	}
 
-	public void setBusinessFax(String businessFax) {
+	final public void setBusinessFax(String businessFax) {
 		this.businessFax = businessFax.trim();
 	}
 
-	public String getBusinessAddress1() {
+	final public String getBusinessAddress1() {
 		return businessAddress1;
 	}
 
-	public void setBusinessAddress1(String businessAddress1) {
+	final public void setBusinessAddress1(String businessAddress1) {
 		this.businessAddress1 = businessAddress1.trim();
 	}
 
-	public String getBusinessAddress2() {
+	final public String getBusinessAddress2() {
 		return businessAddress2;
 	}
 
-	public void setBusinessAddress2(String businessAddress2) {
+	final public void setBusinessAddress2(String businessAddress2) {
 		this.businessAddress2 = businessAddress2.trim();
 	}
 
-	public String getBusinessCity() {
+	final public String getBusinessCity() {
 		return businessCity;
 	}
 
-	public void setBusinessCity(String businessCity) {
+	final public void setBusinessCity(String businessCity) {
 		this.businessCity = businessCity.trim();
 	}
 
-	public String getBusinessState() {
+	final public String getBusinessState() {
 		return businessState;
 	}
 
-	public void setBusinessState(String businessState) {
+	final public void setBusinessState(String businessState) {
 		this.businessState = businessState.trim();
 	}
 
-	public String getBusinessCountry() {
+	final public String getBusinessCountry() {
 		return businessCountry;
 	}
 
-	public void setBusinessCountry(String businessCountry) {
+	final public void setBusinessCountry(String businessCountry) {
 		this.businessCountry = businessCountry.trim();
 	}
 
-	public String getBusinessZip() {
+	final public String getBusinessZip() {
 		return businessZip;
 	}
 
-	public void setBusinessZip(String businessZip) {
+	final public void setBusinessZip(String businessZip) {
 		this.businessZip = businessZip.trim();
 	}
 

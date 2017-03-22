@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -54,19 +54,19 @@ public class SignupDomainForm extends ActionForm implements Serializable, Sessio
 		;
 	}
 
-	public String getChoice() {
+	final public String getChoice() {
 		return choice;
 	}
 
-	public void setChoice(String choice) {
+	final public void setChoice(String choice) {
 		this.choice = choice;
 	}
 
-	public String getDomain() {
+	final public String getDomain() {
 		return domain;
 	}
 
-	public void setDomain(String domain) {
+	final public void setDomain(String domain) {
 		this.domain = domain.trim();
 	}
 

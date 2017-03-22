@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -94,99 +94,99 @@ public class SignupBillingInformationForm extends ActionForm implements Serializ
 	}
 	 */
 
-	public String getBillingContact() {
+	final public String getBillingContact() {
 		return billingContact;
 	}
 
-	public void setBillingContact(String billingContact) {
+	final public void setBillingContact(String billingContact) {
 		this.billingContact = billingContact.trim();
 	}
 
-	public String getBillingEmail() {
+	final public String getBillingEmail() {
 		return billingEmail;
 	}
 
-	public void setBillingEmail(String billingEmail) {
+	final public void setBillingEmail(String billingEmail) {
 		this.billingEmail = billingEmail.trim();
 	}
 
-	public boolean getBillingUseMonthly() {
+	final public boolean getBillingUseMonthly() {
 		return billingUseMonthly;
 	}
 
-	public void setBillingUseMonthly(boolean billingUseMonthly) {
+	final public void setBillingUseMonthly(boolean billingUseMonthly) {
 		this.billingUseMonthly = billingUseMonthly;
 	}
 
-	public boolean getBillingPayOneYear() {
+	final public boolean getBillingPayOneYear() {
 		return billingPayOneYear;
 	}
 
-	public void setBillingPayOneYear(boolean billingPayOneYear) {
+	final public void setBillingPayOneYear(boolean billingPayOneYear) {
 		this.billingPayOneYear = billingPayOneYear;
 	}
 
-	public String getBillingCardholderName() {
+	final public String getBillingCardholderName() {
 		return billingCardholderName;
 	}
 
-	public void setBillingCardholderName(String billingCardholderName) {
+	final public void setBillingCardholderName(String billingCardholderName) {
 		this.billingCardholderName = billingCardholderName.trim();
 	}
 
-	public String getBillingCardNumber() {
+	final public String getBillingCardNumber() {
 		return billingCardNumber;
 	}
 
-	public void setBillingCardNumber(String billingCardNumber) {
+	final public void setBillingCardNumber(String billingCardNumber) {
 		this.billingCardNumber = billingCardNumber.trim();
 	}
 
-	public String getBillingExpirationMonth() {
+	final public String getBillingExpirationMonth() {
 		return billingExpirationMonth;
 	}
 
-	public void setBillingExpirationMonth(String billingExpirationMonth) {
+	final public void setBillingExpirationMonth(String billingExpirationMonth) {
 		this.billingExpirationMonth = billingExpirationMonth.trim();
 	}
 
-	public String getBillingExpirationYear() {
+	final public String getBillingExpirationYear() {
 		return billingExpirationYear;
 	}
 
-	public void setBillingExpirationYear(String billingExpirationYear) {
+	final public void setBillingExpirationYear(String billingExpirationYear) {
 		this.billingExpirationYear = billingExpirationYear.trim();
 	}
 
-	public String getBillingStreetAddress() {
+	final public String getBillingStreetAddress() {
 		return billingStreetAddress;
 	}
 
-	public void setBillingStreetAddress(String billingStreetAddress) {
+	final public void setBillingStreetAddress(String billingStreetAddress) {
 		this.billingStreetAddress = billingStreetAddress.trim();
 	}
 
-	public String getBillingCity() {
+	final public String getBillingCity() {
 		return billingCity;
 	}
 
-	public void setBillingCity(String billingCity) {
+	final public void setBillingCity(String billingCity) {
 		this.billingCity = billingCity.trim();
 	}
 
-	public String getBillingState() {
+	final public String getBillingState() {
 		return billingState;
 	}
 
-	public void setBillingState(String billingState) {
+	final public void setBillingState(String billingState) {
 		this.billingState = billingState.trim();
 	}
 
-	public String getBillingZip() {
+	final public String getBillingZip() {
 		return billingZip;
 	}
 
-	public void setBillingZip(String billingZip) {
+	final public void setBillingZip(String billingZip) {
 		this.billingZip = billingZip.trim();
 	}
 

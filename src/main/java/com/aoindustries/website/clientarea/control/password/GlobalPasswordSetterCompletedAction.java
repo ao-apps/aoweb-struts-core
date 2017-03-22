@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,6 +25,7 @@ package com.aoindustries.website.clientarea.control.password;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.AOServPermission;
 import com.aoindustries.aoserv.client.Username;
+import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -73,9 +74,9 @@ public class GlobalPasswordSetterCompletedAction extends PermissionAction {
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				String username = usernames.get(c);
+				UserId username = UserId.valueOf(usernames.get(c));
 				Username un = aoConn.getUsernames().get(username);
-				if(un==null) throw new SQLException("Unable to find Username: "+username);
+				if(un == null) throw new SQLException("Unable to find Username: "+username);
 				un.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.globalPasswordSetter.field.confirmPasswords.passwordReset"));
 				newPasswords.set(c, "");

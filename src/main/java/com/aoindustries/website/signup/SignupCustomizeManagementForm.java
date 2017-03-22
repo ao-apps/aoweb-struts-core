@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -61,51 +61,51 @@ public class SignupCustomizeManagementForm extends ActionForm implements Seriali
 		;
 	}
 
-	public int getBackupOnsiteOption() {
+	final public int getBackupOnsiteOption() {
 		return backupOnsiteOption;
 	}
 
-	public void setBackupOnsiteOption(int backupOnsiteOption) {
+	final public void setBackupOnsiteOption(int backupOnsiteOption) {
 		this.backupOnsiteOption = backupOnsiteOption;
 	}
 
-	public int getBackupOffsiteOption() {
+	final public int getBackupOffsiteOption() {
 		return backupOffsiteOption;
 	}
 
-	public void setBackupOffsiteOption(int backupOffsiteOption) {
+	final public void setBackupOffsiteOption(int backupOffsiteOption) {
 		this.backupOffsiteOption = backupOffsiteOption;
 	}
 
-	public String getBackupDvdOption() {
+	final public String getBackupDvdOption() {
 		return backupDvdOption;
 	}
 
-	public void setBackupDvdOption(String backupDvdOption) {
+	final public void setBackupDvdOption(String backupDvdOption) {
 		this.backupDvdOption = backupDvdOption;
 	}
 
-	public int getDistributionScanOption() {
+	final public int getDistributionScanOption() {
 		return distributionScanOption;
 	}
 
-	public void setDistributionScanOption(int distributionScanOption) {
+	final public void setDistributionScanOption(int distributionScanOption) {
 		this.distributionScanOption = distributionScanOption;
 	}
 
-	public int getFailoverOption() {
+	final public int getFailoverOption() {
 		return failoverOption;
 	}
 
-	public void setFailoverOption(int failoverOption) {
+	final public void setFailoverOption(int failoverOption) {
 		this.failoverOption = failoverOption;
 	}
 
-	public String getFormCompleted() {
+	final public String getFormCompleted() {
 		return formCompleted;
 	}
 
-	public void setFormCompleted(String formCompleted) {
+	final public void setFormCompleted(String formCompleted) {
 		this.formCompleted = formCompleted;
 	}
 }

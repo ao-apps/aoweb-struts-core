@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -86,10 +86,10 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 				// Long-term plan is to use BigDecimal exclusively for all monetary values. - DRA 2007-10-09
 				int pennies = SQLUtility.getPennies(this.paymentAmount);
 				// Make sure can parse as BigDecimal, and is correct value
-				BigDecimal paymentAmount = new BigDecimal(this.paymentAmount);
-				if(paymentAmount.compareTo(BigDecimal.ZERO)<=0) {
+				BigDecimal pa = new BigDecimal(this.paymentAmount);
+				if(pa.compareTo(BigDecimal.ZERO)<=0) {
 					errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.mustBeGeaterThanZero"));
-				} else if(paymentAmount.scale()>2) {
+				} else if(pa.scale()>2) {
 					// Must not have more than 2 decimal places
 					errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.invalid"));
 				}

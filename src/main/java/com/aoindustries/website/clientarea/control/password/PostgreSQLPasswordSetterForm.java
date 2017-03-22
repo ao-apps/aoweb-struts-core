@@ -64,52 +64,51 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 		setConfirmPasswords(new AutoGrowArrayList<String>());
 	}
 
-	public List<String> getPackages() {
+	final public List<String> getPackages() {
 		return packages;
 	}
 
-	public void setPackages(List<String> packages) {
+	final public void setPackages(List<String> packages) {
 		this.packages = packages;
 	}
 
-	public List<String> getUsernames() {
+	final public List<String> getUsernames() {
 		return usernames;
 	}
 
-	public void setUsernames(List<String> usernames) {
+	final public void setUsernames(List<String> usernames) {
 		this.usernames = usernames;
 	}
 
-	public List<String> getPostgreSQLServers() {
+	final public List<String> getPostgreSQLServers() {
 		return postgreSQLServers;
 	}
 
-	public void setPostgreSQLServers(List<String> postgreSQLServers) {
+	final public void setPostgreSQLServers(List<String> postgreSQLServers) {
 		this.postgreSQLServers = postgreSQLServers;
 	}
 
-
-	public List<String> getAoServers() {
+	final public List<String> getAoServers() {
 		return aoServers;
 	}
 
-	public void setAoServers(List<String> aoServers) {
+	final public void setAoServers(List<String> aoServers) {
 		this.aoServers = aoServers;
 	}
 
-	public List<String> getNewPasswords() {
+	final public List<String> getNewPasswords() {
 		return newPasswords;
 	}
 
-	public void setNewPasswords(List<String> newPasswords) {
+	final public void setNewPasswords(List<String> newPasswords) {
 		this.newPasswords = newPasswords;
 	}
 
-	public List<String> getConfirmPasswords() {
+	final public List<String> getConfirmPasswords() {
 		return confirmPasswords;
 	}
 
-	public void setConfirmPasswords(List<String> confirmPasswords) {
+	final public void setConfirmPasswords(List<String> confirmPasswords) {
 		this.confirmPasswords = confirmPasswords;
 	}
 

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,7 @@ import com.aoindustries.aoserv.client.AOServer;
 import com.aoindustries.aoserv.client.LinuxAccount;
 import com.aoindustries.aoserv.client.LinuxServerAccount;
 import com.aoindustries.aoserv.client.Server;
+import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -77,7 +78,7 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				String username = usernames.get(c);
+				UserId username = UserId.valueOf(usernames.get(c));
 				LinuxAccount la = aoConn.getLinuxAccounts().get(username);
 				if(la==null) throw new SQLException("Unable to find LinuxAccount: "+username);
 				String hostname = aoServers.get(c);

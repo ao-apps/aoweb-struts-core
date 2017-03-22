@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -91,8 +91,7 @@ abstract public class ManagedStepAction extends SkinAction {
 		boolean signupCustomizeServerFormComplete = !doAddErrors(request, signupCustomizeServerFormErrors);
 		boolean signupCustomizeManagementFormComplete;
 		if(doAddErrors(request, signupCustomizeManagementFormErrors)) signupCustomizeManagementFormComplete = false;
-		else if(!"true".equals(signupCustomizeManagementForm.getFormCompleted())) signupCustomizeManagementFormComplete = false;
-		else signupCustomizeManagementFormComplete = true;
+		else signupCustomizeManagementFormComplete = Boolean.parseBoolean(signupCustomizeManagementForm.getFormCompleted());
 		boolean signupBusinessFormComplete = !doAddErrors(request, signupBusinessFormErrors);
 		boolean signupTechnicalFormComplete = !doAddErrors(request, signupTechnicalFormErrors);
 		boolean signupBillingInformationFormComplete = !doAddErrors(request, signupBillingInformationFormErrors);

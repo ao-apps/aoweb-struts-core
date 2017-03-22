@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -75,51 +75,51 @@ abstract public class SignupCustomizeServerForm extends ActionForm implements Se
 		;
 	}
 
-	public int getPowerOption() {
+	final public int getPowerOption() {
 		return powerOption;
 	}
 
-	public void setPowerOption(int powerOption) {
+	final public void setPowerOption(int powerOption) {
 		this.powerOption = powerOption;
 	}
 
-	public int getCpuOption() {
+	final public int getCpuOption() {
 		return cpuOption;
 	}
 
-	public void setCpuOption(int cpuOption) {
+	final public void setCpuOption(int cpuOption) {
 		this.cpuOption = cpuOption;
 	}
 
-	public int getRamOption() {
+	final public int getRamOption() {
 		return ramOption;
 	}
 
-	public void setRamOption(int ramOption) {
+	final public void setRamOption(int ramOption) {
 		this.ramOption = ramOption;
 	}
 
-	public int getSataControllerOption() {
+	final public int getSataControllerOption() {
 		return sataControllerOption;
 	}
 
-	public void setSataControllerOption(int sataControllerOption) {
+	final public void setSataControllerOption(int sataControllerOption) {
 		this.sataControllerOption = sataControllerOption;
 	}
 
-	public int getScsiControllerOption() {
+	final public int getScsiControllerOption() {
 		return scsiControllerOption;
 	}
 
-	public void setScsiControllerOption(int scsiControllerOption) {
+	final public void setScsiControllerOption(int scsiControllerOption) {
 		this.scsiControllerOption = scsiControllerOption;
 	}
 
-	public List<String> getDiskOptions() {
+	final public List<String> getDiskOptions() {
 		return diskOptions;
 	}
 
-	public void setDiskOptions(List<String> diskOptions) {
+	final public void setDiskOptions(List<String> diskOptions) {
 		this.diskOptions = diskOptions;
 	}
 
