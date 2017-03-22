@@ -127,10 +127,10 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.mySQLPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						String username = usernames.get(c);
+						MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
 
 						// Check the password strength
-						List<PasswordChecker.Result> results = MySQLUser.checkPassword(MySQLUserId.valueOf(username), newPassword);
+						List<PasswordChecker.Result> results = MySQLUser.checkPassword(username, newPassword);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

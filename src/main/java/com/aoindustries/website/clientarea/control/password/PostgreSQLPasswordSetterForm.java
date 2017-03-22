@@ -128,10 +128,10 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.postgreSQLPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						String username = usernames.get(c);
+						PostgresUserId username = PostgresUserId.valueOf(usernames.get(c));
 
 						// Check the password strength
-						List<PasswordChecker.Result> results = PostgresUser.checkPassword(PostgresUserId.valueOf(username), newPassword);
+						List<PasswordChecker.Result> results = PostgresUser.checkPassword(username, newPassword);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

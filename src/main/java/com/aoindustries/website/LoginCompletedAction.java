@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,6 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.validator.UserId;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ public class LoginCompletedAction extends SkinAction {
 			return mapping.findForward("input");
 		}
 
-		String username = loginForm.getUsername();
+		UserId username = UserId.valueOf(loginForm.getUsername());
 		String password = loginForm.getPassword();
 
 		ServletContext servletContext = getServlet().getServletContext();

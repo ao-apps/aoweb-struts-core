@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -74,9 +74,9 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 				MySQLUser mu = msu.getMySQLUser();
 				Username un = mu.getUsername();
 				MySQLServer ms = msu.getMySQLServer();
-				packages.add(un.getPackage().getName());
-				usernames.add(un.getUsername());
-				mySQLServers.add(ms.getName());
+				packages.add(un.getPackage().getName().toString());
+				usernames.add(un.getUsername().toString());
+				mySQLServers.add(ms.getName().toString());
 				aoServers.add(ms.getAOServer().getHostname().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");

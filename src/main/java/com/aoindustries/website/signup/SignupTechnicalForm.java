@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,8 +23,10 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.Username;
+import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.WrappedException;
+import com.aoindustries.validation.ValidationException;
+import com.aoindustries.validation.ValidationResult;
 import com.aoindustries.website.SessionActionForm;
 import com.aoindustries.website.SiteSettings;
 import java.io.IOException;
@@ -238,9 +240,20 @@ public class SignupTechnicalForm extends ActionForm implements Serializable, Ses
 				if(myServlet!=null) {
 					AOServConnector rootConn = SiteSettings.getInstance(myServlet.getServletContext()).getRootAOServConnector();
 					String lowerUsername = baUsername.toLowerCase();
-					String check = Username.checkUsername(lowerUsername);
-					if(check!=null) errors.add("baUsername", new ActionMessage(check, false));
-					else if(!rootConn.getUsernames().isUsernameAvailable(lowerUsername)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
+					ValidationResult check = UserId.validate(lowerUsername);
+					if(!check.isValid()) {
+						errors.add("baUsername", new ActionMessage(check.toString(), false));
+					} else {
+						UserId userId;
+						try {
+							userId = UserId.valueOf(lowerUsername);
+						} catch(ValidationException e) {
+							AssertionError ae = new AssertionError("Already validated");
+							ae.initCause(e);
+							throw ae;
+						}
+						if(!rootConn.getUsernames().isUsernameAvailable(userId)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
+					}
 				}
 			}
 			return errors;

@@ -26,6 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.Brand;
 import com.aoindustries.aoserv.client.CountryCode;
 import com.aoindustries.aoserv.client.PackageDefinition;
+import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.net.HostAddress;
 import com.aoindustries.net.InetAddress;
@@ -144,7 +145,7 @@ final public class ServerConfirmationCompletedActionHelper {
 				signupTechnicalForm.getBaState(),
 				baCountry,
 				signupTechnicalForm.getBaZip(),
-				signupTechnicalForm.getBaUsername(),
+				UserId.valueOf(signupTechnicalForm.getBaUsername()),
 				signupBillingInformationForm.getBillingContact(),
 				signupBillingInformationForm.getBillingEmail(),
 				signupBillingInformationForm.getBillingUseMonthly(),

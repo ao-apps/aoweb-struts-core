@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -74,9 +74,9 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 				PostgresUser pu = psu.getPostgresUser();
 				Username un = pu.getUsername();
 				PostgresServer ps = psu.getPostgresServer();
-				packages.add(un.getPackage().getName());
-				usernames.add(un.getUsername());
-				postgreSQLServers.add(ps.getName());
+				packages.add(un.getPackage().getName().toString());
+				usernames.add(un.getUsername().toString());
+				postgreSQLServers.add(ps.getName().toString());
 				aoServers.add(ps.getAOServer().getHostname().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");

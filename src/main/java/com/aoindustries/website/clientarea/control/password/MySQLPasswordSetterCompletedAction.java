@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,8 @@ import com.aoindustries.aoserv.client.AOServer;
 import com.aoindustries.aoserv.client.MySQLServer;
 import com.aoindustries.aoserv.client.MySQLServerUser;
 import com.aoindustries.aoserv.client.Server;
+import com.aoindustries.aoserv.client.validator.MySQLServerName;
+import com.aoindustries.aoserv.client.validator.MySQLUserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -78,13 +80,13 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				String username = usernames.get(c);
+				MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
 				Server server = aoConn.getServers().get(hostname);
 				if(server==null) throw new SQLException("Unable to find Server: "+server);
 				AOServer aoServer = server.getAOServer();
 				if(aoServer==null) throw new SQLException("Unable to find AOServer: "+aoServer);
-				String serverName = mySQLServers.get(c);
+				MySQLServerName serverName = MySQLServerName.valueOf(mySQLServers.get(c));
 				MySQLServer ms = aoServer.getMySQLServer(serverName);
 				if(ms==null) throw new SQLException("Unable to find MySQLServer: "+serverName+" on "+hostname);
 				MySQLServerUser msu = ms.getMySQLServerUser(username);

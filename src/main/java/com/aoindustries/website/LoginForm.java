@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,9 +22,13 @@
  */
 package com.aoindustries.website;
 
+import com.aoindustries.aoserv.client.validator.UserId;
+import com.aoindustries.validation.ValidationResult;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.validator.ValidatorForm;
 
 /**
@@ -58,5 +62,17 @@ public class LoginForm extends ValidatorForm implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	@Override
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+		ActionErrors errors = super.validate(mapping, request);
+		if(errors==null) errors = new ActionErrors();
+
+		ValidationResult usernameCheck = UserId.validate(getUsername());
+		if(!usernameCheck.isValid()) {
+			errors.add("username", new ActionMessage(usernameCheck.toString(), false));
+		}
+		return errors;
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -175,7 +175,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		if(aoTransaction==null) throw new SQLException("Unable to find Transaction: "+transID);
 
 		// 3) Process
-		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername());
+		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString());
 		BusinessGroup businessGroup = new BusinessGroup(rootBusiness, accounting);
 		Transaction transaction = rootProcessor.sale(
 			principal,

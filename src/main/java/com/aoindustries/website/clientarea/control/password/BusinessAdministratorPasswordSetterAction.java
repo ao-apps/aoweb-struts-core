@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -70,8 +70,8 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 		for(BusinessAdministrator ba : bas) {
 			if(ba.canSetPassword()) {
 				Username un = ba.getUsername();
-				packages.add(un.getPackage().getName());
-				usernames.add(un.getUsername());
+				packages.add(un.getPackage().getName().toString());
+				usernames.add(un.getUsername().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");
 			}
