@@ -172,8 +172,7 @@ public class VncConsoleProxySocketHandler {
 							);
 							final AOServDaemonConnection daemonConn=daemonConnector.getConnection();
 							try {
-								final CompressedDataOutputStream daemonOut = daemonConn.getOutputStream();
-								daemonOut.writeCompressedInt(AOServDaemonProtocol.VNC_CONSOLE);
+								final CompressedDataOutputStream daemonOut = daemonConn.getOutputStream(AOServDaemonProtocol.VNC_CONSOLE);
 								daemonOut.writeLong(daemonAccess.getKey());
 								daemonOut.flush();
 
