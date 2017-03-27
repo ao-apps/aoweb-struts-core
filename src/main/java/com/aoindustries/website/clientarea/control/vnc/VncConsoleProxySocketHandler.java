@@ -160,7 +160,7 @@ public class VncConsoleProxySocketHandler {
 							AOServer.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
 							AOServDaemonConnector daemonConnector=AOServDaemonConnector.getConnector(
 								daemonAccess.getHost(),
-								InetAddress.UNSPECIFIED,
+								InetAddress.UNSPECIFIED_IPV4,
 								daemonAccess.getPort(),
 								daemonAccess.getProtocol(),
 								null,
