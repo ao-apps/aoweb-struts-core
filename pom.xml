@@ -194,7 +194,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>aoserv-daemon-client</artifactId>
-			<version>1.80.0-SNAPSHOT</version>
+			<version>1.80.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
