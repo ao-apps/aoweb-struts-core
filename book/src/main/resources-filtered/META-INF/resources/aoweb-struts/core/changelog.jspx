@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2017-03-25T09:29:07-0500"
+		dateModified="2017-07-13T18:22:53-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -57,6 +57,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Updated for validation base moved from <core:link book="/aoserv/client" page="/index.jspx" /> to <core:link book="/ao-lang" page="/index.jspx" />.</li>
 					<li>Making more extensive use of self-validating types.</li>
 					<li>Extended network protocol to send randomized command sequences to help ensure stream integrity.</li>
+					<li>Updated dependencies.</li>
 				</ul>
 			</changelog:release>
 		</c:if>
