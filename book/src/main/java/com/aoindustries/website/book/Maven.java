@@ -34,7 +34,7 @@ class Maven {
 	static final Properties properties;
 	static {
 		try {
-			properties = PropertiesUtils.loadFromResource(Maven.class, "maven.properties");
+			properties = PropertiesUtils.loadFromResource(Maven.class, "Maven.properties");
 		} catch(IOException e) {
 			throw new ExceptionInInitializerError(e);
 		}
