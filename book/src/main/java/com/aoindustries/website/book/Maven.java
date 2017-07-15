@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,23 +22,23 @@
  */
 package com.aoindustries.website.book;
 
-import com.semanticcms.tagreference.TagReferenceInitializer;
-import java.util.Collections;
+import com.aoindustries.util.PropertiesUtils;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author  AO Industries, Inc.
  */
-public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
+class Maven {
 
-	public AowebStrutsAowebTldInitializer() {
-		super(
-			"AOWeb Struts AOWeb Taglib Reference",
-			"AOWeb Taglib Reference",
-			"/aoweb-struts/core",
-			"/aoweb-struts-aoweb.tld",
-			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
-			Maven.properties.getProperty("javac.link.javaeeApi.6"),
-			Collections.singletonMap("com.aoindustries.website.aowebtags.", Maven.properties.getProperty("documented.url") + "apidocs/")
-		);
+	static final Properties properties;
+	static {
+		try {
+			properties = PropertiesUtils.loadFromResource(Maven.class, "maven.properties");
+		} catch(IOException e) {
+			throw new ExceptionInInitializerError(e);
+		}
 	}
+
+	private Maven() {}
 }
