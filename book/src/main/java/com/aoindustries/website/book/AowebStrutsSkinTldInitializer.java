@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -36,9 +36,9 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 			"Skin Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-skin.tld",
-			"https://docs.oracle.com/javase/6/docs/api/",
-			"https://docs.oracle.com/javaee/6/api/",
-			Collections.singletonMap("com.aoindustries.website.skintags.", "https://aoindustries.com/aoweb-struts/core/apidocs/")
+			AowebStrutsAowebTldInitializer.properties.getProperty("javac.link.javaApi.jdk16"),
+			AowebStrutsAowebTldInitializer.properties.getProperty("javac.link.javaeeApi.6"),
+			Collections.singletonMap("com.aoindustries.website.skintags.", AowebStrutsAowebTldInitializer.properties.getProperty("documented.url") + "apidocs/")
 		);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,13 +22,25 @@
  */
 package com.aoindustries.website.book;
 
+import com.aoindustries.util.PropertiesUtils;
 import com.semanticcms.tagreference.TagReferenceInitializer;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * @author  AO Industries, Inc.
  */
 public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
+
+	static final Properties properties;
+	static {
+		try {
+			properties = PropertiesUtils.loadFromResource(AowebStrutsAowebTldInitializer.class, "aoweb-struts-core-book.properties");
+		} catch(IOException e) {
+			throw new ExceptionInInitializerError(e);
+		}
+	}
 
 	public AowebStrutsAowebTldInitializer() {
 		super(
@@ -36,9 +48,9 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 			"AOWeb Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-aoweb.tld",
-			"https://docs.oracle.com/javase/6/docs/api/",
-			"https://docs.oracle.com/javaee/6/api/",
-			Collections.singletonMap("com.aoindustries.website.aowebtags.", "https://aoindustries.com/aoweb-struts/core/apidocs/")
+			properties.getProperty("javac.link.javaApi.jdk16"),
+			properties.getProperty("javac.link.javaeeApi.6"),
+			Collections.singletonMap("com.aoindustries.website.aowebtags.", properties.getProperty("documented.url") + "apidocs/")
 		);
 	}
 }
