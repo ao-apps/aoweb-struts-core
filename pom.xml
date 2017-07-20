@@ -134,12 +134,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
-			<version>1.5.6</version>
+			<version>1.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-			<version>1.5.1</version>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
@@ -149,7 +149,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-credit-cards-api</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
@@ -169,7 +169,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-net-types</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
@@ -184,17 +184,17 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>aoserv-client</artifactId>
-			<version>1.80.2-SNAPSHOT</version>
+			<version>1.80.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>aoserv-credit-cards</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>aoserv-daemon-client</artifactId>
-			<version>1.80.1-SNAPSHOT</version>
+			<version>1.80.1</version>
 		</dependency>
 	</dependencies>
 </project>
