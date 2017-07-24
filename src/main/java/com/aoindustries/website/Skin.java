@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -67,7 +67,7 @@ abstract public class Skin {
 	/**
 	 * Prints the links to the alternate translations of this page.
 	 *
-	 * {@link https://support.google.com/webmasters/answer/189077?hl=en}
+	 * <a href="https://support.google.com/webmasters/answer/189077?hl=en">https://support.google.com/webmasters/answer/189077?hl=en</a>
 	 */
 	public static void printAlternativeLinks(HttpServletResponse resp, Appendable out, String fullPath, List<Language> languages) throws IOException {
 		if(languages.size()>1) {
