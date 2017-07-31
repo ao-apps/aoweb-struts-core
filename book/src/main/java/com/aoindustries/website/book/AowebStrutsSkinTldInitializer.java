@@ -34,6 +34,7 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 		super(
 			"AOWeb Struts Skin Taglib Reference",
 			"Skin Taglib Reference",
+			"aoindustries.com",
 			"/aoweb-struts/core",
 			"/aoweb-struts-skin.tld",
 			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
