@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
-Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -573,7 +573,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<description><![CDATA[
 			<p>
 				Sets the content type appropriately for the current
-				<a href="@{javac.link.javaApi}java/util/Locale.html">Locale</a>.
+				<a rel="nofollow" href="@{javac.link.javaApi}java/util/Locale.html">Locale</a>.
 			</p>
 		]]></description>
 		<name>setContentType</name>
@@ -868,7 +868,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The name of the page-scoped attribute that keeps the <code>isDark</code>
-					<a href="@{javac.link.javaApi}java/lang/Boolean.html">Boolean</a> flag.
+					<a rel="nofollow" href="@{javac.link.javaApi}java/lang/Boolean.html">Boolean</a> flag.
 					Defaults to <code>LightDarkTableRowTag.isDark</code>.
 				</p>
 			]]></description>
