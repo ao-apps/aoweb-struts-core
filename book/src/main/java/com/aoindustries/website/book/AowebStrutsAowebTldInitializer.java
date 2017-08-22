@@ -22,6 +22,10 @@
  */
 package com.aoindustries.website.book;
 
+import com.aoindustries.net.Path;
+import com.aoindustries.validation.ValidationException;
+import com.semanticcms.core.model.BookRef;
+import com.semanticcms.core.model.ResourceRef;
 import com.semanticcms.tagreference.TagReferenceInitializer;
 import java.util.Collections;
 
@@ -30,13 +34,17 @@ import java.util.Collections;
  */
 public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 
-	public AowebStrutsAowebTldInitializer() {
+	public AowebStrutsAowebTldInitializer() throws ValidationException {
 		super(
 			"AOWeb Struts AOWeb Taglib Reference",
 			"AOWeb Taglib Reference",
-			"aoindustries.com",
-			"/aoweb-struts/core",
-			"/aoweb-struts-aoweb.tld",
+			new ResourceRef(
+				new BookRef(
+					"aoindustries.com",
+					Path.valueOf("/aoweb-struts/core")
+				),
+				Path.valueOf("/aoweb-struts-aoweb.tld")
+			),
 			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
 			Collections.singletonMap("com.aoindustries.website.aowebtags.", Maven.properties.getProperty("documented.url") + "apidocs/")
