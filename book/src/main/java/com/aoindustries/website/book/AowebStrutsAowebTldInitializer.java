@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website.book;
 
+import com.aoindustries.net.DomainName;
 import com.aoindustries.net.Path;
 import com.aoindustries.validation.ValidationException;
 import com.semanticcms.core.model.BookRef;
@@ -40,7 +41,7 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 			"AOWeb Taglib Reference",
 			new ResourceRef(
 				new BookRef(
-					"aoindustries.com",
+					DomainName.valueOf("aoindustries.com"),
 					Path.valueOf("/aoweb-struts/core")
 				),
 				Path.valueOf("/aoweb-struts-aoweb.tld")
