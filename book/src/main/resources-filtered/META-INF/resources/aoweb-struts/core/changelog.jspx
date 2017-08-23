@@ -64,8 +64,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{documented.scm.url}"
 		>
 			<ul>
-				<li>Updated for new <core:link book="/ao-net-types" page="/index.jspx" /> project pulled out of <core:link book="/aoserv/client" page="/index.jspx" />.</li>
-				<li>Updated for validation base moved from <core:link book="/aoserv/client" page="/index.jspx" /> to <core:link book="/ao-lang" page="/index.jspx" />.</li>
+				<li>Updated for new <core:link book="/ao-net-types" page="/" /> project pulled out of <core:link book="/aoserv/client" page="/" />.</li>
+				<li>Updated for validation base moved from <core:link book="/aoserv/client" page="/" /> to <core:link book="/ao-lang" page="/" />.</li>
 				<li>Making more extensive use of self-validating types.</li>
 				<li>Extended network protocol to send randomized command sequences to help ensure stream integrity.</li>
 				<li>Updated dependencies.</li>
@@ -81,7 +81,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{documented.scm.url}"
 		>
 			<ul>
-				<li>New <core:link book="/ao-oss-parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
+				<li>New <core:link book="/ao-oss-parent" page="/" /> POM to simplify <code>pom.xml</code> files.</li>
 				<li>Project documentation moved to per-project book in <ao:a href="https://semanticcms.com/">SemanticCMS</ao:a> format.</li>
 				<li>Added changelog as top-level project link.</li>
 				<li>
