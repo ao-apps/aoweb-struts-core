@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -108,12 +108,14 @@ public class VncConsoleProxySocketServer implements Runnable {
 			} catch(Throwable T) {
 				LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.SEVERE, null, T);
 			}
-			try {
-				Thread.sleep(60000);
-			} catch(InterruptedException err) {
-				LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.WARNING, null, err);
-				// Restore the interrupted status
-				Thread.currentThread().interrupt();
+			if(currentThread==this.thread) {
+				try {
+					Thread.sleep(60000);
+				} catch(InterruptedException err) {
+					if(currentThread==this.thread) {
+						LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.WARNING, null, err);
+					}
+				}
 			}
 		}
 	}
