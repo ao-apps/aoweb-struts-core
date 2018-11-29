@@ -72,7 +72,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		List<MySQLServerRow> mysqlServerRows = new ArrayList<MySQLServerRow>();
 		List<MySQLServer> mysqlServers = aoConn.getMysqlServers().getRows();
 		for(MySQLServer mysqlServer : mysqlServers) {
-			AOServer aoServer = mysqlServer.getAOServer();
+			AOServer aoServer = mysqlServer.getAoServer();
 			AOServer failoverServer;
 			try {
 				failoverServer = aoServer.getFailoverServer();
