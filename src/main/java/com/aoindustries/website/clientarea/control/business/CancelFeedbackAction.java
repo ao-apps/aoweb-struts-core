@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.control.business;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -58,7 +58,7 @@ public class CancelFeedbackAction  extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		String business = request.getParameter("business");
-		Business bu;
+		Account bu;
 		if(GenericValidator.isBlankOrNull(business)) {
 			bu = null;
 		} else {
@@ -78,7 +78,7 @@ public class CancelFeedbackAction  extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.cancel_business);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.cancel_business);
 	}
 }

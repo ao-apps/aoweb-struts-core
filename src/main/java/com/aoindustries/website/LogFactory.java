@@ -23,7 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.reseller.TicketCategory;
+import com.aoindustries.aoserv.client.reseller.Category;
 import com.aoindustries.aoserv.client.ticket.TicketLoggingHandler;
 import com.aoindustries.util.ErrorPrinter;
 import java.util.logging.Handler;
@@ -74,7 +74,7 @@ public class LogFactory {
 			try {
 				SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
 				AOServConnector rootConn = siteSettings.getRootAOServConnector();
-				TicketCategory category = rootConn.getTicketCategories().getTicketCategoryByDotPath("aoserv.aoweb_struts");
+				Category category = rootConn.getTicketCategories().getTicketCategoryByDotPath("aoserv.aoweb_struts");
 				handler = TicketLoggingHandler.getHandler(
 					siteSettings.getBrand().getAowebStrutsHttpUrlBase(),
 					rootConn,

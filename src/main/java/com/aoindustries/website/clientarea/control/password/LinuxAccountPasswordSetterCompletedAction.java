@@ -23,11 +23,11 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.linux.AOServer;
-import com.aoindustries.aoserv.client.linux.LinuxAccount;
-import com.aoindustries.aoserv.client.linux.LinuxServerAccount;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.net.Server;
+import com.aoindustries.aoserv.client.linux.Server;
+import com.aoindustries.aoserv.client.linux.User;
+import com.aoindustries.aoserv.client.linux.UserServer;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.net.Host;
 import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -79,15 +79,15 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
 				UserId username = UserId.valueOf(usernames.get(c));
-				LinuxAccount la = aoConn.getLinuxAccounts().get(username);
-				if(la==null) throw new SQLException("Unable to find LinuxAccount: "+username);
+				User la = aoConn.getLinuxAccounts().get(username);
+				if(la==null) throw new SQLException("Unable to find User: "+username);
 				String hostname = aoServers.get(c);
-				Server server = aoConn.getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Server: "+server);
-				AOServer aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find AOServer: "+aoServer);
-				LinuxServerAccount lsa = la.getLinuxServerAccount(aoServer);
-				if(lsa==null) throw new SQLException("Unable to find LinuxServerAccount: "+username+" on "+hostname);
+				Host server = aoConn.getServers().get(hostname);
+				if(server==null) throw new SQLException("Unable to find Host: "+server);
+				Server aoServer = server.getAOServer();
+				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
+				UserServer lsa = la.getLinuxServerAccount(aoServer);
+				if(lsa==null) throw new SQLException("Unable to find UserServer: "+username+" on "+hostname);
 				lsa.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.linuxAccountPasswordSetter.field.confirmPasswords.passwordReset"));
 				newPasswords.set(c, "");
@@ -100,7 +100,7 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_linux_server_account_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_linux_server_account_password);
 	}
 }

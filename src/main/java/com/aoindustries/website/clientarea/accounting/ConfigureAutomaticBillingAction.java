@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
@@ -64,7 +64,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Business business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			return mapping.findForward("credit-card-manager");
 		}
@@ -93,16 +93,16 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<AOServPermission.Permission> permissions;
+	private static final List<Permission.Name> permissions;
 	static {
-		List<AOServPermission.Permission> newList = new ArrayList<AOServPermission.Permission>(2);
-		newList.add(AOServPermission.Permission.get_credit_cards);
-		newList.add(AOServPermission.Permission.edit_credit_card);
+		List<Permission.Name> newList = new ArrayList<Permission.Name>(2);
+		newList.add(Permission.Name.get_credit_cards);
+		newList.add(Permission.Name.edit_credit_card);
 		permissions = Collections.unmodifiableList(newList);
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
+	public List<Permission.Name> getPermissions() {
 		return permissions;
 	}
 }

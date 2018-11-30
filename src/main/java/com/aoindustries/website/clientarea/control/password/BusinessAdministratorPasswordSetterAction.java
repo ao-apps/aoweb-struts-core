@@ -23,9 +23,9 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.BusinessAdministrator;
+import com.aoindustries.aoserv.client.account.Administrator;
 import com.aoindustries.aoserv.client.account.Username;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -59,15 +59,15 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 	) throws Exception {
 		BusinessAdministratorPasswordSetterForm businessAdministratorPasswordSetterForm = (BusinessAdministratorPasswordSetterForm)form;
 
-		BusinessAdministrator thisBA = aoConn.getThisBusinessAdministrator();
+		Administrator thisBA = aoConn.getThisBusinessAdministrator();
 
-		List<BusinessAdministrator> bas = thisBA.hasPermission(AOServPermission.Permission.set_business_administrator_password) ? aoConn.getBusinessAdministrators().getRows() : Collections.singletonList(thisBA);
+		List<Administrator> bas = thisBA.hasPermission(Permission.Name.set_business_administrator_password) ? aoConn.getBusinessAdministrators().getRows() : Collections.singletonList(thisBA);
 
 		List<String> packages = new ArrayList<String>(bas.size());
 		List<String> usernames = new ArrayList<String>(bas.size());
 		List<String> newPasswords = new ArrayList<String>(bas.size());
 		List<String> confirmPasswords = new ArrayList<String>(bas.size());
-		for(BusinessAdministrator ba : bas) {
+		for(Administrator ba : bas) {
 			if(ba.canSetPassword()) {
 				Username un = ba.getUsername();
 				packages.add(un.getPackage().getName().toString());

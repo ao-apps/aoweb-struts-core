@@ -23,10 +23,10 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
-import com.aoindustries.aoserv.client.payment.CreditCardTransaction;
+import com.aoindustries.aoserv.client.payment.Payment;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -61,7 +61,7 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 		Locale locale,
 		Skin skin,
 		AOServConnector aoConn,
-		List<AOServPermission> permissions
+		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
 		response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
@@ -81,7 +81,7 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 	) throws Exception {
 		// Find the requested business
 		String accounting = request.getParameter("accounting");
-		Business business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -102,14 +102,14 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 			// Store to request attributes, return success
 			request.setAttribute("business", business);
 			request.setAttribute("creditCards", creditCards);
-			CreditCardTransaction lastCCT = business.getLastCreditCardTransaction();
+			Payment lastCCT = business.getLastCreditCardTransaction();
 			request.setAttribute("lastPaymentCreditCard", lastCCT==null ? null : lastCCT.getCreditCardProviderUniqueId());
 			return mapping.findForward("success");
 		}
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.get_credit_cards);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.get_credit_cards);
 	}
 }

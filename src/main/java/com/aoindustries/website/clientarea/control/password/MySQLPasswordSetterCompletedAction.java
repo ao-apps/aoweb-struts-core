@@ -23,11 +23,10 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.linux.AOServer;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.mysql.MySQLServer;
-import com.aoindustries.aoserv.client.mysql.MySQLServerUser;
-import com.aoindustries.aoserv.client.net.Server;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.mysql.Server;
+import com.aoindustries.aoserv.client.mysql.UserServer;
+import com.aoindustries.aoserv.client.net.Host;
 import com.aoindustries.aoserv.client.validator.MySQLServerName;
 import com.aoindustries.aoserv.client.validator.MySQLUserId;
 import com.aoindustries.website.PermissionAction;
@@ -82,15 +81,15 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 			if(newPassword.length()>0) {
 				MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
-				Server server = aoConn.getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Server: "+server);
-				AOServer aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find AOServer: "+aoServer);
+				Host server = aoConn.getServers().get(hostname);
+				if(server==null) throw new SQLException("Unable to find Host: "+server);
+				com.aoindustries.aoserv.client.linux.Server aoServer = server.getAOServer();
+				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
 				MySQLServerName serverName = MySQLServerName.valueOf(mySQLServers.get(c));
-				MySQLServer ms = aoServer.getMySQLServer(serverName);
-				if(ms==null) throw new SQLException("Unable to find MySQLServer: "+serverName+" on "+hostname);
-				MySQLServerUser msu = ms.getMySQLServerUser(username);
-				if(msu==null) throw new SQLException("Unable to find MySQLServerUser: "+username+" on "+serverName+" on "+hostname);
+				Server ms = aoServer.getMySQLServer(serverName);
+				if(ms==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
+				UserServer msu = ms.getMySQLServerUser(username);
+				if(msu==null) throw new SQLException("Unable to find UserServer: "+username+" on "+serverName+" on "+hostname);
 				msu.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.mySQLPasswordSetter.field.confirmPasswords.passwordReset"));
 				newPasswords.set(c, "");
@@ -103,7 +102,7 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_mysql_server_user_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_mysql_server_user_password);
 	}
 }

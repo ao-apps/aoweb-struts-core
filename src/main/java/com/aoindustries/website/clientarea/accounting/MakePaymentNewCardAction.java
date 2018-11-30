@@ -23,9 +23,9 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.account.BusinessAdministrator;
-import com.aoindustries.aoserv.client.account.BusinessProfile;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
@@ -73,9 +73,9 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		}
 
 		// Populate the initial details from the selected accounting code or authenticated user
-		Business business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) throw new SQLException("Unable to find Business: "+accounting);
-		BusinessProfile profile = business.getBusinessProfile();
+		Profile profile = business.getBusinessProfile();
 		if(profile!=null) {
 			makePaymentNewCardForm.setFirstName(AddCreditCardAction.getFirstName(profile.getBillingContact(), locale));
 			makePaymentNewCardForm.setLastName(AddCreditCardAction.getLastName(profile.getBillingContact(), locale));
@@ -87,7 +87,7 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 			makePaymentNewCardForm.setPostalCode(profile.getZIP());
 			makePaymentNewCardForm.setCountryCode(profile.getCountry().getCode());
 		} else {
-			BusinessAdministrator thisBA = aoConn.getThisBusinessAdministrator();
+			Administrator thisBA = aoConn.getThisBusinessAdministrator();
 			makePaymentNewCardForm.setFirstName(AddCreditCardAction.getFirstName(thisBA.getName(), locale));
 			makePaymentNewCardForm.setLastName(AddCreditCardAction.getLastName(thisBA.getName(), locale));
 			makePaymentNewCardForm.setStreetAddress1(thisBA.getAddress1());

@@ -24,7 +24,7 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
-import com.aoindustries.aoserv.client.postgresql.PostgresUser;
+import com.aoindustries.aoserv.client.postgresql.User;
 import com.aoindustries.aoserv.client.validator.PostgresUserId;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
@@ -130,7 +130,7 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 						PostgresUserId username = PostgresUserId.valueOf(usernames.get(c));
 
 						// Check the password strength
-						List<PasswordChecker.Result> results = PostgresUser.checkPassword(username, newPassword);
+						List<PasswordChecker.Result> results = User.checkPassword(username, newPassword);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

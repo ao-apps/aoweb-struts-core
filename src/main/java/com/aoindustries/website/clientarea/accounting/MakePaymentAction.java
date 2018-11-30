@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -54,12 +54,12 @@ public class MakePaymentAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		Business thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		Account thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 
 		// Get the list of businesses that are not canceled or have a non-zero balance, or are thisBusiness
-		List<Business> allBusinesses = aoConn.getBusinesses().getRows();
-		List<Business> businesses = new ArrayList<Business>(allBusinesses.size());
-		for(Business business : allBusinesses) {
+		List<Account> allBusinesses = aoConn.getBusinesses().getRows();
+		List<Account> businesses = new ArrayList<Account>(allBusinesses.size());
+		for(Account business : allBusinesses) {
 			if(
 				thisBusiness.equals(business)
 				|| (

@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.mysql.MySQLUser;
+import com.aoindustries.aoserv.client.mysql.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
 import com.aoindustries.aoserv.client.validator.MySQLUserId;
 import com.aoindustries.util.AutoGrowArrayList;
@@ -130,7 +130,7 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 						MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
 
 						// Check the password strength
-						List<PasswordChecker.Result> results = MySQLUser.checkPassword(username, newPassword);
+						List<PasswordChecker.Result> results = User.checkPassword(username, newPassword);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

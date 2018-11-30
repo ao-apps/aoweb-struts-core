@@ -57,7 +57,7 @@ public class VirtualDedicatedAction extends VirtualDedicatedStepAction {
 		SignupBillingInformationForm signupBillingInformationForm,
 		boolean signupBillingInformationFormComplete
 	) throws Exception {
-		List<SignupSelectServerActionHelper.Server> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.VIRTUAL_DEDICATED);
+		List<SignupSelectServerActionHelper.Host> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.VIRTUAL_DEDICATED);
 		if(servers.size()==1) {
 			response.sendRedirect(
 				response.encodeRedirectURL(

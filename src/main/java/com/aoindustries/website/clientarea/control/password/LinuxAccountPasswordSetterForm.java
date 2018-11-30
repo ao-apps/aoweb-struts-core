@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.linux.LinuxAccount;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
 import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.AutoGrowArrayList;
@@ -119,12 +119,12 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 				} else {
 					if(newPassword.length()>0) {
 						UserId username = UserId.valueOf(usernames.get(c));
-						LinuxAccount la = aoConn.getLinuxAccounts().get(username);
+						User la = aoConn.getLinuxAccounts().get(username);
 						if(la==null) {
-							throw new AssertionError("Unable to find LinuxAccount: "+username);
+							throw new AssertionError("Unable to find User: "+username);
 						} else {
 							// Check the password strength
-							List<PasswordChecker.Result> results = LinuxAccount.checkPassword(username, la.getType().getName(), newPassword);
+							List<PasswordChecker.Result> results = User.checkPassword(username, la.getType().getName(), newPassword);
 							if(PasswordChecker.hasResults(results)) {
 								errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 							}

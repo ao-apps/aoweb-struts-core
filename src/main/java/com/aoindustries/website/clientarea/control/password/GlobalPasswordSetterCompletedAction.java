@@ -24,7 +24,7 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Username;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -89,12 +89,12 @@ public class GlobalPasswordSetterCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		List<AOServPermission.Permission> permissions = new ArrayList<AOServPermission.Permission>();
-		permissions.add(AOServPermission.Permission.set_business_administrator_password);
-		permissions.add(AOServPermission.Permission.set_linux_server_account_password);
-		permissions.add(AOServPermission.Permission.set_mysql_server_user_password);
-		permissions.add(AOServPermission.Permission.set_postgres_server_user_password);
+	public List<Permission.Name> getPermissions() {
+		List<Permission.Name> permissions = new ArrayList<Permission.Name>();
+		permissions.add(Permission.Name.set_business_administrator_password);
+		permissions.add(Permission.Name.set_linux_server_account_password);
+		permissions.add(Permission.Name.set_mysql_server_user_password);
+		permissions.add(Permission.Name.set_postgres_server_user_password);
 		return permissions;
 	}
 }

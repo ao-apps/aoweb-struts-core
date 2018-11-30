@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -57,11 +57,11 @@ public class CreditCardManagerAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		Business thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		Account thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 
 		// Create a map from business to list of credit cards
 		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<BusinessAndCreditCards>();
-		for(Business business : aoConn.getBusinesses().getRows()) {
+		for(Account business : aoConn.getBusinesses().getRows()) {
 			List<CreditCard> ccs = business.getCreditCards();
 			if(
 				thisBusiness.equals(business)
@@ -90,23 +90,23 @@ public class CreditCardManagerAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.get_credit_cards);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.get_credit_cards);
 	}
 
 	public static class BusinessAndCreditCards {
 
-		final private Business business;
+		final private Account business;
 		final private List<CreditCard> creditCards;
 		final private boolean hasActiveCard;
 
-		private BusinessAndCreditCards(Business business, List<CreditCard> creditCards, boolean hasActiveCard) {
+		private BusinessAndCreditCards(Account business, List<CreditCard> creditCards, boolean hasActiveCard) {
 			this.business=business;
 			this.creditCards=creditCards;
 			this.hasActiveCard=hasActiveCard;
 		}
 
-		public Business getBusiness() {
+		public Account getBusiness() {
 			return business;
 		}
 

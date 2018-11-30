@@ -23,11 +23,10 @@
 package com.aoindustries.website.clientarea.control.monitor;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.backup.FailoverFileReplication;
-import com.aoindustries.aoserv.client.backup.FailoverMySQLReplication;
-import com.aoindustries.aoserv.client.linux.AOServer;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.mysql.MySQLServer;
+import com.aoindustries.aoserv.client.backup.FileReplication;
+import com.aoindustries.aoserv.client.backup.MysqlReplication;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.mysql.Server;
 import com.aoindustries.net.DomainName;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -70,10 +69,10 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 
 		List<MySQLServerRow> mysqlServerRows = new ArrayList<MySQLServerRow>();
-		List<MySQLServer> mysqlServers = aoConn.getMysqlServers().getRows();
-		for(MySQLServer mysqlServer : mysqlServers) {
-			AOServer aoServer = mysqlServer.getAoServer();
-			AOServer failoverServer;
+		List<Server> mysqlServers = aoConn.getMysqlServers().getRows();
+		for(Server mysqlServer : mysqlServers) {
+			com.aoindustries.aoserv.client.linux.Server aoServer = mysqlServer.getAoServer();
+			com.aoindustries.aoserv.client.linux.Server failoverServer;
 			try {
 				failoverServer = aoServer.getFailoverServer();
 			} catch(SQLException err) {
@@ -85,19 +84,19 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 			server.append(aoServer.getHostname());
 			if(failoverServer!=null) server.append(" on ").append(failoverServer.getHostname());
 
-			List<FailoverMySQLReplication> fmrs = mysqlServer.getFailoverMySQLReplications();
+			List<MysqlReplication> fmrs = mysqlServer.getFailoverMySQLReplications();
 			if(!fmrs.isEmpty()) {
 				// Query the slaves first, this way the master will always appear equal to or ahead of the slaves
 				// since we can't query them both exactly at the same time.
 				List<ReplicationRow> replications = new ArrayList<ReplicationRow>();
-				for(FailoverMySQLReplication fmr : fmrs) {
+				for(MysqlReplication fmr : fmrs) {
 					DomainName slave;
-					AOServer replicationAoServer = fmr.getAOServer();
+					com.aoindustries.aoserv.client.linux.Server replicationAoServer = fmr.getAOServer();
 					if(replicationAoServer!=null) {
 						// ao_server-based
 						slave = replicationAoServer.getHostname();
 					} else {
-						FailoverFileReplication ffr = fmr.getFailoverFileReplication();
+						FileReplication ffr = fmr.getFailoverFileReplication();
 						try {
 							slave = ffr.getBackupPartition().getAOServer().getHostname();
 						} catch(SQLException err) {
@@ -106,7 +105,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 						}
 					}
 					try {
-						FailoverMySQLReplication.SlaveStatus slaveStatus = fmr.getSlaveStatus();
+						MysqlReplication.SlaveStatus slaveStatus = fmr.getSlaveStatus();
 						if(slaveStatus==null) {
 							replications.add(
 								new ReplicationRow(
@@ -162,7 +161,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 					}
 				}
 				// Next, query the master and add the results to the rows
-				MySQLServer.MasterStatus masterStatus;
+				Server.MasterStatus masterStatus;
 				MySQLServerRow mysqlServerRow;
 				try {
 					masterStatus = mysqlServer.getMasterStatus();
@@ -246,15 +245,15 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<AOServPermission.Permission> permissions = new ArrayList<AOServPermission.Permission>(2);
+	private static final List<Permission.Name> permissions = new ArrayList<Permission.Name>(2);
 	static {
-		permissions.add(AOServPermission.Permission.get_mysql_master_status);
-		permissions.add(AOServPermission.Permission.get_mysql_slave_status);
+		permissions.add(Permission.Name.get_mysql_master_status);
+		permissions.add(Permission.Name.get_mysql_slave_status);
 	}
-	private static final List<AOServPermission.Permission> unmodifiablePermissions = Collections.unmodifiableList(permissions);
+	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
+	public List<Permission.Name> getPermissions() {
 		return unmodifiablePermissions;
 	}
 

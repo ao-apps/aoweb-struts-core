@@ -57,7 +57,7 @@ public class DedicatedAction extends DedicatedStepAction {
 		SignupBillingInformationForm signupBillingInformationForm,
 		boolean signupBillingInformationFormComplete
 	) throws Exception {
-		List<SignupSelectServerActionHelper.Server> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.DEDICATED);
+		List<SignupSelectServerActionHelper.Host> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.DEDICATED);
 		if(servers.size()==1) {
 			response.sendRedirect(
 				response.encodeRedirectURL(

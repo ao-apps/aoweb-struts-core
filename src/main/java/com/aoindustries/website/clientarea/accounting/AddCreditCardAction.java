@@ -23,10 +23,10 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.account.BusinessAdministrator;
-import com.aoindustries.aoserv.client.account.BusinessProfile;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.account.Profile;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -112,9 +112,9 @@ public class AddCreditCardAction extends PermissionAction {
 		}
 
 		// Populate the initial details from the selected accounting code or authenticated user
-		Business business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) throw new SQLException("Unable to find Business: "+accounting);
-		BusinessProfile profile = business.getBusinessProfile();
+		Profile profile = business.getBusinessProfile();
 		if(profile!=null) {
 			addCreditCardForm.setFirstName(getFirstName(profile.getBillingContact(), locale));
 			addCreditCardForm.setLastName(getLastName(profile.getBillingContact(), locale));
@@ -126,7 +126,7 @@ public class AddCreditCardAction extends PermissionAction {
 			addCreditCardForm.setPostalCode(profile.getZIP());
 			addCreditCardForm.setCountryCode(profile.getCountry().getCode());
 		} else {
-			BusinessAdministrator thisBA = aoConn.getThisBusinessAdministrator();
+			Administrator thisBA = aoConn.getThisBusinessAdministrator();
 			addCreditCardForm.setFirstName(getFirstName(thisBA.getName(), locale));
 			addCreditCardForm.setLastName(getLastName(thisBA.getName(), locale));
 			addCreditCardForm.setStreetAddress1(thisBA.getAddress1());
@@ -158,7 +158,7 @@ public class AddCreditCardAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.add_credit_card);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.add_credit_card);
 	}
 }

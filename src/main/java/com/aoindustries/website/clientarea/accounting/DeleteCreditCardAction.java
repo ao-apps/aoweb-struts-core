@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -76,16 +76,16 @@ public class DeleteCreditCardAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<AOServPermission.Permission> permissions;
+	private static final List<Permission.Name> permissions;
 	static {
-		List<AOServPermission.Permission> newList = new ArrayList<AOServPermission.Permission>(2);
-		newList.add(AOServPermission.Permission.get_credit_cards);
-		newList.add(AOServPermission.Permission.delete_credit_card);
+		List<Permission.Name> newList = new ArrayList<Permission.Name>(2);
+		newList.add(Permission.Name.get_credit_cards);
+		newList.add(Permission.Name.delete_credit_card);
 		permissions = Collections.unmodifiableList(newList);
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
+	public List<Permission.Name> getPermissions() {
 		return permissions;
 	}
 }

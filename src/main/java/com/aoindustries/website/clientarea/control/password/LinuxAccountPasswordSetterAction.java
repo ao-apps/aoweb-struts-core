@@ -24,9 +24,9 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Username;
-import com.aoindustries.aoserv.client.linux.LinuxAccount;
-import com.aoindustries.aoserv.client.linux.LinuxServerAccount;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.linux.User;
+import com.aoindustries.aoserv.client.linux.UserServer;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -60,16 +60,16 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 	) throws Exception {
 		LinuxAccountPasswordSetterForm linuxAccountPasswordSetterForm = (LinuxAccountPasswordSetterForm)form;
 
-		List<LinuxServerAccount> lsas = aoConn.getLinuxServerAccounts().getRows();
+		List<UserServer> lsas = aoConn.getLinuxServerAccounts().getRows();
 
 		List<String> packages = new ArrayList<String>(lsas.size());
 		List<String> usernames = new ArrayList<String>(lsas.size());
 		List<String> aoServers = new ArrayList<String>(lsas.size());
 		List<String> newPasswords = new ArrayList<String>(lsas.size());
 		List<String> confirmPasswords = new ArrayList<String>(lsas.size());
-		for(LinuxServerAccount lsa : lsas) {
+		for(UserServer lsa : lsas) {
 			if(lsa.canSetPassword()) {
-				LinuxAccount la = lsa.getLinuxAccount();
+				User la = lsa.getLinuxAccount();
 				Username un = la.getUsername();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
@@ -90,7 +90,7 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_linux_server_account_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_linux_server_account_password);
 	}
 }

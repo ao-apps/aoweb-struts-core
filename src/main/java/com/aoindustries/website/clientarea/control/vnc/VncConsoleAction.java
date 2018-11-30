@@ -24,8 +24,8 @@ package com.aoindustries.website.clientarea.control.vnc;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.infrastructure.VirtualServer;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.schema.AOServProtocol;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.schema.AoservProtocol;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -61,7 +61,7 @@ public class VncConsoleAction extends PermissionAction {
 		List<VirtualServer> vncVirtualServers = new ArrayList<VirtualServer>(virtualServers.size());
 		for(VirtualServer virtualServer : virtualServers) {
 			String vncPassword = virtualServer.getVncPassword();
-			if(vncPassword!=null && !vncPassword.equals(AOServProtocol.FILTERED)) vncVirtualServers.add(virtualServer);
+			if(vncPassword!=null && !vncPassword.equals(AoservProtocol.FILTERED)) vncVirtualServers.add(virtualServer);
 		}
 		request.setAttribute("vncVirtualServers", vncVirtualServers);
 
@@ -69,7 +69,7 @@ public class VncConsoleAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.vnc_console);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.vnc_console);
 	}
 }

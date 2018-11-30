@@ -23,10 +23,10 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.Ticket;
-import com.aoindustries.aoserv.client.ticket.TicketPriority;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -96,9 +96,9 @@ public class EditCompletedAction extends PermissionAction {
 		boolean annotationAdded = false;
 
 		// Update anything that changed
-		Business newBusiness = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account newBusiness = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
 		if(newBusiness==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
-		Business oldBusiness = ticket.getBusiness();
+		Account oldBusiness = ticket.getBusiness();
 		if(!newBusiness.equals(oldBusiness)) {
 			ticket.setBusiness(oldBusiness, newBusiness);
 			businessUpdated = true;
@@ -111,7 +111,7 @@ public class EditCompletedAction extends PermissionAction {
 			ticket.setContactPhoneNumbers(ticketForm.getContactPhoneNumbers());
 			contactPhoneNumbersUpdated = true;
 		}
-		TicketPriority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
+		Priority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
 		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
 		if(!clientPriority.equals(ticket.getClientPriority())) {
 			ticket.setClientPriority(clientPriority);
@@ -148,14 +148,14 @@ public class EditCompletedAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<AOServPermission.Permission> permissions = new ArrayList<AOServPermission.Permission>(2);
-	private static final List<AOServPermission.Permission> unmodifiablePermissions = Collections.unmodifiableList(permissions);
+	private static final List<Permission.Name> permissions = new ArrayList<Permission.Name>(2);
+	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
 	static {
-		permissions.add(AOServPermission.Permission.add_ticket);
-		permissions.add(AOServPermission.Permission.edit_ticket);
+		permissions.add(Permission.Name.add_ticket);
+		permissions.add(Permission.Name.edit_ticket);
 	}
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
+	public List<Permission.Name> getPermissions() {
 		return unmodifiablePermissions;
 	}
 }

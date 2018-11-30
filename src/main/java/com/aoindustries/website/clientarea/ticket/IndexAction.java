@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.ticket.Status;
 import com.aoindustries.aoserv.client.ticket.Ticket;
-import com.aoindustries.aoserv.client.ticket.TicketStatus;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -68,8 +68,8 @@ public class IndexAction  extends AuthenticatedAction {
 				// Do not show junk or deleted tickets
 				String status = ticket.getStatus().getStatus();
 				if(
-					!status.equals(TicketStatus.JUNK)
-					&& !status.equals(TicketStatus.DELETED)
+					!status.equals(Status.JUNK)
+					&& !status.equals(Status.DELETED)
 				) {
 					filteredTickets.add(ticket);
 				}

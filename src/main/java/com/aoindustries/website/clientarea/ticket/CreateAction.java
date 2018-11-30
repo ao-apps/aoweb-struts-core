@@ -23,9 +23,9 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.BusinessAdministrator;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.ticket.TicketPriority;
+import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -57,13 +57,13 @@ public class CreateAction extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		TicketForm ticketForm = (TicketForm)form;
-		BusinessAdministrator thisBusinessAdministrator = aoConn.getThisBusinessAdministrator();
+		Administrator thisBusinessAdministrator = aoConn.getThisBusinessAdministrator();
 
 		// Default to the business of the authenticated user
 		ticketForm.setAccounting(thisBusinessAdministrator.getUsername().getPackage().getBusiness().getAccounting().toString());
 
 		// Default to normal priority
-		ticketForm.setClientPriority(TicketPriority.NORMAL);
+		ticketForm.setClientPriority(Priority.NORMAL);
 
 		// Default contact emails
 		// ticketForm.setContactEmails(thisBusinessAdministrator.getEmail());
@@ -72,7 +72,7 @@ public class CreateAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.add_ticket);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.add_ticket);
 	}
 }

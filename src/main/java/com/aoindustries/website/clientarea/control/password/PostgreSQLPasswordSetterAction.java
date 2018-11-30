@@ -24,10 +24,10 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Username;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.postgresql.PostgresServer;
-import com.aoindustries.aoserv.client.postgresql.PostgresServerUser;
-import com.aoindustries.aoserv.client.postgresql.PostgresUser;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.postgresql.Server;
+import com.aoindustries.aoserv.client.postgresql.User;
+import com.aoindustries.aoserv.client.postgresql.UserServer;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -61,7 +61,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 	) throws Exception {
 		PostgreSQLPasswordSetterForm postgreSQLPasswordSetterForm = (PostgreSQLPasswordSetterForm)form;
 
-		List<PostgresServerUser> psus = aoConn.getPostgresServerUsers().getRows();
+		List<UserServer> psus = aoConn.getPostgresServerUsers().getRows();
 
 		List<String> packages = new ArrayList<String>(psus.size());
 		List<String> usernames = new ArrayList<String>(psus.size());
@@ -69,11 +69,11 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 		List<String> aoServers = new ArrayList<String>(psus.size());
 		List<String> newPasswords = new ArrayList<String>(psus.size());
 		List<String> confirmPasswords = new ArrayList<String>(psus.size());
-		for(PostgresServerUser psu : psus) {
+		for(UserServer psu : psus) {
 			if(psu.canSetPassword()) {
-				PostgresUser pu = psu.getPostgresUser();
+				User pu = psu.getPostgresUser();
 				Username un = pu.getUsername();
-				PostgresServer ps = psu.getPostgresServer();
+				Server ps = psu.getPostgresServer();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				postgreSQLServers.add(ps.getName().toString());
@@ -95,7 +95,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_postgres_server_user_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_postgres_server_user_password);
 	}
 }

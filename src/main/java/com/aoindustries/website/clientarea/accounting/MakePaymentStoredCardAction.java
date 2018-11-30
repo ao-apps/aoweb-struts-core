@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
@@ -60,7 +60,7 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		Locale locale,
 		Skin skin,
 		AOServConnector aoConn,
-		List<AOServPermission> permissions
+		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
 		response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
@@ -82,7 +82,7 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 
 		// Find the requested business
 		String accounting = makePaymentStoredCardForm.getAccounting();
-		Business business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -127,7 +127,7 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.get_credit_cards);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.get_credit_cards);
 	}
 }

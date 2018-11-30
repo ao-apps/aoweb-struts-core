@@ -24,8 +24,8 @@ package com.aoindustries.website.clientarea.control.vnc;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.infrastructure.VirtualServer;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.schema.AOServProtocol;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.schema.AoservProtocol;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -68,7 +68,7 @@ public class VncViewerAction extends PermissionAction {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;
 			}
-			if(vncPassword.equals(AOServProtocol.FILTERED)) {
+			if(vncPassword.equals(AoservProtocol.FILTERED)) {
 				// Not accessible
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return null;
@@ -82,7 +82,7 @@ public class VncViewerAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.vnc_console);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.vnc_console);
 	}
 }

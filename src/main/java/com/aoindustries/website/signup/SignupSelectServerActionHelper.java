@@ -23,7 +23,7 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.encoding.ChainWriter;
@@ -58,7 +58,7 @@ final public class SignupSelectServerActionHelper {
 		HttpServletResponse response,
 		String packageCategoryName
 	) throws IOException, SQLException {
-		List<Server> servers = getServers(servletContext, packageCategoryName);
+		List<Host> servers = getServers(servletContext, packageCategoryName);
 
 		request.setAttribute("servers", servers);
 	}
@@ -66,17 +66,17 @@ final public class SignupSelectServerActionHelper {
 	/**
 	 * Gets the possible servers ordered by minimum monthly rate.
 	 */
-	public static List<Server> getServers(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
+	public static List<Host> getServers(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
 		PackageCategory category = rootConn.getPackageCategories().get(packageCategoryName);
-		Business rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
-		List<Server> servers = new ArrayList<Server>();
+		List<Host> servers = new ArrayList<Host>();
 
 		for(PackageDefinition packageDefinition : packageDefinitions) {
 			if(packageDefinition.isActive()) {
 				servers.add(
-					new Server(
+					new Host(
 						ServerConfiguration.getMinimumConfiguration(packageDefinition),
 						ServerConfiguration.getMaximumConfiguration(packageDefinition)
 					)
@@ -89,11 +89,11 @@ final public class SignupSelectServerActionHelper {
 		return servers;
 	}
 
-	public static class Server {
+	public static class Host {
 		final private ServerConfiguration minimumConfiguration;
 		final private ServerConfiguration maximumConfiguration;
 
-		private Server(
+		private Host(
 			ServerConfiguration minimumConfiguration,
 			ServerConfiguration maximumConfiguration
 		) {
@@ -110,9 +110,9 @@ final public class SignupSelectServerActionHelper {
 		}
 	}
 
-	private static class ServerComparator implements Comparator<Server> {
+	private static class ServerComparator implements Comparator<Host> {
 		@Override
-		public int compare(Server s1, Server s2) {
+		public int compare(Host s1, Host s2) {
 			return s1.getMinimumConfiguration().getMonthly().compareTo(s2.getMinimumConfiguration().getMonthly());
 		}
 	}

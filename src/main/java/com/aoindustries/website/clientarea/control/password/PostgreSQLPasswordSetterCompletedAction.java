@@ -23,11 +23,10 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.linux.AOServer;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.net.Server;
-import com.aoindustries.aoserv.client.postgresql.PostgresServer;
-import com.aoindustries.aoserv.client.postgresql.PostgresServerUser;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.net.Host;
+import com.aoindustries.aoserv.client.postgresql.Server;
+import com.aoindustries.aoserv.client.postgresql.UserServer;
 import com.aoindustries.aoserv.client.validator.PostgresServerName;
 import com.aoindustries.aoserv.client.validator.PostgresUserId;
 import com.aoindustries.website.PermissionAction;
@@ -82,15 +81,15 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 			if(newPassword.length()>0) {
 				PostgresUserId username = PostgresUserId.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
-				Server server = aoConn.getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Server: "+server);
-				AOServer aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find AOServer: "+aoServer);
+				Host server = aoConn.getServers().get(hostname);
+				if(server==null) throw new SQLException("Unable to find Host: "+server);
+				com.aoindustries.aoserv.client.linux.Server aoServer = server.getAOServer();
+				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
 				PostgresServerName serverName = PostgresServerName.valueOf(postgreSQLServers.get(c));
-				PostgresServer ps = aoServer.getPostgresServer(serverName);
-				if(ps==null) throw new SQLException("Unable to find PostgresServer: "+serverName+" on "+hostname);
-				PostgresServerUser psu = ps.getPostgresServerUser(username);
-				if(psu==null) throw new SQLException("Unable to find PostgresServerUser: "+username+" on "+serverName+" on "+hostname);
+				Server ps = aoServer.getPostgresServer(serverName);
+				if(ps==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
+				UserServer psu = ps.getPostgresServerUser(username);
+				if(psu==null) throw new SQLException("Unable to find UserServer: "+username+" on "+serverName+" on "+hostname);
 				psu.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.postgreSQLPasswordSetter.field.confirmPasswords.passwordReset"));
 				newPasswords.set(c, "");
@@ -103,7 +102,7 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_postgres_server_user_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_postgres_server_user_password);
 	}
 }

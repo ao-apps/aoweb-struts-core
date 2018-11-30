@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
@@ -76,7 +76,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		initRequestAttributes(request, getServlet().getServletContext());
 
 		String accounting = makePaymentNewCardForm.getAccounting();
-		Business business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -131,11 +131,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		// 1) Pick a processor
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootConn);
 		if(rootProcessor==null) throw new SQLException("Unable to find enabled CreditCardProcessor for root connector");
-		com.aoindustries.aoserv.client.payment.CreditCardProcessor rootAoProcessor = rootConn.getCreditCardProcessors().get(rootProcessor.getProviderId());
+		com.aoindustries.aoserv.client.payment.Processor rootAoProcessor = rootConn.getCreditCardProcessors().get(rootProcessor.getProviderId());
 		if(rootAoProcessor==null) throw new SQLException("Unable to find CreditCardProcessor: "+rootProcessor.getProviderId());
 
 		// 2) Add the transaction as pending on this processor
-		Business rootBusiness = rootConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account rootBusiness = rootConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(rootBusiness==null) throw new SQLException("Unable to find Business: "+accounting);
 		TransactionType paymentTransactionType = rootConn.getTransactionTypes().get(TransactionType.PAYMENT);
 		if(paymentTransactionType==null) throw new SQLException("Unable to find TransactionType: "+TransactionType.PAYMENT);
@@ -362,7 +362,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	 *                   Otherwise there is a race condition between the non-root AOServConnector getting the invalidation signal
 	 *                   and this method being called.
 	 */
-	private void setAutomatic(AOServConnector rootConn, com.aoindustries.creditcards.CreditCard newCreditCard, Business business) throws SQLException, IOException {
+	private void setAutomatic(AOServConnector rootConn, com.aoindustries.creditcards.CreditCard newCreditCard, Account business) throws SQLException, IOException {
 		String persistenceUniqueId = newCreditCard.getPersistenceUniqueId();
 		CreditCard creditCard = rootConn.getCreditCards().get(Integer.parseInt(persistenceUniqueId));
 		if(creditCard==null) throw new SQLException("Unable to find CreditCard: "+persistenceUniqueId);

@@ -24,10 +24,10 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Username;
-import com.aoindustries.aoserv.client.master.AOServPermission;
-import com.aoindustries.aoserv.client.mysql.MySQLServer;
-import com.aoindustries.aoserv.client.mysql.MySQLServerUser;
-import com.aoindustries.aoserv.client.mysql.MySQLUser;
+import com.aoindustries.aoserv.client.master.Permission;
+import com.aoindustries.aoserv.client.mysql.Server;
+import com.aoindustries.aoserv.client.mysql.User;
+import com.aoindustries.aoserv.client.mysql.UserServer;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -61,7 +61,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 	) throws Exception {
 		MySQLPasswordSetterForm mySQLPasswordSetterForm = (MySQLPasswordSetterForm)form;
 
-		List<MySQLServerUser> msus = aoConn.getMysqlServerUsers().getRows();
+		List<UserServer> msus = aoConn.getMysqlServerUsers().getRows();
 
 		List<String> packages = new ArrayList<String>(msus.size());
 		List<String> usernames = new ArrayList<String>(msus.size());
@@ -69,11 +69,11 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 		List<String> aoServers = new ArrayList<String>(msus.size());
 		List<String> newPasswords = new ArrayList<String>(msus.size());
 		List<String> confirmPasswords = new ArrayList<String>(msus.size());
-		for(MySQLServerUser msu : msus) {
+		for(UserServer msu : msus) {
 			if(msu.canSetPassword()) {
-				MySQLUser mu = msu.getMySQLUser();
+				User mu = msu.getMySQLUser();
 				Username un = mu.getUsername();
-				MySQLServer ms = msu.getMySQLServer();
+				Server ms = msu.getMySQLServer();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				mySQLServers.add(ms.getName().toString());
@@ -95,7 +95,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.set_mysql_server_user_password);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.set_mysql_server_user_password);
 	}
 }

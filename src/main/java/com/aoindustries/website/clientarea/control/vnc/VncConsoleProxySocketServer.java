@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.control.vnc;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.net.NetBind;
+import com.aoindustries.aoserv.client.net.Bind;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.website.LogFactory;
 import com.aoindustries.website.SiteSettings;
@@ -54,7 +54,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 
 	public void init(ServletContext servletContext) {
 		this.servletContext = servletContext;
-		(thread = new Thread(this, "VNC Console Proxy Socket Server")).start();
+		(thread = new Thread(this, "VNC Console Proxy Socket Host")).start();
 	}
 
 	public void destroy() {
@@ -73,7 +73,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 			try {
 				SiteSettings siteSettings = SiteSettings.getInstance(myServletContext);
 				Brand brand = siteSettings.getBrand();
-				NetBind vncBind = brand.getAowebStrutsVncBind();
+				Bind vncBind = brand.getAowebStrutsVncBind();
 				InetAddress inetAddress = InetAddress.getByName(vncBind.getIpAddress().getInetAddress().toString());
 				AOServConnector rootConn = siteSettings.getRootAOServConnector();
 				// Init SSL without using system properties because default SSLContext may be already set

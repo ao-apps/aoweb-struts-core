@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.control.business;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -55,7 +55,7 @@ public class CancelAction  extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		List<Business> businesses = aoConn.getBusinesses().getRows();
+		List<Account> businesses = aoConn.getBusinesses().getRows();
 
 		// Set request values
 		request.setAttribute("businesses", businesses);
@@ -64,7 +64,7 @@ public class CancelAction  extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.cancel_business);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.cancel_business);
 	}
 }

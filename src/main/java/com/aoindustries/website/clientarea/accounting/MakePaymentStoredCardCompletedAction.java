@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
@@ -75,7 +75,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 
 		// Init request values
 		String accounting = makePaymentStoredCardForm.getAccounting();
-		Business business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -126,11 +126,11 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		// 1) Pick a processor
 		CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
 		if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
-		com.aoindustries.aoserv.client.payment.CreditCardProcessor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
+		com.aoindustries.aoserv.client.payment.Processor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoProcessor);
 
 		// 2) Add the transaction as pending on this processor
-		Business rootBusiness = rootConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account rootBusiness = rootConn.getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(rootBusiness==null) throw new SQLException("Unable to find Business: "+accounting);
 		TransactionType paymentTransactionType = rootConn.getTransactionTypes().get(TransactionType.PAYMENT);
 		if(paymentTransactionType==null) throw new SQLException("Unable to find TransactionType: "+TransactionType.PAYMENT);

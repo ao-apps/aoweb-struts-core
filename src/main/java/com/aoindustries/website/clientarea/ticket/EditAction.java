@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Ticket;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -82,7 +82,7 @@ public class EditAction extends PermissionAction {
 		}
 
 		// Populate the ticket form
-		Business business = ticket.getBusiness();
+		Account business = ticket.getBusiness();
 		ticketForm.setAccounting(business==null ? "" : business.getAccounting().toString());
 		ticketForm.setClientPriority(ticket.getClientPriority().getPriority());
 		ticketForm.setContactEmails(ticket.getContactEmails());
@@ -96,14 +96,14 @@ public class EditAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<AOServPermission.Permission> permissions = new ArrayList<AOServPermission.Permission>(2);
-	private static final List<AOServPermission.Permission> unmodifiablePermissions = Collections.unmodifiableList(permissions);
+	private static final List<Permission.Name> permissions = new ArrayList<Permission.Name>(2);
+	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
 	static {
-		permissions.add(AOServPermission.Permission.add_ticket);
-		permissions.add(AOServPermission.Permission.edit_ticket);
+		permissions.add(Permission.Name.add_ticket);
+		permissions.add(Permission.Name.edit_ticket);
 	}
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
+	public List<Permission.Name> getPermissions() {
 		return unmodifiablePermissions;
 	}
 }

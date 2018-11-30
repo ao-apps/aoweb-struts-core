@@ -23,8 +23,8 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.BusinessAdministrator;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.master.Permission;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,11 +59,11 @@ abstract public class PermissionAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		List<AOServPermission.Permission> permissions = getPermissions();
+		List<Permission.Name> permissions = getPermissions();
 
 		// No permissions defined, default to denied
 		if(permissions==null || permissions.isEmpty()) {
-			List<AOServPermission> aoPerms = Collections.emptyList();
+			List<Permission> aoPerms = Collections.emptyList();
 			return executePermissionDenied(
 				mapping,
 				form,
@@ -77,13 +77,13 @@ abstract public class PermissionAction extends AuthenticatedAction {
 			);
 		}
 
-		BusinessAdministrator thisBA = aoConn.getThisBusinessAdministrator();
+		Administrator thisBA = aoConn.getThisBusinessAdministrator();
 		// Return denied on first missing permission
-		for(AOServPermission.Permission permission : permissions) {
+		for(Permission.Name permission : permissions) {
 			if(!thisBA.hasPermission(permission)) {
-				List<AOServPermission> aoPerms = new ArrayList<AOServPermission>(permissions.size());
-				for(AOServPermission.Permission requiredPermission : permissions) {
-					AOServPermission aoPerm = aoConn.getAoservPermissions().get(requiredPermission);
+				List<Permission> aoPerms = new ArrayList<Permission>(permissions.size());
+				for(Permission.Name requiredPermission : permissions) {
+					Permission aoPerm = aoConn.getAoservPermissions().get(requiredPermission);
 					if(aoPerm==null) throw new SQLException("Unable to find AOServPermission: "+requiredPermission);
 					aoPerms.add(aoPerm);
 				}
@@ -136,7 +136,7 @@ abstract public class PermissionAction extends AuthenticatedAction {
 		Locale locale,
 		Skin skin,
 		AOServConnector aoConn,
-		List<AOServPermission> permissions
+		List<Permission> permissions
 	) throws Exception {
 		request.setAttribute(Constants.PERMISSION_DENIED, permissions);
 		return mapping.findForward("permission-denied");
@@ -145,7 +145,7 @@ abstract public class PermissionAction extends AuthenticatedAction {
 	/**
 	 * Gets the list of permissions that are required for this action.  Returning a null or empty list will result in nothing being allowed.
 	 *
-	 * @see  AOServPermission
+	 * @see  Permission
 	 */
-	abstract public List<AOServPermission.Permission> getPermissions();
+	abstract public List<Permission.Name> getPermissions();
 }

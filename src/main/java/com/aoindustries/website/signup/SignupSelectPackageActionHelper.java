@@ -23,7 +23,7 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.encoding.ChainWriter;
@@ -69,7 +69,7 @@ final public class SignupSelectPackageActionHelper {
 	public static List<PackageDefinition> getPackageDefinitions(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
 		PackageCategory category = rootConn.getPackageCategories().get(packageCategoryName);
-		Business rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
 		List<PackageDefinition> activePackageDefinitions = new ArrayList<PackageDefinition>();
 

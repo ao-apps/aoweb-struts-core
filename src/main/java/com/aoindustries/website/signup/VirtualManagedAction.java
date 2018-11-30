@@ -59,7 +59,7 @@ public class VirtualManagedAction extends VirtualManagedStepAction {
 		SignupBillingInformationForm signupBillingInformationForm,
 		boolean signupBillingInformationFormComplete
 	) throws Exception {
-		List<SignupSelectServerActionHelper.Server> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.VIRTUAL_MANAGED);
+		List<SignupSelectServerActionHelper.Host> servers = SignupSelectServerActionHelper.getServers(getServlet().getServletContext(), PackageCategory.VIRTUAL_MANAGED);
 		if(servers.size()==1) {
 			response.sendRedirect(
 				response.encodeRedirectURL(

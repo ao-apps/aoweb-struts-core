@@ -24,7 +24,7 @@ package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.ticket.Language;
-import com.aoindustries.aoserv.client.ticket.TicketPriority;
+import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.TicketType;
 import java.sql.SQLException;
 import java.util.Locale;
@@ -67,8 +67,8 @@ public class ContactCompletedAction extends SkinAction {
 		}
 		TicketType ticketType = rootConn.getTicketTypes().get(TicketType.CONTACT);
 		if(ticketType==null) throw new SQLException("Unable to find TicketType: "+TicketType.CONTACT);
-		TicketPriority clientPriority = rootConn.getTicketPriorities().get(TicketPriority.NORMAL);
-		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+TicketPriority.NORMAL);
+		Priority clientPriority = rootConn.getTicketPriorities().get(Priority.NORMAL);
+		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+Priority.NORMAL);
 		rootConn.getTickets().addTicket(
 			siteSettings.getBrand(),
 			null,

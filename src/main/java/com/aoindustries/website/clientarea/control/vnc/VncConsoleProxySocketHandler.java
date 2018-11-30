@@ -25,8 +25,8 @@ package com.aoindustries.website.clientarea.control.vnc;
 import com.aoindustries.aoserv.client.AOServClientConfiguration;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.infrastructure.VirtualServer;
-import com.aoindustries.aoserv.client.linux.AOServer;
-import com.aoindustries.aoserv.client.schema.AOServProtocol;
+import com.aoindustries.aoserv.client.linux.Server;
+import com.aoindustries.aoserv.client.schema.AoservProtocol;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonConnection;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonConnector;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonProtocol;
@@ -137,7 +137,7 @@ public class VncConsoleProxySocketHandler {
 						VirtualServer virtualServer = null;
 						for(VirtualServer vs : rootConn.getVirtualServers().getRows()) {
 							String vncPassword = vs.getVncPassword();
-							if(vncPassword!=null && !vncPassword.equals(AOServProtocol.FILTERED)) {
+							if(vncPassword!=null && !vncPassword.equals(AoservProtocol.FILTERED)) {
 								byte[] expectedResponse = desCipher(challenge, vncPassword);
 								if(Arrays.equals(response, expectedResponse)) {
 									virtualServer = vs;
@@ -146,7 +146,7 @@ public class VncConsoleProxySocketHandler {
 							}
 						}
 						if(virtualServer==null) {
-							// Virtual Server not found
+							// Virtual Host not found
 							Thread.sleep(5000);
 							socketOut.write(0);
 							socketOut.write(0);
@@ -157,7 +157,7 @@ public class VncConsoleProxySocketHandler {
 							// Connect and authenticate to the real VNC server before sending security result
 
 							// Connect through AOServ Platform
-							AOServer.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
+							Server.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
 							AOServDaemonConnector daemonConnector=AOServDaemonConnector.getConnector(
 								daemonAccess.getHost(),
 								InetAddress.UNSPECIFIED_IPV4,

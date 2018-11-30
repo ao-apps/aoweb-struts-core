@@ -23,9 +23,9 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
-import com.aoindustries.aoserv.client.payment.CreditCardProcessor;
+import com.aoindustries.aoserv.client.payment.Processor;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
@@ -81,7 +81,7 @@ public class DeleteCreditCardCompletedAction extends PermissionAction {
 		if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
 
 		// Delete the card from the bank and persistence
-		CreditCardProcessor rootAoservCCP = rootCreditCard.getCreditCardProcessor();
+		Processor rootAoservCCP = rootCreditCard.getCreditCardProcessor();
 		com.aoindustries.creditcards.CreditCardProcessor processor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoservCCP);
 		processor.deleteCreditCard(
 			new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
@@ -96,7 +96,7 @@ public class DeleteCreditCardCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.delete_credit_card);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.delete_credit_card);
 	}
 }

@@ -23,10 +23,10 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Business;
-import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Language;
-import com.aoindustries.aoserv.client.ticket.TicketPriority;
+import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.TicketType;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
@@ -70,7 +70,7 @@ public class CreateCompletedAction extends PermissionAction {
 			return mapping.findForward("input");
 		}
 
-		Business business = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
 		if(business==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
 		Language language = aoConn.getLanguages().get(locale.getLanguage());
 		if(language==null) {
@@ -79,7 +79,7 @@ public class CreateCompletedAction extends PermissionAction {
 		}
 		TicketType ticketType = aoConn.getTicketTypes().get(TicketType.SUPPORT);
 		if(ticketType==null) throw new SQLException("Unable to find TicketType: "+TicketType.SUPPORT);
-		TicketPriority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
+		Priority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
 		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
 		int pkey = aoConn.getTickets().addTicket(
 			siteSettings.getBrand(),
@@ -100,7 +100,7 @@ public class CreateCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<AOServPermission.Permission> getPermissions() {
-		return Collections.singletonList(AOServPermission.Permission.add_ticket);
+	public List<Permission.Name> getPermissions() {
+		return Collections.singletonList(Permission.Name.add_ticket);
 	}
 }
