@@ -148,10 +148,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<groupId>com.aoindustries</groupId><artifactId>aoserv-client</artifactId><version>1.81.18-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>aoserv-credit-cards</artifactId><version>1.0.4-validation-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>aoserv-credit-cards</artifactId><version>1.0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>aoserv-daemon-client</artifactId><version>1.81.11-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>aoserv-daemon-client</artifactId><version>1.81.18-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

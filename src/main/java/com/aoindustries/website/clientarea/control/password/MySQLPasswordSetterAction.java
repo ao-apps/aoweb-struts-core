@@ -23,11 +23,11 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.AOServPermission;
-import com.aoindustries.aoserv.client.MySQLServer;
-import com.aoindustries.aoserv.client.MySQLServerUser;
-import com.aoindustries.aoserv.client.MySQLUser;
-import com.aoindustries.aoserv.client.Username;
+import com.aoindustries.aoserv.client.account.Username;
+import com.aoindustries.aoserv.client.master.AOServPermission;
+import com.aoindustries.aoserv.client.mysql.MySQLServer;
+import com.aoindustries.aoserv.client.mysql.MySQLServerUser;
+import com.aoindustries.aoserv.client.mysql.MySQLUser;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;

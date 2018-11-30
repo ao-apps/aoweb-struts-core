@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.control.vnc;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.Brand;
-import com.aoindustries.aoserv.client.NetBind;
+import com.aoindustries.aoserv.client.net.NetBind;
+import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.website.LogFactory;
 import com.aoindustries.website.SiteSettings;
 import java.io.File;

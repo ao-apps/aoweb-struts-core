@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,10 +23,10 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.Business;
-import com.aoindustries.aoserv.client.CreditCard;
-import com.aoindustries.aoserv.client.PaymentType;
-import com.aoindustries.aoserv.client.TransactionType;
+import com.aoindustries.aoserv.client.account.Business;
+import com.aoindustries.aoserv.client.billing.TransactionType;
+import com.aoindustries.aoserv.client.payment.CreditCard;
+import com.aoindustries.aoserv.client.payment.PaymentType;
 import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.BusinessGroup;
@@ -126,7 +126,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		// 1) Pick a processor
 		CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
 		if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
-		com.aoindustries.aoserv.client.CreditCardProcessor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
+		com.aoindustries.aoserv.client.payment.CreditCardProcessor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoProcessor);
 
 		// 2) Add the transaction as pending on this processor
@@ -165,9 +165,9 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			paymentType,
 			cardInfo,
 			rootAoProcessor,
-			com.aoindustries.aoserv.client.Transaction.WAITING_CONFIRMATION
+			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
-		com.aoindustries.aoserv.client.Transaction aoTransaction = rootConn.getTransactions().get(transID);
+		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getTransactions().get(transID);
 		if(aoTransaction==null) throw new SQLException("Unable to find Transaction: "+transID);
 
 		// 3) Process

@@ -24,9 +24,9 @@ package com.aoindustries.website.clientarea.control.vnc;
 
 import com.aoindustries.aoserv.client.AOServClientConfiguration;
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.AOServProtocol;
-import com.aoindustries.aoserv.client.AOServer;
-import com.aoindustries.aoserv.client.VirtualServer;
+import com.aoindustries.aoserv.client.infrastructure.VirtualServer;
+import com.aoindustries.aoserv.client.linux.AOServer;
+import com.aoindustries.aoserv.client.schema.AOServProtocol;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonConnection;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonConnector;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonProtocol;
