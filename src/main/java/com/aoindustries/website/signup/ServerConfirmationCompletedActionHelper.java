@@ -116,10 +116,10 @@ final public class ServerConfirmationCompletedActionHelper {
 		int pkey;
 		String statusKey;
 		try {
-			CountryCode businessCountry = rootConn.getPayment().getCountryCodes().get(signupBusinessForm.getBusinessCountry());
-			CountryCode baCountry = GenericValidator.isBlankOrNull(signupTechnicalForm.getBaCountry()) ? null : rootConn.getPayment().getCountryCodes().get(signupTechnicalForm.getBaCountry());
+			CountryCode businessCountry = rootConn.getPayment().getCountryCode().get(signupBusinessForm.getBusinessCountry());
+			CountryCode baCountry = GenericValidator.isBlankOrNull(signupTechnicalForm.getBaCountry()) ? null : rootConn.getPayment().getCountryCode().get(signupTechnicalForm.getBaCountry());
 
-			pkey = rootConn.getSignup().getSignupRequests().addSignupRequest(
+			pkey = rootConn.getSignup().getRequest().addSignupRequest(
 				rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness().getBrand(),
 				InetAddress.valueOf(request.getRemoteAddr()),
 				packageDefinition,

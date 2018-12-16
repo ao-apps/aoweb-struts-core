@@ -81,14 +81,14 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 	) throws Exception {
 		// Find the requested business
 		String accounting = request.getParameter("accounting");
-		Account business = accounting==null ? null : aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
-		if(business==null) {
+		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		if(account == null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
 		}
 
 		// Get the list of active credit cards stored for this business
-		List<CreditCard> allCreditCards = business.getCreditCards();
+		List<CreditCard> allCreditCards = account.getCreditCards();
 		List<CreditCard> creditCards = new ArrayList<CreditCard>(allCreditCards.size());
 		for(CreditCard creditCard : allCreditCards) {
 			if(creditCard.getDeactivatedOn()==null) creditCards.add(creditCard);
@@ -100,9 +100,9 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 			return null;
 		} else {
 			// Store to request attributes, return success
-			request.setAttribute("business", business);
+			request.setAttribute("business", account);
 			request.setAttribute("creditCards", creditCards);
-			Payment lastCCT = business.getLastCreditCardTransaction();
+			Payment lastCCT = account.getLastCreditCardTransaction();
 			request.setAttribute("lastPaymentCreditCard", lastCCT==null ? null : lastCCT.getCreditCardProviderUniqueId());
 			return mapping.findForward("success");
 		}

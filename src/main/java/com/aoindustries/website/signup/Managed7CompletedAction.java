@@ -88,7 +88,7 @@ public class Managed7CompletedAction extends Managed7Action {
 		ActionServlet myServlet = getServlet();
 		ServletContext servletContext = myServlet.getServletContext();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
-		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
+		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
 
 		// Build the options map
 		Map<String,String> options = new HashMap<String,String>();

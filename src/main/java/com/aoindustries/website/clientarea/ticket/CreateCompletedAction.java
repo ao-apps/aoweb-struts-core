@@ -70,20 +70,20 @@ public class CreateCompletedAction extends PermissionAction {
 			return mapping.findForward("input");
 		}
 
-		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
-		if(business==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
-		Language language = aoConn.getTicket().getLanguages().get(locale.getLanguage());
-		if(language==null) {
-			language = aoConn.getTicket().getLanguages().get(Language.EN);
-			if(language==null) throw new SQLException("Unable to find Language: "+Language.EN);
+		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		if(account == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
+		Language language = aoConn.getTicket().getLanguage().get(locale.getLanguage());
+		if(language == null) {
+			language = aoConn.getTicket().getLanguage().get(Language.EN);
+			if(language==null) throw new SQLException("Unable to find Language: " + Language.EN);
 		}
-		TicketType ticketType = aoConn.getTicket().getTicketTypes().get(TicketType.SUPPORT);
-		if(ticketType==null) throw new SQLException("Unable to find TicketType: "+TicketType.SUPPORT);
-		Priority clientPriority = aoConn.getTicket().getTicketPriorities().get(ticketForm.getClientPriority());
-		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
-		int pkey = aoConn.getTicket().getTickets().addTicket(
+		TicketType ticketType = aoConn.getTicket().getTicketType().get(TicketType.SUPPORT);
+		if(ticketType == null) throw new SQLException("Unable to find TicketType: " + TicketType.SUPPORT);
+		Priority clientPriority = aoConn.getTicket().getPriority().get(ticketForm.getClientPriority());
+		if(clientPriority == null) throw new SQLException("Unable to find TicketPriority: " + ticketForm.getClientPriority());
+		int pkey = aoConn.getTicket().getTicket().addTicket(
 			siteSettings.getBrand(),
-			business,
+			account,
 			language,
 			null,
 			ticketType,

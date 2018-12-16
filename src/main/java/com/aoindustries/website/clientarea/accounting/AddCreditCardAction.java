@@ -112,9 +112,9 @@ public class AddCreditCardAction extends PermissionAction {
 		}
 
 		// Populate the initial details from the selected accounting code or authenticated user
-		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
-		if(business==null) throw new SQLException("Unable to find Business: "+accounting);
-		Profile profile = business.getBusinessProfile();
+		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		if(account == null) throw new SQLException("Unable to find Account: " + accounting);
+		Profile profile = account.getBusinessProfile();
 		if(profile!=null) {
 			addCreditCardForm.setFirstName(getFirstName(profile.getBillingContact(), locale));
 			addCreditCardForm.setLastName(getLastName(profile.getBillingContact(), locale));

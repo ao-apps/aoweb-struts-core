@@ -81,12 +81,12 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 			if(newPassword.length()>0) {
 				PostgresUserId username = PostgresUserId.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
-				Host server = aoConn.getNet().getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Host: "+server);
-				com.aoindustries.aoserv.client.linux.Server aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
+				Host host = aoConn.getNet().getHost().get(hostname);
+				if(host == null) throw new SQLException("Unable to find Host: " + host);
+				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
+				if(linuxServer == null) throw new SQLException("Unable to find Server: " + host);
 				PostgresServerName serverName = PostgresServerName.valueOf(postgreSQLServers.get(c));
-				Server ps = aoServer.getPostgresServer(serverName);
+				Server ps = linuxServer.getPostgresServer(serverName);
 				if(ps==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
 				UserServer psu = ps.getPostgresServerUser(username);
 				if(psu==null) throw new SQLException("Unable to find UserServer: "+username+" on "+serverName+" on "+hostname);

@@ -66,15 +66,15 @@ public class EditAction extends PermissionAction {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "pkey required");
 			return null;
 		}
-		int pkey;
+		int id;
 		try {
-			pkey = Integer.parseInt(pkeyS);
+			id = Integer.parseInt(pkeyS);
 		} catch(NumberFormatException err) {
 			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_BAD_REQUEST);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid pkey");
 			return null;
 		}
-		Ticket ticket = aoConn.getTicket().getTickets().get(pkey);
+		Ticket ticket = aoConn.getTicket().getTicket().get(id);
 		if(ticket==null) {
 			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");

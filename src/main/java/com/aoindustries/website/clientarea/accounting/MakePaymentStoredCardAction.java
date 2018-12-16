@@ -82,8 +82,8 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 
 		// Find the requested business
 		String accounting = makePaymentStoredCardForm.getAccounting();
-		Account business = accounting==null ? null : aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
-		if(business==null) {
+		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		if(account == null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
 		}
@@ -99,28 +99,28 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 			return null;
 		}
 
-		int pkey;
+		int id;
 		try {
-			pkey = Integer.parseInt(pkeyString);
+			id = Integer.parseInt(pkeyString);
 		} catch(NumberFormatException err) {
 			// Can't parse int, redirect back to make-payment
 			return mapping.findForward("make-payment");
 		}
-		CreditCard creditCard = aoConn.getPayment().getCreditCards().get(pkey);
-		if(creditCard==null) {
+		CreditCard creditCard = aoConn.getPayment().getCreditCard().get(id);
+		if(creditCard == null) {
 			// creditCard not found, redirect back to make-payment
 			return mapping.findForward("make-payment");
 		}
 
 		// Prompt for amount of payment defaults to current balance.
-		BigDecimal balance = business.getAccountBalance();
+		BigDecimal balance = account.getAccountBalance();
 		if(balance.signum()>0) {
 			makePaymentStoredCardForm.setPaymentAmount(balance.toPlainString());
 		} else {
 			makePaymentStoredCardForm.setPaymentAmount("");
 		}
 
-		request.setAttribute("business", business);
+		request.setAttribute("business", account);
 		request.setAttribute("creditCard", creditCard);
 
 		return mapping.findForward("success");

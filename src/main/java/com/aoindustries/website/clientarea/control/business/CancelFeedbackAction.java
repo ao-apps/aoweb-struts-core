@@ -57,19 +57,19 @@ public class CancelFeedbackAction  extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		String business = request.getParameter("business");
+		String account = request.getParameter("business");
 		Account bu;
-		if(GenericValidator.isBlankOrNull(business)) {
+		if(GenericValidator.isBlankOrNull(account)) {
 			bu = null;
 		} else {
-			bu = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(business));
+			bu = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(account));
 		}
 		if(bu==null || !bu.canCancel()) {
 			return mapping.findForward("invalid-business");
 		}
 
 		CancelFeedbackForm cancelFeedbackForm = (CancelFeedbackForm)form;
-		cancelFeedbackForm.setBusiness(business);
+		cancelFeedbackForm.setBusiness(account);
 
 		// Set request values
 		request.setAttribute("business", bu);

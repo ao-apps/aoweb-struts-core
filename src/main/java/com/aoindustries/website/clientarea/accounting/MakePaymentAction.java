@@ -54,27 +54,27 @@ public class MakePaymentAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		Account thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		Account thisAccount = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 
 		// Get the list of businesses that are not canceled or have a non-zero balance, or are thisBusiness
-		List<Account> allBusinesses = aoConn.getAccount().getBusinesses().getRows();
-		List<Account> businesses = new ArrayList<Account>(allBusinesses.size());
-		for(Account business : allBusinesses) {
+		List<Account> allAccounts = aoConn.getAccount().getAccount().getRows();
+		List<Account> accounts = new ArrayList<Account>(allAccounts.size());
+		for(Account account : allAccounts) {
 			if(
-				thisBusiness.equals(business)
+				thisAccount.equals(account)
 				|| (
-					business.getCanceled()==null
-					&& !business.billParent()
-				) || business.getAccountBalance().signum()!=0
-			) businesses.add(business);
+					account.getCanceled()==null
+					&& !account.billParent()
+				) || account.getAccountBalance().signum()!=0
+			) accounts.add(account);
 		}
-		if(businesses.size()==1) {
+		if(accounts.size()==1) {
 			// Redirect, only one option
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-select-card.do?accounting="+businesses.get(0).getAccounting()));
+			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-select-card.do?accounting="+accounts.get(0).getAccounting()));
 			return null;
 		} else {
 			// Show selector screen
-			request.setAttribute("businesses", businesses);
+			request.setAttribute("businesses", accounts);
 			return mapping.findForward("success");
 		}
 	}

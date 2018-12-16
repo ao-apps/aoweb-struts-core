@@ -143,7 +143,7 @@ abstract public class SignupCustomizeServerForm extends ActionForm implements Se
 			if(rootConn!=null) {
 				SignupSelectPackageForm signupSelectPackageForm = (SignupSelectPackageForm)request.getSession().getAttribute(getSignupSelectPackageFormName());
 				if(signupSelectPackageForm!=null) {
-					pd = rootConn.getBilling().getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
+					pd = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
 				}
 			}
 

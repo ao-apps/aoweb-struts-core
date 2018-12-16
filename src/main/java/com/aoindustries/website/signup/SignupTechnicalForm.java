@@ -252,7 +252,7 @@ public class SignupTechnicalForm extends ActionForm implements Serializable, Ses
 							ae.initCause(e);
 							throw ae;
 						}
-						if(!rootConn.getAccount().getUsernames().isUsernameAvailable(userId)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
+						if(!rootConn.getAccount().getUsername().isUsernameAvailable(userId)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
 					}
 				}
 			}

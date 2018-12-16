@@ -58,14 +58,14 @@ public class CancelFeedbackCompletedAction  extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		CancelFeedbackForm cancelFeedbackForm = (CancelFeedbackForm)form;
-		String business = cancelFeedbackForm.getBusiness();
+		String accountId = cancelFeedbackForm.getBusiness();
 		String reason = cancelFeedbackForm.getReason();
 
 		Account bu;
-		if(GenericValidator.isBlankOrNull(business)) {
+		if(GenericValidator.isBlankOrNull(accountId)) {
 			bu = null;
 		} else {
-			bu = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(business));
+			bu = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accountId));
 		}
 		if(bu==null || !bu.canCancel()) {
 			return mapping.findForward("invalid-business");

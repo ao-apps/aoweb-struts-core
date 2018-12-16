@@ -135,7 +135,7 @@ public class VncConsoleProxySocketHandler {
 						byte[] response = new byte[16];
 						for(int c=0;c<16;c++) if((response[c] = (byte)socketIn.read())==-1) throw new EOFException("EOF from socketIn");
 						VirtualServer virtualServer = null;
-						for(VirtualServer vs : rootConn.getInfrastructure().getVirtualServers().getRows()) {
+						for(VirtualServer vs : rootConn.getInfrastructure().getVirtualServer().getRows()) {
 							String vncPassword = vs.getVncPassword();
 							if(vncPassword!=null && !vncPassword.equals(AoservProtocol.FILTERED)) {
 								byte[] expectedResponse = desCipher(challenge, vncPassword);

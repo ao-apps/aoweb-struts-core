@@ -57,7 +57,7 @@ public class VncViewerAction extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		try {
-			VirtualServer virtualServer = aoConn.getInfrastructure().getVirtualServers().get(Integer.parseInt(request.getParameter("virtualServer")));
+			VirtualServer virtualServer = aoConn.getInfrastructure().getVirtualServer().get(Integer.parseInt(request.getParameter("virtualServer")));
 			if(virtualServer==null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;

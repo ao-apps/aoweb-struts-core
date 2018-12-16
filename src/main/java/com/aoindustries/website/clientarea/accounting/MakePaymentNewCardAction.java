@@ -73,9 +73,9 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		}
 
 		// Populate the initial details from the selected accounting code or authenticated user
-		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
-		if(business==null) throw new SQLException("Unable to find Business: "+accounting);
-		Profile profile = business.getBusinessProfile();
+		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		if(account == null) throw new SQLException("Unable to find Account: " + accounting);
+		Profile profile = account.getBusinessProfile();
 		if(profile!=null) {
 			makePaymentNewCardForm.setFirstName(AddCreditCardAction.getFirstName(profile.getBillingContact(), locale));
 			makePaymentNewCardForm.setLastName(AddCreditCardAction.getLastName(profile.getBillingContact(), locale));
@@ -101,14 +101,14 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		initRequestAttributes(request, getServlet().getServletContext());
 
 		// Prompt for amount of payment defaults to current balance.
-		BigDecimal balance = business.getAccountBalance();
+		BigDecimal balance = account.getAccountBalance();
 		if(balance.signum()>0) {
 			makePaymentNewCardForm.setPaymentAmount(balance.toPlainString());
 		} else {
 			makePaymentNewCardForm.setPaymentAmount("");
 		}
 
-		request.setAttribute("business", business);
+		request.setAttribute("business", account);
 
 		return mapping.findForward("success");
 	}

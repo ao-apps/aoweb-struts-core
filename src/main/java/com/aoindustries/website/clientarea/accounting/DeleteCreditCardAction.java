@@ -61,8 +61,8 @@ public class DeleteCreditCardAction extends PermissionAction {
 		String S = request.getParameter("pkey");
 		if(S!=null && S.length()>0) {
 			try {
-				int pkey = Integer.parseInt(S);
-				creditCard = aoConn.getPayment().getCreditCards().get(pkey);
+				int id = Integer.parseInt(S);
+				creditCard = aoConn.getPayment().getCreditCard().get(id);
 			} catch(NumberFormatException err) {
 				getServlet().log(null, err);
 			}

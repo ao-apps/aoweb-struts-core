@@ -57,7 +57,7 @@ public class VncConsoleAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		List<VirtualServer> virtualServers = aoConn.getInfrastructure().getVirtualServers().getRows();
+		List<VirtualServer> virtualServers = aoConn.getInfrastructure().getVirtualServer().getRows();
 		List<VirtualServer> vncVirtualServers = new ArrayList<VirtualServer>(virtualServers.size());
 		for(VirtualServer virtualServer : virtualServers) {
 			String vncPassword = virtualServer.getVncPassword();

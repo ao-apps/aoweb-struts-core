@@ -61,15 +61,15 @@ public class CreditCardManagerAction extends PermissionAction {
 
 		// Create a map from business to list of credit cards
 		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<BusinessAndCreditCards>();
-		for(Account business : aoConn.getAccount().getBusinesses().getRows()) {
-			List<CreditCard> ccs = business.getCreditCards();
+		for(Account account : aoConn.getAccount().getAccount().getRows()) {
+			List<CreditCard> ccs = account.getCreditCards();
 			if(
-				thisBusiness.equals(business)
+				thisBusiness.equals(account)
 				|| !ccs.isEmpty()
 				|| (
-					business.getCanceled()==null
-					&& !business.billParent()
-				) || business.getAccountBalance().signum()!=0
+					account.getCanceled()==null
+					&& !account.billParent()
+				) || account.getAccountBalance().signum()!=0
 			) {
 				boolean hasActiveCard = false;
 				for(CreditCard cc : ccs) {
@@ -78,10 +78,10 @@ public class CreditCardManagerAction extends PermissionAction {
 						break;
 					}
 				}
-				businessCreditCards.add(new BusinessAndCreditCards(business, ccs, hasActiveCard));
+				businessCreditCards.add(new BusinessAndCreditCards(account, ccs, hasActiveCard));
 			}
 		}
-		boolean showAccounting = aoConn.getAccount().getBusinesses().getRows().size()>1;
+		boolean showAccounting = aoConn.getAccount().getAccount().getRows().size() > 1;
 
 		request.setAttribute("businessCreditCards", businessCreditCards);
 		request.setAttribute("showAccounting", showAccounting ? "true" : "false");

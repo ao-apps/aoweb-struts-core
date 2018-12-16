@@ -57,7 +57,7 @@ public class GlobalPasswordSetterAction extends PermissionAction {
 	) throws Exception {
 		GlobalPasswordSetterForm globalPasswordSetterForm = (GlobalPasswordSetterForm)form;
 
-		List<Username> uns = aoConn.getAccount().getUsernames().getRows();
+		List<Username> uns = aoConn.getAccount().getUsername().getRows();
 
 		List<String> packages = new ArrayList<String>(uns.size());
 		List<String> usernames = new ArrayList<String>(uns.size());

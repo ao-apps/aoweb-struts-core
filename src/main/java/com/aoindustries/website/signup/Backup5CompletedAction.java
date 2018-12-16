@@ -78,7 +78,7 @@ public class Backup5CompletedAction extends Backup5Action {
 		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
-		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
+		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
 
 		// Build the options map
 		Map<String,String> options = new HashMap<String,String>();

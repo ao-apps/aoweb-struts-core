@@ -55,7 +55,7 @@ public class IndexAction  extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		List<Ticket> tickets = aoConn.getTicket().getTickets().getRows();
+		List<Ticket> tickets = aoConn.getTicket().getTicket().getRows();
 
 		List<Ticket> filteredTickets = new ArrayList<Ticket>(tickets.size());
 		for(Ticket ticket : tickets) {

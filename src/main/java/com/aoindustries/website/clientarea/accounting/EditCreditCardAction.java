@@ -69,17 +69,17 @@ public class EditCreditCardAction extends PermissionAction {
 			// Redirect back to credit-card-manager if no persistenceId selected
 			return mapping.findForward("credit-card-manager");
 		}
-		int pkey;
+		int id;
 		try {
-			pkey = Integer.parseInt(persistenceId);
+			id = Integer.parseInt(persistenceId);
 		} catch(NumberFormatException err) {
 			getServlet().log(null, err);
 			// Redirect back to credit-card-manager if persistenceId can't be parsed to int
 			return mapping.findForward("credit-card-manager");
 		}
 		// Find the credit card
-		CreditCard creditCard = aoConn.getPayment().getCreditCards().get(pkey);
-		if(creditCard==null) {
+		CreditCard creditCard = aoConn.getPayment().getCreditCard().get(id);
+		if(creditCard == null) {
 			// Redirect back to credit-card-manager if card no longer exists or is inaccessible
 			return mapping.findForward("credit-card-manager");
 		}

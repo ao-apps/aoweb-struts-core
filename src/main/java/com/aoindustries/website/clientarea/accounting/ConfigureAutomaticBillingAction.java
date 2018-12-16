@@ -64,13 +64,13 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
-		if(business==null) {
+		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		if(account == null) {
 			return mapping.findForward("credit-card-manager");
 		}
 
 		// Get the list of cards for the business, must have at least one card.
-		List<CreditCard> creditCards = business.getCreditCards();
+		List<CreditCard> creditCards = account.getCreditCards();
 		// Build list of active cards
 		List<CreditCard> activeCards = new ArrayList<CreditCard>(creditCards.size());
 		CreditCard automaticCard = null;
@@ -86,7 +86,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		}
 
 		// Store request attributes
-		request.setAttribute("business", business);
+		request.setAttribute("business", account);
 		request.setAttribute("activeCards", activeCards);
 		request.setAttribute("automaticCard", automaticCard);
 

@@ -81,12 +81,12 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 			if(newPassword.length()>0) {
 				MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
-				Host server = aoConn.getNet().getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Host: "+server);
-				com.aoindustries.aoserv.client.linux.Server aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
+				Host host = aoConn.getNet().getHost().get(hostname);
+				if(host == null) throw new SQLException("Unable to find Host: " + host);
+				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
+				if(linuxServer == null) throw new SQLException("Unable to find Server: " + linuxServer);
 				MySQLServerName serverName = MySQLServerName.valueOf(mySQLServers.get(c));
-				Server ms = aoServer.getMySQLServer(serverName);
+				Server ms = linuxServer.getMySQLServer(serverName);
 				if(ms==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
 				UserServer msu = ms.getMySQLServerUser(username);
 				if(msu==null) throw new SQLException("Unable to find UserServer: "+username+" on "+serverName+" on "+hostname);

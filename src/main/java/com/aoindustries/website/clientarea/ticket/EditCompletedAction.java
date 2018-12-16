@@ -66,14 +66,14 @@ public class EditCompletedAction extends PermissionAction {
 		// Look for the existing ticket
 		String pkeyS = request.getParameter("pkey");
 		if(pkeyS==null) return mapping.findForward("index");
-		int pkey;
+		int id;
 		try {
-			pkey = Integer.parseInt(pkeyS);
+			id = Integer.parseInt(pkeyS);
 		} catch(NumberFormatException err) {
 			return mapping.findForward("index");
 		}
-		Ticket ticket = aoConn.getTicket().getTickets().get(pkey);
-		if(ticket==null) {
+		Ticket ticket = aoConn.getTicket().getTicket().get(id);
+		if(ticket == null) {
 			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");
 			return null;
@@ -96,11 +96,11 @@ public class EditCompletedAction extends PermissionAction {
 		boolean annotationAdded = false;
 
 		// Update anything that changed
-		Account newBusiness = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
-		if(newBusiness==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
+		Account newAccount = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		if(newAccount == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
 		Account oldBusiness = ticket.getBusiness();
-		if(!newBusiness.equals(oldBusiness)) {
-			ticket.setBusiness(oldBusiness, newBusiness);
+		if(!newAccount.equals(oldBusiness)) {
+			ticket.setBusiness(oldBusiness, newAccount);
 			businessUpdated = true;
 		}
 		if(!ticketForm.getContactEmails().equals(ticket.getContactEmails())) {
@@ -111,8 +111,8 @@ public class EditCompletedAction extends PermissionAction {
 			ticket.setContactPhoneNumbers(ticketForm.getContactPhoneNumbers());
 			contactPhoneNumbersUpdated = true;
 		}
-		Priority clientPriority = aoConn.getTicket().getTicketPriorities().get(ticketForm.getClientPriority());
-		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
+		Priority clientPriority = aoConn.getTicket().getPriority().get(ticketForm.getClientPriority());
+		if(clientPriority == null) throw new SQLException("Unable to find Priority: " + ticketForm.getClientPriority());
 		if(!clientPriority.equals(ticket.getClientPriority())) {
 			ticket.setClientPriority(clientPriority);
 			clientPriorityUpdated = true;

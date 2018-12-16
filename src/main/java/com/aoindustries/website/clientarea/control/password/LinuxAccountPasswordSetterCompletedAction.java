@@ -79,14 +79,14 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
 				UserId username = UserId.valueOf(usernames.get(c));
-				User la = aoConn.getLinux().getLinuxAccounts().get(username);
-				if(la==null) throw new SQLException("Unable to find User: "+username);
+				User la = aoConn.getLinux().getUser().get(username);
+				if(la == null) throw new SQLException("Unable to find User: " + username);
 				String hostname = aoServers.get(c);
-				Host server = aoConn.getNet().getServers().get(hostname);
-				if(server==null) throw new SQLException("Unable to find Host: "+server);
-				Server aoServer = server.getAOServer();
-				if(aoServer==null) throw new SQLException("Unable to find Server: "+aoServer);
-				UserServer lsa = la.getLinuxServerAccount(aoServer);
+				Host host = aoConn.getNet().getHost().get(hostname);
+				if(host == null) throw new SQLException("Unable to find Host: " + host);
+				Server server = host.getAOServer();
+				if(server == null) throw new SQLException("Unable to find Server: " + server);
+				UserServer lsa = la.getLinuxServerAccount(server);
 				if(lsa==null) throw new SQLException("Unable to find UserServer: "+username+" on "+hostname);
 				lsa.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.linuxAccountPasswordSetter.field.confirmPasswords.passwordReset"));
