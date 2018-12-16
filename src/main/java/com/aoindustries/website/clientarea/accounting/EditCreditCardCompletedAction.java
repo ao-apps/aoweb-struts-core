@@ -74,7 +74,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			return mapping.findForward("credit-card-manager");
 		}
 		// Find the credit card
-		CreditCard creditCard = aoConn.getCreditCards().get(pkey);
+		CreditCard creditCard = aoConn.getPayment().getCreditCards().get(pkey);
 		if(creditCard==null) {
 			// Redirect back to credit-card-manager if card no longer exists or is inaccessible
 			return mapping.findForward("credit-card-manager");
@@ -111,7 +111,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			// Update all fields except card number and expiration
 			// Root connector used to get processor
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
+			CreditCard rootCreditCard = rootConn.getPayment().getCreditCards().get(creditCard.getPkey());
 			if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
 			CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 			com.aoindustries.creditcards.CreditCard storedCreditCard = CreditCardFactory.getCreditCard(rootCreditCard);
@@ -142,7 +142,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			// Update card number and expiration
 			// Root connector used to get processor
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
+			CreditCard rootCreditCard = rootConn.getPayment().getCreditCards().get(creditCard.getPkey());
 			if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
 			CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 			rootProcessor.updateCreditCardNumberAndExpiration(
@@ -163,7 +163,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 				// Update expiration only
 				// Root connector used to get processor
 				AOServConnector rootConn = siteSettings.getRootAOServConnector();
-				CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
+				CreditCard rootCreditCard = rootConn.getPayment().getCreditCards().get(creditCard.getPkey());
 				if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
 				CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 				rootProcessor.updateCreditCardExpiration(

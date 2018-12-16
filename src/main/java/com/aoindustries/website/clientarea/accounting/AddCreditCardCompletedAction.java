@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -86,7 +86,7 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 
 		creditCardProcessor.storeCreditCard(
 			new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
-			new BusinessGroup(aoConn.getBusinesses().get(AccountingCode.valueOf(accounting)), accounting),
+			new BusinessGroup(aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting)), accounting),
 			new CreditCard(
 				null, // persistenceUniqueId
 				null, // principalName

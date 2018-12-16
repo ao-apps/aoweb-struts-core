@@ -64,7 +64,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			return mapping.findForward("credit-card-manager");
 		}

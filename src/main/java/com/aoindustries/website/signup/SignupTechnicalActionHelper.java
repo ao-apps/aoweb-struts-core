@@ -70,7 +70,7 @@ final public class SignupTechnicalActionHelper {
 
 	public static String getBaCountry(AOServConnector rootConn, SignupTechnicalForm signupTechnicalForm) throws IOException, SQLException {
 		String baCountry = signupTechnicalForm.getBaCountry();
-		return baCountry==null || baCountry.length()==0 ? "" : rootConn.getCountryCodes().get(baCountry).getName();
+		return baCountry==null || baCountry.length()==0 ? "" : rootConn.getPayment().getCountryCodes().get(baCountry).getName();
 	}
 
 	public static void setConfirmationRequestAttributes(

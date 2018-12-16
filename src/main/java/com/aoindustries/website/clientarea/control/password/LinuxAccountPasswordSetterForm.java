@@ -119,7 +119,7 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 				} else {
 					if(newPassword.length()>0) {
 						UserId username = UserId.valueOf(usernames.get(c));
-						User la = aoConn.getLinuxAccounts().get(username);
+						User la = aoConn.getLinux().getLinuxAccounts().get(username);
 						if(la==null) {
 							throw new AssertionError("Unable to find User: "+username);
 						} else {

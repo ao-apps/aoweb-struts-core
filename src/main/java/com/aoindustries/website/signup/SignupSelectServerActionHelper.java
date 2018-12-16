@@ -68,7 +68,7 @@ final public class SignupSelectServerActionHelper {
 	 */
 	public static List<Host> getServers(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
-		PackageCategory category = rootConn.getPackageCategories().get(packageCategoryName);
+		PackageCategory category = rootConn.getBilling().getPackageCategories().get(packageCategoryName);
 		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
 		List<Host> servers = new ArrayList<Host>();
@@ -124,7 +124,7 @@ final public class SignupSelectServerActionHelper {
 	) throws IOException, SQLException {
 		// Lookup things needed by the view
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
-		PackageDefinition packageDefinition = rootConn.getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
+		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
 
 		// Store as request attribute for the view
 		request.setAttribute("packageDefinition", packageDefinition);

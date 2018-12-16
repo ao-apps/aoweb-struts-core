@@ -69,7 +69,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 
 		List<MySQLServerRow> mysqlServerRows = new ArrayList<MySQLServerRow>();
-		List<Server> mysqlServers = aoConn.getMysqlServers().getRows();
+		List<Server> mysqlServers = aoConn.getMysql().getMysqlServers().getRows();
 		for(Server mysqlServer : mysqlServers) {
 			com.aoindustries.aoserv.client.linux.Server aoServer = mysqlServer.getAoServer();
 			com.aoindustries.aoserv.client.linux.Server failoverServer;
@@ -77,7 +77,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 				failoverServer = aoServer.getFailoverServer();
 			} catch(SQLException err) {
 				// May be filtered, need to use RootAOServConnector
-				failoverServer = rootConn.getAoServers().get(aoServer.getPkey()).getFailoverServer();
+				failoverServer = rootConn.getLinux().getAoServers().get(aoServer.getPkey()).getFailoverServer();
 			}
 
 			StringBuilder server = new StringBuilder();
@@ -101,7 +101,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 							slave = ffr.getBackupPartition().getAOServer().getHostname();
 						} catch(SQLException err) {
 							// May be filtered, need to use RootAOServConnector
-							slave = rootConn.getFailoverFileReplications().get(ffr.getPkey()).getBackupPartition().getAOServer().getHostname();
+							slave = rootConn.getBackup().getFailoverFileReplications().get(ffr.getPkey()).getBackupPartition().getAOServer().getHostname();
 						}
 					}
 					try {

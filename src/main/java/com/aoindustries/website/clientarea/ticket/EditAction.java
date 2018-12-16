@@ -74,7 +74,7 @@ public class EditAction extends PermissionAction {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid pkey");
 			return null;
 		}
-		Ticket ticket = aoConn.getTickets().get(pkey);
+		Ticket ticket = aoConn.getTicket().getTickets().get(pkey);
 		if(ticket==null) {
 			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");

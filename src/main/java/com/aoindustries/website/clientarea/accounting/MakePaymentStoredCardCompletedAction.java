@@ -75,7 +75,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 
 		// Init request values
 		String accounting = makePaymentStoredCardForm.getAccounting();
-		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -99,7 +99,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			// Can't parse int, redirect back to make-payment
 			return mapping.findForward("make-payment");
 		}
-		CreditCard creditCard = aoConn.getCreditCards().get(pkey);
+		CreditCard creditCard = aoConn.getPayment().getCreditCards().get(pkey);
 		if(creditCard==null) {
 			// creditCard not found, redirect back to make-payment
 			return mapping.findForward("make-payment");
@@ -124,15 +124,15 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 
 		// 1) Pick a processor
-		CreditCard rootCreditCard = rootConn.getCreditCards().get(creditCard.getPkey());
+		CreditCard rootCreditCard = rootConn.getPayment().getCreditCards().get(creditCard.getPkey());
 		if(rootCreditCard==null) throw new SQLException("Unable to find CreditCard: "+creditCard.getPkey());
 		com.aoindustries.aoserv.client.payment.Processor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoProcessor);
 
 		// 2) Add the transaction as pending on this processor
-		Account rootBusiness = rootConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account rootBusiness = rootConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(rootBusiness==null) throw new SQLException("Unable to find Business: "+accounting);
-		TransactionType paymentTransactionType = rootConn.getTransactionTypes().get(TransactionType.PAYMENT);
+		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionTypes().get(TransactionType.PAYMENT);
 		if(paymentTransactionType==null) throw new SQLException("Unable to find TransactionType: "+TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
 		String paymentTypeName;
@@ -151,7 +151,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		PaymentType paymentType;
 		if(paymentTypeName==null) paymentType = null;
 		else {
-			paymentType = rootConn.getPaymentTypes().get(paymentTypeName);
+			paymentType = rootConn.getPayment().getPaymentTypes().get(paymentTypeName);
 			if(paymentType==null) throw new SQLException("Unable to find PaymentType: "+paymentTypeName);
 		}
 
@@ -167,7 +167,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
-		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getTransactions().get(transID);
+		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransactions().get(transID);
 		if(aoTransaction==null) throw new SQLException("Unable to find Transaction: "+transID);
 
 		// 3) Process

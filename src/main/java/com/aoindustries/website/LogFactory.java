@@ -74,7 +74,7 @@ public class LogFactory {
 			try {
 				SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
 				AOServConnector rootConn = siteSettings.getRootAOServConnector();
-				Category category = rootConn.getTicketCategories().getTicketCategoryByDotPath("aoserv.aoweb_struts");
+				Category category = rootConn.getReseller().getTicketCategories().getTicketCategoryByDotPath("aoserv.aoweb_struts");
 				handler = TicketLoggingHandler.getHandler(
 					siteSettings.getBrand().getAowebStrutsHttpUrlBase(),
 					rootConn,

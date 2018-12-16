@@ -72,7 +72,7 @@ public class EditCompletedAction extends PermissionAction {
 		} catch(NumberFormatException err) {
 			return mapping.findForward("index");
 		}
-		Ticket ticket = aoConn.getTickets().get(pkey);
+		Ticket ticket = aoConn.getTicket().getTickets().get(pkey);
 		if(ticket==null) {
 			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");
@@ -96,7 +96,7 @@ public class EditCompletedAction extends PermissionAction {
 		boolean annotationAdded = false;
 
 		// Update anything that changed
-		Account newBusiness = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account newBusiness = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
 		if(newBusiness==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
 		Account oldBusiness = ticket.getBusiness();
 		if(!newBusiness.equals(oldBusiness)) {
@@ -111,7 +111,7 @@ public class EditCompletedAction extends PermissionAction {
 			ticket.setContactPhoneNumbers(ticketForm.getContactPhoneNumbers());
 			contactPhoneNumbersUpdated = true;
 		}
-		Priority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
+		Priority clientPriority = aoConn.getTicket().getTicketPriorities().get(ticketForm.getClientPriority());
 		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
 		if(!clientPriority.equals(ticket.getClientPriority())) {
 			ticket.setClientPriority(clientPriority);

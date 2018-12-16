@@ -84,7 +84,7 @@ public class VirtualDedicated6CompletedAction extends VirtualDedicated6Action {
 		ActionServlet myServlet = getServlet();
 		ServletContext servletContext = myServlet.getServletContext();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
-		PackageDefinition packageDefinition = rootConn.getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
+		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinitions().get(signupSelectPackageForm.getPackageDefinition());
 
 		// Build the options map
 		Map<String,String> options = new HashMap<String,String>();

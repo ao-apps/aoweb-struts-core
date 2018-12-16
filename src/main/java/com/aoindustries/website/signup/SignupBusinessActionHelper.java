@@ -75,7 +75,7 @@ final public class SignupBusinessActionHelper {
 		final int prioritySize = 10;
 		int[] priorityCounter = new int[1];
 		boolean selectedOne = false;
-		List<CountryCode> cc = aoConn.getCountryCodes().getCountryCodesByPriority(prioritySize, priorityCounter);
+		List<CountryCode> cc = aoConn.getPayment().getCountryCodes().getCountryCodesByPriority(prioritySize, priorityCounter);
 		for (int i = 0; i<cc.size(); i++) {
 			if(priorityCounter[0]!=0 && i==priorityCounter[0]) {
 				countryOptions.add(new CountryOption("", "---"));
@@ -107,7 +107,7 @@ final public class SignupBusinessActionHelper {
 	}
 
 	public static String getBusinessCountry(AOServConnector rootConn, SignupBusinessForm signupBusinessForm) throws IOException, SQLException {
-		return rootConn.getCountryCodes().get(signupBusinessForm.getBusinessCountry()).getName();
+		return rootConn.getPayment().getCountryCodes().get(signupBusinessForm.getBusinessCountry()).getName();
 	}
 
 	public static void setConfirmationRequestAttributes(

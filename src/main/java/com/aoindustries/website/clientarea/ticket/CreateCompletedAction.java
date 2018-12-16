@@ -70,18 +70,18 @@ public class CreateCompletedAction extends PermissionAction {
 			return mapping.findForward("input");
 		}
 
-		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(ticketForm.getAccounting()));
 		if(business==null) throw new SQLException("Unable to find Business: "+ticketForm.getAccounting());
-		Language language = aoConn.getLanguages().get(locale.getLanguage());
+		Language language = aoConn.getTicket().getLanguages().get(locale.getLanguage());
 		if(language==null) {
-			language = aoConn.getLanguages().get(Language.EN);
+			language = aoConn.getTicket().getLanguages().get(Language.EN);
 			if(language==null) throw new SQLException("Unable to find Language: "+Language.EN);
 		}
-		TicketType ticketType = aoConn.getTicketTypes().get(TicketType.SUPPORT);
+		TicketType ticketType = aoConn.getTicket().getTicketTypes().get(TicketType.SUPPORT);
 		if(ticketType==null) throw new SQLException("Unable to find TicketType: "+TicketType.SUPPORT);
-		Priority clientPriority = aoConn.getTicketPriorities().get(ticketForm.getClientPriority());
+		Priority clientPriority = aoConn.getTicket().getTicketPriorities().get(ticketForm.getClientPriority());
 		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+ticketForm.getClientPriority());
-		int pkey = aoConn.getTickets().addTicket(
+		int pkey = aoConn.getTicket().getTickets().addTicket(
 			siteSettings.getBrand(),
 			business,
 			language,

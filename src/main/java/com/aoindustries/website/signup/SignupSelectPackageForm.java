@@ -74,10 +74,10 @@ abstract public class SignupSelectPackageForm extends ActionForm implements Seri
 			ActionServlet myServlet = getServlet();
 			if(myServlet!=null) {
 				AOServConnector rootConn = SiteSettings.getInstance(myServlet.getServletContext()).getRootAOServConnector();
-				PackageCategory category = rootConn.getPackageCategories().get(getPackageCategory());
+				PackageCategory category = rootConn.getBilling().getPackageCategories().get(getPackageCategory());
 				Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 
-				PackageDefinition pd = rootConn.getPackageDefinitions().get(packageDefinition);
+				PackageDefinition pd = rootConn.getBilling().getPackageDefinitions().get(packageDefinition);
 				if(pd==null || !pd.getPackageCategory().equals(category) || !pd.getBusiness().equals(rootBusiness)) {
 					errors.add("packageDefinition", new ActionMessage("signupSelectPackageForm.packageDefinition.required"));
 				}

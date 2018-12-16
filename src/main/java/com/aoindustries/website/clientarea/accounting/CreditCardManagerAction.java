@@ -61,7 +61,7 @@ public class CreditCardManagerAction extends PermissionAction {
 
 		// Create a map from business to list of credit cards
 		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<BusinessAndCreditCards>();
-		for(Account business : aoConn.getBusinesses().getRows()) {
+		for(Account business : aoConn.getAccount().getBusinesses().getRows()) {
 			List<CreditCard> ccs = business.getCreditCards();
 			if(
 				thisBusiness.equals(business)
@@ -81,7 +81,7 @@ public class CreditCardManagerAction extends PermissionAction {
 				businessCreditCards.add(new BusinessAndCreditCards(business, ccs, hasActiveCard));
 			}
 		}
-		boolean showAccounting = aoConn.getBusinesses().getRows().size()>1;
+		boolean showAccounting = aoConn.getAccount().getBusinesses().getRows().size()>1;
 
 		request.setAttribute("businessCreditCards", businessCreditCards);
 		request.setAttribute("showAccounting", showAccounting ? "true" : "false");

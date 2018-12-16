@@ -81,7 +81,7 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 	) throws Exception {
 		// Find the requested business
 		String accounting = request.getParameter("accounting");
-		Account business = accounting==null ? null : aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = accounting==null ? null : aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");

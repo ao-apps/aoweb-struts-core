@@ -78,7 +78,7 @@ public class EditCreditCardAction extends PermissionAction {
 			return mapping.findForward("credit-card-manager");
 		}
 		// Find the credit card
-		CreditCard creditCard = aoConn.getCreditCards().get(pkey);
+		CreditCard creditCard = aoConn.getPayment().getCreditCards().get(pkey);
 		if(creditCard==null) {
 			// Redirect back to credit-card-manager if card no longer exists or is inaccessible
 			return mapping.findForward("credit-card-manager");

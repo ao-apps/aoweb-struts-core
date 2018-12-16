@@ -65,7 +65,7 @@ public class CancelFeedbackCompletedAction  extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(business)) {
 			bu = null;
 		} else {
-			bu = aoConn.getBusinesses().get(AccountingCode.valueOf(business));
+			bu = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(business));
 		}
 		if(bu==null || !bu.canCancel()) {
 			return mapping.findForward("invalid-business");

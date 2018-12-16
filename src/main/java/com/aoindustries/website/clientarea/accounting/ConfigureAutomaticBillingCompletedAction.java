@@ -65,7 +65,7 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account business = aoConn.getBusinesses().get(AccountingCode.valueOf(accounting));
+		Account business = aoConn.getAccount().getBusinesses().get(AccountingCode.valueOf(accounting));
 		if(business==null) {
 			return mapping.findForward("credit-card-manager");
 		}
@@ -79,7 +79,7 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		if(pkey.length()==0) {
 			creditCard=null;
 		} else {
-			creditCard = aoConn.getCreditCards().get(Integer.parseInt(pkey));
+			creditCard = aoConn.getPayment().getCreditCards().get(Integer.parseInt(pkey));
 			if(creditCard==null) return mapping.findForward("credit-card-manager");
 			if(!creditCard.getBusiness().equals(business)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getAccounting()+"!="+business.getAccounting());
 		}

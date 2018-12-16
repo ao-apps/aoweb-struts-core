@@ -60,16 +60,16 @@ public class ContactCompletedAction extends SkinAction {
 		}
 
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
-		Language language = rootConn.getLanguages().get(locale.getLanguage());
+		Language language = rootConn.getTicket().getLanguages().get(locale.getLanguage());
 		if(language==null) {
-			language = rootConn.getLanguages().get(Language.EN);
+			language = rootConn.getTicket().getLanguages().get(Language.EN);
 			if(language==null) throw new SQLException("Unable to find Language: "+Language.EN);
 		}
-		TicketType ticketType = rootConn.getTicketTypes().get(TicketType.CONTACT);
+		TicketType ticketType = rootConn.getTicket().getTicketTypes().get(TicketType.CONTACT);
 		if(ticketType==null) throw new SQLException("Unable to find TicketType: "+TicketType.CONTACT);
-		Priority clientPriority = rootConn.getTicketPriorities().get(Priority.NORMAL);
+		Priority clientPriority = rootConn.getTicket().getTicketPriorities().get(Priority.NORMAL);
 		if(clientPriority==null) throw new SQLException("Unable to find TicketPriority: "+Priority.NORMAL);
-		rootConn.getTickets().addTicket(
+		rootConn.getTicket().getTickets().addTicket(
 			siteSettings.getBrand(),
 			null,
 			language,
