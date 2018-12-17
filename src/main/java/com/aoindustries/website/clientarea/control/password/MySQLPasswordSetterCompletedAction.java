@@ -25,10 +25,9 @@ package com.aoindustries.website.clientarea.control.password;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.mysql.Server;
+import com.aoindustries.aoserv.client.mysql.User;
 import com.aoindustries.aoserv.client.mysql.UserServer;
 import com.aoindustries.aoserv.client.net.Host;
-import com.aoindustries.aoserv.client.validator.MySQLServerName;
-import com.aoindustries.aoserv.client.validator.MySQLUserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -79,13 +78,13 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				MySQLUserId username = MySQLUserId.valueOf(usernames.get(c));
+				User.Name username = User.Name.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
 				Host host = aoConn.getNet().getHost().get(hostname);
 				if(host == null) throw new SQLException("Unable to find Host: " + host);
 				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
 				if(linuxServer == null) throw new SQLException("Unable to find Server: " + linuxServer);
-				MySQLServerName serverName = MySQLServerName.valueOf(mySQLServers.get(c));
+				Server.Name serverName = Server.Name.valueOf(mySQLServers.get(c));
 				Server ms = linuxServer.getMySQLServer(serverName);
 				if(ms==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
 				UserServer msu = ms.getMySQLServerUser(username);

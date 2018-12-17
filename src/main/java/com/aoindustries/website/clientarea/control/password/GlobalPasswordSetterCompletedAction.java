@@ -23,9 +23,8 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Username;
+import com.aoindustries.aoserv.client.account.User;
 import com.aoindustries.aoserv.client.master.Permission;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -74,8 +73,8 @@ public class GlobalPasswordSetterCompletedAction extends PermissionAction {
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				UserId username = UserId.valueOf(usernames.get(c));
-				Username un = aoConn.getAccount().getUsername().get(username);
+				User.Name username = User.Name.valueOf(usernames.get(c));
+				User un = aoConn.getAccount().getUser().get(username);
 				if(un == null) throw new SQLException("Unable to find Username: " + username);
 				un.setPassword(newPassword);
 				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.globalPasswordSetter.field.confirmPasswords.passwordReset"));

@@ -27,7 +27,6 @@ import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.BusinessGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
@@ -76,7 +75,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		initRequestAttributes(request, getServlet().getServletContext());
 
 		String accounting = makePaymentNewCardForm.getAccounting();
-		Account account = accounting == null ? null : aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account account = accounting == null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(account == null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -135,7 +134,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		if(rootAoProcessor == null) throw new SQLException("Unable to find CreditCardProcessor: " + rootProcessor.getProviderId());
 
 		// 2) Add the transaction as pending on this processor
-		Account rootAccount = rootConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account rootAccount = rootConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(rootAccount == null) throw new SQLException("Unable to find Account: " + accounting);
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
@@ -366,7 +365,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		String persistenceUniqueId = newCreditCard.getPersistenceUniqueId();
 		CreditCard creditCard = rootConn.getPayment().getCreditCard().get(Integer.parseInt(persistenceUniqueId));
 		if(creditCard == null) throw new SQLException("Unable to find CreditCard: " + persistenceUniqueId);
-		if(!creditCard.getBusiness().equals(business)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getAccounting()+"!="+business.getAccounting());
+		if(!creditCard.getBusiness().equals(business)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getName()+"!="+business.getName());
 		business.setUseMonthlyCreditCard(creditCard);
 	}
 }

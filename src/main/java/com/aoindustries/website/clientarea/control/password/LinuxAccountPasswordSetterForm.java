@@ -25,7 +25,6 @@ package com.aoindustries.website.clientarea.control.password;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
@@ -118,7 +117,7 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.linuxAccountPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						UserId username = UserId.valueOf(usernames.get(c));
+						User.Name username = User.Name.valueOf(usernames.get(c));
 						User la = aoConn.getLinux().getUser().get(username);
 						if(la == null) {
 							throw new AssertionError("Unable to find User: " + username);

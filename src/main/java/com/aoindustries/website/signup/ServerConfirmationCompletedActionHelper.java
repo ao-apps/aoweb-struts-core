@@ -24,10 +24,11 @@ package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.payment.CountryCode;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.net.Email;
 import com.aoindustries.net.HostAddress;
 import com.aoindustries.net.InetAddress;
 import com.aoindustries.util.i18n.ThreadLocale;
@@ -119,8 +120,7 @@ final public class ServerConfirmationCompletedActionHelper {
 			CountryCode businessCountry = rootConn.getPayment().getCountryCode().get(signupBusinessForm.getBusinessCountry());
 			CountryCode baCountry = GenericValidator.isBlankOrNull(signupTechnicalForm.getBaCountry()) ? null : rootConn.getPayment().getCountryCode().get(signupTechnicalForm.getBaCountry());
 
-			pkey = rootConn.getSignup().getRequest().addSignupRequest(
-				rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness().getBrand(),
+			pkey = rootConn.getSignup().getRequest().addSignupRequest(rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness().getBrand(),
 				InetAddress.valueOf(request.getRemoteAddr()),
 				packageDefinition,
 				signupBusinessForm.getBusinessName(),
@@ -138,16 +138,16 @@ final public class ServerConfirmationCompletedActionHelper {
 				signupTechnicalForm.getBaCellPhone(),
 				signupTechnicalForm.getBaHomePhone(),
 				signupTechnicalForm.getBaFax(),
-				signupTechnicalForm.getBaEmail(),
+				Email.valueOf(signupTechnicalForm.getBaEmail()),
 				signupTechnicalForm.getBaAddress1(),
 				signupTechnicalForm.getBaAddress2(),
 				signupTechnicalForm.getBaCity(),
 				signupTechnicalForm.getBaState(),
 				baCountry,
 				signupTechnicalForm.getBaZip(),
-				UserId.valueOf(signupTechnicalForm.getBaUsername()),
+				User.Name.valueOf(signupTechnicalForm.getBaUsername()),
 				signupBillingInformationForm.getBillingContact(),
-				signupBillingInformationForm.getBillingEmail(),
+				Email.valueOf(signupBillingInformationForm.getBillingEmail()),
 				signupBillingInformationForm.getBillingUseMonthly(),
 				signupBillingInformationForm.getBillingPayOneYear(),
 				signupTechnicalForm.getBaPassword(),

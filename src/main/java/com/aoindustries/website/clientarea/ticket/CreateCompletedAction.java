@@ -24,11 +24,11 @@ package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Language;
 import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.TicketType;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -70,7 +70,7 @@ public class CreateCompletedAction extends PermissionAction {
 			return mapping.findForward("input");
 		}
 
-		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccounting()));
 		if(account == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
 		Language language = aoConn.getTicket().getLanguage().get(locale.getLanguage());
 		if(language == null) {
@@ -91,7 +91,7 @@ public class CreateCompletedAction extends PermissionAction {
 			ticketForm.getSummary(),
 			ticketForm.getDetails(),
 			clientPriority,
-			ticketForm.getContactEmails(),
+			Profile.splitEmails(ticketForm.getContactEmails()),
 			ticketForm.getContactPhoneNumbers()
 		);
 		request.setAttribute("pkey", pkey);

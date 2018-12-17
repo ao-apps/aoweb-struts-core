@@ -24,8 +24,8 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.master.Permission;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -74,7 +74,7 @@ public class BusinessAdministratorPasswordSetterCompletedAction extends Authenti
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				UserId username = UserId.valueOf(usernames.get(c));
+				User.Name username = User.Name.valueOf(usernames.get(c));
 				if(!thisBA.hasPermission(Permission.Name.set_business_administrator_password) && !thisBA.getUsername().getUsername().equals(username)) {
 					Permission aoPerm = aoConn.getMaster().getPermission().get(Permission.Name.set_business_administrator_password);
 					if(aoPerm==null) throw new SQLException("Unable to find AOServPermission: "+Permission.Name.set_business_administrator_password);

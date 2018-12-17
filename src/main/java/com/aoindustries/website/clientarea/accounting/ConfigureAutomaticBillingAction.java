@@ -26,7 +26,6 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -64,7 +63,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(account == null) {
 			return mapping.findForward("credit-card-manager");
 		}

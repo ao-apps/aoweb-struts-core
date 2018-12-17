@@ -26,7 +26,6 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -65,7 +64,7 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accounting)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account account = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(account == null) {
 			return mapping.findForward("credit-card-manager");
 		}
@@ -81,7 +80,7 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		} else {
 			creditCard = aoConn.getPayment().getCreditCard().get(Integer.parseInt(pkey));
 			if(creditCard == null) return mapping.findForward("credit-card-manager");
-			if(!creditCard.getBusiness().equals(account)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getAccounting()+"!="+account.getAccounting());
+			if(!creditCard.getBusiness().equals(account)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getName()+"!="+account.getName());
 		}
 
 		account.setUseMonthlyCreditCard(creditCard);

@@ -25,7 +25,6 @@ package com.aoindustries.website.clientarea.control.business;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -65,7 +64,7 @@ public class CancelFeedbackCompletedAction  extends PermissionAction {
 		if(GenericValidator.isBlankOrNull(accountId)) {
 			bu = null;
 		} else {
-			bu = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accountId));
+			bu = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accountId));
 		}
 		if(bu==null || !bu.canCancel()) {
 			return mapping.findForward("invalid-business");

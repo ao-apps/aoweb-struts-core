@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,7 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.validator.UserId;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
 import java.util.Locale;
@@ -107,7 +107,7 @@ abstract public class AuthenticatedAction extends SkinAction {
 					aoConn = authenticatedAoConn;
 				} else {
 					try {
-						UserId suId = UserId.valueOf(su);
+						User.Name suId = User.Name.valueOf(su);
 						aoConn = authenticatedAoConn.switchUsers(suId);
 					} catch(ValidationException e) {
 						// Ignore requests for invalid su

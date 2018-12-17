@@ -70,7 +70,7 @@ public class MakePaymentAction extends AuthenticatedAction {
 		}
 		if(accounts.size()==1) {
 			// Redirect, only one option
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-select-card.do?accounting="+accounts.get(0).getAccounting()));
+			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-select-card.do?accounting="+accounts.get(0).getName()));
 			return null;
 		} else {
 			// Show selector screen

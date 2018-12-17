@@ -27,7 +27,6 @@ import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.Payment;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -81,7 +80,7 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 	) throws Exception {
 		// Find the requested business
 		String accounting = request.getParameter("accounting");
-		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(account == null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");

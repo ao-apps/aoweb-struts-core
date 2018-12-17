@@ -23,8 +23,8 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
@@ -119,9 +119,9 @@ public class SiteSettings {
 	 *
 	 * @see #getRootAOServConnector()
 	 */
-	protected UserId getRootAOServConnectorUsername() {
+	protected User.Name getRootAOServConnectorUsername() {
 		try {
-			return UserId.valueOf(servletContext.getInitParameter("root.aoserv.client.username"));
+			return User.Name.valueOf(servletContext.getInitParameter("root.aoserv.client.username"));
 		} catch(ValidationException e) {
 			throw new WrappedException(e);
 		}

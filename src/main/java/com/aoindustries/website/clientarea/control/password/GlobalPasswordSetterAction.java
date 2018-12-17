@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Username;
+import com.aoindustries.aoserv.client.account.User;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
@@ -57,13 +57,13 @@ public class GlobalPasswordSetterAction extends PermissionAction {
 	) throws Exception {
 		GlobalPasswordSetterForm globalPasswordSetterForm = (GlobalPasswordSetterForm)form;
 
-		List<Username> uns = aoConn.getAccount().getUsername().getRows();
+		List<User> uns = aoConn.getAccount().getUser().getRows();
 
 		List<String> packages = new ArrayList<String>(uns.size());
 		List<String> usernames = new ArrayList<String>(uns.size());
 		List<String> newPasswords = new ArrayList<String>(uns.size());
 		List<String> confirmPasswords = new ArrayList<String>(uns.size());
-		for(Username un : uns) {
+		for(User un : uns) {
 			if(un.canSetPassword()) {
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());

@@ -27,7 +27,6 @@ import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.BusinessGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
@@ -75,7 +74,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 
 		// Init request values
 		String accounting = makePaymentStoredCardForm.getAccounting();
-		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(account == null) {
 			// Redirect back to make-payment if business not found
 			return mapping.findForward("make-payment");
@@ -130,7 +129,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoProcessor);
 
 		// 2) Add the transaction as pending on this processor
-		Account rootAccount = rootConn.getAccount().getAccount().get(AccountingCode.valueOf(accounting));
+		Account rootAccount = rootConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
 		if(rootAccount == null) throw new SQLException("Unable to find Account: " + accounting);
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);

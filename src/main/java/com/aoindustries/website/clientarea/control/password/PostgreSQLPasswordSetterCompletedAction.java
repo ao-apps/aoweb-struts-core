@@ -26,9 +26,8 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.net.Host;
 import com.aoindustries.aoserv.client.postgresql.Server;
+import com.aoindustries.aoserv.client.postgresql.User;
 import com.aoindustries.aoserv.client.postgresql.UserServer;
-import com.aoindustries.aoserv.client.validator.PostgresServerName;
-import com.aoindustries.aoserv.client.validator.PostgresUserId;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -79,13 +78,13 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
-				PostgresUserId username = PostgresUserId.valueOf(usernames.get(c));
+				User.Name username = User.Name.valueOf(usernames.get(c));
 				String hostname = aoServers.get(c);
 				Host host = aoConn.getNet().getHost().get(hostname);
 				if(host == null) throw new SQLException("Unable to find Host: " + host);
 				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
 				if(linuxServer == null) throw new SQLException("Unable to find Server: " + host);
-				PostgresServerName serverName = PostgresServerName.valueOf(postgreSQLServers.get(c));
+				Server.Name serverName = Server.Name.valueOf(postgreSQLServers.get(c));
 				Server ps = linuxServer.getPostgresServer(serverName);
 				if(ps==null) throw new SQLException("Unable to find Server: "+serverName+" on "+hostname);
 				UserServer psu = ps.getPostgresServerUser(username);

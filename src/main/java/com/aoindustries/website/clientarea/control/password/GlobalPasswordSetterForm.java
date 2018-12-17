@@ -23,8 +23,8 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
@@ -106,7 +106,7 @@ public class GlobalPasswordSetterForm extends ActionForm implements Serializable
 					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.globalPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
-						UserId username = UserId.valueOf(usernames.get(c));
+						User.Name username = User.Name.valueOf(usernames.get(c));
 						// Check the password strength
 						List<PasswordChecker.Result> results = PasswordChecker.checkPassword(username, newPassword, PasswordChecker.PasswordStrength.STRICT);
 						if(PasswordChecker.hasResults(results)) {

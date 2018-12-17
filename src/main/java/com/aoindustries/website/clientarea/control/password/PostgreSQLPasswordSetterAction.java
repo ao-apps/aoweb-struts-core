@@ -23,7 +23,6 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Username;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.postgresql.Server;
 import com.aoindustries.aoserv.client.postgresql.User;
@@ -72,7 +71,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 		for(UserServer psu : psus) {
 			if(psu.canSetPassword()) {
 				User pu = psu.getPostgresUser();
-				Username un = pu.getUsername();
+				com.aoindustries.aoserv.client.account.User un = pu.getUsername();
 				Server ps = psu.getPostgresServer();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());

@@ -24,7 +24,7 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Administrator;
-import com.aoindustries.aoserv.client.account.Username;
+import com.aoindustries.aoserv.client.account.User;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
@@ -69,7 +69,7 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 		List<String> confirmPasswords = new ArrayList<String>(bas.size());
 		for(Administrator ba : bas) {
 			if(ba.canSetPassword()) {
-				Username un = ba.getUsername();
+				User un = ba.getUsername();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				newPasswords.add("");

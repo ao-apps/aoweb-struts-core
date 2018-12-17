@@ -86,7 +86,7 @@ public class EditCreditCardAction extends PermissionAction {
 
 		// Populate the initial details from selected card
 		editCreditCardForm.setIsActive(creditCard.getIsActive() ? "true" : "false");
-		editCreditCardForm.setAccounting(creditCard.getBusiness().getAccounting().toString());
+		editCreditCardForm.setAccounting(creditCard.getBusiness().getName().toString());
 		editCreditCardForm.setFirstName(creditCard.getFirstName());
 		editCreditCardForm.setLastName(creditCard.getLastName());
 		editCreditCardForm.setCompanyName(creditCard.getCompanyName());

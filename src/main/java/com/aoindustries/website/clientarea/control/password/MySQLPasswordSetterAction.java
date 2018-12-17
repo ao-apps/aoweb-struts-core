@@ -23,7 +23,6 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Username;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.mysql.Server;
 import com.aoindustries.aoserv.client.mysql.User;
@@ -72,7 +71,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 		for(UserServer msu : msus) {
 			if(msu.canSetPassword()) {
 				User mu = msu.getMySQLUser();
-				Username un = mu.getUsername();
+				com.aoindustries.aoserv.client.account.User un = mu.getUsername();
 				Server ms = msu.getMySQLServer();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());

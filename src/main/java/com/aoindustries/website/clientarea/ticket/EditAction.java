@@ -26,6 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Ticket;
+import com.aoindustries.util.StringUtility;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -83,9 +84,9 @@ public class EditAction extends PermissionAction {
 
 		// Populate the ticket form
 		Account business = ticket.getBusiness();
-		ticketForm.setAccounting(business==null ? "" : business.getAccounting().toString());
+		ticketForm.setAccounting(business==null ? "" : business.getName().toString());
 		ticketForm.setClientPriority(ticket.getClientPriority().getPriority());
-		ticketForm.setContactEmails(ticket.getContactEmails());
+		ticketForm.setContactEmails(StringUtility.join(ticket.getContactEmails(), ", "));
 		ticketForm.setContactPhoneNumbers(ticket.getContactPhoneNumbers());
 		ticketForm.setDetails(ticket.getDetails());
 		ticketForm.setSummary(ticket.getSummary());

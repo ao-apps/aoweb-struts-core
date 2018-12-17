@@ -24,8 +24,8 @@ package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Administrator;
+import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
-import com.aoindustries.aoserv.client.validator.UserId;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
@@ -109,7 +109,7 @@ public class BusinessAdministratorPasswordSetterForm extends ActionForm implemen
 					if(newPassword.length()>0) {
 						String username = usernames.get(c);
 						// Check the password strength
-						List<PasswordChecker.Result> results = Administrator.checkPassword(UserId.valueOf(username), newPassword);
+						List<PasswordChecker.Result> results = Administrator.checkPassword(User.Name.valueOf(username), newPassword);
 						if(PasswordChecker.hasResults(results)) {
 							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
 						}

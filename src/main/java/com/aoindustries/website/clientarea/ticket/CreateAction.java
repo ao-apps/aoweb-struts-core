@@ -60,7 +60,7 @@ public class CreateAction extends PermissionAction {
 		Administrator thisBusinessAdministrator = aoConn.getThisBusinessAdministrator();
 
 		// Default to the business of the authenticated user
-		ticketForm.setAccounting(thisBusinessAdministrator.getUsername().getPackage().getBusiness().getAccounting().toString());
+		ticketForm.setAccounting(thisBusinessAdministrator.getUsername().getPackage().getBusiness().getName().toString());
 
 		// Default to normal priority
 		ticketForm.setClientPriority(Priority.NORMAL);

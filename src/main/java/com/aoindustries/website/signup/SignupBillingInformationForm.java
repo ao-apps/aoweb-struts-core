@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,6 +23,8 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.creditcards.CreditCard;
+import com.aoindustries.net.Email;
+import com.aoindustries.validation.ValidationResult;
 import com.aoindustries.website.SessionActionForm;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
@@ -197,8 +199,13 @@ public class SignupBillingInformationForm extends ActionForm implements Serializ
 		if(GenericValidator.isBlankOrNull(billingContact)) errors.add("billingContact", new ActionMessage("signupBillingInformationForm.billingContact.required"));
 		if(GenericValidator.isBlankOrNull(billingEmail)) {
 			errors.add("billingEmail", new ActionMessage("signupBillingInformationForm.billingEmail.required"));
-		} else if(!GenericValidator.isEmail(billingEmail)) {
-			errors.add("billingEmail", new ActionMessage("signupBillingInformationForm.billingEmail.invalid"));
+		//} else if(!GenericValidator.isEmail(billingEmail)) {
+		//	errors.add("billingEmail", new ActionMessage("signupBillingInformationForm.billingEmail.invalid"));
+		} else {
+			ValidationResult billingEmailCheck = Email.validate(billingEmail);
+			if(!billingEmailCheck.isValid()) {
+				errors.add("billingEmail", new ActionMessage(billingEmailCheck.toString(), false));
+			}
 		}
 		if(GenericValidator.isBlankOrNull(billingCardholderName)) errors.add("billingCardholderName", new ActionMessage("signupBillingInformationForm.billingCardholderName.required"));
 		if(GenericValidator.isBlankOrNull(billingCardNumber)) {

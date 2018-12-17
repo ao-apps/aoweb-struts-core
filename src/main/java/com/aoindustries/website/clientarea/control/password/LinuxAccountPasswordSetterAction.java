@@ -23,7 +23,6 @@
 package com.aoindustries.website.clientarea.control.password;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.account.Username;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.linux.UserServer;
 import com.aoindustries.aoserv.client.master.Permission;
@@ -70,7 +69,7 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 		for(UserServer lsa : lsas) {
 			if(lsa.canSetPassword()) {
 				User la = lsa.getLinuxAccount();
-				Username un = la.getUsername();
+				com.aoindustries.aoserv.client.account.User un = la.getUsername();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				aoServers.add(lsa.getAOServer().getHostname().toString());

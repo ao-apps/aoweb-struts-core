@@ -24,10 +24,11 @@ package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.Ticket;
-import com.aoindustries.aoserv.client.validator.AccountingCode;
+import com.aoindustries.net.Email;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -96,15 +98,16 @@ public class EditCompletedAction extends PermissionAction {
 		boolean annotationAdded = false;
 
 		// Update anything that changed
-		Account newAccount = aoConn.getAccount().getAccount().get(AccountingCode.valueOf(ticketForm.getAccounting()));
+		Account newAccount = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccounting()));
 		if(newAccount == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
 		Account oldBusiness = ticket.getBusiness();
 		if(!newAccount.equals(oldBusiness)) {
 			ticket.setBusiness(oldBusiness, newAccount);
 			businessUpdated = true;
 		}
-		if(!ticketForm.getContactEmails().equals(ticket.getContactEmails())) {
-			ticket.setContactEmails(ticketForm.getContactEmails());
+		Set<Email> contactEmails = Profile.splitEmails(ticketForm.getContactEmails());
+		if(!contactEmails.equals(ticket.getContactEmails())) {
+			ticket.setContactEmails(contactEmails);
 			contactEmailsUpdated = true;
 		}
 		if(!ticketForm.getContactPhoneNumbers().equals(ticket.getContactPhoneNumbers())) {

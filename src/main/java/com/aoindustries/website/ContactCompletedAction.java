@@ -26,7 +26,9 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.ticket.Language;
 import com.aoindustries.aoserv.client.ticket.Priority;
 import com.aoindustries.aoserv.client.ticket.TicketType;
+import com.aoindustries.net.Email;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,17 +71,18 @@ public class ContactCompletedAction extends SkinAction {
 		if(ticketType == null) throw new SQLException("Unable to find TicketType: " + TicketType.CONTACT);
 		Priority clientPriority = rootConn.getTicket().getPriority().get(Priority.NORMAL);
 		if(clientPriority == null) throw new SQLException("Unable to find Priority: " + Priority.NORMAL);
+		Email from = Email.valueOf(contactForm.getFrom());
 		rootConn.getTicket().getTicket().addTicket(
 			siteSettings.getBrand(),
 			null,
 			language,
 			null,
 			ticketType,
-			contactForm.getFrom(),
+			from,
 			contactForm.getSubject(),
 			contactForm.getMessage(),
 			clientPriority,
-			contactForm.getFrom(),
+			Collections.singleton(from),
 			""
 		);
 

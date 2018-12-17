@@ -23,7 +23,8 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.aoserv.client.validator.UserId;
+import com.aoindustries.aoserv.client.account.User;
+import com.aoindustries.net.Email;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.validation.ValidationResult;
@@ -231,8 +232,13 @@ public class SignupTechnicalForm extends ActionForm implements Serializable, Ses
 			if(GenericValidator.isBlankOrNull(baWorkPhone)) errors.add("baWorkPhone", new ActionMessage("signupTechnicalForm.baWorkPhone.required"));
 			if(GenericValidator.isBlankOrNull(baEmail)) {
 				errors.add("baEmail", new ActionMessage("signupTechnicalForm.baEmail.required"));
-			} else if(!GenericValidator.isEmail(baEmail)) {
-				errors.add("baEmail", new ActionMessage("signupTechnicalForm.baEmail.invalid"));
+			//} else if(!GenericValidator.isEmail(baEmail)) {
+			//	errors.add("baEmail", new ActionMessage("signupTechnicalForm.baEmail.invalid"));
+			} else {
+				ValidationResult baEmailCheck = Email.validate(baEmail);
+				if(!baEmailCheck.isValid()) {
+					errors.add("baEmail", new ActionMessage(baEmailCheck.toString(), false));
+				}
 			}
 			if(GenericValidator.isBlankOrNull(baUsername)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.required"));
 			else {
@@ -240,19 +246,19 @@ public class SignupTechnicalForm extends ActionForm implements Serializable, Ses
 				if(myServlet!=null) {
 					AOServConnector rootConn = SiteSettings.getInstance(myServlet.getServletContext()).getRootAOServConnector();
 					String lowerUsername = baUsername.toLowerCase();
-					ValidationResult check = UserId.validate(lowerUsername);
+					ValidationResult check = User.Name.validate(lowerUsername);
 					if(!check.isValid()) {
 						errors.add("baUsername", new ActionMessage(check.toString(), false));
 					} else {
-						UserId userId;
+						User.Name userId;
 						try {
-							userId = UserId.valueOf(lowerUsername);
+							userId = User.Name.valueOf(lowerUsername);
 						} catch(ValidationException e) {
 							AssertionError ae = new AssertionError("Already validated");
 							ae.initCause(e);
 							throw ae;
 						}
-						if(!rootConn.getAccount().getUsername().isUsernameAvailable(userId)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
+						if(!rootConn.getAccount().getUser().isUsernameAvailable(userId)) errors.add("baUsername", new ActionMessage("signupTechnicalForm.baUsername.unavailable"));
 					}
 				}
 			}
