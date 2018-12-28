@@ -292,7 +292,10 @@ public class VncConsoleProxySocketHandler {
 						// Do not log any socket exceptions
 					} catch(SSLHandshakeException err) {
 						String message = err.getMessage();
-						if(!"Remote host closed connection during handshake".equals(message)) {
+						if(
+							!"Remote host closed connection during handshake".equals(message)
+							&& !"Remote host terminated the handshake".equals(message)
+						) {
 							LogFactory.getLogger(servletContext, getClass()).log(Level.INFO, null, err);
 						}
 					} catch(Throwable T) {
