@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,11 +22,7 @@
  */
 package com.aoindustries.website.book;
 
-import com.aoindustries.net.DomainName;
-import com.aoindustries.net.Path;
 import com.aoindustries.validation.ValidationException;
-import com.semanticcms.core.model.BookRef;
-import com.semanticcms.core.model.ResourceRef;
 import com.semanticcms.tagreference.TagReferenceInitializer;
 import java.util.Collections;
 
@@ -39,16 +35,11 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 		super(
 			"AOWeb Struts Skin Taglib Reference",
 			"Skin Taglib Reference",
-			new ResourceRef(
-				new BookRef(
-					DomainName.valueOf("aoindustries.com"),
-					Path.valueOf("/aoweb-struts/core")
-				),
-				Path.valueOf("/aoweb-struts-skin.tld")
-			),
+			"/aoweb-struts/core",
+			"/aoweb-struts-skin.tld",
 			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
-			Collections.singletonMap("com.aoindustries.website.skintags.", Maven.properties.getProperty("documented.url") + "apidocs/")
+			Collections.singletonMap("com.aoindustries.website.skintags.", Maven.properties.getProperty("documented.url") + "apidocs")
 		);
 	}
 }
