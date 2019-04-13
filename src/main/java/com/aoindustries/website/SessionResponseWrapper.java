@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -184,17 +184,23 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 		if(session.isNew() || request.isRequestedSessionIdFromURL()) {
 			// Don't add for certains file types
 			int pos = url.indexOf('?');
-			String lowerPath = (pos==-1 ? url : url.substring(0, pos)).toLowerCase(Locale.ENGLISH);
+			String lowerPath = (pos==-1 ? url : url.substring(0, pos)).toLowerCase(Locale.ROOT);
 			//System.err.println("DEBUG: addNoCookieParameters: lowerPath="+lowerPath);
 			if(
-				!lowerPath.endsWith(".css")
+				// Matches LocaleFilter
+				// Matches NoSessionFilter
+				!lowerPath.endsWith(".bmp")
+				&& !lowerPath.endsWith(".css")
+				&& !lowerPath.endsWith(".exe")
 				&& !lowerPath.endsWith(".gif")
 				&& !lowerPath.endsWith(".ico")
 				&& !lowerPath.endsWith(".jpeg")
 				&& !lowerPath.endsWith(".jpg")
 				&& !lowerPath.endsWith(".js")
 				&& !lowerPath.endsWith(".png")
+				&& !lowerPath.endsWith(".svg")
 				&& !lowerPath.endsWith(".txt")
+				&& !lowerPath.endsWith(".zip")
 			) {
 				// Use the default servlet container jsessionid when any session object exists besides
 				// the three values that will be encoded into the URL as parameters below.

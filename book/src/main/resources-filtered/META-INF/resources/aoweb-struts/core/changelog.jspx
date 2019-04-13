@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2018-05-06T13:05:51-0500"
+		dateModified="2019-04-13T10:17:41-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -56,6 +56,24 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<ul>
 					<li>Working on VNC compatibility for HVM guests on Xen 4.6 on CentOS 7.</li>
 					<li>Updated dependencies.</li>
+					<li>
+						Aligned the session URL rewriting excluded path extensions to match other projects.
+						The list is now:
+						<ol>
+							<li><code>*.bmp</code> (added this release)</li>
+							<li><code>*.css</code></li>
+							<li><code>*.exe</code> (added this release)</li>
+							<li><code>*.gif</code></li>
+							<li><code>*.ico</code></li>
+							<li><code>*.jpeg</code></li>
+							<li><code>*.jpg</code></li>
+							<li><code>*.js</code></li>
+							<li><code>*.png</code></li>
+							<li><code>*.svg</code> (added this release)</li>
+							<li><code>*.txt</code></li>
+							<li><code>*.zip</code></li>
+						</ol>
+					</li>
 				</ul>
 			</changelog:release>
 		</c:if>
