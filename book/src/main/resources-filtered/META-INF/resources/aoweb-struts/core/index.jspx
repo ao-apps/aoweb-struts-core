@@ -39,7 +39,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<core:child page="changelog.jspx" />
 		<core:child page="aoweb-struts-aoweb.tld/" />
 		<core:child page="aoweb-struts-skin.tld/" />
-		<core:child page="apidocs/" />
+		<core:child page="apidocs/index.jspx" />
 		<ao:include
 			page="/ao-badges/badges.inc.jspx"
 			arg.projectStatus="${currentPage.property.projectStatus}"
@@ -51,7 +51,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			arg.license="${currentPage.property.license}"
 		/>
 		<p>
-			Core API for legacy Struts-based site framework with <core:link book="/" page="/aoserv/" /> control panels.
+			Core API for legacy Struts-based site framework with <core:link book="/" page="/aoserv/index.jspx" /> control panels.
 		</p>
 		<section:section label="Project Links">
 			<ul>
