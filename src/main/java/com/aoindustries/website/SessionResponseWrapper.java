@@ -23,6 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.servlet.http.ServletUtil;
+import com.aoindustries.tempfiles.servlet.ServletTempFileContext;
 import com.aoindustries.util.WrappedException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -216,6 +217,8 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 						// JSTL 1.1
 						&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
 						&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
+						// Allow session-based temporary file context
+						&& !ServletTempFileContext.SESSION_ATTRIBUTE_NAME.equals(name)
 					) {
 						// These will always trigger jsessionid
 						if(
