@@ -26,9 +26,6 @@ import com.aoindustries.validation.ValidationException;
 import com.semanticcms.tagreference.TagReferenceInitializer;
 import java.util.Collections;
 
-/**
- * @author  AO Industries, Inc.
- */
 public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 
 	public AowebStrutsAowebTldInitializer() throws ValidationException {
@@ -37,7 +34,7 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 			"AOWeb Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-aoweb.tld",
-			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
+			Maven.properties.getProperty("javac.link.javaApi.jdk6"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
 			Collections.singletonMap("com.aoindustries.website.aowebtags.", Maven.properties.getProperty("documented.url") + "apidocs")
 		);

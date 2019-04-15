@@ -26,9 +26,6 @@ import com.aoindustries.validation.ValidationException;
 import com.semanticcms.tagreference.TagReferenceInitializer;
 import java.util.Collections;
 
-/**
- * @author  AO Industries, Inc.
- */
 public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 
 	public AowebStrutsSkinTldInitializer() throws ValidationException {
@@ -37,7 +34,7 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 			"Skin Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-skin.tld",
-			Maven.properties.getProperty("javac.link.javaApi.jdk16"),
+			Maven.properties.getProperty("javac.link.javaApi.jdk6"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
 			Collections.singletonMap("com.aoindustries.website.skintags.", Maven.properties.getProperty("documented.url") + "apidocs")
 		);
