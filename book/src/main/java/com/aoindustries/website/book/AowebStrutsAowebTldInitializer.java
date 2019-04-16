@@ -34,9 +34,9 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 			"AOWeb Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-aoweb.tld",
-			Maven.properties.getProperty("javac.link.javaApi.jdk6"),
+			Maven.properties.getProperty("javac.link.javaApi.jdk7"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
-			Collections.singletonMap("com.aoindustries.website.aowebtags.", Maven.properties.getProperty("documented.url") + "apidocs")
+			Collections.singletonMap("com.aoindustries.website.aowebtags.", Maven.properties.getProperty("documented.url") + "apidocs/")
 		);
 	}
 }

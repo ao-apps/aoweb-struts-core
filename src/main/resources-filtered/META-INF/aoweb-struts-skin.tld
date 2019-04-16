@@ -573,7 +573,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<description><![CDATA[
 			<p>
 				Sets the content type appropriately for the current
-				<a rel="nofollow" href="@{javac.link.javaApi}/java/util/Locale.html">Locale</a>.
+				<a rel="nofollow" href="@{javac.link.javaApi}java/util/Locale.html">Locale</a>.
 			</p>
 		]]></description>
 		<name>setContentType</name>
@@ -868,7 +868,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The name of the page-scoped attribute that keeps the <code>isDark</code>
-					<a rel="nofollow" href="@{javac.link.javaApi}/java/lang/Boolean.html">Boolean</a> flag.
+					<a rel="nofollow" href="@{javac.link.javaApi}java/lang/Boolean.html">Boolean</a> flag.
 					Defaults to <code>LightDarkTableRowTag.isDark</code>.
 				</p>
 			]]></description>
