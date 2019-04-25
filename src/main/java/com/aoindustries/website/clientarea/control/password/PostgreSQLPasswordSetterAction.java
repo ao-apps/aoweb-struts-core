@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -62,12 +62,12 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 
 		List<UserServer> psus = aoConn.getPostgresql().getUserServer().getRows();
 
-		List<String> packages = new ArrayList<String>(psus.size());
-		List<String> usernames = new ArrayList<String>(psus.size());
-		List<String> postgreSQLServers = new ArrayList<String>(psus.size());
-		List<String> aoServers = new ArrayList<String>(psus.size());
-		List<String> newPasswords = new ArrayList<String>(psus.size());
-		List<String> confirmPasswords = new ArrayList<String>(psus.size());
+		List<String> packages = new ArrayList<>(psus.size());
+		List<String> usernames = new ArrayList<>(psus.size());
+		List<String> postgreSQLServers = new ArrayList<>(psus.size());
+		List<String> aoServers = new ArrayList<>(psus.size());
+		List<String> newPasswords = new ArrayList<>(psus.size());
+		List<String> confirmPasswords = new ArrayList<>(psus.size());
 		for(UserServer psu : psus) {
 			if(psu.canSetPassword()) {
 				User pu = psu.getPostgresUser();

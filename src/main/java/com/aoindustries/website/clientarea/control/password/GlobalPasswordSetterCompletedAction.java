@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -89,7 +89,7 @@ public class GlobalPasswordSetterCompletedAction extends PermissionAction {
 
 	@Override
 	public List<Permission.Name> getPermissions() {
-		List<Permission.Name> permissions = new ArrayList<Permission.Name>();
+		List<Permission.Name> permissions = new ArrayList<>();
 		permissions.add(Permission.Name.set_business_administrator_password);
 		permissions.add(Permission.Name.set_linux_server_account_password);
 		permissions.add(Permission.Name.set_mysql_server_user_password);

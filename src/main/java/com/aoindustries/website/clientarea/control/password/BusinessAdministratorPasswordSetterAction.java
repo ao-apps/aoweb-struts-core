@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -63,10 +63,10 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 
 		List<Administrator> bas = thisBA.hasPermission(Permission.Name.set_business_administrator_password) ? aoConn.getAccount().getAdministrator().getRows() : Collections.singletonList(thisBA);
 
-		List<String> packages = new ArrayList<String>(bas.size());
-		List<String> usernames = new ArrayList<String>(bas.size());
-		List<String> newPasswords = new ArrayList<String>(bas.size());
-		List<String> confirmPasswords = new ArrayList<String>(bas.size());
+		List<String> packages = new ArrayList<>(bas.size());
+		List<String> usernames = new ArrayList<>(bas.size());
+		List<String> newPasswords = new ArrayList<>(bas.size());
+		List<String> confirmPasswords = new ArrayList<>(bas.size());
 		for(Administrator ba : bas) {
 			if(ba.canSetPassword()) {
 				User un = ba.getUsername();

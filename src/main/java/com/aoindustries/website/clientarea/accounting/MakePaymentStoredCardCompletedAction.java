@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -213,7 +213,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
 				// Get the list of active credit cards stored for this business
 				List<CreditCard> allCreditCards = account.getCreditCards();
-				List<CreditCard> creditCards = new ArrayList<CreditCard>(allCreditCards.size());
+				List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 				for(CreditCard tCreditCard : allCreditCards) {
 					if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
 				}
@@ -240,7 +240,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
 						// Get the list of active credit cards stored for this business
 						List<CreditCard> allCreditCards = account.getCreditCards();
-						List<CreditCard> creditCards = new ArrayList<CreditCard>(allCreditCards.size());
+						List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 						for(CreditCard tCreditCard : allCreditCards) {
 							if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
 						}

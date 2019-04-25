@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -162,19 +162,7 @@ final public class ServerConfirmationCompletedActionHelper {
 				options
 			);
 			statusKey = "serverConfirmationCompleted.success";
-		} catch(RuntimeException err) {
-			servlet.log("Unable to store signup", err);
-			pkey = -1;
-			statusKey = "serverConfirmationCompleted.error";
-		} catch(ValidationException err) {
-			servlet.log("Unable to store signup", err);
-			pkey = -1;
-			statusKey = "serverConfirmationCompleted.error";
-		} catch(IOException err) {
-			servlet.log("Unable to store signup", err);
-			pkey = -1;
-			statusKey = "serverConfirmationCompleted.error";
-		} catch(SQLException err) {
+		} catch(RuntimeException | ValidationException | IOException | SQLException err) {
 			servlet.log("Unable to store signup", err);
 			pkey = -1;
 			statusKey = "serverConfirmationCompleted.error";
@@ -220,11 +208,11 @@ final public class ServerConfirmationCompletedActionHelper {
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
-		Set<String> addresses = new HashSet<String>();
+		Set<String> addresses = new HashSet<>();
 		addresses.add(signupTechnicalForm.getBaEmail());
 		addresses.add(signupBillingInformationForm.getBillingEmail());
-		Set<String> successAddresses = new HashSet<String>();
-		Set<String> failureAddresses = new HashSet<String>();
+		Set<String> successAddresses = new HashSet<>();
+		Set<String> failureAddresses = new HashSet<>();
 		Iterator<String> I=addresses.iterator();
 		while(I.hasNext()) {
 			String address=I.next();
@@ -345,16 +333,7 @@ final public class ServerConfirmationCompletedActionHelper {
 			);
 
 			return true;
-		} catch(RuntimeException err) {
-			servlet.log("Unable to send sign up details to "+recipient, err);
-			return false;
-		} catch(IOException err) {
-			servlet.log("Unable to send sign up details to "+recipient, err);
-			return false;
-		} catch(SQLException err) {
-			servlet.log("Unable to send sign up details to "+recipient, err);
-			return false;
-		} catch(MessagingException err) {
+		} catch(RuntimeException | IOException | SQLException | MessagingException err) {
 			servlet.log("Unable to send sign up details to "+recipient, err);
 			return false;
 		}

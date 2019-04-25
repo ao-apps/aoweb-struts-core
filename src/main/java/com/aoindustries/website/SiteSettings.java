@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -59,7 +59,7 @@ public class SiteSettings {
 	/**
 	 * Only one instance is created per unique classname.
 	 */
-	private static final Map<String,SiteSettings> instanceCache = new HashMap<String,SiteSettings>();
+	private static final Map<String,SiteSettings> instanceCache = new HashMap<>();
 
 	/**
 	 * Gets the proper settings instance as configured in the web.xml file.
@@ -80,15 +80,7 @@ public class SiteSettings {
 				}
 				return settings;
 			}
-		} catch(ClassNotFoundException err) {
-			throw new RuntimeException("classname="+classname, err);
-		} catch(NoSuchMethodException err) {
-			throw new RuntimeException("classname="+classname, err);
-		} catch(InvocationTargetException err) {
-			throw new RuntimeException("classname="+classname, err);
-		} catch(InstantiationException err) {
-			throw new RuntimeException("classname="+classname, err);
-		} catch(IllegalAccessException err) {
+		} catch(ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException err) {
 			throw new RuntimeException("classname="+classname, err);
 		}
 	}
@@ -184,7 +176,7 @@ public class SiteSettings {
 		boolean isUnitedStates = locale.getCountry().equals(Locale.US.getCountry());
 
 		Brand brand = getBrand();
-		List<Skin.Language> languages = new ArrayList<Skin.Language>(2);
+		List<Skin.Language> languages = new ArrayList<>(2);
 		if(brand.getEnglishEnabled()) {
 			if(isUnitedStates) {
 				languages.add(

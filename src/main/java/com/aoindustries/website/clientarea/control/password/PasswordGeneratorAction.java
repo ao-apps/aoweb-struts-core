@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -55,7 +55,7 @@ public class PasswordGeneratorAction extends SkinAction {
 		Skin skin
 	) throws Exception {
 		// Generate the passwords
-		List<String> generatedPasswords = new ArrayList<String>(NUM_PASSWORDS);
+		List<String> generatedPasswords = new ArrayList<>(NUM_PASSWORDS);
 		for(int c=0;c<10;c++) generatedPasswords.add(PasswordGenerator.generatePassword());
 
 		// Set request values

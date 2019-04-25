@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -178,7 +178,7 @@ public class PageAttributes {
 	}
 
 	public void addMeta(Meta meta) {
-		if(metas==null) metas = new ArrayList<Meta>();
+		if(metas==null) metas = new ArrayList<>();
 		metas.add(meta);
 	}
 
@@ -189,7 +189,7 @@ public class PageAttributes {
 	}
 
 	public void addLink(String rel, String href, String type, String conditionalCommentExpression) {
-		if(links==null) links = new ArrayList<Link>();
+		if(links==null) links = new ArrayList<>();
 		links.add(new Link(rel, href, type, conditionalCommentExpression));
 	}
 
@@ -220,7 +220,7 @@ public class PageAttributes {
 	}
 
 	public void addParent(Parent parent) {
-		if(parents==null) parents = new ArrayList<Parent>();
+		if(parents==null) parents = new ArrayList<>();
 		parents.add(parent);
 	}
 
@@ -236,7 +236,7 @@ public class PageAttributes {
 	}
 
 	public void addChild(Child child) {
-		if(children==null) children = new ArrayList<Child>();
+		if(children==null) children = new ArrayList<>();
 		children.add(child);
 	}
 

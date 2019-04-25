@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2013, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2013, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -68,7 +68,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 
-		List<MySQLServerRow> mysqlServerRows = new ArrayList<MySQLServerRow>();
+		List<MySQLServerRow> mysqlServerRows = new ArrayList<>();
 		List<Server> mysqlServers = aoConn.getMysql().getServer().getRows();
 		for(Server mysqlServer : mysqlServers) {
 			com.aoindustries.aoserv.client.linux.Server aoServer = mysqlServer.getAoServer();
@@ -88,7 +88,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 			if(!fmrs.isEmpty()) {
 				// Query the slaves first, this way the master will always appear equal to or ahead of the slaves
 				// since we can't query them both exactly at the same time.
-				List<ReplicationRow> replications = new ArrayList<ReplicationRow>();
+				List<ReplicationRow> replications = new ArrayList<>();
 				for(MysqlReplication fmr : fmrs) {
 					DomainName slave;
 					com.aoindustries.aoserv.client.linux.Server replicationAoServer = fmr.getAOServer();
@@ -245,7 +245,7 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<Permission.Name> permissions = new ArrayList<Permission.Name>(2);
+	private static final List<Permission.Name> permissions = new ArrayList<>(2);
 	static {
 		permissions.add(Permission.Name.get_mysql_master_status);
 		permissions.add(Permission.Name.get_mysql_slave_status);

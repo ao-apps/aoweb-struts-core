@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -253,15 +253,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								storeCard(rootProcessor, principal, businessGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
-							} catch(IOException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
-								storeSuccess = false;
-							} catch(SQLException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
-								storeSuccess = false;
-							} catch(RuntimeException err) {
+							} catch(IOException | SQLException | RuntimeException err) {
 								getServlet().log("Unable to store card", err);
 								request.setAttribute("storeError", err);
 								storeSuccess = false;
@@ -271,10 +263,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								try {
 									setAutomatic(rootConn, newCreditCard, account);
 									request.setAttribute("cardSetAutomatic", "true");
-								} catch(SQLException err) {
-									getServlet().log("Unable to set automatic", err);
-									request.setAttribute("setAutomaticError", err);
-								} catch(RuntimeException err) {
+								} catch(SQLException | RuntimeException err) {
 									getServlet().log("Unable to set automatic", err);
 									request.setAttribute("setAutomaticError", err);
 								}
@@ -311,15 +300,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								storeCard(rootProcessor, principal, businessGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
-							} catch(IOException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
-								storeSuccess = false;
-							} catch(SQLException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
-								storeSuccess = false;
-							} catch(RuntimeException err) {
+							} catch(IOException | SQLException | RuntimeException err) {
 								getServlet().log("Unable to store card", err);
 								request.setAttribute("storeError", err);
 								storeSuccess = false;
@@ -329,10 +310,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								try {
 									setAutomatic(rootConn, newCreditCard, account);
 									request.setAttribute("cardSetAutomatic", "true");
-								} catch(SQLException err) {
-									getServlet().log("Unable to set automatic", err);
-									request.setAttribute("setAutomaticError", err);
-								} catch(RuntimeException err) {
+								} catch(SQLException | RuntimeException err) {
 									getServlet().log("Unable to set automatic", err);
 									request.setAttribute("setAutomaticError", err);
 								}

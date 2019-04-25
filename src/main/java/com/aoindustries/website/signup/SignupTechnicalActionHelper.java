@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -59,7 +59,7 @@ final public class SignupTechnicalActionHelper {
 		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(rootConn);
 
 		// Generate random passwords, keeping the selected password at index 0
-		List<String> passwords = new ArrayList<String>(16);
+		List<String> passwords = new ArrayList<>(16);
 		if(!GenericValidator.isBlankOrNull(signupTechnicalForm.getBaPassword())) passwords.add(signupTechnicalForm.getBaPassword());
 		while(passwords.size()<16) passwords.add(PasswordGenerator.generatePassword());
 

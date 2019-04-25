@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -58,7 +58,7 @@ public class MakePaymentAction extends AuthenticatedAction {
 
 		// Get the list of businesses that are not canceled or have a non-zero balance, or are thisBusiness
 		List<Account> allAccounts = aoConn.getAccount().getAccount().getRows();
-		List<Account> accounts = new ArrayList<Account>(allAccounts.size());
+		List<Account> accounts = new ArrayList<>(allAccounts.size());
 		for(Account account : allAccounts) {
 			if(
 				thisAccount.equals(account)

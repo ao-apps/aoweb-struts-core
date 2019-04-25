@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -61,11 +61,11 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 
 		List<UserServer> lsas = aoConn.getLinux().getUserServer().getRows();
 
-		List<String> packages = new ArrayList<String>(lsas.size());
-		List<String> usernames = new ArrayList<String>(lsas.size());
-		List<String> aoServers = new ArrayList<String>(lsas.size());
-		List<String> newPasswords = new ArrayList<String>(lsas.size());
-		List<String> confirmPasswords = new ArrayList<String>(lsas.size());
+		List<String> packages = new ArrayList<>(lsas.size());
+		List<String> usernames = new ArrayList<>(lsas.size());
+		List<String> aoServers = new ArrayList<>(lsas.size());
+		List<String> newPasswords = new ArrayList<>(lsas.size());
+		List<String> confirmPasswords = new ArrayList<>(lsas.size());
 		for(UserServer lsa : lsas) {
 			if(lsa.canSetPassword()) {
 				User la = lsa.getLinuxAccount();

@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-04-13T10:17:41-0500"
+		dateModified="2019-04-25T01:20:07-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -54,7 +54,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				scmUrl="@{documented.scm.url}"
 			>
 				<ul>
-					<li>Working on VNC compatibility for HVM guests on Xen 4.6 on CentOS 7.</li>
+					<li>Minimum Java version changed from 1.6 to 1.7.</li>
+					<li>Implemented VNC compatibility for HVM guests on Xen 4.6 on CentOS 7.</li>
 					<li>Updated dependencies.</li>
 					<li>
 						Aligned the session URL rewriting excluded path extensions to match other projects.

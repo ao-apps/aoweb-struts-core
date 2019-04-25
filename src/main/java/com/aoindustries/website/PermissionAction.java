@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -81,7 +81,7 @@ abstract public class PermissionAction extends AuthenticatedAction {
 		// Return denied on first missing permission
 		for(Permission.Name permission : permissions) {
 			if(!thisBA.hasPermission(permission)) {
-				List<Permission> aoPerms = new ArrayList<Permission>(permissions.size());
+				List<Permission> aoPerms = new ArrayList<>(permissions.size());
 				for(Permission.Name requiredPermission : permissions) {
 					Permission aoPerm = aoConn.getMaster().getPermission().get(requiredPermission);
 					if(aoPerm==null) throw new SQLException("Unable to find AOServPermission: "+requiredPermission);
@@ -147,5 +147,6 @@ abstract public class PermissionAction extends AuthenticatedAction {
 	 *
 	 * @see  Permission
 	 */
+	// TODO: Should this be EnumSet?
 	abstract public List<Permission.Name> getPermissions();
 }

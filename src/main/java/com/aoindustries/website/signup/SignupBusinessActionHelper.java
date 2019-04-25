@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -70,7 +70,7 @@ final public class SignupBusinessActionHelper {
 	 */
 	public static List<CountryOption> getCountryOptions(AOServConnector aoConn) throws IOException, SQLException {
 		// Build the list of countries
-		List<CountryOption> countryOptions = new ArrayList<CountryOption>();
+		List<CountryOption> countryOptions = new ArrayList<>();
 		countryOptions.add(new CountryOption("", "---"));
 		final int prioritySize = 10;
 		int[] priorityCounter = new int[1];

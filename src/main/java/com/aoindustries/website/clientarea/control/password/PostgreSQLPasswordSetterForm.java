@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -137,9 +137,7 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 				}
 			}
 			return errors;
-		} catch(IOException err) {
-			throw new WrappedException(err);
-		} catch(ValidationException err) {
+		} catch(IOException | ValidationException err) {
 			throw new WrappedException(err);
 		}
 	}

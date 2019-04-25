@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,7 +71,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		// Get the list of cards for the business, must have at least one card.
 		List<CreditCard> creditCards = account.getCreditCards();
 		// Build list of active cards
-		List<CreditCard> activeCards = new ArrayList<CreditCard>(creditCards.size());
+		List<CreditCard> activeCards = new ArrayList<>(creditCards.size());
 		CreditCard automaticCard = null;
 		for(CreditCard creditCard : creditCards) {
 			if(creditCard.getIsActive()) {
@@ -94,7 +94,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 
 	private static final List<Permission.Name> permissions;
 	static {
-		List<Permission.Name> newList = new ArrayList<Permission.Name>(2);
+		List<Permission.Name> newList = new ArrayList<>(2);
 		newList.add(Permission.Name.get_credit_cards);
 		newList.add(Permission.Name.edit_credit_card);
 		permissions = Collections.unmodifiableList(newList);

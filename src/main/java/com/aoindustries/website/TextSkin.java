@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -480,9 +480,7 @@ public class TextSkin extends Skin {
 			out.print("        </td>\n"
 					+ "        <td valign='top'>\n");
 			printCommonPages(req, resp, out);
-		} catch(IOException err) {
-			throw new JspException(err);
-		} catch(SQLException err) {
+		} catch(IOException | SQLException err) {
 			throw new JspException(err);
 		}
 	}
@@ -707,9 +705,7 @@ public class TextSkin extends Skin {
 			);
 			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getSession().getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
 			out.print("  </body>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
-		} catch(SQLException err) {
+		} catch(IOException | SQLException err) {
 			throw new JspException(err);
 		}
 	}

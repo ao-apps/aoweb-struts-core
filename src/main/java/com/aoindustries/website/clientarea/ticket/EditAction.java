@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -97,7 +97,7 @@ public class EditAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<Permission.Name> permissions = new ArrayList<Permission.Name>(2);
+	private static final List<Permission.Name> permissions = new ArrayList<>(2);
 	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
 	static {
 		permissions.add(Permission.Name.add_ticket);

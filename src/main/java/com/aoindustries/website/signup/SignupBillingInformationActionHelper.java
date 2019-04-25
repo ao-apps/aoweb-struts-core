@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -51,7 +51,7 @@ final public class SignupBillingInformationActionHelper {
 
 	public static void setBillingExpirationYearsRequestAttribute(HttpServletRequest request) {
 		// Build the list of years
-		List<String> billingExpirationYears = new ArrayList<String>(12);
+		List<String> billingExpirationYears = new ArrayList<>(12);
 		int startYear = Calendar.getInstance().get(Calendar.YEAR);
 		for(int c=0;c<12;c++) billingExpirationYears.add(Integer.toString(startYear+c));
 

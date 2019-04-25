@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -58,7 +58,7 @@ public class VncConsoleAction extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		List<VirtualServer> virtualServers = aoConn.getInfrastructure().getVirtualServer().getRows();
-		List<VirtualServer> vncVirtualServers = new ArrayList<VirtualServer>(virtualServers.size());
+		List<VirtualServer> vncVirtualServers = new ArrayList<>(virtualServers.size());
 		for(VirtualServer virtualServer : virtualServers) {
 			String vncPassword = virtualServer.getVncPassword();
 			if(vncPassword!=null && !vncPassword.equals(AoservProtocol.FILTERED)) vncVirtualServers.add(virtualServer);

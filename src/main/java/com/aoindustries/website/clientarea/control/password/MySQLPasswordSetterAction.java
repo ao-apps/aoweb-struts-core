@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -62,12 +62,12 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 
 		List<UserServer> msus = aoConn.getMysql().getUserServer().getRows();
 
-		List<String> packages = new ArrayList<String>(msus.size());
-		List<String> usernames = new ArrayList<String>(msus.size());
-		List<String> mySQLServers = new ArrayList<String>(msus.size());
-		List<String> aoServers = new ArrayList<String>(msus.size());
-		List<String> newPasswords = new ArrayList<String>(msus.size());
-		List<String> confirmPasswords = new ArrayList<String>(msus.size());
+		List<String> packages = new ArrayList<>(msus.size());
+		List<String> usernames = new ArrayList<>(msus.size());
+		List<String> mySQLServers = new ArrayList<>(msus.size());
+		List<String> aoServers = new ArrayList<>(msus.size());
+		List<String> newPasswords = new ArrayList<>(msus.size());
+		List<String> confirmPasswords = new ArrayList<>(msus.size());
 		for(UserServer msu : msus) {
 			if(msu.canSetPassword()) {
 				User mu = msu.getMySQLUser();

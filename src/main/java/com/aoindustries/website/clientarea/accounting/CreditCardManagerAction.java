@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -60,7 +60,7 @@ public class CreditCardManagerAction extends PermissionAction {
 		Account thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 
 		// Create a map from business to list of credit cards
-		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<BusinessAndCreditCards>();
+		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<>();
 		for(Account account : aoConn.getAccount().getAccount().getRows()) {
 			List<CreditCard> ccs = account.getCreditCards();
 			if(

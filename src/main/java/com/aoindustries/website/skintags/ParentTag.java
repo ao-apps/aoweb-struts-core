@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -54,7 +54,7 @@ public class ParentTag extends PageTag {
 	public int doStartTag() {
 		ServletRequest request = pageContext.getRequest();
 		Stack<ParentTag> stack = (Stack)request.getAttribute(STACK_ATTRIBUTE_NAME);
-		if(stack==null) request.setAttribute(STACK_ATTRIBUTE_NAME, stack = new Stack<ParentTag>());
+		if(stack==null) request.setAttribute(STACK_ATTRIBUTE_NAME, stack = new Stack<>());
 		stack.push(this);
 		return super.doStartTag();
 	}
@@ -71,7 +71,7 @@ public class ParentTag extends PageTag {
 	}
 
 	public void addChild(Child child) {
-		if(children==null) children = new ArrayList<Child>();
+		if(children==null) children = new ArrayList<>();
 		children.add(child);
 	}
 

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -165,12 +165,12 @@ final public class SignupCustomizeServerActionHelper {
 		if(cheapestDisk==null) throw new SQLException("Unable to find cheapestDisk");
 
 		// Find all the options
-		List<Option> powerOptions = new ArrayList<Option>();
-		List<Option> cpuOptions = new ArrayList<Option>();
-		List<Option> ramOptions = new ArrayList<Option>();
-		List<Option> sataControllerOptions = new ArrayList<Option>();
-		List<Option> scsiControllerOptions = new ArrayList<Option>();
-		List<List<Option>> diskOptions = new ArrayList<List<Option>>();
+		List<Option> powerOptions = new ArrayList<>();
+		List<Option> cpuOptions = new ArrayList<>();
+		List<Option> ramOptions = new ArrayList<>();
+		List<Option> sataControllerOptions = new ArrayList<>();
+		List<Option> scsiControllerOptions = new ArrayList<>();
+		List<List<Option>> diskOptions = new ArrayList<>();
 		for(int c=0;c<maxDisks;c++) diskOptions.add(new ArrayList<Option>());
 		for(PackageDefinitionLimit limit : limits) {
 			Resource resource = limit.getResource();
@@ -436,7 +436,7 @@ final public class SignupCustomizeServerActionHelper {
 	}
 
 	public static List<String> getDiskOptions(AOServConnector rootConn, SignupCustomizeServerForm signupCustomizeServerForm) throws IOException, SQLException {
-		List<String> diskOptions = new ArrayList<String>();
+		List<String> diskOptions = new ArrayList<>();
 		for(String pkey : signupCustomizeServerForm.getDiskOptions()) {
 			if(pkey!=null && pkey.length()>0 && !pkey.equals("-1")) {
 				PackageDefinitionLimit diskPDL = rootConn.getBilling().getPackageDefinitionLimit().get(Integer.parseInt(pkey));

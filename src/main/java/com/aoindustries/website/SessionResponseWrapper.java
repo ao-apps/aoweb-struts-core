@@ -105,11 +105,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				//encoded = response.encodeURL(url);
 			}
 			return encoded;
-		} catch(JspException err) {
-			throw new WrappedException(err);
-		} catch(IOException err) {
-			throw new WrappedException(err);
-		} catch(SQLException err) {
+		} catch(JspException | IOException | SQLException err) {
 			throw new WrappedException(err);
 		}
 	}
@@ -159,11 +155,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				//encoded = response.encodeRedirectURL(url);
 			}
 			return encoded;
-		} catch(JspException err) {
-			throw new WrappedException(err);
-		} catch(IOException err) {
-			throw new WrappedException(err);
-		} catch(SQLException err) {
+		} catch(JspException | IOException | SQLException err) {
 			throw new WrappedException(err);
 		}
 	}

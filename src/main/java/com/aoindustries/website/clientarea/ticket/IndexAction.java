@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -57,7 +57,7 @@ public class IndexAction  extends AuthenticatedAction {
 	) throws Exception {
 		List<Ticket> tickets = aoConn.getTicket().getTicket().getRows();
 
-		List<Ticket> filteredTickets = new ArrayList<Ticket>(tickets.size());
+		List<Ticket> filteredTickets = new ArrayList<>(tickets.size());
 		for(Ticket ticket : tickets) {
 			// Only show support or project tickets here
 			//String type = ticket.getTicketType().getType();

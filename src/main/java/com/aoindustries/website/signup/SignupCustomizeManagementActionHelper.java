@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -70,10 +70,10 @@ final public class SignupCustomizeManagementActionHelper {
 		int totalHardwareDiskSpace = SignupCustomizeServerActionHelper.getTotalHardwareDiskSpace(rootConn, signupCustomizeServerForm);
 
 		// Find all the options
-		List<Option> backupOnsiteOptions = new ArrayList<Option>();
-		List<Option> backupOffsiteOptions = new ArrayList<Option>();
-		List<Option> distributionScanOptions = new ArrayList<Option>();
-		List<Option> failoverOptions = new ArrayList<Option>();
+		List<Option> backupOnsiteOptions = new ArrayList<>();
+		List<Option> backupOffsiteOptions = new ArrayList<>();
+		List<Option> distributionScanOptions = new ArrayList<>();
+		List<Option> failoverOptions = new ArrayList<>();
 		for(PackageDefinitionLimit limit : limits) {
 			Resource resource = limit.getResource();
 			String resourceName = resource.getName();

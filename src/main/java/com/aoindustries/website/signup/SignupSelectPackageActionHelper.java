@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,7 +71,7 @@ final public class SignupSelectPackageActionHelper {
 		PackageCategory category = rootConn.getBilling().getPackageCategory().get(packageCategoryName);
 		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
 		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
-		List<PackageDefinition> activePackageDefinitions = new ArrayList<PackageDefinition>();
+		List<PackageDefinition> activePackageDefinitions = new ArrayList<>();
 
 		for(PackageDefinition packageDefinition : packageDefinitions) {
 			if(packageDefinition.isActive()) activePackageDefinitions.add(packageDefinition);

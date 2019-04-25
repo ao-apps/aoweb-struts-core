@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -93,15 +93,12 @@ public class VncConsoleProxySocketServer implements Runnable {
 				// Create the server socket
 				SSLServerSocketFactory socketFactory = ctx.getServerSocketFactory();
 				//SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
-				SSLServerSocket SS=(SSLServerSocket)socketFactory.createServerSocket(vncBind.getPort().getPort(), 50, inetAddress);
-				try {
+				try (SSLServerSocket SS = (SSLServerSocket)socketFactory.createServerSocket(vncBind.getPort().getPort(), 50, inetAddress)) {
 					while(currentThread==this.thread) {
 						Socket socket = SS.accept();
 						socket.setKeepAlive(true);
 						new VncConsoleProxySocketHandler(servletContext, rootConn, socket);
 					}
-				} finally {
-					SS.close();
 				}
 			} catch(ThreadDeath TD) {
 				throw TD;

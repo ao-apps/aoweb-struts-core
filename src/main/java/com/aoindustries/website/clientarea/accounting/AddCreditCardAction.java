@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -143,7 +143,7 @@ public class AddCreditCardAction extends PermissionAction {
 
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
-		List<String> expirationYears = new ArrayList<String>(12);
+		List<String> expirationYears = new ArrayList<>(12);
 		int startYear = Calendar.getInstance().get(Calendar.YEAR);
 		for(int c=0;c<12;c++) expirationYears.add(Integer.toString(startYear+c));
 
