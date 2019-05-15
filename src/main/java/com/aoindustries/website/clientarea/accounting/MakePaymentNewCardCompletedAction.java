@@ -24,6 +24,7 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
@@ -31,10 +32,12 @@ import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.BusinessGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
+import com.aoindustries.creditcards.CaptureResult;
 import com.aoindustries.creditcards.CreditCardProcessor;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
+import com.aoindustries.net.Email;
 import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -43,6 +46,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -57,6 +61,30 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction {
+
+	/**
+	 * Process as separate authorize/capture.  This is useful for testing payment API implementations.
+	 * This should always be "false" for a production release.
+	 * TODO: Make this a context parameter?
+	 */
+	static final boolean DEBUG_AUTHORIZE_THEN_CAPTURE = false;
+
+	static final int DUPLICATE_WINDOW = 120;
+
+	static final Currency USD = Currency.getInstance("USD");
+
+	static String trimNullIfEmpty(String s) {
+		if(s == null) return null;
+		s = s.trim();
+		return s.isEmpty() ? null : s;
+	}
+
+	static String getFirstBillingEmail(Profile profile) {
+		if(profile == null) return null;
+		Set<Email> emails = profile.getBillingEmail();
+		if(emails.isEmpty()) return null;
+		return emails.iterator().next().toString();
+	}
 
 	@Override
 	final public ActionForward execute(
@@ -96,24 +124,27 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 
 		// Encapsulate the values into a new credit card
 		String cardNumber = makePaymentNewCardForm.getCardNumber();
+		String principalName = aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString();
+		String groupName = accounting;
+		Profile profile = account.getBusinessProfile();
 		com.aoindustries.creditcards.CreditCard newCreditCard = new com.aoindustries.creditcards.CreditCard(
-			null,
-			null,
-			null,
-			null,
-			null,
+			null, // persistenceUniqueId
+			principalName,
+			groupName,
+			null, // providerId
+			null, // providerUniqueId
 			cardNumber,
-			null,
+			null, // maskedCardNumber
 			Byte.parseByte(makePaymentNewCardForm.getExpirationMonth()),
 			Short.parseShort(makePaymentNewCardForm.getExpirationYear()),
 			makePaymentNewCardForm.getCardCode(),
 			makePaymentNewCardForm.getFirstName(),
 			makePaymentNewCardForm.getLastName(),
 			makePaymentNewCardForm.getCompanyName(),
-			null, // email
-			null, // phone
-			null, // fax
-			null,
+			getFirstBillingEmail(profile),
+			profile == null ? null : trimNullIfEmpty(profile.getPhone()),
+			profile == null ? null : trimNullIfEmpty(profile.getFax()),
+			null, // customerId: TODO: Set from account.Account once there is a constant identifier
 			null, // customerTaxId
 			makePaymentNewCardForm.getStreetAddress1(),
 			makePaymentNewCardForm.getStreetAddress2(),
@@ -173,40 +204,78 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transID);
 		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transID);
 
+		// TODO: Store card before sale, and use its stored card ID
+		// TODO: This currently implementation provides disconnected first payment and stored card in Stripe.
+
 		// 3) Process
-		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString());
-		BusinessGroup businessGroup = new BusinessGroup(rootAccount, accounting);
-		Transaction transaction = rootProcessor.sale(
-			principal,
-			businessGroup,
-			new TransactionRequest(
-				false,
-				request.getRemoteAddr(),
-				120,
-				Integer.toString(transID), // orderNumber
-				Currency.getInstance("USD"),
-				paymentAmount,
-				null,
-				false,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				false,
-				null,
-				null,
-				null,
-				applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description")
-			),
-			newCreditCard
-		);
+		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, principalName);
+		BusinessGroup businessGroup = new BusinessGroup(rootAccount, groupName);
+		Transaction transaction;
+		if(DEBUG_AUTHORIZE_THEN_CAPTURE) {
+			transaction = rootProcessor.authorize(
+				principal,
+				businessGroup,
+				new TransactionRequest(
+					false, // testMode
+					request.getRemoteAddr(), // customerIp
+					DUPLICATE_WINDOW,
+					Integer.toString(transID), // orderNumber
+					USD, // currency
+					paymentAmount, // amount
+					null, // taxAmount
+					false, // taxExempt
+					null, // shippingAmount
+					null, // dutyAmount
+					null, // shippingFirstName
+					null, // shippingLastName
+					null, // shippingCompanyName
+					null, // shippingStreetAddress1
+					null, // shippingStreetAddress2
+					null, // shippingCity
+					null, // shippingState
+					null, // shippingPostalCode
+					null, // shippingCountryCode
+					false, // emailCustomer
+					null, // merchantEmail
+					null, // invoiceNumber
+					null, // purchaseOrderNumber
+					applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description") // description
+				),
+				newCreditCard
+			);
+		} else {
+			transaction = rootProcessor.sale(
+				principal,
+				businessGroup,
+				new TransactionRequest(
+					false, // testMode
+					request.getRemoteAddr(), // customerIp
+					DUPLICATE_WINDOW,
+					Integer.toString(transID), // orderNumber
+					USD, // currency
+					paymentAmount, // amount
+					null, // taxAmount
+					false, // taxExempt
+					null, // shippingAmount
+					null, // dutyAmount
+					null, // shippingFirstName
+					null, // shippingLastName
+					null, // shippingCompanyName
+					null, // shippingStreetAddress1
+					null, // shippingStreetAddress2
+					null, // shippingCity
+					null, // shippingState
+					null, // shippingPostalCode
+					null, // shippingCountryCode
+					false, // emailCustomer
+					null, // merchantEmail
+					null, // invoiceNumber
+					null, // purchaseOrderNumber
+					applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description") // description
+				),
+				newCreditCard
+			);
+		}
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
@@ -282,6 +351,37 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 					}
 					case APPROVED :
 					{
+						if(DEBUG_AUTHORIZE_THEN_CAPTURE) {
+							// Perform capture in second step
+							CaptureResult captureResult = rootProcessor.capture(principal, transaction);
+							switch(captureResult.getCommunicationResult()) {
+								case LOCAL_ERROR :
+								case IO_ERROR :
+								case GATEWAY_ERROR :
+								{
+									// Update transaction as failed
+									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+
+									TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
+									ActionMessages mappedErrors = makePaymentNewCardForm.mapTransactionError(errorCode);
+									if(mappedErrors==null || mappedErrors.isEmpty()) {
+										// Not mapped, store to request attributes as generate error (to be displayed separate from specific fields)
+										request.setAttribute("errorReason", errorCode.toString());
+									} else {
+										// Store for display with specific fields
+										saveErrors(request, mappedErrors);
+									}
+									return mapping.findForward("error");
+								}
+								case SUCCESS :
+								{
+									// Continue with processing of SUCCESS below, same as used for direct sale(...)
+									break;
+								}
+								default:
+									throw new RuntimeException("Unexpected value for capture communication result: "+captureResult.getCommunicationResult());
+							}
+						}
 						// Update transaction as successful
 						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()));
 

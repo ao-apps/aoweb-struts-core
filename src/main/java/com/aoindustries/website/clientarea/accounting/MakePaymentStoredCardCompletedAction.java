@@ -32,6 +32,7 @@ import com.aoindustries.aoserv.creditcards.BusinessGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
+import com.aoindustries.creditcards.CaptureResult;
 import com.aoindustries.creditcards.CreditCardProcessor;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
@@ -41,7 +42,6 @@ import com.aoindustries.website.Skin;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -170,37 +170,74 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transID);
 
 		// 3) Process
-		Transaction transaction = rootProcessor.sale(
-			new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
-			new BusinessGroup(rootAccount, accounting),
-			new TransactionRequest(
-				false,
-				request.getRemoteAddr(),
-				120,
-				Integer.toString(transID),
-				Currency.getInstance("USD"),
-				paymentAmount,
-				null,
-				false,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				false,
-				null,
-				null,
-				null,
-				applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description")
-			),
-			CreditCardFactory.getCreditCard(rootCreditCard)
-		);
+		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString());
+		BusinessGroup businessGroup = new BusinessGroup(rootAccount, accounting);
+		Transaction transaction;
+		if(MakePaymentNewCardCompletedAction.DEBUG_AUTHORIZE_THEN_CAPTURE) {
+			transaction = rootProcessor.authorize(
+				principal,
+				businessGroup,
+				new TransactionRequest(
+					false, // testMode
+					request.getRemoteAddr(), // customerIp
+					MakePaymentNewCardCompletedAction.DUPLICATE_WINDOW,
+					Integer.toString(transID), // orderNumber
+					MakePaymentNewCardCompletedAction.USD, // currency
+					paymentAmount, // amount
+					null, // taxAmount
+					false, // taxExempt
+					null, // shippingAmount
+					null, // dutyAmount
+					null, // shippingFirstName
+					null, // shippingLastName
+					null, // shippingCompanyName
+					null, // shippingStreetAddress1
+					null, // shippingStreetAddress2
+					null, // shippingCity
+					null, // shippingState
+					null, // shippingPostalCode
+					null, // shippingCountryCode
+					false, // emailCustomer
+					null, // merchantEmail
+					null, // invoiceNumber
+					null, // purchaseOrderNumber
+					applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description") // description
+				),
+				CreditCardFactory.getCreditCard(rootCreditCard)
+			);
+		} else {
+			transaction = rootProcessor.sale(
+				principal,
+				businessGroup,
+				new TransactionRequest(
+					false, // testMode
+					request.getRemoteAddr(), // customerIp
+					MakePaymentNewCardCompletedAction.DUPLICATE_WINDOW,
+					Integer.toString(transID), // orderNumber
+					MakePaymentNewCardCompletedAction.USD, // currency
+					paymentAmount, // amount
+					null, // taxAmount
+					false, // taxExempt
+					null, // shippingAmount
+					null, // dutyAmount
+					null, // shippingFirstName
+					null, // shippingLastName
+					null, // shippingCompanyName
+					null, // shippingStreetAddress1
+					null, // shippingStreetAddress2
+					null, // shippingCity
+					null, // shippingState
+					null, // shippingPostalCode
+					null, // shippingCountryCode
+					false, // emailCustomer
+					null, // merchantEmail
+					null, // invoiceNumber
+					null, // purchaseOrderNumber
+					applicationResources.getMessage(Locale.US, "makePaymentStoredCardCompleted.transaction.description") // description
+				),
+				CreditCardFactory.getCreditCard(rootCreditCard)
+			);
+		}
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
@@ -228,6 +265,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				// Check approval result
 				switch(authorizationResult.getApprovalResult()) {
 					case HOLD :
+					{
 						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()));
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
@@ -235,7 +273,9 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						request.setAttribute("aoTransaction", aoTransaction);
 						request.setAttribute("reviewReason", authorizationResult.getReviewReason().toString());
 						return mapping.findForward("hold");
+					}
 					case DECLINED :
+					{
 						// Update transaction as declined
 						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
 						// Get the list of active credit cards stored for this business
@@ -250,7 +290,41 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						request.setAttribute("lastPaymentCreditCard", creditCard.getProviderUniqueId());
 						request.setAttribute("declineReason", authorizationResult.getDeclineReason().toString());
 						return mapping.findForward("declined");
+					}
 					case APPROVED :
+					{
+						if(MakePaymentNewCardCompletedAction.DEBUG_AUTHORIZE_THEN_CAPTURE) {
+							// Perform capture in second step
+							CaptureResult captureResult = rootProcessor.capture(principal, transaction);
+							switch(captureResult.getCommunicationResult()) {
+								case LOCAL_ERROR :
+								case IO_ERROR :
+								case GATEWAY_ERROR :
+								{
+									// Update transaction as failed
+									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+									// Get the list of active credit cards stored for this business
+									List<CreditCard> allCreditCards = account.getCreditCards();
+									List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
+									for(CreditCard tCreditCard : allCreditCards) {
+										if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
+									}
+									// Store to request attributes, return success
+									request.setAttribute("business", account);
+									request.setAttribute("creditCards", creditCards);
+									request.setAttribute("lastPaymentCreditCard", creditCard.getProviderUniqueId());
+									request.setAttribute("errorReason", authorizationResult.getErrorCode().toString());
+									return mapping.findForward("error");
+								}
+								case SUCCESS :
+								{
+									// Continue with processing of SUCCESS below, same as used for direct sale(...)
+									break;
+								}
+								default:
+									throw new RuntimeException("Unexpected value for capture communication result: "+captureResult.getCommunicationResult());
+							}
+						}
 						// Update transaction as successful
 						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()));
 						request.setAttribute("business", account);
@@ -258,6 +332,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						request.setAttribute("transaction", transaction);
 						request.setAttribute("aoTransaction", aoTransaction);
 						return mapping.findForward("success");
+					}
 					default:
 						throw new RuntimeException("Unexpected value for authorization approval result: "+authorizationResult.getApprovalResult());
 				}

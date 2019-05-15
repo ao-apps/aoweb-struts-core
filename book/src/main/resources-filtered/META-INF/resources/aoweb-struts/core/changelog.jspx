@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-04-25T01:20:07-0500"
+		dateModified="2019-05-06T02:04:43-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -73,6 +73,15 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 							<li><code>*.svg</code> (added this release)</li>
 							<li><code>*.txt</code></li>
 							<li><code>*.zip</code></li>
+						</ol>
+					</li>
+					<li>Passing more values to <core:link book="/ao-credit-cards/api" page="/index.jspx">underlying credit card processing API</core:link>:
+						<ol>
+							<li><code>principalName</code> from authenticated user</li>
+							<li><code>groupName</code> from accounting code</li>
+							<li><code>email</code> from account profile's first billing email address</li>
+							<li><code>phone</code> from account profile</li>
+							<li><code>fax</code> from account profile</li>
 						</ol>
 					</li>
 				</ul>

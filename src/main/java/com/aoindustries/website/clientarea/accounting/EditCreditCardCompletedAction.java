@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,6 +23,7 @@
 package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
@@ -32,6 +33,7 @@ import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.validator.GenericValidator;
@@ -96,10 +98,23 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		boolean updatedExpirationDate = false;
 		boolean reactivatedCard = false;
 
+		// Root connector used to get processor
+		AOServConnector rootConn = siteSettings.getRootAOServConnector();
+		CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
+		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
+		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
+		// Get the values that are simply copied from account profile, instead of cluttering the credit card form with too many fields
+		Profile profile = rootCreditCard.getBusiness().getBusinessProfile();
+		String profileEmail = MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile);
+		String profilePhone = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone());
+		String profileFax = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax());
 		if(
 			!nullOrBlankEquals(editCreditCardForm.getFirstName(), creditCard.getFirstName())
 			|| !nullOrBlankEquals(editCreditCardForm.getLastName(), creditCard.getLastName())
 			|| !nullOrBlankEquals(editCreditCardForm.getCompanyName(), creditCard.getCompanyName())
+			|| !nullOrBlankEquals(profileEmail, Objects.toString(creditCard.getEmail(), null))
+			|| !nullOrBlankEquals(profilePhone, creditCard.getPhone())
+			|| !nullOrBlankEquals(profileFax, creditCard.getFax())
 			|| !nullOrBlankEquals(editCreditCardForm.getStreetAddress1(), creditCard.getStreetAddress1())
 			|| !nullOrBlankEquals(editCreditCardForm.getStreetAddress2(), creditCard.getStreetAddress2())
 			|| !nullOrBlankEquals(editCreditCardForm.getCity(), creditCard.getCity())
@@ -109,16 +124,14 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			|| !nullOrBlankEquals(editCreditCardForm.getDescription(), creditCard.getDescription())
 		) {
 			// Update all fields except card number and expiration
-			// Root connector used to get processor
-			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
-			if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
-			CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 			com.aoindustries.creditcards.CreditCard storedCreditCard = CreditCardFactory.getCreditCard(rootCreditCard);
 			// Update fields
 			storedCreditCard.setFirstName(editCreditCardForm.getFirstName());
 			storedCreditCard.setLastName(editCreditCardForm.getLastName());
 			storedCreditCard.setCompanyName(editCreditCardForm.getCompanyName());
+			storedCreditCard.setEmail(profileEmail);
+			storedCreditCard.setPhone(profilePhone);
+			storedCreditCard.setFax(profileFax);
 			storedCreditCard.setStreetAddress1(editCreditCardForm.getStreetAddress1());
 			storedCreditCard.setStreetAddress2(editCreditCardForm.getStreetAddress2());
 			storedCreditCard.setCity(editCreditCardForm.getCity());
@@ -140,11 +153,6 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		String newCardCode = editCreditCardForm.getCardCode();
 		if(!GenericValidator.isBlankOrNull(newCardNumber)) {
 			// Update card number and expiration
-			// Root connector used to get processor
-			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
-			if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
-			CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 			rootProcessor.updateCreditCardNumberAndExpiration(
 				new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
 				CreditCardFactory.getCreditCard(rootCreditCard),
@@ -161,11 +169,6 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 				&& !GenericValidator.isBlankOrNull(newExpirationYear)
 			) {
 				// Update expiration only
-				// Root connector used to get processor
-				AOServConnector rootConn = siteSettings.getRootAOServConnector();
-				CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
-				if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
-				CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 				rootProcessor.updateCreditCardExpiration(
 					new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
 					CreditCardFactory.getCreditCard(rootCreditCard),

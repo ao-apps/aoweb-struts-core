@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,6 +24,7 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.BusinessGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
@@ -66,6 +67,11 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 			// Redirect back to credit-card-manager it no accounting selected
 			return mapping.findForward("credit-card-manager");
 		}
+		Account account = accounting == null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
+		if(account == null) {
+			// Redirect back to credit-card-manager if business not found
+			return mapping.findForward("credit-card-manager");
+		}
 
 		// Validation
 		ActionMessages errors = addCreditCardForm.validate(mapping, request);
@@ -84,13 +90,16 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 		// Add card
 		if(!creditCardProcessor.canStoreCreditCards()) throw new SQLException("CreditCardProcessor indicates it does not support storing credit cards.");
 
+		String principalName = aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString();
+		String groupName = accounting;
+		Profile profile = account.getBusinessProfile();
 		creditCardProcessor.storeCreditCard(
-			new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
-			new BusinessGroup(aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting)), accounting),
+			new AOServConnectorPrincipal(rootConn, principalName),
+			new BusinessGroup(aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting)), groupName),
 			new CreditCard(
 				null, // persistenceUniqueId
-				null, // principalName
-				null, // groupName
+				principalName,
+				groupName,
 				null, // providerId
 				null, // providerUniqueId
 				addCreditCardForm.getCardNumber(),
@@ -101,11 +110,11 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 				addCreditCardForm.getFirstName(),
 				addCreditCardForm.getLastName(),
 				addCreditCardForm.getCompanyName(),
-				null,
-				null,
-				null,
-				null,
-				null,
+				MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile),
+				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone()),
+				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax()),
+				null, // customerId: TODO: Set from account.Account once there is a constant identifier
+				null, // customerTaxId
 				addCreditCardForm.getStreetAddress1(),
 				addCreditCardForm.getStreetAddress2(),
 				addCreditCardForm.getCity(),
