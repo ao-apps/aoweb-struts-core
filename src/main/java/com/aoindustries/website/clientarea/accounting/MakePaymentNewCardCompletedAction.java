@@ -171,6 +171,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
 		String paymentTypeName;
+		// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
 		if(cardNumber.startsWith("34") || cardNumber.startsWith("37")) {
 			paymentTypeName = PaymentType.AMEX;
 		} else if(cardNumber.startsWith("60")) {

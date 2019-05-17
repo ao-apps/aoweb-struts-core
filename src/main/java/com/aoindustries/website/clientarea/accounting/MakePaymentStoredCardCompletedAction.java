@@ -136,6 +136,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
 		String paymentTypeName;
 		String cardInfo = creditCard.getCardInfo();
+		// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
 		if(cardInfo.startsWith("34") || cardInfo.startsWith("37")) {
 			paymentTypeName = PaymentType.AMEX;
 		} else if(cardInfo.startsWith("60")) {
