@@ -139,11 +139,22 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		{
 			String paymentTypeName;
 			// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
-			if(cardInfo.startsWith("34") || cardInfo.startsWith("37") || cardInfo.startsWith("3?")) {
+			if(
+				cardInfo.startsWith("34")
+				|| cardInfo.startsWith("37")
+				|| cardInfo.startsWith("3" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)
+			) {
 				paymentTypeName = PaymentType.AMEX;
 			} else if(cardInfo.startsWith("60")) {
 				paymentTypeName = PaymentType.DISCOVER;
-			} else if(cardInfo.startsWith("51") || cardInfo.startsWith("52") || cardInfo.startsWith("53") || cardInfo.startsWith("54") || cardInfo.startsWith("55") || cardInfo.startsWith("5?")) {
+			} else if(
+				cardInfo.startsWith("51")
+				|| cardInfo.startsWith("52")
+				|| cardInfo.startsWith("53")
+				|| cardInfo.startsWith("54")
+				|| cardInfo.startsWith("55")
+				|| cardInfo.startsWith("5" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)
+			) {
 				paymentTypeName = PaymentType.MASTERCARD;
 			} else if(cardInfo.startsWith("4")) {
 				paymentTypeName = PaymentType.VISA;
