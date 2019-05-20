@@ -170,26 +170,28 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
-		String paymentTypeName;
-		// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
-		if(cardNumber.startsWith("34") || cardNumber.startsWith("37")) {
-			paymentTypeName = PaymentType.AMEX;
-		} else if(cardNumber.startsWith("60")) {
-			paymentTypeName = PaymentType.DISCOVER;
-		} else if(cardNumber.startsWith("51") || cardNumber.startsWith("52") || cardNumber.startsWith("53") || cardNumber.startsWith("54") || cardNumber.startsWith("55")) {
-			paymentTypeName = PaymentType.MASTERCARD;
-		} else if(cardNumber.startsWith("4")) {
-			paymentTypeName = PaymentType.VISA;
-		} else {
-			paymentTypeName = null;
-		}
+		String cardInfo = com.aoindustries.creditcards.CreditCard.maskCreditCardNumber(cardNumber);
 		PaymentType paymentType;
-		if(paymentTypeName==null) paymentType = null;
-		else {
-			paymentType = rootConn.getPayment().getPaymentType().get(paymentTypeName);
-			if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
+		{
+			String paymentTypeName;
+			// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
+			if(cardNumber.startsWith("34") || cardNumber.startsWith("37") || cardNumber.startsWith("3?")) {
+				paymentTypeName = PaymentType.AMEX;
+			} else if(cardNumber.startsWith("60")) {
+				paymentTypeName = PaymentType.DISCOVER;
+			} else if(cardNumber.startsWith("51") || cardNumber.startsWith("52") || cardNumber.startsWith("53") || cardNumber.startsWith("54") || cardNumber.startsWith("55") || cardNumber.startsWith("5?")) {
+				paymentTypeName = PaymentType.MASTERCARD;
+			} else if(cardNumber.startsWith("4")) {
+				paymentTypeName = PaymentType.VISA;
+			} else {
+				paymentTypeName = null;
+			}
+			if(paymentTypeName==null) paymentType = null;
+			else {
+				paymentType = rootConn.getPayment().getPaymentType().get(paymentTypeName);
+				if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
+			}
 		}
-
 		int transID = rootAccount.addTransaction(
 			rootAccount,
 			aoConn.getThisBusinessAdministrator(),
@@ -198,7 +200,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			1000,
 			-pennies,
 			paymentType,
-			com.aoindustries.creditcards.CreditCard.maskCreditCardNumber(cardNumber),
+			cardInfo,
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
@@ -277,6 +279,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 				newCreditCard
 			);
 		}
+		// TODO: CreditCard might have been updated on root connector, invalidate and get fresh object always to avoid possible race condition
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
@@ -286,7 +289,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			case GATEWAY_ERROR :
 			{
 				// Update transaction as failed
-				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 
 				TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
 				ActionMessages mappedErrors = makePaymentNewCardForm.mapTransactionError(errorCode);
@@ -305,7 +308,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 					case HOLD :
 					{
 						// Update transaction as held
-						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 
 						// Store to request attributes
 						request.setAttribute("transaction", transaction);
@@ -344,7 +347,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 					case DECLINED :
 					{
 						// Update transaction as declined
-						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 
 						// Store to request attributes
 						request.setAttribute("declineReason", authorizationResult.getDeclineReason().toString());
@@ -361,7 +364,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								case GATEWAY_ERROR :
 								{
 									// Update transaction as failed
-									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 
 									TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
 									ActionMessages mappedErrors = makePaymentNewCardForm.mapTransactionError(errorCode);
@@ -384,7 +387,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 							}
 						}
 						// Update transaction as successful
-						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 
 						// Store to request attributes
 						request.setAttribute("transaction", transaction);

@@ -134,27 +134,28 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
-		String paymentTypeName;
 		String cardInfo = creditCard.getCardInfo();
-		// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
-		if(cardInfo.startsWith("34") || cardInfo.startsWith("37")) {
-			paymentTypeName = PaymentType.AMEX;
-		} else if(cardInfo.startsWith("60")) {
-			paymentTypeName = PaymentType.DISCOVER;
-		} else if(cardInfo.startsWith("51") || cardInfo.startsWith("52") || cardInfo.startsWith("53") || cardInfo.startsWith("54") || cardInfo.startsWith("55")) {
-			paymentTypeName = PaymentType.MASTERCARD;
-		} else if(cardInfo.startsWith("4")) {
-			paymentTypeName = PaymentType.VISA;
-		} else {
-			paymentTypeName = null;
-		}
 		PaymentType paymentType;
-		if(paymentTypeName==null) paymentType = null;
-		else {
-			paymentType = rootConn.getPayment().getPaymentType().get(paymentTypeName);
-			if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
+		{
+			String paymentTypeName;
+			// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
+			if(cardInfo.startsWith("34") || cardInfo.startsWith("37") || cardInfo.startsWith("3?")) {
+				paymentTypeName = PaymentType.AMEX;
+			} else if(cardInfo.startsWith("60")) {
+				paymentTypeName = PaymentType.DISCOVER;
+			} else if(cardInfo.startsWith("51") || cardInfo.startsWith("52") || cardInfo.startsWith("53") || cardInfo.startsWith("54") || cardInfo.startsWith("55") || cardInfo.startsWith("5?")) {
+				paymentTypeName = PaymentType.MASTERCARD;
+			} else if(cardInfo.startsWith("4")) {
+				paymentTypeName = PaymentType.VISA;
+			} else {
+				paymentTypeName = null;
+			}
+			if(paymentTypeName==null) paymentType = null;
+			else {
+				paymentType = rootConn.getPayment().getPaymentType().get(paymentTypeName);
+				if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
+			}
 		}
-
 		int transID = rootAccount.addTransaction(
 			rootAccount,
 			aoConn.getThisBusinessAdministrator(),
@@ -239,6 +240,15 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				CreditCardFactory.getCreditCard(rootCreditCard)
 			);
 		}
+		// CreditCard might have been updated on root connector, invalidate and get fresh object always to avoid possible race condition
+		{
+			aoConn.getPayment().getCreditCard().clearCache();
+			CreditCard newCreditCard = aoConn.getPayment().getCreditCard().get(id);
+			if(newCreditCard != null) {
+				creditCard = newCreditCard;
+				request.setAttribute("creditCard", creditCard);
+			}
+		}
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
@@ -248,7 +258,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			case GATEWAY_ERROR :
 			{
 				// Update transaction as failed
-				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 				// Get the list of active credit cards stored for this business
 				List<CreditCard> allCreditCards = account.getCreditCards();
 				List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -267,7 +277,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				switch(authorizationResult.getApprovalResult()) {
 					case HOLD :
 					{
-						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);
@@ -278,7 +288,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					case DECLINED :
 					{
 						// Update transaction as declined
-						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 						// Get the list of active credit cards stored for this business
 						List<CreditCard> allCreditCards = account.getCreditCards();
 						List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -303,7 +313,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 								case GATEWAY_ERROR :
 								{
 									// Update transaction as failed
-									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()));
+									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 									// Get the list of active credit cards stored for this business
 									List<CreditCard> allCreditCards = account.getCreditCards();
 									List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -327,7 +337,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 							}
 						}
 						// Update transaction as successful
-						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()));
+						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);
