@@ -26,6 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Administrator;
 import com.aoindustries.aoserv.client.account.Profile;
+import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -114,9 +115,9 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
-		List<String> expirationYears = new ArrayList<>(12);
+		List<String> expirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = Calendar.getInstance().get(Calendar.YEAR);
-		for(int c=0;c<12;c++) expirationYears.add(Integer.toString(startYear+c));
+		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
 
 		// Build the list of countries
 		// We use the root connector to provide a better set of country values

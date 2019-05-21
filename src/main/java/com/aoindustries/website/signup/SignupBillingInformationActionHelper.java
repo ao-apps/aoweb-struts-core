@@ -51,9 +51,9 @@ final public class SignupBillingInformationActionHelper {
 
 	public static void setBillingExpirationYearsRequestAttribute(HttpServletRequest request) {
 		// Build the list of years
-		List<String> billingExpirationYears = new ArrayList<>(12);
+		List<String> billingExpirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = Calendar.getInstance().get(Calendar.YEAR);
-		for(int c=0;c<12;c++) billingExpirationYears.add(Integer.toString(startYear+c));
+		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) billingExpirationYears.add(Integer.toString(startYear + c));
 
 		// Store to request attributes
 		request.setAttribute("billingExpirationYears", billingExpirationYears);

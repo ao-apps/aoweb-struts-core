@@ -107,9 +107,9 @@ public class EditCreditCardAction extends PermissionAction {
 
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
-		List<String> expirationYears = new ArrayList<>(12);
+		List<String> expirationYears = new ArrayList<>(1 + com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = Calendar.getInstance().get(Calendar.YEAR);
-		for(int c=0;c<12;c++) expirationYears.add(Integer.toString(startYear+c));
+		for(int c = 0; c <= com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
 
 		// Build the list of countries
 		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
