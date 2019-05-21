@@ -155,9 +155,29 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				When an empay string, after trimming, an empty string is returned.
 			</p>
 		]]></description>
-		<name>getCardDisplay</name>
+		<name>getCardNumberDisplay</name>
 		<function-class>com.aoindustries.creditcards.CreditCard</function-class>
-		<function-signature>java.lang.String getCardDisplay(java.lang.String)</function-signature>
-		<example><![CDATA[<code>${aoweb:getCardDisplay(cardNumber)}</code>]]></example>
+		<function-signature>java.lang.String getCardNumberDisplay(java.lang.String)</function-signature>
+		<example><![CDATA[<code>${aoweb:getCardNumberDisplay(cardNumber)}</code>]]></example>
+	</function>
+	<function>
+		<description><![CDATA[
+			<p>
+				Formats a card expiration date for display in "MM / YYYY" format.
+			</p>
+			<p>
+				When both <code>expirationMonth</code> and <code>expirationYear</code> are unknown, <code>null</code> is returned.
+			</p>
+			<p>
+				When <code>expirationMonth</code> is unknown, returns in "?? / YYYY" format.
+			</p>
+			<p>
+				When <code>expirationYear</code> is unknown, returns in "MM / ????" format.
+			</p>
+		]]></description>
+		<name>getExpirationDisplay</name>
+		<function-class>com.aoindustries.creditcards.CreditCard</function-class>
+		<function-signature>java.lang.String getExpirationDisplay(byte,short)</function-signature>
+		<example><![CDATA[<code>${aoweb:getExpirationDisplay(expirationMonth,expirationYear)}</code>]]></example>
 	</function>
 </taglib>
