@@ -34,6 +34,7 @@ import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
 import com.aoindustries.creditcards.CaptureResult;
 import com.aoindustries.creditcards.CreditCardProcessor;
+import com.aoindustries.creditcards.TokenizedCreditCard;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.sql.SQLUtility;
@@ -263,13 +264,17 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
+		TokenizedCreditCard tokenizedCreditCard = authorizationResult.getTokenizedCreditCard();
 		switch(authorizationResult.getCommunicationResult()) {
 			case LOCAL_ERROR :
 			case IO_ERROR :
 			case GATEWAY_ERROR :
 			{
 				// Update transaction as failed
-				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+				aoTransaction.declined(
+					Integer.parseInt(transaction.getPersistenceUniqueId()),
+					tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+				);
 				// Get the list of active credit cards stored for this business
 				List<CreditCard> allCreditCards = account.getCreditCards();
 				List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -288,7 +293,10 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				switch(authorizationResult.getApprovalResult()) {
 					case HOLD :
 					{
-						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.held(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);
@@ -299,7 +307,10 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					case DECLINED :
 					{
 						// Update transaction as declined
-						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.declined(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 						// Get the list of active credit cards stored for this business
 						List<CreditCard> allCreditCards = account.getCreditCards();
 						List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -324,7 +335,10 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 								case GATEWAY_ERROR :
 								{
 									// Update transaction as failed
-									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+									aoTransaction.declined(
+										Integer.parseInt(transaction.getPersistenceUniqueId()),
+										tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+									);
 									// Get the list of active credit cards stored for this business
 									List<CreditCard> allCreditCards = account.getCreditCards();
 									List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
@@ -348,7 +362,10 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 							}
 						}
 						// Update transaction as successful
-						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.approved(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);

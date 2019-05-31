@@ -34,6 +34,7 @@ import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
 import com.aoindustries.creditcards.CaptureResult;
 import com.aoindustries.creditcards.CreditCardProcessor;
+import com.aoindustries.creditcards.TokenizedCreditCard;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
@@ -293,13 +294,17 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 
 		// 4) Decline/approve based on results
 		AuthorizationResult authorizationResult = transaction.getAuthorizationResult();
+		TokenizedCreditCard tokenizedCreditCard = authorizationResult.getTokenizedCreditCard();
 		switch(authorizationResult.getCommunicationResult()) {
 			case LOCAL_ERROR :
 			case IO_ERROR :
 			case GATEWAY_ERROR :
 			{
 				// Update transaction as failed
-				aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+				aoTransaction.declined(
+					Integer.parseInt(transaction.getPersistenceUniqueId()),
+					tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+				);
 
 				TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
 				ActionMessages mappedErrors = makePaymentNewCardForm.mapTransactionError(errorCode);
@@ -318,7 +323,10 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 					case HOLD :
 					{
 						// Update transaction as held
-						aoTransaction.held(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.held(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 
 						// Store to request attributes
 						request.setAttribute("transaction", transaction);
@@ -357,7 +365,10 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 					case DECLINED :
 					{
 						// Update transaction as declined
-						aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.declined(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 
 						// Store to request attributes
 						request.setAttribute("declineReason", authorizationResult.getDeclineReason().toString());
@@ -374,7 +385,10 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								case GATEWAY_ERROR :
 								{
 									// Update transaction as failed
-									aoTransaction.declined(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+									aoTransaction.declined(
+										Integer.parseInt(transaction.getPersistenceUniqueId()),
+										tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+									);
 
 									TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
 									ActionMessages mappedErrors = makePaymentNewCardForm.mapTransactionError(errorCode);
@@ -397,7 +411,10 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 							}
 						}
 						// Update transaction as successful
-						aoTransaction.approved(Integer.parseInt(transaction.getPersistenceUniqueId()), authorizationResult.getReplacementMaskedCardNumber());
+						aoTransaction.approved(
+							Integer.parseInt(transaction.getPersistenceUniqueId()),
+							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+						);
 
 						// Store to request attributes
 						request.setAttribute("transaction", transaction);
