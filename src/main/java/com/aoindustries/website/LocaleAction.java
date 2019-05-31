@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -46,7 +46,7 @@ public class LocaleAction extends SiteSettingsAction {
 	/**
 	 * Selects the <code>Locale</code>, sets the request attribute "locale", then the subclass execute method is invoked.
 	 *
-	 * @see #execute(ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse,Locale)
+	 * @see #execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.website.SiteSettings, java.util.Locale)
 	 */
 	@Override
 	final public ActionForward execute(
