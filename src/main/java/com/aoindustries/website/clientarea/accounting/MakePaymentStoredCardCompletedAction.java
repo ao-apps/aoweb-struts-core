@@ -176,7 +176,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			1000,
 			-pennies,
 			paymentType,
-			cardInfo,
+			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
@@ -273,7 +273,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				// Update transaction as failed
 				aoTransaction.declined(
 					Integer.parseInt(transaction.getPersistenceUniqueId()),
-					tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+					tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 				);
 				// Get the list of active credit cards stored for this business
 				List<CreditCard> allCreditCards = account.getCreditCards();
@@ -295,7 +295,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					{
 						aoTransaction.held(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);
@@ -309,7 +309,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						// Update transaction as declined
 						aoTransaction.declined(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						// Get the list of active credit cards stored for this business
 						List<CreditCard> allCreditCards = account.getCreditCards();
@@ -337,7 +337,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 									// Update transaction as failed
 									aoTransaction.declined(
 										Integer.parseInt(transaction.getPersistenceUniqueId()),
-										tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+										tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 									);
 									// Get the list of active credit cards stored for this business
 									List<CreditCard> allCreditCards = account.getCreditCards();
@@ -364,7 +364,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						// Update transaction as successful
 						aoTransaction.approved(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						request.setAttribute("business", account);
 						request.setAttribute("creditCard", creditCard);

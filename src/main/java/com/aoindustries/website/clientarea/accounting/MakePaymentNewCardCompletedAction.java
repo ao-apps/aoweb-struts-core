@@ -211,7 +211,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			1000,
 			-pennies,
 			paymentType,
-			cardInfo,
+			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
@@ -303,7 +303,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 				// Update transaction as failed
 				aoTransaction.declined(
 					Integer.parseInt(transaction.getPersistenceUniqueId()),
-					tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+					tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 				);
 
 				TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
@@ -325,7 +325,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as held
 						aoTransaction.held(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
@@ -367,7 +367,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as declined
 						aoTransaction.declined(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
@@ -387,7 +387,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 									// Update transaction as failed
 									aoTransaction.declined(
 										Integer.parseInt(transaction.getPersistenceUniqueId()),
-										tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+										tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 									);
 
 									TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
@@ -413,7 +413,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as successful
 						aoTransaction.approved(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : tokenizedCreditCard.getReplacementMaskedCardNumber()
+							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
