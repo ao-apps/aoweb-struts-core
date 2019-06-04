@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-05-20T13:22:27-0500"
+		dateModified="2019-06-03T23:03:29-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -56,7 +56,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<ul>
 					<li>Minimum Java version changed from 1.6 to 1.7.</li>
 					<li>Implemented VNC compatibility for HVM guests on Xen 4.6 on CentOS 7.</li>
-					<li>Updated dependencies.</li>
 					<li>
 						Aligned the session URL rewriting excluded path extensions to match other projects.
 						The list is now:
@@ -75,22 +74,32 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 							<li><code>*.zip</code></li>
 						</ol>
 					</li>
-					<li>Passing more values to <core:link book="/ao-credit-cards/api" page="/index.jspx">underlying credit card processing API</core:link>:
+					<li>Payment form improvements:
 						<ol>
-							<li><code>principalName</code> from authenticated user</li>
-							<li><code>groupName</code> from accounting code</li>
-							<li><code>email</code> from account profile's first billing email address</li>
-							<li><code>phone</code> from account profile</li>
-							<li><code>fax</code> from account profile</li>
+							<li>Passing more values to <core:link book="/ao-credit-cards/api" page="/index.jspx">underlying credit card processing API</core:link>:
+								<ol type="a">
+									<li><code>principalName</code> from authenticated user</li>
+									<li><code>groupName</code> from accounting code</li>
+									<li><code>email</code> from account profile's first billing email address</li>
+									<li><code>phone</code> from account profile</li>
+									<li><code>fax</code> from account profile</li>
+								</ol>
+							</li>
+							<li>
+								New function <core:link page="aoweb-struts-aoweb.tld/function-getCardNumberDisplay" />
+								to format masked card numbers for display.
+							</li>
+							<li>
+								New function <core:link page="aoweb-struts-aoweb.tld/function-getExpirationDisplay" />
+								to format expiration dates for display.
+							</li>
 						</ol>
 					</li>
-					<li>
-						New function <core:link page="aoweb-struts-aoweb.tld/function-getCardNumberDisplay" />
-						to format masked card numbers for display.
-					</li>
-					<li>
-						New function <core:link page="aoweb-struts-aoweb.tld/function-getExpirationDisplay" />
-						to format expiration dates for display.
+					<li>Using managed dependencies:
+						<ol>
+							<li>This project uses transitive managed dependencies.</li>
+							<li>This project's managed dependencies may also be imported by other projects.</li>
+						</ol>
 					</li>
 				</ul>
 			</changelog:release>
