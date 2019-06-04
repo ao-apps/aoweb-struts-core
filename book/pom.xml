@@ -147,9 +147,13 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId><artifactId>maven-javadoc-plugin</artifactId>
 						<configuration>
+							<!-- TODO: Is it worth linking javadocs for the books? -->
 							<links>
 								<link>${javac.link.javaApi}</link>
+								<!-- Java EE -->
 								<link>${javac.link.javaeeApi.6}</link>
+								<!-- Direct -->
+								<!-- No apidocs: <groupId>com.aoindustries</groupId><artifactId>ao-badges</artifactId> -->
 								<link>https://aoindustries.com/ao-lang/apidocs/</link>
 								<link>https://aoindustries.com/ao-taglib/apidocs/</link>
 								<link>https://semanticcms.com/changelog/taglib/apidocs/</link>
@@ -165,21 +169,118 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</profile>
 	</profiles>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- Java EE -->
+			<dependency>
+				<groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId><version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- JSTL: See http://stackoverflow.com/questions/6094329/tomcat-7-and-jstl -->
+			<dependency>
+				<groupId>javax.servlet</groupId><artifactId>jstl</artifactId><version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId><version>2.2.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.web</groupId><artifactId>jstl-impl</artifactId><version>1.2</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.servlet.jsp</groupId><artifactId>jsp-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.servlet.jsp.jstl</groupId><artifactId>jstl-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- Direct -->
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-badges</artifactId><version>1.1.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-badges</artifactId><version>1.1.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-lang</artifactId><version>2.1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-lang</artifactId><version>2.1.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId><version>3.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId><version>3.0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-changelog-taglib</artifactId><version>1.1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-changelog-taglib</artifactId><version>1.1.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId><version>1.9.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId><version>1.9.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId><version>1.10.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId><version>1.10.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-taglib</artifactId><version>1.5.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-taglib</artifactId><version>1.5.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-tag-reference</artifactId><version>1.2.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.semanticcms</groupId><artifactId>semanticcms-tag-reference</artifactId><version>1.2.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
+		<!-- Java EE -->
 		<dependency>
-			<groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId><version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- JSTL: See http://stackoverflow.com/questions/6094329/tomcat-7-and-jstl -->
-		<dependency>
-			<groupId>javax.servlet</groupId><artifactId>jstl</artifactId><version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId><version>2.2.1</version>
+			<groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish.web</groupId><artifactId>jstl-impl</artifactId><version>1.2</version>
+			<groupId>javax.servlet</groupId><artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId><artifactId>jstl-impl</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId>
@@ -192,29 +293,30 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Direct -->
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>ao-badges</artifactId><version>1.1.1-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>ao-badges</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>ao-lang</artifactId><version>2.1.0-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>ao-lang</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId><version>3.0.1-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>ao-taglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.semanticcms</groupId><artifactId>semanticcms-changelog-taglib</artifactId><version>1.1.0-SNAPSHOT</version>
+			<groupId>com.semanticcms</groupId><artifactId>semanticcms-changelog-taglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId><version>1.9.1-SNAPSHOT</version>
+			<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId><version>1.10.1-SNAPSHOT</version>
+			<groupId>com.semanticcms</groupId><artifactId>semanticcms-core-taglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-taglib</artifactId><version>1.5.0-SNAPSHOT</version>
+			<groupId>com.semanticcms</groupId><artifactId>semanticcms-section-taglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.semanticcms</groupId><artifactId>semanticcms-tag-reference</artifactId><version>1.2.0-SNAPSHOT</version>
+			<groupId>com.semanticcms</groupId><artifactId>semanticcms-tag-reference</artifactId>
 		</dependency>
 		<!-- Dependency for dependencyversion-maven-plugin only -->
 		<dependency>
@@ -222,6 +324,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<type>pom</type>
 			<scope>provided</scope>
 			<optional>true</optional>
+			<!-- TODO: Put this exclusion of all pom-version-only dependencies in a different commit: -->
+			<exclusions><exclusion><groupId>*</groupId><artifactId>*</artifactId></exclusion></exclusions>
 		</dependency>
 	</dependencies>
 </project>
