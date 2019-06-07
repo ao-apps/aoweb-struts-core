@@ -226,7 +226,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<type>pom</type>
 			<scope>provided</scope>
 			<optional>true</optional>
-			<!-- TODO: Put this exclusion of all pom-version-only dependencies in a different commit: -->
 			<exclusions><exclusion><groupId>*</groupId><artifactId>*</artifactId></exclusion></exclusions>
 		</dependency>
 	</dependencies>
