@@ -25,6 +25,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
+	<!-- datePublished="2016-10-07T16:24:47-0500" -->
+	<!-- dateModified="2016-11-10T22:36:09-0600" -->
 	<description><![CDATA[
 		<p>@{description.html}</p>
 	]]></description>
@@ -36,6 +38,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<short-name>skin</short-name>
 	<uri>@{project.url}skin-taglib/</uri>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides keywords to its
@@ -50,6 +54,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides a description to its
@@ -64,6 +70,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides an author to its
@@ -78,6 +86,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides a copyright to its
@@ -92,6 +102,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p class="semanticcms-tag-reference-summary">
 				Provides a path to its
@@ -116,6 +128,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides a meta to its
@@ -163,6 +177,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Adds a link tag to <a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageAttributes.html">this page</a>.
@@ -243,6 +259,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides a title to its
@@ -257,6 +275,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Provides a navImageAlt to its
@@ -271,6 +291,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Adds a parent to the hierarchy above this page.
@@ -365,6 +387,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Adds a child to the <a href="@{project.url}aoweb-struts-skin.tld/tag-parent">&lt;skin:parent&gt;</a> tag or at the same level as this page if no parent tag.
@@ -459,6 +483,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Writes the skin between the HTML tags and the page content.
@@ -504,6 +530,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Surrounds the body with a light area.
@@ -537,6 +565,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Surrounds the body with a white area.
@@ -570,6 +600,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2019-04-15T19:37:13-0500" -->
 		<description><![CDATA[
 			<p>
 				Sets the content type appropriately for the current
@@ -581,6 +613,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Writes the advanced content area with skin-provided formatting.
@@ -615,6 +649,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints the content title line, must be nested in a content tag.
@@ -625,6 +661,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a line of content in a content area.
@@ -687,6 +725,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a vertical divider within the content line.
@@ -760,6 +800,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a horizontal divider line.
@@ -798,6 +840,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Creates an auto index on a per-skin formatted basis.
@@ -808,6 +852,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- TODO: Move popups to their own small project, with taglib of <popup:group />, <popup:popup />, and <popup:close /> -->
 		<description><![CDATA[
 			<p>
 				A popup group will only have one <a href="@{project.url}aoweb-struts-skin.tld/tag-popup">&lt;skin:popup&gt;</a>
@@ -821,6 +868,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				A popup will display extra information when the mouse is moved over
@@ -845,6 +894,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Renders a close button/link/image for a popup.
@@ -856,6 +907,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>empty</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2019-04-15T19:37:13-0500" -->
 		<description><![CDATA[
 			<p>
 				Alternates between <code>aoLightRow</code> and <code>aoDarkRow</code> classes.

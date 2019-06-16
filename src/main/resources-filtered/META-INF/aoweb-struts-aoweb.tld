@@ -25,6 +25,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
+	<!-- datePublished="2016-10-07T16:24:47-0500" -->
+	<!-- dateModified="2016-11-10T22:36:09-0600" -->
 	<description><![CDATA[
 		<p>@{description.html}</p>
 	]]></description>
@@ -36,6 +38,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<short-name>aoweb</short-name>
 	<uri>@{project.url}aoweb-taglib/</uri>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-07T16:29:23-0600" -->
 		<description><![CDATA[
 			<p>Conditionally includes the body if the resources with the provided path exists.</p>
 		]]></description>
@@ -53,6 +57,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-07T16:29:23-0600" -->
 		<description><![CDATA[
 			<p>Conditionally includes the body if the resources with the provided path does not exist.</p>
 		]]></description>
@@ -70,6 +76,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Some scripts may benefit by delaying or batching their execution.  This
@@ -103,6 +111,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</attribute>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -116,6 +126,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date and time.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -129,6 +141,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2016-10-07T16:24:47-0500" -->
+		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local time.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -142,6 +156,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>JSP</body-content>
 	</tag>
 	<function>
+		<!-- datePublished="2019-05-20T20:26:39-0500" -->
 		<description><![CDATA[
 			<p>
 				Formats a card number for display.  The card number may be a full or masked format.
@@ -161,6 +176,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<example><![CDATA[<code>${aoweb:getCardNumberDisplay(cardNumber)}</code>]]></example>
 	</function>
 	<function>
+		<!-- datePublished="2019-05-20T20:26:39-0500" -->
+		<!-- dateModified="2019-05-31T17:10:03-0500" -->
 		<description><![CDATA[
 			<p>
 				Formats a card expiration date for display in "MM / YYYY" format.
