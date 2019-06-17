@@ -171,7 +171,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>getCardNumberDisplay</name>
-		<function-class>com.aoindustries.creditcards.CreditCard</function-class>
+		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
 		<function-signature>java.lang.String getCardNumberDisplay(java.lang.String)</function-signature>
 		<example><![CDATA[<code>${aoweb:getCardNumberDisplay(cardNumber)}</code>]]></example>
 	</function>
@@ -193,7 +193,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>getExpirationDisplay</name>
-		<function-class>com.aoindustries.creditcards.CreditCard</function-class>
+		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
 		<function-signature>java.lang.String getExpirationDisplay(java.lang.Byte,java.lang.Short)</function-signature>
 		<example><![CDATA[<code>${aoweb:getExpirationDisplay(expirationMonth,expirationYear)}</code>]]></example>
 	</function>
