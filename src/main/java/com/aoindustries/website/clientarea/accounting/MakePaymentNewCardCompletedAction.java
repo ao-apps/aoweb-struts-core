@@ -218,7 +218,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transID);
 		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transID);
 
-		// TODO: Store card before sale, and use its stored card ID
+		// TODO: Store card before sale, and use its stored card ID (once ao-credit-cards can throw ErrorCodeException on store card)
 		// TODO: This currently implementation provides disconnected first payment and stored card in Stripe.
 
 		// 3) Process
