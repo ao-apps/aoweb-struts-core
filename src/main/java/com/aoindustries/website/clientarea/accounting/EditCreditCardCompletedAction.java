@@ -104,7 +104,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootCreditCard.getCreditCardProcessor());
 		// Get the values that are simply copied from account profile, instead of cluttering the credit card form with too many fields
-		Profile profile = rootCreditCard.getBusiness().getBusinessProfile();
+		Profile profile = rootCreditCard.getAccount().getProfile();
 		String profileEmail = MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile);
 		String profilePhone = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone());
 		String profileFax = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax());
@@ -141,7 +141,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			storedCreditCard.setComments(editCreditCardForm.getDescription());
 			// Update persistence
 			rootProcessor.updateCreditCard(
-				new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
+				new AOServConnectorPrincipal(rootConn, aoConn.getCurrentAdministrator().getUsername().getUsername().toString()),
 				storedCreditCard
 			);
 			updatedCardDetails = true;
@@ -154,7 +154,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		if(!GenericValidator.isBlankOrNull(newCardNumber)) {
 			// Update card number and expiration
 			rootProcessor.updateCreditCardNumberAndExpiration(
-				new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
+				new AOServConnectorPrincipal(rootConn, aoConn.getCurrentAdministrator().getUsername().getUsername().toString()),
 				CreditCardFactory.getCreditCard(rootCreditCard),
 				newCardNumber,
 				Byte.parseByte(newExpirationMonth),
@@ -170,7 +170,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			) {
 				// Update expiration only
 				rootProcessor.updateCreditCardExpiration(
-					new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
+					new AOServConnectorPrincipal(rootConn, aoConn.getCurrentAdministrator().getUsername().getUsername().toString()),
 					CreditCardFactory.getCreditCard(rootCreditCard),
 					Byte.parseByte(newExpirationMonth),
 					Short.parseShort(newExpirationYear)

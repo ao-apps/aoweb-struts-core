@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -62,11 +62,10 @@ public class DeleteCreditCardCompletedAction extends PermissionAction {
 	) throws Exception {
 		// Make sure the credit card still exists, redirect to credit-card-manager if doesn't
 		CreditCard creditCard = null;
-		String S = request.getParameter("pkey");
-		if(S!=null && S.length()>0) {
+		String id = request.getParameter("id");
+		if(id != null && !id.isEmpty()) {
 			try {
-				int id = Integer.parseInt(S);
-				creditCard = aoConn.getPayment().getCreditCard().get(id);
+				creditCard = aoConn.getPayment().getCreditCard().get(Integer.parseInt(id));
 			} catch(NumberFormatException err) {
 				getServlet().log(null, err);
 			}
@@ -77,14 +76,14 @@ public class DeleteCreditCardCompletedAction extends PermissionAction {
 
 		// Lookup the card in the root connector (to get access to the processor)
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
-		CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
-		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
+		CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getId());
+		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getId());
 
 		// Delete the card from the bank and persistence
 		Processor rootAoservCCP = rootCreditCard.getCreditCardProcessor();
 		com.aoindustries.creditcards.CreditCardProcessor processor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoservCCP);
 		processor.deleteCreditCard(
-			new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString()),
+			new AOServConnectorPrincipal(rootConn, aoConn.getCurrentAdministrator().getUsername().getUsername().toString()),
 			CreditCardFactory.getCreditCard(rootCreditCard)
 		);
 

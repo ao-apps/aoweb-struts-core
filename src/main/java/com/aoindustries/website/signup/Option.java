@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.signup;
 
-import java.math.BigDecimal;
+import com.aoindustries.util.i18n.Monies;
 import java.util.Comparator;
 
 /**
@@ -30,21 +30,21 @@ import java.util.Comparator;
  */
 public class Option {
 
-	public static class PriceComparator implements Comparator<Option> {
+	public static final Comparator<Option> priceComparator = new Comparator<Option>() {
 		@Override
 		public int compare(Option pdl1, Option pdl2) {
 			return pdl1.getPriceDifference().compareTo(pdl2.getPriceDifference());
 		}
-	}
+	};
 
 	final private int packageDefinitionLimit;
 	final private String display;
-	final private BigDecimal priceDifference;
+	final private Monies priceDifference;
 
 	public Option(
 		int packageDefinitionLimit,
 		String display,
-		BigDecimal priceDifference
+		Monies priceDifference
 	) {
 		this.packageDefinitionLimit = packageDefinitionLimit;
 		this.display = display;
@@ -59,7 +59,7 @@ public class Option {
 		return display;
 	}
 
-	public BigDecimal getPriceDifference() {
+	public Monies getPriceDifference() {
 		return priceDifference;
 	}
 }

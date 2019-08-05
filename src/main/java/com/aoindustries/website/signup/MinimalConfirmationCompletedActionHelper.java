@@ -57,6 +57,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 	 */
 	private MinimalConfirmationCompletedActionHelper() {}
 
+	// TODO: Have this generate a ticket instead, with full details.  Remove "all except bank card numbers" in other places once done.
 	public static void sendSupportSummaryEmail(
 		ActionServlet servlet,
 		HttpServletRequest request,
@@ -64,13 +65,13 @@ final public class MinimalConfirmationCompletedActionHelper {
 		String statusKey,
 		SiteSettings siteSettings,
 		PackageDefinition packageDefinition,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
 		try {
-			sendSummaryEmail(servlet, request, pkey, statusKey, siteSettings.getBrand().getAowebStrutsSignupAdminAddress(), siteSettings, packageDefinition, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm);
-		} catch(Exception err) {
+			sendSummaryEmail(servlet, request, pkey, statusKey, siteSettings.getBrand().getAowebStrutsSignupAdminAddress(), siteSettings, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm);
+		} catch(RuntimeException | IOException | SQLException err) {
 			servlet.log("Unable to send sign up details to support admin address", err);
 		}
 	}
@@ -85,7 +86,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 		String statusKey,
 		SiteSettings siteSettings,
 		PackageDefinition packageDefinition,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
@@ -97,7 +98,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 		Iterator<String> I=addresses.iterator();
 		while(I.hasNext()) {
 			String address=I.next();
-			boolean success = sendSummaryEmail(servlet, request, pkey, statusKey, address, siteSettings, packageDefinition, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm);
+			boolean success = sendSummaryEmail(servlet, request, pkey, statusKey, address, siteSettings, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm);
 			if(success) successAddresses.add(address);
 			else failureAddresses.add(address);
 		}
@@ -118,7 +119,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 		String recipient,
 		SiteSettings siteSettings,
 		PackageDefinition packageDefinition,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
@@ -172,8 +173,8 @@ final public class MinimalConfirmationCompletedActionHelper {
 			SignupSelectPackageActionHelper.printConfirmation(emailOut, packageDefinition);
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.businessInfo.label")).print("</th></tr>\n");
-			SignupBusinessActionHelper.printConfirmation(emailOut, rootConn, signupBusinessForm);
+						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.organizationInfo.label")).print("</th></tr>\n");
+			SignupOrganizationActionHelper.printConfirmation(emailOut, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.technicalInfo.label")).print("</th></tr>\n");
 			SignupTechnicalActionHelper.printConfirmation(emailOut, rootConn, signupTechnicalForm);
@@ -188,7 +189,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 			// Send the email
 			Brand brand = siteSettings.getBrand();
 			Mailer.sendEmail(
-				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getAOServer().getHostname()),
+				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getLinuxServer().getHostname()),
 				"text/html",
 				charset,
 				brand.getSignupEmailAddress().toString(),

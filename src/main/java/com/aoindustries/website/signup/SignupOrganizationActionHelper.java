@@ -41,12 +41,12 @@ import org.apache.commons.validator.GenericValidator;
  *
  * @author  AO Industries, Inc.
  */
-final public class SignupBusinessActionHelper {
+final public class SignupOrganizationActionHelper {
 
 	/**
 	 * Make no instances.
 	 */
-	private SignupBusinessActionHelper() {}
+	private SignupOrganizationActionHelper() {}
 
 	public static void setRequestAttributes(
 		ServletContext servletContext,
@@ -106,69 +106,69 @@ final public class SignupBusinessActionHelper {
 		}
 	}
 
-	public static String getBusinessCountry(AOServConnector rootConn, SignupBusinessForm signupBusinessForm) throws IOException, SQLException {
-		return rootConn.getPayment().getCountryCode().get(signupBusinessForm.getBusinessCountry()).getName();
+	public static String getOrganizationCountry(AOServConnector rootConn, SignupOrganizationForm signupOrganizationForm) throws IOException, SQLException {
+		return rootConn.getPayment().getCountryCode().get(signupOrganizationForm.getOrganizationCountry()).getName();
 	}
 
 	public static void setConfirmationRequestAttributes(
 		ServletContext servletContext,
 		HttpServletRequest request,
-		SignupBusinessForm signupBusinessForm
+		SignupOrganizationForm signupOrganizationForm
 	) throws IOException, SQLException {
 		// Lookup things needed by the view
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
 
 		// Store as request attribute for the view
-		request.setAttribute("businessCountry", getBusinessCountry(rootConn, signupBusinessForm));
+		request.setAttribute("organizationCountry", getOrganizationCountry(rootConn, signupOrganizationForm));
 	}
 
-	public static void printConfirmation(ChainWriter emailOut, AOServConnector rootConn, SignupBusinessForm signupBusinessForm) throws IOException, SQLException {
+	public static void printConfirmation(ChainWriter emailOut, AOServConnector rootConn, SignupOrganizationForm signupOrganizationForm) throws IOException, SQLException {
 		emailOut.print("    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessName.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessName()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationName.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessPhone.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessPhone()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationPhone.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessFax.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessFax()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationFax.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationFax()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessAddress1.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessAddress1()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationAddress1.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationAddress1()).print("</td>\n"
 					 + "    </tr>\n");
-		if(!GenericValidator.isBlankOrNull(signupBusinessForm.getBusinessAddress2())) {
+		if(!GenericValidator.isBlankOrNull(signupOrganizationForm.getOrganizationAddress2())) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessAddress2.prompt")).print("</td>\n"
-						 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessAddress2()).print("</td>\n"
+						 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationAddress2.prompt")).print("</td>\n"
+						 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationAddress2()).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessCity.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessCity()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationCity.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessState.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessState()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationState.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessCountry.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(getBusinessCountry(rootConn, signupBusinessForm)).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationCountry.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(getOrganizationCountry(rootConn, signupOrganizationForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupBusinessForm.businessZip.prompt")).print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBusinessForm.getBusinessZip()).print("</td>\n"
+					 + "        <td>").print(accessor.getMessage("signupOrganizationForm.organizationZip.prompt")).print("</td>\n"
+					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationZip()).print("</td>\n"
 					 + "    </tr>\n");
 	}
 }

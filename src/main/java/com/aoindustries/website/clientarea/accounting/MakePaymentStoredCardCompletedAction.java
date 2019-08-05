@@ -24,11 +24,13 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
+import com.aoindustries.aoserv.client.schema.Type;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
-import com.aoindustries.aoserv.creditcards.BusinessGroup;
+import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
@@ -37,10 +39,12 @@ import com.aoindustries.creditcards.CreditCardProcessor;
 import com.aoindustries.creditcards.TokenizedCreditCard;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
-import com.aoindustries.sql.SQLUtility;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,27 +78,43 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		MakePaymentStoredCardForm makePaymentStoredCardForm = (MakePaymentStoredCardForm)form;
 
 		// Init request values
-		String accounting = makePaymentStoredCardForm.getAccounting();
-		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) {
-			// Redirect back to make-payment if business not found
+		Account account;
+		try {
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(makePaymentStoredCardForm.getAccount()));
+		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
+		if(account == null || currency == null) {
+			// Redirect back to make-payment if account or currency not found
+			return mapping.findForward("make-payment");
+		}
+		request.setAttribute("account", account);
+		request.setAttribute("currency", currency);
 
-		// If the card pkey in "", new card was selected
-		String pkeyString = makePaymentStoredCardForm.getPkey();
-		if(pkeyString==null) {
-			// pkey not provided, redirect back to make-payment
+		// If the card id in "", new card was selected
+		String idString = makePaymentStoredCardForm.getId();
+		if(idString==null) {
+			// id not provided, redirect back to make-payment
 			return mapping.findForward("make-payment");
 		}
-		if("".equals(pkeyString)) {
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
+		if(idString.isEmpty()) {
+			String encoding = response.getCharacterEncoding();
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					skin.getUrlBase(request)
+						+ "clientarea/accounting/make-payment-new-card.do?account="
+						+ URLEncoder.encode(request.getParameter("account"), encoding)
+						+ "&currency="
+						+ URLEncoder.encode(request.getParameter("currency"), encoding)
+				)
+			);
 			return null;
 		}
 
 		int id;
 		try {
-			id = Integer.parseInt(pkeyString);
+			id = Integer.parseInt(idString);
 		} catch(NumberFormatException err) {
 			// Can't parse int, redirect back to make-payment
 			return mapping.findForward("make-payment");
@@ -105,7 +125,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			return mapping.findForward("make-payment");
 		}
 
-		request.setAttribute("business", account);
+		request.setAttribute("account", account);
 		request.setAttribute("creditCard", creditCard);
 
 		// Validation
@@ -116,22 +136,21 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			return mapping.findForward("input");
 		}
 
-		// Convert to pennies
-		int pennies = SQLUtility.getPennies(makePaymentStoredCardForm.getPaymentAmount());
-		BigDecimal paymentAmount = new BigDecimal(makePaymentStoredCardForm.getPaymentAmount());
+		// Convert to money
+		Money paymentAmount = new Money(currency.getCurrency(), new BigDecimal(makePaymentStoredCardForm.getPaymentAmount()));
 
 		// Perform the transaction
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 
 		// 1) Pick a processor
-		CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getPkey());
-		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getPkey());
+		CreditCard rootCreditCard = rootConn.getPayment().getCreditCard().get(creditCard.getId());
+		if(rootCreditCard == null) throw new SQLException("Unable to find CreditCard: " + creditCard.getId());
 		com.aoindustries.aoserv.client.payment.Processor rootAoProcessor = rootCreditCard.getCreditCardProcessor();
 		CreditCardProcessor rootProcessor = CreditCardProcessorFactory.getCreditCardProcessor(rootAoProcessor);
 
 		// 2) Add the transaction as pending on this processor
-		Account rootAccount = rootConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(rootAccount == null) throw new SQLException("Unable to find Account: " + accounting);
+		Account rootAccount = rootConn.getAccount().getAccount().get(account.getName());
+		if(rootAccount == null) throw new SQLException("Unable to find Account: " + account.getName());
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
@@ -168,36 +187,39 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
 			}
 		}
-		int transID = rootAccount.addTransaction(
+		int transid = rootConn.getBilling().getTransaction().add(
+			Type.TIME,
+			null,
 			rootAccount,
-			aoConn.getThisBusinessAdministrator(),
+			rootAccount,
+			aoConn.getCurrentAdministrator(),
 			paymentTransactionType,
 			applicationResources.getMessage(locale, "makePaymentStoredCardCompleted.transaction.description"),
 			1000,
-			-pennies,
+			paymentAmount.negate(),
 			paymentType,
 			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
-		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transID);
-		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transID);
+		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transid);
+		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transid);
 
 		// 3) Process
-		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString());
-		BusinessGroup businessGroup = new BusinessGroup(rootAccount, accounting);
+		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, aoConn.getCurrentAdministrator().getUsername().getUsername().toString());
+		AccountGroup accountGroup = new AccountGroup(rootAccount, account.getName().toString());
 		Transaction transaction;
 		if(MakePaymentNewCardCompletedAction.DEBUG_AUTHORIZE_THEN_CAPTURE) {
 			transaction = rootProcessor.authorize(
 				principal,
-				businessGroup,
+				accountGroup,
 				new TransactionRequest(
 					false, // testMode
 					request.getRemoteAddr(), // customerIp
 					MakePaymentNewCardCompletedAction.DUPLICATE_WINDOW,
-					Integer.toString(transID), // orderNumber
-					MakePaymentNewCardCompletedAction.USD, // currency
-					paymentAmount, // amount
+					Integer.toString(transid), // orderNumber
+					paymentAmount.getCurrency(), // currency
+					paymentAmount.getValue(), // amount
 					null, // taxAmount
 					false, // taxExempt
 					null, // shippingAmount
@@ -222,14 +244,14 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		} else {
 			transaction = rootProcessor.sale(
 				principal,
-				businessGroup,
+				accountGroup,
 				new TransactionRequest(
 					false, // testMode
 					request.getRemoteAddr(), // customerIp
 					MakePaymentNewCardCompletedAction.DUPLICATE_WINDOW,
-					Integer.toString(transID), // orderNumber
-					MakePaymentNewCardCompletedAction.USD, // currency
-					paymentAmount, // amount
+					Integer.toString(transid), // orderNumber
+					paymentAmount.getCurrency(), // currency
+					paymentAmount.getValue(), // amount
 					null, // taxAmount
 					false, // taxExempt
 					null, // shippingAmount
@@ -275,14 +297,14 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					Integer.parseInt(transaction.getPersistenceUniqueId()),
 					tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 				);
-				// Get the list of active credit cards stored for this business
+				// Get the list of active credit cards stored for this account
 				List<CreditCard> allCreditCards = account.getCreditCards();
 				List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 				for(CreditCard tCreditCard : allCreditCards) {
 					if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
 				}
 				// Store to request attributes, return success
-				request.setAttribute("business", account);
+				request.setAttribute("account", account);
 				request.setAttribute("creditCards", creditCards);
 				request.setAttribute("lastPaymentCreditCard", creditCard.getProviderUniqueId());
 				request.setAttribute("errorReason", authorizationResult.getErrorCode().toString());
@@ -297,7 +319,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
 							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
-						request.setAttribute("business", account);
+						request.setAttribute("account", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);
 						request.setAttribute("aoTransaction", aoTransaction);
@@ -311,14 +333,14 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
 							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
-						// Get the list of active credit cards stored for this business
+						// Get the list of active credit cards stored for this account
 						List<CreditCard> allCreditCards = account.getCreditCards();
 						List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 						for(CreditCard tCreditCard : allCreditCards) {
 							if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
 						}
 						// Store to request attributes, return success
-						request.setAttribute("business", account);
+						request.setAttribute("account", account);
 						request.setAttribute("creditCards", creditCards);
 						request.setAttribute("lastPaymentCreditCard", creditCard.getProviderUniqueId());
 						request.setAttribute("declineReason", authorizationResult.getDeclineReason().toString());
@@ -339,14 +361,14 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 										Integer.parseInt(transaction.getPersistenceUniqueId()),
 										tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 									);
-									// Get the list of active credit cards stored for this business
+									// Get the list of active credit cards stored for this account
 									List<CreditCard> allCreditCards = account.getCreditCards();
 									List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 									for(CreditCard tCreditCard : allCreditCards) {
 										if(tCreditCard.getDeactivatedOn()==null) creditCards.add(tCreditCard);
 									}
 									// Store to request attributes, return success
-									request.setAttribute("business", account);
+									request.setAttribute("account", account);
 									request.setAttribute("creditCards", creditCards);
 									request.setAttribute("lastPaymentCreditCard", creditCard.getProviderUniqueId());
 									request.setAttribute("errorReason", authorizationResult.getErrorCode().toString());
@@ -366,7 +388,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
 							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
-						request.setAttribute("business", account);
+						request.setAttribute("account", account);
 						request.setAttribute("creditCard", creditCard);
 						request.setAttribute("transaction", transaction);
 						request.setAttribute("aoTransaction", aoTransaction);

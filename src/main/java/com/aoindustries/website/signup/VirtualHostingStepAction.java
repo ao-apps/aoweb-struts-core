@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -74,25 +74,25 @@ abstract public class VirtualHostingStepAction extends SkinAction {
 
 		VirtualHostingSignupSelectPackageForm signupSelectPackageForm = SignupHelper.getSessionActionForm(servlet, session, VirtualHostingSignupSelectPackageForm.class, "virtualHostingSignupSelectPackageForm");
 		SignupDomainForm signupDomainForm = SignupHelper.getSessionActionForm(servlet, session, SignupDomainForm.class, "signupDomainForm");
-		SignupBusinessForm signupBusinessForm = SignupHelper.getSessionActionForm(servlet, session, SignupBusinessForm.class, "signupBusinessForm");
+		SignupOrganizationForm signupOrganizationForm = SignupHelper.getSessionActionForm(servlet, session, SignupOrganizationForm.class, "signupOrganizationForm");
 		SignupTechnicalForm signupTechnicalForm = SignupHelper.getSessionActionForm(servlet, session, SignupTechnicalForm.class, "signupTechnicalForm");
 		SignupBillingInformationForm signupBillingInformationForm = SignupHelper.getSessionActionForm(servlet, session, SignupBillingInformationForm.class, "signupBillingInformationForm");
 
 		ActionMessages signupSelectPackageFormErrors = signupSelectPackageForm.validate(mapping, request);
 		ActionMessages signupDomainFormErrors = signupDomainForm.validate(mapping, request);
-		ActionMessages signupBusinessFormErrors = signupBusinessForm.validate(mapping, request);
+		ActionMessages signupOrganizationFormErrors = signupOrganizationForm.validate(mapping, request);
 		ActionMessages signupTechnicalFormErrors = signupTechnicalForm.validate(mapping, request);
 		ActionMessages signupBillingInformationFormErrors = signupBillingInformationForm.validate(mapping, request);
 
 		boolean signupSelectPackageFormComplete = !doAddErrors(request, signupSelectPackageFormErrors);
 		boolean signupDomainFormComplete = !doAddErrors(request, signupDomainFormErrors);
-		boolean signupBusinessFormComplete = !doAddErrors(request, signupBusinessFormErrors);
+		boolean signupOrganizationFormComplete = !doAddErrors(request, signupOrganizationFormErrors);
 		boolean signupTechnicalFormComplete = !doAddErrors(request, signupTechnicalFormErrors);
 		boolean signupBillingInformationFormComplete = !doAddErrors(request, signupBillingInformationFormErrors);
 
 		request.setAttribute("signupSelectPackageFormComplete", signupSelectPackageFormComplete ? "true" : "false");
 		request.setAttribute("signupDomainFormComplete", signupDomainFormComplete ? "true" : "false");
-		request.setAttribute("signupBusinessFormComplete", signupBusinessFormComplete ? "true" : "false");
+		request.setAttribute("signupOrganizationFormComplete", signupOrganizationFormComplete ? "true" : "false");
 		request.setAttribute("signupTechnicalFormComplete", signupTechnicalFormComplete ? "true" : "false");
 		request.setAttribute("signupBillingInformationFormComplete", signupBillingInformationFormComplete ? "true" : "false");
 
@@ -107,8 +107,8 @@ abstract public class VirtualHostingStepAction extends SkinAction {
 			signupSelectPackageFormComplete,
 			signupDomainForm,
 			signupDomainFormComplete,
-			signupBusinessForm,
-			signupBusinessFormComplete,
+			signupOrganizationForm,
+			signupOrganizationFormComplete,
 			signupTechnicalForm,
 			signupTechnicalFormComplete,
 			signupBillingInformationForm,
@@ -145,8 +145,8 @@ abstract public class VirtualHostingStepAction extends SkinAction {
 		boolean signupSelectPackageFormComplete,
 		SignupDomainForm signupDomainForm,
 		boolean signupDomainFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,

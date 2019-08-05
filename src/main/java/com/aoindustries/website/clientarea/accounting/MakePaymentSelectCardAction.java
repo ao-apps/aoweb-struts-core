@@ -24,12 +24,15 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.Payment;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +44,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Gets the list of businesses or redirects to next step if only one business accessible.
+ * Gets the list of accounts or redirects to next step if only one account accessible.
  *
  * @author  AO Industries, Inc.
  */
@@ -63,7 +66,16 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
-		response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
+		String encoding = response.getCharacterEncoding();
+		response.sendRedirect(
+			response.encodeRedirectURL(
+				skin.getUrlBase(request)
+					+ "clientarea/accounting/make-payment-new-card.do?account="
+					+ URLEncoder.encode(request.getParameter("account"), encoding)
+					+ "&currency="
+					+ URLEncoder.encode(request.getParameter("currency"), encoding)
+			)
+		);
 		return null;
 	}
 
@@ -78,15 +90,19 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		// Find the requested business
-		String accounting = request.getParameter("accounting");
-		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) {
-			// Redirect back to make-payment if business not found
+		Account account;
+		try {
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(request.getParameter("account")));
+		} catch(ValidationException e) {
+			return mapping.findForward("make-payment");
+		}
+		Currency currency = aoConn.getBilling().getCurrency().get(request.getParameter("currency"));
+		if(account == null || currency == null) {
+			// Redirect back to make-payment if account or currency not found
 			return mapping.findForward("make-payment");
 		}
 
-		// Get the list of active credit cards stored for this business
+		// Get the list of active credit cards stored for this account
 		List<CreditCard> allCreditCards = account.getCreditCards();
 		List<CreditCard> creditCards = new ArrayList<>(allCreditCards.size());
 		for(CreditCard creditCard : allCreditCards) {
@@ -95,11 +111,21 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 
 		if(creditCards.isEmpty()) {
 			// Redirect to new card if none stored
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
+			String encoding = response.getCharacterEncoding();
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					skin.getUrlBase(request)
+						+ "clientarea/accounting/make-payment-new-card.do?account="
+						+ URLEncoder.encode(request.getParameter("account"), encoding)
+						+ "&currency="
+						+ URLEncoder.encode(request.getParameter("currency"), encoding)
+				)
+			);
 			return null;
 		} else {
 			// Store to request attributes, return success
-			request.setAttribute("business", account);
+			request.setAttribute("account", account);
+			request.setAttribute("currency", currency);
 			request.setAttribute("creditCards", creditCards);
 			Payment lastCCT = account.getLastCreditCardTransaction();
 			request.setAttribute("lastPaymentCreditCard", lastCCT==null ? null : lastCCT.getCreditCardProviderUniqueId());

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,7 +71,7 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 		// Reset passwords here and clear the passwords from the form
 		ActionMessages messages = new ActionMessages();
 		List<String> usernames = linuxAccountPasswordSetterForm.getUsernames();
-		List<String> aoServers = linuxAccountPasswordSetterForm.getAoServers();
+		List<String> servers = linuxAccountPasswordSetterForm.getServers();
 		List<String> newPasswords = linuxAccountPasswordSetterForm.getNewPasswords();
 		List<String> confirmPasswords = linuxAccountPasswordSetterForm.getConfirmPasswords();
 		for(int c=0;c<usernames.size();c++) {
@@ -80,10 +80,10 @@ public class LinuxAccountPasswordSetterCompletedAction extends PermissionAction 
 				User.Name username = User.Name.valueOf(usernames.get(c));
 				User la = aoConn.getLinux().getUser().get(username);
 				if(la == null) throw new SQLException("Unable to find User: " + username);
-				String hostname = aoServers.get(c);
+				String hostname = servers.get(c);
 				Host host = aoConn.getNet().getHost().get(hostname);
 				if(host == null) throw new SQLException("Unable to find Host: " + host);
-				Server server = host.getAOServer();
+				Server server = host.getLinuxServer();
 				if(server == null) throw new SQLException("Unable to find Server: " + server);
 				UserServer lsa = la.getLinuxServerAccount(server);
 				if(lsa==null) throw new SQLException("Unable to find UserServer: "+username+" on "+hostname);

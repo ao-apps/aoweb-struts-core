@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,7 +71,7 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 		// Reset passwords here and clear the passwords from the form
 		ActionMessages messages = new ActionMessages();
 		List<String> usernames = mySQLPasswordSetterForm.getUsernames();
-		List<String> aoServers = mySQLPasswordSetterForm.getAoServers();
+		List<String> servers = mySQLPasswordSetterForm.getServers();
 		List<String> mySQLServers = mySQLPasswordSetterForm.getMySQLServers();
 		List<String> newPasswords = mySQLPasswordSetterForm.getNewPasswords();
 		List<String> confirmPasswords = mySQLPasswordSetterForm.getConfirmPasswords();
@@ -79,10 +79,10 @@ public class MySQLPasswordSetterCompletedAction extends PermissionAction {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
 				User.Name username = User.Name.valueOf(usernames.get(c));
-				String hostname = aoServers.get(c);
+				String hostname = servers.get(c);
 				Host host = aoConn.getNet().getHost().get(hostname);
 				if(host == null) throw new SQLException("Unable to find Host: " + host);
-				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
+				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getLinuxServer();
 				if(linuxServer == null) throw new SQLException("Unable to find Server: " + linuxServer);
 				Server.Name serverName = Server.Name.valueOf(mySQLServers.get(c));
 				Server ms = linuxServer.getMySQLServer(serverName);

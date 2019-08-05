@@ -24,12 +24,19 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.billing.TransactionTable;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.util.ArrayList;
+import java.net.URLEncoder;
+import java.util.Currency;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -37,7 +44,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Gets the list of businesses or redirects to next step if only one business accessible.
+ * Gets the list of accounts or redirects to next step if only one account accessible.
  *
  * @author  AO Industries, Inc.
  */
@@ -54,28 +61,60 @@ public class MakePaymentAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		Account thisAccount = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		TransactionTable transactionTable = aoConn.getBilling().getTransaction();
+		Account thisAccount = aoConn.getCurrentAdministrator().getUsername().getPackage().getAccount();
 
-		// Get the list of businesses that are not canceled or have a non-zero balance, or are thisBusiness
+		// Get the list of accounts that are not canceled or have a non-zero balance, or are thisAccount
 		List<Account> allAccounts = aoConn.getAccount().getAccount().getRows();
-		List<Account> accounts = new ArrayList<>(allAccounts.size());
+		Map<Account,Monies> accountsAndBalances = new LinkedHashMap<>(allAccounts.size() *4/3+1);
 		for(Account account : allAccounts) {
+			Monies accountBalance = transactionTable.getAccountBalance(account);
 			if(
 				thisAccount.equals(account)
 				|| (
-					account.getCanceled()==null
+					account.getCanceled() == null
 					&& !account.billParent()
-				) || account.getAccountBalance().signum()!=0
-			) accounts.add(account);
+				) || !accountBalance.isZero()
+			) {
+				// Remove all zero balances
+				// This is useful when an account changes currencies and have paid their bill in old currency
+				accountBalance = accountBalance.removeZeros();
+				assert !accountBalance.isEmpty();
+
+				if(account.getCanceled() == null) {
+					// Add all currencies, as zero, for all current monthly charges (including billParent sub accounts)
+					// This will allow payment in advance when there is no balance due
+					Monies monthlyRate = account.getBillingMonthlyRate();
+					if(monthlyRate != null) {
+						for(Currency currency : monthlyRate.getCurrencies()) {
+							accountBalance = accountBalance.add(new Money(currency, 0, 0));
+						}
+					}
+				}
+				accountsAndBalances.put(account, accountBalance);
+			}
 		}
-		if(accounts.size()==1) {
-			// Redirect, only one option
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-select-card.do?accounting="+accounts.get(0).getName()));
-			return null;
-		} else {
-			// Show selector screen
-			request.setAttribute("businesses", accounts);
-			return mapping.findForward("success");
+		if(accountsAndBalances.size() == 1) {
+			Map.Entry<Account,Monies> entry = accountsAndBalances.entrySet().iterator().next();
+			Monies accountBalance = entry.getValue();
+			Set<Currency> currencies = accountBalance.getCurrencies();
+			if(currencies.size() == 1) {
+				// Redirect, only one option
+				String encoding = response.getCharacterEncoding();
+				response.sendRedirect(
+					response.encodeRedirectURL(
+						skin.getUrlBase(request)
+							+ "clientarea/accounting/make-payment-select-card.do?account="
+							+ URLEncoder.encode(entry.getKey().getName().toString(), encoding)
+							+ "&currency="
+							+ URLEncoder.encode(currencies.iterator().next().getCurrencyCode(), encoding)
+					)
+				);
+				return null;
+			}
 		}
+		// Show selector screen
+		request.setAttribute("accountsAndBalances", accountsAndBalances);
+		return mapping.findForward("success");
 	}
 }

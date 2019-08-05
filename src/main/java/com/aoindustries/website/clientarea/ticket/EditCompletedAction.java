@@ -90,7 +90,7 @@ public class EditCompletedAction extends PermissionAction {
 		}
 
 		// Request attribute defaults
-		boolean businessUpdated = false;
+		boolean accountUpdated = false;
 		boolean contactEmailsUpdated = false;
 		boolean contactPhoneNumbersUpdated = false;
 		boolean clientPriorityUpdated = false;
@@ -98,12 +98,12 @@ public class EditCompletedAction extends PermissionAction {
 		boolean annotationAdded = false;
 
 		// Update anything that changed
-		Account newAccount = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccounting()));
-		if(newAccount == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
-		Account oldBusiness = ticket.getBusiness();
-		if(!newAccount.equals(oldBusiness)) {
-			ticket.setBusiness(oldBusiness, newAccount);
-			businessUpdated = true;
+		Account newAccount = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccount()));
+		if(newAccount == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccount());
+		Account oldAccount = ticket.getAccount();
+		if(!newAccount.equals(oldAccount)) {
+			ticket.setAccount(oldAccount, newAccount);
+			accountUpdated = true;
 		}
 		Set<Email> contactEmails = Profile.splitEmails(ticketForm.getContactEmails());
 		if(!contactEmails.equals(ticket.getContactEmails())) {
@@ -133,7 +133,7 @@ public class EditCompletedAction extends PermissionAction {
 		}
 
 		// Set the request attributes
-		request.setAttribute("businessUpdated", businessUpdated);
+		request.setAttribute("accountUpdated", accountUpdated);
 		request.setAttribute("contactEmailsUpdated", contactEmailsUpdated);
 		request.setAttribute("contactPhoneNumbersUpdated", contactPhoneNumbersUpdated);
 		request.setAttribute("clientPriorityUpdated", clientPriorityUpdated);
@@ -141,7 +141,7 @@ public class EditCompletedAction extends PermissionAction {
 		request.setAttribute("annotationAdded", annotationAdded);
 		request.setAttribute(
 			"nothingChanged",
-			!businessUpdated
+			!accountUpdated
 			&& !contactEmailsUpdated
 			&& !contactPhoneNumbersUpdated
 			&& !clientPriorityUpdated

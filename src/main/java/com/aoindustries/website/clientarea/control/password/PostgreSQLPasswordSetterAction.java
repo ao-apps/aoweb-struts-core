@@ -41,7 +41,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Prepares for business administrator password setting.  Populates lists in postgreSQLPasswordSetterForm.
+ * Prepares for administrator password setting.  Populates lists in postgreSQLPasswordSetterForm.
  *
  * @author  AO Industries, Inc.
  */
@@ -65,7 +65,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 		List<String> packages = new ArrayList<>(psus.size());
 		List<String> usernames = new ArrayList<>(psus.size());
 		List<String> postgreSQLServers = new ArrayList<>(psus.size());
-		List<String> aoServers = new ArrayList<>(psus.size());
+		List<String> servers = new ArrayList<>(psus.size());
 		List<String> newPasswords = new ArrayList<>(psus.size());
 		List<String> confirmPasswords = new ArrayList<>(psus.size());
 		for(UserServer psu : psus) {
@@ -76,7 +76,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				postgreSQLServers.add(ps.getName().toString());
-				aoServers.add(ps.getAoServer().getHostname().toString());
+				servers.add(ps.getLinuxServer().getHostname().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");
 			}
@@ -86,7 +86,7 @@ public class PostgreSQLPasswordSetterAction extends PermissionAction {
 		postgreSQLPasswordSetterForm.setPackages(packages);
 		postgreSQLPasswordSetterForm.setUsernames(usernames);
 		postgreSQLPasswordSetterForm.setPostgreSQLServers(postgreSQLServers);
-		postgreSQLPasswordSetterForm.setAoServers(aoServers);
+		postgreSQLPasswordSetterForm.setServers(servers);
 		postgreSQLPasswordSetterForm.setNewPasswords(newPasswords);
 		postgreSQLPasswordSetterForm.setConfirmPasswords(confirmPasswords);
 

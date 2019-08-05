@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -43,7 +43,7 @@ abstract public class CreditCardForm extends ActionForm implements Serializable 
 	private String expirationMonth;
 	private String expirationYear;
 	private String cardCode;
-	private String accounting;
+	private String account;
 	private String firstName;
 	private String lastName;
 	private String companyName;
@@ -65,7 +65,7 @@ abstract public class CreditCardForm extends ActionForm implements Serializable 
 		setExpirationMonth("");
 		setExpirationYear("");
 		setCardCode("");
-		setAccounting("");
+		setAccount("");
 		setFirstName("");
 		setLastName("");
 		setCompanyName("");
@@ -114,12 +114,12 @@ abstract public class CreditCardForm extends ActionForm implements Serializable 
 		this.cardCode = cardCode==null ? null : cardCode.trim();
 	}
 
-	public String getAccounting() {
-		return accounting;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setAccounting(String accounting) {
-		this.accounting = accounting;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	public String getFirstName() {
@@ -206,7 +206,7 @@ abstract public class CreditCardForm extends ActionForm implements Serializable 
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
 		ActionErrors errors = super.validate(mapping, request);
 		if(errors==null) errors = new ActionErrors();
-		if(GenericValidator.isBlankOrNull(accounting)) errors.add("accounting", new ActionMessage("creditCardForm.accounting.required"));
+		if(GenericValidator.isBlankOrNull(account)) errors.add("account", new ActionMessage("creditCardForm.account.required"));
 		if(GenericValidator.isBlankOrNull(firstName)) errors.add("firstName", new ActionMessage("creditCardForm.firstName.required"));
 		if(GenericValidator.isBlankOrNull(lastName)) errors.add("lastName", new ActionMessage("creditCardForm.lastName.required"));
 		if(GenericValidator.isBlankOrNull(streetAddress1)) errors.add("streetAddress1", new ActionMessage("creditCardForm.streetAddress1.required"));

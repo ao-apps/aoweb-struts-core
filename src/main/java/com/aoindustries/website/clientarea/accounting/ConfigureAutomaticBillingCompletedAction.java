@@ -59,17 +59,17 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		// Business must be selected and accessible
-		String accounting = request.getParameter("accounting");
-		if(GenericValidator.isBlankOrNull(accounting)) {
+		// Account must be selected and accessible
+		String account_name = request.getParameter("account");
+		if(GenericValidator.isBlankOrNull(account_name)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name));
 		if(account == null) {
 			return mapping.findForward("credit-card-manager");
 		}
 
-		// CreditCard must be selected or "", and part of the business
+		// CreditCard must be selected or "", and part of the account
 		String pkey = request.getParameter("pkey");
 		if(pkey==null) {
 			return mapping.findForward("credit-card-manager");
@@ -80,13 +80,13 @@ public class ConfigureAutomaticBillingCompletedAction extends PermissionAction {
 		} else {
 			creditCard = aoConn.getPayment().getCreditCard().get(Integer.parseInt(pkey));
 			if(creditCard == null) return mapping.findForward("credit-card-manager");
-			if(!creditCard.getBusiness().equals(account)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getName()+"!="+account.getName());
+			if(!creditCard.getAccount().equals(account)) throw new SQLException("Requested account and CreditCard account do not match: "+creditCard.getAccount().getName()+"!="+account.getName());
 		}
 
 		account.setUseMonthlyCreditCard(creditCard);
 
 		// Store request attributes
-		request.setAttribute("business", account);
+		request.setAttribute("account", account);
 		request.setAttribute("creditCard", creditCard);
 
 		return mapping.findForward("success");

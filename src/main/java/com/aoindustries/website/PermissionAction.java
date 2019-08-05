@@ -77,7 +77,7 @@ abstract public class PermissionAction extends AuthenticatedAction {
 			);
 		}
 
-		Administrator thisBA = aoConn.getThisBusinessAdministrator();
+		Administrator thisBA = aoConn.getCurrentAdministrator();
 		// Return denied on first missing permission
 		for(Permission.Name permission : permissions) {
 			if(!thisBA.hasPermission(permission)) {

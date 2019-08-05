@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -91,9 +91,9 @@ public class LoginCompletedAction extends SkinAction {
 			String message=err.getMessage();
 			if(message!=null) {
 				MessageResources applicationResources = (MessageResources)request.getAttribute("/ApplicationResources");
-				if(message.contains("Unable to find BusinessAdministrator")) message=applicationResources.getMessage(locale, "login.accountNotFound");
+				if(message.contains("Unable to find Administrator")) message=applicationResources.getMessage(locale, "login.accountNotFound");
 				else if(message.contains("Connection attempted with invalid password")) message=applicationResources.getMessage(locale, "login.badPassword");
-				else if(message.contains("BusinessAdministrator disabled")) message=applicationResources.getMessage(locale, "accountDisabled");
+				else if(message.contains("Administrator disabled")) message=applicationResources.getMessage(locale, "accountDisabled");
 				else message=null;
 			}
 			if(message!=null) request.setAttribute(Constants.AUTHENTICATION_MESSAGE, message);

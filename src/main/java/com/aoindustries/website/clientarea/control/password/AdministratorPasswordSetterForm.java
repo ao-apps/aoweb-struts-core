@@ -42,7 +42,7 @@ import org.apache.struts.action.ActionMessage;
 /**
  * @author AO Industries, Inc.
  */
-public class BusinessAdministratorPasswordSetterForm extends ActionForm implements Serializable {
+public class AdministratorPasswordSetterForm extends ActionForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -104,7 +104,7 @@ public class BusinessAdministratorPasswordSetterForm extends ActionForm implemen
 				String newPassword = newPasswords.get(c);
 				String confirmPassword = confirmPasswords.get(c);
 				if(!newPassword.equals(confirmPassword)) {
-					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.businessAdministratorPasswordSetter.field.confirmPasswords.mismatch"));
+					errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.administratorPasswordSetter.field.confirmPasswords.mismatch"));
 				} else {
 					if(newPassword.length()>0) {
 						String username = usernames.get(c);

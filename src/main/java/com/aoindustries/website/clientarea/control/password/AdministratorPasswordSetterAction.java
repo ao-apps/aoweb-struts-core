@@ -40,11 +40,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Prepares for business administrator password setting.  Populates lists in businessAdministratorPasswordSetterForm.
+ * Prepares for administrator password setting.  Populates lists in administratorPasswordSetterForm.
  *
  * @author  AO Industries, Inc.
  */
-public class BusinessAdministratorPasswordSetterAction extends AuthenticatedAction {
+public class AdministratorPasswordSetterAction extends AuthenticatedAction {
 
 	@Override
 	public ActionForward execute(
@@ -57,9 +57,9 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		BusinessAdministratorPasswordSetterForm businessAdministratorPasswordSetterForm = (BusinessAdministratorPasswordSetterForm)form;
+		AdministratorPasswordSetterForm administratorPasswordSetterForm = (AdministratorPasswordSetterForm)form;
 
-		Administrator thisBA = aoConn.getThisBusinessAdministrator();
+		Administrator thisBA = aoConn.getCurrentAdministrator();
 
 		List<Administrator> bas = thisBA.hasPermission(Permission.Name.set_business_administrator_password) ? aoConn.getAccount().getAdministrator().getRows() : Collections.singletonList(thisBA);
 
@@ -78,10 +78,10 @@ public class BusinessAdministratorPasswordSetterAction extends AuthenticatedActi
 		}
 
 		// Store to the form
-		businessAdministratorPasswordSetterForm.setPackages(packages);
-		businessAdministratorPasswordSetterForm.setUsernames(usernames);
-		businessAdministratorPasswordSetterForm.setNewPasswords(newPasswords);
-		businessAdministratorPasswordSetterForm.setConfirmPasswords(confirmPasswords);
+		administratorPasswordSetterForm.setPackages(packages);
+		administratorPasswordSetterForm.setUsernames(usernames);
+		administratorPasswordSetterForm.setNewPasswords(newPasswords);
+		administratorPasswordSetterForm.setConfirmPasswords(confirmPasswords);
 
 		return mapping.findForward("success");
 	}

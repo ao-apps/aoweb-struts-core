@@ -40,7 +40,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Prepares for business administrator password setting.  Populates lists in linuxAccountPasswordSetterForm.
+ * Prepares for linux account password setting.  Populates lists in linuxAccountPasswordSetterForm.
  *
  * @author  AO Industries, Inc.
  */
@@ -63,7 +63,7 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 
 		List<String> packages = new ArrayList<>(lsas.size());
 		List<String> usernames = new ArrayList<>(lsas.size());
-		List<String> aoServers = new ArrayList<>(lsas.size());
+		List<String> servers = new ArrayList<>(lsas.size());
 		List<String> newPasswords = new ArrayList<>(lsas.size());
 		List<String> confirmPasswords = new ArrayList<>(lsas.size());
 		for(UserServer lsa : lsas) {
@@ -72,7 +72,7 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 				com.aoindustries.aoserv.client.account.User un = la.getUsername();
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
-				aoServers.add(lsa.getAOServer().getHostname().toString());
+				servers.add(lsa.getServer().getHostname().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");
 			}
@@ -81,7 +81,7 @@ public class LinuxAccountPasswordSetterAction extends PermissionAction {
 		// Store to the form
 		linuxAccountPasswordSetterForm.setPackages(packages);
 		linuxAccountPasswordSetterForm.setUsernames(usernames);
-		linuxAccountPasswordSetterForm.setAoServers(aoServers);
+		linuxAccountPasswordSetterForm.setServers(servers);
 		linuxAccountPasswordSetterForm.setNewPasswords(newPasswords);
 		linuxAccountPasswordSetterForm.setConfirmPasswords(confirmPasswords);
 

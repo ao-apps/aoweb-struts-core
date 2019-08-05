@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,15 +22,23 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.creditcards.TransactionResult;
-import com.aoindustries.sql.SQLUtility;
+import com.aoindustries.util.WrappedException;
+import com.aoindustries.util.i18n.CurrencyUtil;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.website.SiteSettings;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.Currency;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionServlet;
 
 /**
  * @author  AO Industries, Inc.
@@ -39,6 +47,7 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 
 	private static final long serialVersionUID = 1L;
 
+	private String currency;
 	private String paymentAmount;
 
 	/**
@@ -52,8 +61,17 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
+		setCurrency("");
 		setPaymentAmount("");
 		setStoreCard("");
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public String getPaymentAmount() {
@@ -61,9 +79,7 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 	}
 
 	public void setPaymentAmount(String paymentAmount) {
-		paymentAmount = paymentAmount.trim();
-		if(paymentAmount.startsWith("$")) paymentAmount=paymentAmount.substring(1);
-		this.paymentAmount = paymentAmount;
+		this.paymentAmount = paymentAmount.trim();
 	}
 
 	public String getStoreCard() {
@@ -77,27 +93,61 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
 		ActionErrors errors = super.validate(mapping, request);
-		if(errors==null) errors = new ActionErrors();
-		if(GenericValidator.isBlankOrNull(paymentAmount)) {
-			errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.required"));
-		} else {
-			try {
-				// Make sure can parse as int-of-pennies format (Once we no longer use int-of-pennies, this should be removed)
-				// Long-term plan is to use BigDecimal exclusively for all monetary values. - DRA 2007-10-09
-				int pennies = SQLUtility.getPennies(this.paymentAmount);
-				// Make sure can parse as BigDecimal, and is correct value
-				BigDecimal pa = new BigDecimal(this.paymentAmount);
-				if(pa.compareTo(BigDecimal.ZERO)<=0) {
-					errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.mustBeGeaterThanZero"));
-				} else if(pa.scale()>2) {
-					// Must not have more than 2 decimal places
+		if(errors == null) errors = new ActionErrors();
+		try {
+			Currency javaCurrency;
+			if(GenericValidator.isBlankOrNull(currency)) {
+				errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.required"));
+				javaCurrency = null;
+			} else {
+				ActionServlet myServlet = getServlet();
+				if(myServlet != null) {
+					AOServConnector rootConn = SiteSettings.getInstance(myServlet.getServletContext()).getRootAOServConnector();
+					com.aoindustries.aoserv.client.billing.Currency aoservCurrency = rootConn.getBilling().getCurrency().get(currency);
+					if(aoservCurrency != null) {
+						javaCurrency = aoservCurrency.getCurrency();
+					} else {
+						errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
+						javaCurrency = null;
+					}
+				} else {
+					try {
+						javaCurrency = Currency.getInstance(currency);
+					} catch(IllegalArgumentException e) {
+						errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
+						javaCurrency = null;
+					}
+				}
+			}
+			if(GenericValidator.isBlankOrNull(paymentAmount)) {
+				errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.required"));
+			} else {
+				try {
+					BigDecimal pa = Money.parseMoneyAmount(
+						javaCurrency == null ? null : CurrencyUtil.getSymbol(javaCurrency),
+						this.paymentAmount
+					);
+					if(pa == null) {
+						errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.invalid"));
+					} else {
+						this.paymentAmount = pa.toPlainString();
+						if(pa.signum() <= 0) {
+							errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.mustBeGeaterThanZero"));
+						}
+						if(javaCurrency != null) {
+							// Verify scale against currency
+							Money money = new Money(javaCurrency, pa);
+							this.paymentAmount = money.getValue().toPlainString();
+						}
+					}
+				} catch(NumberFormatException err) {
 					errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.invalid"));
 				}
-			} catch(NumberFormatException err) {
-				errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.paymentAmount.invalid"));
 			}
+			return errors;
+		} catch(IOException | SQLException err) {
+			throw new WrappedException(err);
 		}
-		return errors;
 	}
 
 	@Override

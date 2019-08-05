@@ -56,7 +56,7 @@ final public class SignupTechnicalActionHelper {
 		AOServConnector rootConn=SiteSettings.getInstance(servletContext).getRootAOServConnector();
 
 		// Build the list of countries
-		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(rootConn);
+		List<SignupOrganizationActionHelper.CountryOption> countryOptions = SignupOrganizationActionHelper.getCountryOptions(rootConn);
 
 		// Generate random passwords, keeping the selected password at index 0
 		List<String> passwords = new ArrayList<>(16);

@@ -108,7 +108,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		HttpServletRequest request,
 		AOServConnector rootConn,
 		PackageDefinition packageDefinition,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm,
 		Map<String,String> options
@@ -117,21 +117,21 @@ final public class ServerConfirmationCompletedActionHelper {
 		int pkey;
 		String statusKey;
 		try {
-			CountryCode businessCountry = rootConn.getPayment().getCountryCode().get(signupBusinessForm.getBusinessCountry());
+			CountryCode organizationCountry = rootConn.getPayment().getCountryCode().get(signupOrganizationForm.getOrganizationCountry());
 			CountryCode baCountry = GenericValidator.isBlankOrNull(signupTechnicalForm.getBaCountry()) ? null : rootConn.getPayment().getCountryCode().get(signupTechnicalForm.getBaCountry());
 
-			pkey = rootConn.getSignup().getRequest().addSignupRequest(rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness().getBrand(),
+			pkey = rootConn.getSignup().getRequest().addSignupRequest(rootConn.getCurrentAdministrator().getUsername().getPackage().getAccount().getBrand(),
 				InetAddress.valueOf(request.getRemoteAddr()),
 				packageDefinition,
-				signupBusinessForm.getBusinessName(),
-				signupBusinessForm.getBusinessPhone(),
-				signupBusinessForm.getBusinessFax(),
-				signupBusinessForm.getBusinessAddress1(),
-				signupBusinessForm.getBusinessAddress2(),
-				signupBusinessForm.getBusinessCity(),
-				signupBusinessForm.getBusinessState(),
-				businessCountry,
-				signupBusinessForm.getBusinessZip(),
+				signupOrganizationForm.getOrganizationName(),
+				signupOrganizationForm.getOrganizationPhone(),
+				signupOrganizationForm.getOrganizationFax(),
+				signupOrganizationForm.getOrganizationAddress1(),
+				signupOrganizationForm.getOrganizationAddress2(),
+				signupOrganizationForm.getOrganizationCity(),
+				signupOrganizationForm.getOrganizationState(),
+				organizationCountry,
+				signupOrganizationForm.getOrganizationZip(),
 				signupTechnicalForm.getBaName(),
 				signupTechnicalForm.getBaTitle(),
 				signupTechnicalForm.getBaWorkPhone(),
@@ -172,6 +172,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		request.setAttribute("pkey", Integer.toString(pkey));
 	}
 
+	// TODO: Have this generate a ticket instead, with full details.  Remove "all except bank card numbers" in other places once done.
 	public static void sendSupportSummaryEmail(
 		ActionServlet servlet,
 		HttpServletRequest request,
@@ -181,13 +182,13 @@ final public class ServerConfirmationCompletedActionHelper {
 		PackageDefinition packageDefinition,
 		SignupCustomizeServerForm signupCustomizeServerForm,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
 		try {
-			sendSummaryEmail(servlet, request, pkey, statusKey, siteSettings.getBrand().getAowebStrutsSignupAdminAddress(), siteSettings, packageDefinition, signupCustomizeServerForm, signupCustomizeManagementForm, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm);
-		} catch(Exception err) {
+			sendSummaryEmail(servlet, request, pkey, statusKey, siteSettings.getBrand().getAowebStrutsSignupAdminAddress(), siteSettings, packageDefinition, signupCustomizeServerForm, signupCustomizeManagementForm, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm);
+		} catch(RuntimeException | IOException | SQLException err) {
 			servlet.log("Unable to send sign up details to support admin address", err);
 		}
 	}
@@ -204,7 +205,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		PackageDefinition packageDefinition,
 		SignupCustomizeServerForm signupCustomizeServerForm,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
@@ -216,7 +217,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		Iterator<String> I=addresses.iterator();
 		while(I.hasNext()) {
 			String address=I.next();
-			boolean success = sendSummaryEmail(servlet, request, pkey, statusKey, address, siteSettings, packageDefinition, signupCustomizeServerForm, signupCustomizeManagementForm, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm);
+			boolean success = sendSummaryEmail(servlet, request, pkey, statusKey, address, siteSettings, packageDefinition, signupCustomizeServerForm, signupCustomizeManagementForm, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm);
 			if(success) successAddresses.add(address);
 			else failureAddresses.add(address);
 		}
@@ -239,7 +240,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		PackageDefinition packageDefinition,
 		SignupCustomizeServerForm signupCustomizeServerForm,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
@@ -306,8 +307,8 @@ final public class ServerConfirmationCompletedActionHelper {
 				);
 			}
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.businessInfo.label")).print("</th></tr>\n");
-			SignupBusinessActionHelper.printConfirmation(emailOut, rootConn, signupBusinessForm);
+						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.organizationInfo.label")).print("</th></tr>\n");
+			SignupOrganizationActionHelper.printConfirmation(emailOut, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.technicalInfo.label")).print("</th></tr>\n");
 			SignupTechnicalActionHelper.printConfirmation(emailOut, rootConn, signupTechnicalForm);
@@ -322,7 +323,7 @@ final public class ServerConfirmationCompletedActionHelper {
 			// Send the email
 			Brand brand = siteSettings.getBrand();
 			Mailer.sendEmail(
-				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getAOServer().getHostname()),
+				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getLinuxServer().getHostname()),
 				"text/html",
 				charset,
 				brand.getSignupEmailAddress().toString(),

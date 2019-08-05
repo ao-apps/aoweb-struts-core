@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -76,14 +76,14 @@ abstract public class ManagedStepAction extends SkinAction {
 		ManagedSignupSelectPackageForm signupSelectPackageForm = SignupHelper.getSessionActionForm(servlet, session, ManagedSignupSelectPackageForm.class, "managedSignupSelectPackageForm");
 		ManagedSignupCustomizeServerForm signupCustomizeServerForm = SignupHelper.getSessionActionForm(servlet, session, ManagedSignupCustomizeServerForm.class, "managedSignupCustomizeServerForm");
 		SignupCustomizeManagementForm signupCustomizeManagementForm = SignupHelper.getSessionActionForm(servlet, session, SignupCustomizeManagementForm.class, "managedSignupCustomizeManagementForm");
-		SignupBusinessForm signupBusinessForm = SignupHelper.getSessionActionForm(servlet, session, SignupBusinessForm.class, "signupBusinessForm");
+		SignupOrganizationForm signupOrganizationForm = SignupHelper.getSessionActionForm(servlet, session, SignupOrganizationForm.class, "signupOrganizationForm");
 		SignupTechnicalForm signupTechnicalForm = SignupHelper.getSessionActionForm(servlet, session, SignupTechnicalForm.class, "signupTechnicalForm");
 		SignupBillingInformationForm signupBillingInformationForm = SignupHelper.getSessionActionForm(servlet, session, SignupBillingInformationForm.class, "signupBillingInformationForm");
 
 		ActionMessages signupSelectPackageFormErrors = signupSelectPackageForm.validate(mapping, request);
 		ActionMessages signupCustomizeServerFormErrors = signupCustomizeServerForm.validate(mapping, request);
 		ActionMessages signupCustomizeManagementFormErrors = signupCustomizeManagementForm.validate(mapping, request);
-		ActionMessages signupBusinessFormErrors = signupBusinessForm.validate(mapping, request);
+		ActionMessages signupOrganizationFormErrors = signupOrganizationForm.validate(mapping, request);
 		ActionMessages signupTechnicalFormErrors = signupTechnicalForm.validate(mapping, request);
 		ActionMessages signupBillingInformationFormErrors = signupBillingInformationForm.validate(mapping, request);
 
@@ -92,14 +92,14 @@ abstract public class ManagedStepAction extends SkinAction {
 		boolean signupCustomizeManagementFormComplete;
 		if(doAddErrors(request, signupCustomizeManagementFormErrors)) signupCustomizeManagementFormComplete = false;
 		else signupCustomizeManagementFormComplete = Boolean.parseBoolean(signupCustomizeManagementForm.getFormCompleted());
-		boolean signupBusinessFormComplete = !doAddErrors(request, signupBusinessFormErrors);
+		boolean signupOrganizationFormComplete = !doAddErrors(request, signupOrganizationFormErrors);
 		boolean signupTechnicalFormComplete = !doAddErrors(request, signupTechnicalFormErrors);
 		boolean signupBillingInformationFormComplete = !doAddErrors(request, signupBillingInformationFormErrors);
 
 		request.setAttribute("signupSelectPackageFormComplete", signupSelectPackageFormComplete ? "true" : "false");
 		request.setAttribute("signupCustomizeServerFormComplete", signupCustomizeServerFormComplete ? "true" : "false");
 		request.setAttribute("signupCustomizeManagementFormComplete", signupCustomizeManagementFormComplete ? "true" : "false");
-		request.setAttribute("signupBusinessFormComplete", signupBusinessFormComplete ? "true" : "false");
+		request.setAttribute("signupOrganizationFormComplete", signupOrganizationFormComplete ? "true" : "false");
 		request.setAttribute("signupTechnicalFormComplete", signupTechnicalFormComplete ? "true" : "false");
 		request.setAttribute("signupBillingInformationFormComplete", signupBillingInformationFormComplete ? "true" : "false");
 
@@ -116,8 +116,8 @@ abstract public class ManagedStepAction extends SkinAction {
 			signupCustomizeServerFormComplete,
 			signupCustomizeManagementForm,
 			signupCustomizeManagementFormComplete,
-			signupBusinessForm,
-			signupBusinessFormComplete,
+			signupOrganizationForm,
+			signupOrganizationFormComplete,
 			signupTechnicalForm,
 			signupTechnicalFormComplete,
 			signupBillingInformationForm,
@@ -156,8 +156,8 @@ abstract public class ManagedStepAction extends SkinAction {
 		boolean signupCustomizeServerFormComplete,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		boolean signupCustomizeManagementFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,

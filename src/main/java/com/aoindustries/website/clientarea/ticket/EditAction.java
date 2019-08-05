@@ -83,8 +83,8 @@ public class EditAction extends PermissionAction {
 		}
 
 		// Populate the ticket form
-		Account business = ticket.getBusiness();
-		ticketForm.setAccounting(business==null ? "" : business.getName().toString());
+		Account account = ticket.getAccount();
+		ticketForm.setAccount(account==null ? "" : account.getName().toString());
 		ticketForm.setClientPriority(ticket.getClientPriority().getPriority());
 		ticketForm.setContactEmails(StringUtility.join(ticket.getContactEmails(), ", "));
 		ticketForm.setContactPhoneNumbers(ticket.getContactPhoneNumbers());

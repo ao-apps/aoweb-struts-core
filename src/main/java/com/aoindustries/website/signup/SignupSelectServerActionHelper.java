@@ -69,8 +69,8 @@ final public class SignupSelectServerActionHelper {
 	public static List<Host> getServers(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
 		PackageCategory category = rootConn.getBilling().getPackageCategory().get(packageCategoryName);
-		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
-		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
+		Account rootAccount = rootConn.getCurrentAdministrator().getUsername().getPackage().getAccount();
+		List<PackageDefinition> packageDefinitions = rootAccount.getPackageDefinitions(category);
 		List<Host> servers = new ArrayList<>();
 
 		for(PackageDefinition packageDefinition : packageDefinitions) {

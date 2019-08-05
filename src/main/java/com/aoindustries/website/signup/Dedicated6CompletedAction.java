@@ -54,8 +54,8 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 		boolean signupSelectPackageFormComplete,
 		DedicatedSignupCustomizeServerForm signupCustomizeServerForm,
 		boolean signupCustomizeServerFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -64,7 +64,7 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 		// Forward to previous steps if they have not been completed
 		if(!signupSelectPackageFormComplete) return mapping.findForward("dedicated-server-completed");
 		if(!signupCustomizeServerFormComplete) return mapping.findForward("dedicated-server-2-completed");
-		if(!signupBusinessFormComplete) return mapping.findForward("dedicated-server-3-completed");
+		if(!signupOrganizationFormComplete) return mapping.findForward("dedicated-server-3-completed");
 		if(!signupTechnicalFormComplete) return mapping.findForward("dedicated-server-4-completed");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("dedicated-server-5-completed");
 
@@ -74,7 +74,7 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 			response,
 			signupSelectPackageForm,
 			signupCustomizeServerForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -91,7 +91,7 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 		ServerConfirmationCompletedActionHelper.addOptions(options, signupCustomizeServerForm);
 
 		// Store to the database
-		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm, options);
+		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm, options);
 		String pkey = (String)request.getAttribute("pkey");
 		String statusKey = (String)request.getAttribute("statusKey");
 
@@ -105,7 +105,7 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 			packageDefinition,
 			signupCustomizeServerForm,
 			null,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -120,7 +120,7 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 			packageDefinition,
 			signupCustomizeServerForm,
 			null,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);

@@ -48,7 +48,7 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 	private List<String> packages;
 	private List<String> usernames;
 	private List<String> mySQLServers;
-	private List<String> aoServers;
+	private List<String> servers;
 	private List<String> newPasswords;
 	private List<String> confirmPasswords;
 
@@ -58,7 +58,7 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 		setPackages(new AutoGrowArrayList<String>());
 		setUsernames(new AutoGrowArrayList<String>());
 		setMySQLServers(new AutoGrowArrayList<String>());
-		setAoServers(new AutoGrowArrayList<String>());
+		setServers(new AutoGrowArrayList<String>());
 		setNewPasswords(new AutoGrowArrayList<String>());
 		setConfirmPasswords(new AutoGrowArrayList<String>());
 	}
@@ -87,12 +87,12 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 		this.mySQLServers = mySQLServers;
 	}
 
-	public List<String> getAoServers() {
-		return aoServers;
+	public List<String> getServers() {
+		return servers;
 	}
 
-	public void setAoServers(List<String> aoServers) {
-		this.aoServers = aoServers;
+	public void setServers(List<String> servers) {
+		this.servers = servers;
 	}
 
 	public List<String> getNewPasswords() {

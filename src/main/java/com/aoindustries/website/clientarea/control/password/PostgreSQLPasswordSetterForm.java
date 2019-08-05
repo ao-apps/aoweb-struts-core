@@ -48,7 +48,7 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 	private List<String> packages;
 	private List<String> usernames;
 	private List<String> postgreSQLServers;
-	private List<String> aoServers;
+	private List<String> servers;
 	private List<String> newPasswords;
 	private List<String> confirmPasswords;
 
@@ -58,7 +58,7 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 		setPackages(new AutoGrowArrayList<String>());
 		setUsernames(new AutoGrowArrayList<String>());
 		setPostgreSQLServers(new AutoGrowArrayList<String>());
-		setAoServers(new AutoGrowArrayList<String>());
+		setServers(new AutoGrowArrayList<String>());
 		setNewPasswords(new AutoGrowArrayList<String>());
 		setConfirmPasswords(new AutoGrowArrayList<String>());
 	}
@@ -87,12 +87,12 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 		this.postgreSQLServers = postgreSQLServers;
 	}
 
-	final public List<String> getAoServers() {
-		return aoServers;
+	final public List<String> getServers() {
+		return servers;
 	}
 
-	final public void setAoServers(List<String> aoServers) {
-		this.aoServers = aoServers;
+	final public void setServers(List<String> servers) {
+		this.servers = servers;
 	}
 
 	final public List<String> getNewPasswords() {

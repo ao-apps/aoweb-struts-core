@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2008-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2008-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.website.clientarea.control.business;
+package com.aoindustries.website.clientarea.control.account;
 
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
@@ -34,22 +34,22 @@ public class CancelFeedbackForm extends ActionForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String business;
+	private String account;
 	private String reason;
 
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
-		setBusiness("");
+		setAccount("");
 		setReason("");
 	}
 
-	public String getBusiness() {
-		return business;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setBusiness(String business) {
-		this.business = business;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	public String getReason() {

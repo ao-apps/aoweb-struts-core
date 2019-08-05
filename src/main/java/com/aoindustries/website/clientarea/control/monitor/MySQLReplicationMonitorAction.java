@@ -23,6 +23,7 @@
 package com.aoindustries.website.clientarea.control.monitor;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.aoserv.client.backup.BackupPartition;
 import com.aoindustries.aoserv.client.backup.FileReplication;
 import com.aoindustries.aoserv.client.backup.MysqlReplication;
 import com.aoindustries.aoserv.client.master.Permission;
@@ -71,17 +72,17 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		List<MySQLServerRow> mysqlServerRows = new ArrayList<>();
 		List<Server> mysqlServers = aoConn.getMysql().getServer().getRows();
 		for(Server mysqlServer : mysqlServers) {
-			com.aoindustries.aoserv.client.linux.Server aoServer = mysqlServer.getAoServer();
+			com.aoindustries.aoserv.client.linux.Server linuxServer = mysqlServer.getLinuxServer();
 			com.aoindustries.aoserv.client.linux.Server failoverServer;
 			try {
-				failoverServer = aoServer.getFailoverServer();
+				failoverServer = linuxServer.getFailoverServer();
 			} catch(SQLException err) {
 				// May be filtered, need to use RootAOServConnector
-				failoverServer = rootConn.getLinux().getServer().get(aoServer.getPkey()).getFailoverServer();
+				failoverServer = rootConn.getLinux().getServer().get(linuxServer.getPkey()).getFailoverServer();
 			}
 
 			StringBuilder server = new StringBuilder();
-			server.append(aoServer.getHostname());
+			server.append(linuxServer.getHostname());
 			if(failoverServer!=null) server.append(" on ").append(failoverServer.getHostname());
 
 			List<MysqlReplication> fmrs = mysqlServer.getFailoverMySQLReplications();
@@ -91,17 +92,18 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 				List<ReplicationRow> replications = new ArrayList<>();
 				for(MysqlReplication fmr : fmrs) {
 					DomainName slave;
-					com.aoindustries.aoserv.client.linux.Server replicationAoServer = fmr.getAOServer();
+					com.aoindustries.aoserv.client.linux.Server replicationAoServer = fmr.getLinuxServer();
 					if(replicationAoServer!=null) {
 						// ao_server-based
 						slave = replicationAoServer.getHostname();
 					} else {
 						FileReplication ffr = fmr.getFailoverFileReplication();
-						try {
-							slave = ffr.getBackupPartition().getAOServer().getHostname();
-						} catch(SQLException err) {
+						BackupPartition bp = ffr.getBackupPartition();
+						if(bp == null) {
 							// May be filtered, need to use RootAOServConnector
-							slave = rootConn.getBackup().getFileReplication().get(ffr.getPkey()).getBackupPartition().getAOServer().getHostname();
+							slave = rootConn.getBackup().getFileReplication().get(ffr.getPkey()).getBackupPartition().getLinuxServer().getHostname();
+						} else {
+							slave = bp.getLinuxServer().getHostname();
 						}
 					}
 					try {

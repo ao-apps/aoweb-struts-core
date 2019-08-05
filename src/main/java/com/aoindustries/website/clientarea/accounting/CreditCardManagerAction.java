@@ -24,6 +24,7 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.billing.TransactionTable;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.website.PermissionAction;
@@ -57,34 +58,40 @@ public class CreditCardManagerAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		Account thisBusiness = aoConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
+		TransactionTable transactionTable = aoConn.getBilling().getTransaction();
+		Account currentAccount = aoConn.getCurrentAdministrator().getUsername().getPackage().getAccount();
 
-		// Create a map from business to list of credit cards
-		List<BusinessAndCreditCards> businessCreditCards = new ArrayList<>();
+		// Create a map from account to list of credit cards
+		List<AccountAndCreditCards> accountCreditCards = new ArrayList<>();
 		for(Account account : aoConn.getAccount().getAccount().getRows()) {
-			List<CreditCard> ccs = account.getCreditCards();
+			List<CreditCard> creditCards = account.getCreditCards();
 			if(
-				thisBusiness.equals(account)
-				|| !ccs.isEmpty()
+				// Always show own account
+				currentAccount.equals(account)
+				// Show any account with stored cards
+				|| !creditCards.isEmpty()
 				|| (
-					account.getCanceled()==null
+					// Active and not billing parent
+					account.getCanceled() == null
 					&& !account.billParent()
-				) || account.getAccountBalance().signum()!=0
+				)
+				// Has any non-zero balance
+				|| !transactionTable.getAccountBalance(account).isZero()
 			) {
 				boolean hasActiveCard = false;
-				for(CreditCard cc : ccs) {
+				for(CreditCard cc : creditCards) {
 					if(cc.getIsActive()) {
 						hasActiveCard = true;
 						break;
 					}
 				}
-				businessCreditCards.add(new BusinessAndCreditCards(account, ccs, hasActiveCard));
+				accountCreditCards.add(new AccountAndCreditCards(account, creditCards, hasActiveCard));
 			}
 		}
-		boolean showAccounting = aoConn.getAccount().getAccount().getRows().size() > 1;
+		boolean showAccount = aoConn.getAccount().getAccount().getRows().size() > 1;
 
-		request.setAttribute("businessCreditCards", businessCreditCards);
-		request.setAttribute("showAccounting", showAccounting ? "true" : "false");
+		request.setAttribute("accountCreditCards", accountCreditCards);
+		request.setAttribute("showAccount", showAccount ? "true" : "false");
 
 		return mapping.findForward("success");
 	}
@@ -94,20 +101,20 @@ public class CreditCardManagerAction extends PermissionAction {
 		return Collections.singletonList(Permission.Name.get_credit_cards);
 	}
 
-	public static class BusinessAndCreditCards {
+	public static class AccountAndCreditCards {
 
-		final private Account business;
+		final private Account account;
 		final private List<CreditCard> creditCards;
 		final private boolean hasActiveCard;
 
-		private BusinessAndCreditCards(Account business, List<CreditCard> creditCards, boolean hasActiveCard) {
-			this.business=business;
-			this.creditCards=creditCards;
-			this.hasActiveCard=hasActiveCard;
+		private AccountAndCreditCards(Account account, List<CreditCard> creditCards, boolean hasActiveCard) {
+			this.account = account;
+			this.creditCards = creditCards;
+			this.hasActiveCard = hasActiveCard;
 		}
 
-		public Account getBusiness() {
-			return business;
+		public Account getAccount() {
+			return account;
 		}
 
 		public List<CreditCard> getCreditCards() {

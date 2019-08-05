@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -49,8 +49,8 @@ public class VirtualManaged3CompletedAction extends VirtualManaged3Action {
 		boolean signupCustomizeServerFormComplete,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		boolean signupCustomizeManagementFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -73,15 +73,15 @@ public class VirtualManaged3CompletedAction extends VirtualManaged3Action {
 				signupCustomizeServerFormComplete,
 				signupCustomizeManagementForm,
 				signupCustomizeManagementFormComplete,
-				signupBusinessForm,
-				signupBusinessFormComplete,
+				signupOrganizationForm,
+				signupOrganizationFormComplete,
 				signupTechnicalForm,
 				signupTechnicalFormComplete,
 				signupBillingInformationForm,
 				signupBillingInformationFormComplete
 			);
 		}
-		if(!signupBusinessFormComplete) return mapping.findForward("virtual-managed-server-4");
+		if(!signupOrganizationFormComplete) return mapping.findForward("virtual-managed-server-4");
 		if(!signupTechnicalFormComplete) return mapping.findForward("virtual-managed-server-5");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("virtual-managed-server-6");
 		return mapping.findForward("virtual-managed-server-7");

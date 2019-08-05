@@ -58,17 +58,17 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		// Business must be selected and accessible
-		String accounting = request.getParameter("accounting");
-		if(GenericValidator.isBlankOrNull(accounting)) {
+		// Account must be selected and accessible
+		String account_name = request.getParameter("account");
+		if(GenericValidator.isBlankOrNull(account_name)) {
 			return mapping.findForward("credit-card-manager");
 		}
-		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name));
 		if(account == null) {
 			return mapping.findForward("credit-card-manager");
 		}
 
-		// Get the list of cards for the business, must have at least one card.
+		// Get the list of cards for the account, must have at least one card.
 		List<CreditCard> creditCards = account.getCreditCards();
 		// Build list of active cards
 		List<CreditCard> activeCards = new ArrayList<>(creditCards.size());
@@ -85,7 +85,7 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		}
 
 		// Store request attributes
-		request.setAttribute("business", account);
+		request.setAttribute("account", account);
 		request.setAttribute("activeCards", activeCards);
 		request.setAttribute("automaticCard", automaticCard);
 

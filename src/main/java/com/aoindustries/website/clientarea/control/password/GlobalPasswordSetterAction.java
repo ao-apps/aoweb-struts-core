@@ -38,7 +38,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Prepares for business administrator password setting.  Populates lists in globalPasswordSetterForm.
+ * Prepares for global password setting.  Populates lists in globalPasswordSetterForm.
  *
  * @author  AO Industries, Inc.
  */

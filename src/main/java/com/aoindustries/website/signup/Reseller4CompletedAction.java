@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -46,8 +46,8 @@ public class Reseller4CompletedAction extends Reseller4Action {
 		Skin skin,
 		ResellerSignupSelectPackageForm signupSelectPackageForm,
 		boolean signupSelectPackageFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -55,7 +55,7 @@ public class Reseller4CompletedAction extends Reseller4Action {
 	) throws Exception {
 		// Forward to previous steps if they have not been completed
 		if(!signupSelectPackageFormComplete) return mapping.findForward("reseller-completed");
-		if(!signupBusinessFormComplete)  return mapping.findForward("reseller-2-completed");
+		if(!signupOrganizationFormComplete)  return mapping.findForward("reseller-2-completed");
 		if(!signupTechnicalFormComplete)  return mapping.findForward("reseller-3-completed");
 		if(!signupBillingInformationFormComplete) {
 			// Init values for the form
@@ -68,8 +68,8 @@ public class Reseller4CompletedAction extends Reseller4Action {
 				skin,
 				signupSelectPackageForm,
 				signupSelectPackageFormComplete,
-				signupBusinessForm,
-				signupBusinessFormComplete,
+				signupOrganizationForm,
+				signupOrganizationFormComplete,
 				signupTechnicalForm,
 				signupTechnicalFormComplete,
 				signupBillingInformationForm,

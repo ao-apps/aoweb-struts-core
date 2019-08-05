@@ -48,7 +48,7 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 
 	private List<String> packages;
 	private List<String> usernames;
-	private List<String> aoServers;
+	private List<String> servers;
 	private List<String> newPasswords;
 	private List<String> confirmPasswords;
 
@@ -57,7 +57,7 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 		super.reset(mapping, request);
 		setPackages(new AutoGrowArrayList<String>());
 		setUsernames(new AutoGrowArrayList<String>());
-		setAoServers(new AutoGrowArrayList<String>());
+		setServers(new AutoGrowArrayList<String>());
 		setNewPasswords(new AutoGrowArrayList<String>());
 		setConfirmPasswords(new AutoGrowArrayList<String>());
 	}
@@ -78,12 +78,12 @@ public class LinuxAccountPasswordSetterForm extends ActionForm implements Serial
 		this.usernames = usernames;
 	}
 
-	public List<String> getAoServers() {
-		return aoServers;
+	public List<String> getServers() {
+		return servers;
 	}
 
-	public void setAoServers(List<String> aoServers) {
-		this.aoServers = aoServers;
+	public void setServers(List<String> servers) {
+		this.servers = servers;
 	}
 
 	public List<String> getNewPasswords() {

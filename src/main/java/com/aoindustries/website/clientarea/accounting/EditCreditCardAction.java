@@ -28,12 +28,13 @@ import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import com.aoindustries.website.signup.SignupBusinessActionHelper;
+import com.aoindustries.website.signup.SignupOrganizationActionHelper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -86,7 +87,7 @@ public class EditCreditCardAction extends PermissionAction {
 
 		// Populate the initial details from selected card
 		editCreditCardForm.setIsActive(creditCard.getIsActive() ? "true" : "false");
-		editCreditCardForm.setAccounting(creditCard.getBusiness().getName().toString());
+		editCreditCardForm.setAccount(creditCard.getAccount_name().toString());
 		editCreditCardForm.setFirstName(creditCard.getFirstName());
 		editCreditCardForm.setLastName(creditCard.getLastName());
 		editCreditCardForm.setCompanyName(creditCard.getCompanyName());
@@ -108,11 +109,11 @@ public class EditCreditCardAction extends PermissionAction {
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
 		List<String> expirationYears = new ArrayList<>(1 + com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE);
-		int startYear = Calendar.getInstance().get(Calendar.YEAR);
+		int startYear = new GregorianCalendar().get(Calendar.YEAR);
 		for(int c = 0; c <= com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
 
 		// Build the list of countries
-		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
+		List<SignupOrganizationActionHelper.CountryOption> countryOptions = SignupOrganizationActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
 
 		// Store to request attributes
 		request.setAttribute("expirationYears", expirationYears);

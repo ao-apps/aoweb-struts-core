@@ -51,8 +51,8 @@ public class Reseller5CompletedAction extends Reseller5Action {
 		Skin skin,
 		ResellerSignupSelectPackageForm signupSelectPackageForm,
 		boolean signupSelectPackageFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -60,7 +60,7 @@ public class Reseller5CompletedAction extends Reseller5Action {
 	) throws Exception {
 		// Forward to previous steps if they have not been completed
 		if(!signupSelectPackageFormComplete) return mapping.findForward("reseller-completed");
-		if(!signupBusinessFormComplete) return mapping.findForward("reseller-2-completed");
+		if(!signupOrganizationFormComplete) return mapping.findForward("reseller-2-completed");
 		if(!signupTechnicalFormComplete) return mapping.findForward("reseller-3-completed");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("reseller-4-completed");
 
@@ -69,7 +69,7 @@ public class Reseller5CompletedAction extends Reseller5Action {
 			request,
 			response,
 			signupSelectPackageForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -84,7 +84,7 @@ public class Reseller5CompletedAction extends Reseller5Action {
 		Map<String,String> options = new HashMap<>();
 
 		// Store to the database
-		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm, options);
+		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm, options);
 		String pkey = (String)request.getAttribute("pkey");
 		String statusKey = (String)request.getAttribute("statusKey");
 
@@ -96,7 +96,7 @@ public class Reseller5CompletedAction extends Reseller5Action {
 			statusKey,
 			siteSettings,
 			packageDefinition,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -109,7 +109,7 @@ public class Reseller5CompletedAction extends Reseller5Action {
 			statusKey,
 			siteSettings,
 			packageDefinition,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);

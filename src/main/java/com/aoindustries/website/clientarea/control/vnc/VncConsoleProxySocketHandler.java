@@ -129,7 +129,7 @@ public class VncConsoleProxySocketHandler {
 						socketOut.write(2);
 						// VNC Authentication
 						byte[] challenge = new byte[16];
-						AOServConnector.getRandom().nextBytes(challenge);
+						AOServConnector.getSecureRandom().nextBytes(challenge);
 						socketOut.write(challenge);
 						socketOut.flush();
 						byte[] response = new byte[16];

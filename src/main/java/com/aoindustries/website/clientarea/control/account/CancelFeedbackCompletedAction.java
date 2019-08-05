@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2003-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2003-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.website.clientarea.control.business;
+package com.aoindustries.website.clientarea.control.account;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
@@ -57,24 +57,24 @@ public class CancelFeedbackCompletedAction  extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		CancelFeedbackForm cancelFeedbackForm = (CancelFeedbackForm)form;
-		String accountId = cancelFeedbackForm.getBusiness();
+		String account_name = cancelFeedbackForm.getAccount();
 		String reason = cancelFeedbackForm.getReason();
 
-		Account bu;
-		if(GenericValidator.isBlankOrNull(accountId)) {
-			bu = null;
+		Account account;
+		if(GenericValidator.isBlankOrNull(account_name)) {
+			account = null;
 		} else {
-			bu = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accountId));
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name));
 		}
-		if(bu==null || !bu.canCancel()) {
-			return mapping.findForward("invalid-business");
+		if(account==null || !account.canCancel()) {
+			return mapping.findForward("invalid-account");
 		}
 
 		// Do the actual cancellation
-		bu.cancel(reason);
+		account.cancel(reason);
 
 		// Set request values
-		request.setAttribute("business", bu);
+		request.setAttribute("account", account);
 
 		return mapping.findForward("success");
 	}

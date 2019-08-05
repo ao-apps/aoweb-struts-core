@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -43,7 +43,7 @@ import org.apache.struts.action.ActionMessages;
 /**
  * @author  AO Industries, Inc.
  */
-public class BusinessAdministratorPasswordSetterCompletedAction extends AuthenticatedAction {
+public class AdministratorPasswordSetterCompletedAction extends AuthenticatedAction {
 
 	@Override
 	public ActionForward execute(
@@ -56,21 +56,21 @@ public class BusinessAdministratorPasswordSetterCompletedAction extends Authenti
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		BusinessAdministratorPasswordSetterForm businessAdministratorPasswordSetterForm = (BusinessAdministratorPasswordSetterForm)form;
+		AdministratorPasswordSetterForm administratorPasswordSetterForm = (AdministratorPasswordSetterForm)form;
 
 		// Validation
-		ActionMessages errors = businessAdministratorPasswordSetterForm.validate(mapping, request);
+		ActionMessages errors = administratorPasswordSetterForm.validate(mapping, request);
 		if(errors!=null && !errors.isEmpty()) {
 			saveErrors(request, errors);
 			return mapping.findForward("input");
 		}
 
 		// Reset passwords here and clear the passwords from the form
-		Administrator thisBA = aoConn.getThisBusinessAdministrator();
+		Administrator thisBA = aoConn.getCurrentAdministrator();
 		ActionMessages messages = new ActionMessages();
-		List<String> usernames = businessAdministratorPasswordSetterForm.getUsernames();
-		List<String> newPasswords = businessAdministratorPasswordSetterForm.getNewPasswords();
-		List<String> confirmPasswords = businessAdministratorPasswordSetterForm.getConfirmPasswords();
+		List<String> usernames = administratorPasswordSetterForm.getUsernames();
+		List<String> newPasswords = administratorPasswordSetterForm.getNewPasswords();
+		List<String> confirmPasswords = administratorPasswordSetterForm.getConfirmPasswords();
 		for(int c=0;c<usernames.size();c++) {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
@@ -84,9 +84,9 @@ public class BusinessAdministratorPasswordSetterCompletedAction extends Authenti
 					return forward;
 				}
 				Administrator ba = aoConn.getAccount().getAdministrator().get(username);
-				if(ba == null) throw new SQLException("Unable to find BusinessAdministrator: " + username);
+				if(ba == null) throw new SQLException("Unable to find Administrator: " + username);
 				ba.setPassword(newPassword);
-				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.businessAdministratorPasswordSetter.field.confirmPasswords.passwordReset"));
+				messages.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage("password.administratorPasswordSetter.field.confirmPasswords.passwordReset"));
 				newPasswords.set(c, "");
 				confirmPasswords.set(c, "");
 			}

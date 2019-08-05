@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -48,7 +48,7 @@ public class IndexAction extends SkinAction {
 		AOServConnector rootConn = SiteSettings.getInstance(getServlet().getServletContext()).getRootAOServConnector();
 
 		// Determine the active packages per category
-		Map<PackageCategory,List<PackageDefinition>> categories = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness().getActivePackageDefinitions();
+		Map<PackageCategory,List<PackageDefinition>> categories = rootConn.getCurrentAdministrator().getUsername().getPackage().getAccount().getActivePackageDefinitions();
 		// 404 when no packages defined
 		if(categories.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);

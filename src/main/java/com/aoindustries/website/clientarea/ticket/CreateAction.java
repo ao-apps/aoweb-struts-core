@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -57,16 +57,16 @@ public class CreateAction extends PermissionAction {
 		AOServConnector aoConn
 	) throws Exception {
 		TicketForm ticketForm = (TicketForm)form;
-		Administrator thisBusinessAdministrator = aoConn.getThisBusinessAdministrator();
+		Administrator currentAdministrator = aoConn.getCurrentAdministrator();
 
-		// Default to the business of the authenticated user
-		ticketForm.setAccounting(thisBusinessAdministrator.getUsername().getPackage().getBusiness().getName().toString());
+		// Default to the account of the authenticated user
+		ticketForm.setAccount(currentAdministrator.getUsername().getPackage().getAccount_name().toString());
 
 		// Default to normal priority
 		ticketForm.setClientPriority(Priority.NORMAL);
 
 		// Default contact emails
-		// ticketForm.setContactEmails(thisBusinessAdministrator.getEmail());
+		// ticketForm.setContactEmails(currentAdministrator.getEmail());
 
 		return mapping.findForward("success");
 	}

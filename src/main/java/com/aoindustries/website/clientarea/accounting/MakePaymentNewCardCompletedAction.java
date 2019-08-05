@@ -25,11 +25,13 @@ package com.aoindustries.website.clientarea.accounting;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Profile;
+import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.billing.TransactionType;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.PaymentType;
+import com.aoindustries.aoserv.client.schema.Type;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
-import com.aoindustries.aoserv.creditcards.BusinessGroup;
+import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.AuthorizationResult;
 import com.aoindustries.creditcards.CaptureResult;
@@ -39,13 +41,13 @@ import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
 import com.aoindustries.net.Email;
-import com.aoindustries.sql.SQLUtility;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Currency;
 import java.util.Locale;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -71,8 +73,6 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	static final boolean DEBUG_AUTHORIZE_THEN_CAPTURE = false;
 
 	static final int DUPLICATE_WINDOW = 120;
-
-	static final Currency USD = Currency.getInstance("USD");
 
 	static String trimNullIfEmpty(String s) {
 		if(s == null) return null;
@@ -103,13 +103,19 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		// Init request values
 		initRequestAttributes(request, getServlet().getServletContext());
 
-		String accounting = makePaymentNewCardForm.getAccounting();
-		Account account = accounting == null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) {
-			// Redirect back to make-payment if business not found
+		Account account;
+		try {
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(makePaymentNewCardForm.getAccount()));
+		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
-		request.setAttribute("business", account);
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
+		if(account == null || currency == null) {
+			// Redirect back to make-payment if account or currency not found
+			return mapping.findForward("make-payment");
+		}
+		request.setAttribute("account", account);
+		request.setAttribute("currency", currency);
 
 		// Validation
 		ActionMessages errors = makePaymentNewCardForm.validate(mapping, request);
@@ -119,15 +125,14 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			return mapping.findForward("input");
 		}
 
-		// Convert to pennies
-		int pennies = SQLUtility.getPennies(makePaymentNewCardForm.getPaymentAmount());
-		BigDecimal paymentAmount = new BigDecimal(makePaymentNewCardForm.getPaymentAmount());
+		// Convert to money
+		Money paymentAmount = new Money(currency.getCurrency(), new BigDecimal(makePaymentNewCardForm.getPaymentAmount()));
 
 		// Encapsulate the values into a new credit card
 		String cardNumber = makePaymentNewCardForm.getCardNumber();
-		String principalName = aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString();
-		String groupName = accounting;
-		Profile profile = account.getBusinessProfile();
+		String principalName = aoConn.getCurrentAdministrator().getUsername().getUsername().toString();
+		String groupName = account.getName().toString();
+		Profile profile = account.getProfile();
 		com.aoindustries.creditcards.CreditCard newCreditCard = new com.aoindustries.creditcards.CreditCard(
 			null, // persistenceUniqueId
 			principalName,
@@ -166,8 +171,8 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		if(rootAoProcessor == null) throw new SQLException("Unable to find CreditCardProcessor: " + rootProcessor.getProviderId());
 
 		// 2) Add the transaction as pending on this processor
-		Account rootAccount = rootConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(rootAccount == null) throw new SQLException("Unable to find Account: " + accounting);
+		Account rootAccount = rootConn.getAccount().getAccount().get(account.getName());
+		if(rootAccount == null) throw new SQLException("Unable to find Account: " + account.getName());
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
@@ -203,39 +208,42 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 				if(paymentType == null) throw new SQLException("Unable to find PaymentType: " + paymentTypeName);
 			}
 		}
-		int transID = rootAccount.addTransaction(
+		int transid = rootConn.getBilling().getTransaction().add(
+			Type.TIME,
+			null,
 			rootAccount,
-			aoConn.getThisBusinessAdministrator(),
+			rootAccount,
+			aoConn.getCurrentAdministrator(),
 			paymentTransactionType,
 			applicationResources.getMessage(locale, "makePaymentStoredCardCompleted.transaction.description"),
 			1000,
-			-pennies,
+			paymentAmount.negate(),
 			paymentType,
 			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
-		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transID);
-		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transID);
+		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transid);
+		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transid);
 
 		// TODO: Store card before sale, and use its stored card ID (once ao-credit-cards can throw ErrorCodeException on store card)
 		// TODO: This currently implementation provides disconnected first payment and stored card in Stripe.
 
 		// 3) Process
 		AOServConnectorPrincipal principal = new AOServConnectorPrincipal(rootConn, principalName);
-		BusinessGroup businessGroup = new BusinessGroup(rootAccount, groupName);
+		AccountGroup accountGroup = new AccountGroup(rootAccount, groupName);
 		Transaction transaction;
 		if(DEBUG_AUTHORIZE_THEN_CAPTURE) {
 			transaction = rootProcessor.authorize(
 				principal,
-				businessGroup,
+				accountGroup,
 				new TransactionRequest(
 					false, // testMode
 					request.getRemoteAddr(), // customerIp
 					DUPLICATE_WINDOW,
-					Integer.toString(transID), // orderNumber
-					USD, // currency
-					paymentAmount, // amount
+					Integer.toString(transid), // orderNumber
+					paymentAmount.getCurrency(), // currency
+					paymentAmount.getValue(), // amount
 					null, // taxAmount
 					false, // taxExempt
 					null, // shippingAmount
@@ -260,14 +268,14 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		} else {
 			transaction = rootProcessor.sale(
 				principal,
-				businessGroup,
+				accountGroup,
 				new TransactionRequest(
 					false, // testMode
 					request.getRemoteAddr(), // customerIp
 					DUPLICATE_WINDOW,
-					Integer.toString(transID), // orderNumber
-					USD, // currency
-					paymentAmount, // amount
+					Integer.toString(transid), // orderNumber
+					paymentAmount.getCurrency(), // currency
+					paymentAmount.getValue(), // amount
 					null, // taxAmount
 					false, // taxExempt
 					null, // shippingAmount
@@ -341,7 +349,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 							// Store card
 							boolean storeSuccess;
 							try {
-								storeCard(rootProcessor, principal, businessGroup, newCreditCard);
+								storeCard(rootProcessor, principal, accountGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
 							} catch(IOException | SQLException | RuntimeException err) {
@@ -428,7 +436,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 							// Store card
 							boolean storeSuccess;
 							try {
-								storeCard(rootProcessor, principal, businessGroup, newCreditCard);
+								storeCard(rootProcessor, principal, accountGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
 							} catch(IOException | SQLException | RuntimeException err) {
@@ -457,10 +465,10 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		}
 	}
 
-	private void storeCard(CreditCardProcessor rootProcessor, AOServConnectorPrincipal principal, BusinessGroup businessGroup, com.aoindustries.creditcards.CreditCard newCreditCard) throws SQLException, IOException {
+	private void storeCard(CreditCardProcessor rootProcessor, AOServConnectorPrincipal principal, AccountGroup accountGroup, com.aoindustries.creditcards.CreditCard newCreditCard) throws SQLException, IOException {
 		rootProcessor.storeCreditCard(
 			principal,
-			businessGroup,
+			accountGroup,
 			newCreditCard
 		);
 	}
@@ -470,11 +478,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	 *                   Otherwise there is a race condition between the non-root AOServConnector getting the invalidation signal
 	 *                   and this method being called.
 	 */
-	private void setAutomatic(AOServConnector rootConn, com.aoindustries.creditcards.CreditCard newCreditCard, Account business) throws SQLException, IOException {
+	private void setAutomatic(AOServConnector rootConn, com.aoindustries.creditcards.CreditCard newCreditCard, Account account) throws SQLException, IOException {
 		String persistenceUniqueId = newCreditCard.getPersistenceUniqueId();
 		CreditCard creditCard = rootConn.getPayment().getCreditCard().get(Integer.parseInt(persistenceUniqueId));
 		if(creditCard == null) throw new SQLException("Unable to find CreditCard: " + persistenceUniqueId);
-		if(!creditCard.getBusiness().equals(business)) throw new SQLException("Requested business and CreditCard business do not match: "+creditCard.getBusiness().getName()+"!="+business.getName());
-		business.setUseMonthlyCreditCard(creditCard);
+		if(!creditCard.getAccount().equals(account)) throw new SQLException("Requested account and CreditCard account do not match: " + creditCard.getAccount_name() + "!=" + account.getName());
+		account.setUseMonthlyCreditCard(creditCard);
 	}
 }

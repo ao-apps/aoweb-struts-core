@@ -31,12 +31,13 @@ import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import com.aoindustries.website.signup.SignupBusinessActionHelper;
+import com.aoindustries.website.signup.SignupOrganizationActionHelper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -105,16 +106,16 @@ public class AddCreditCardAction extends PermissionAction {
 	) throws Exception {
 		AddCreditCardForm addCreditCardForm=(AddCreditCardForm)form;
 
-		String accounting = addCreditCardForm.getAccounting();
-		if(GenericValidator.isBlankOrNull(accounting)) {
-			// Redirect back to credit-card-manager it no accounting selected
+		String account_name = addCreditCardForm.getAccount();
+		if(GenericValidator.isBlankOrNull(account_name)) {
+			// Redirect back to credit-card-manager if no account selected
 			return mapping.findForward("credit-card-manager");
 		}
 
-		// Populate the initial details from the selected accounting code or authenticated user
-		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) throw new SQLException("Unable to find Account: " + accounting);
-		Profile profile = account.getBusinessProfile();
+		// Populate the initial details from the selected account name or authenticated user
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name));
+		if(account == null) throw new SQLException("Unable to find Account: " + account_name);
+		Profile profile = account.getProfile();
 		if(profile!=null) {
 			addCreditCardForm.setFirstName(getFirstName(profile.getBillingContact(), locale));
 			addCreditCardForm.setLastName(getLastName(profile.getBillingContact(), locale));
@@ -126,7 +127,7 @@ public class AddCreditCardAction extends PermissionAction {
 			addCreditCardForm.setPostalCode(profile.getZIP());
 			addCreditCardForm.setCountryCode(profile.getCountry().getCode());
 		} else {
-			Administrator thisBA = aoConn.getThisBusinessAdministrator();
+			Administrator thisBA = aoConn.getCurrentAdministrator();
 			addCreditCardForm.setFirstName(getFirstName(thisBA.getName(), locale));
 			addCreditCardForm.setLastName(getLastName(thisBA.getName(), locale));
 			addCreditCardForm.setStreetAddress1(thisBA.getAddress1());
@@ -145,12 +146,12 @@ public class AddCreditCardAction extends PermissionAction {
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
 		List<String> expirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
-		int startYear = Calendar.getInstance().get(Calendar.YEAR);
+		int startYear = new GregorianCalendar().get(Calendar.YEAR);
 		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
 
 		// Build the list of countries
 		// We use the root connector to provide a better set of country values
-		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
+		List<SignupOrganizationActionHelper.CountryOption> countryOptions = SignupOrganizationActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
 
 		// Store to request attributes
 		request.setAttribute("expirationYears", expirationYears);

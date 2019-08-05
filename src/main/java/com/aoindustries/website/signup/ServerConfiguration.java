@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,6 +24,8 @@ package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.util.i18n.Monies;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -38,9 +40,9 @@ import java.util.List;
 public class ServerConfiguration {
 
 	private static String getDiskDescription(int numDrives, PackageDefinitionLimit pdl) throws SQLException, IOException {
-		if(pdl==null || numDrives==0) return null;
+		if(pdl == null || numDrives == 0) return null;
 		String description = pdl.getResource().toString();
-		if(numDrives==1) {
+		if(numDrives == 1) {
 			if(description.startsWith("2x")) return description;
 			else return "Single " + description;
 		} else {
@@ -52,9 +54,8 @@ public class ServerConfiguration {
 		List<PackageDefinitionLimit> limits = packageDefinition.getLimits();
 
 		// Calculate the total minimum monthly
-		BigDecimal setup = packageDefinition.getSetupFee();
-		BigDecimal minimumMonthly = packageDefinition.getMonthlyRate();
-		if(minimumMonthly==null) minimumMonthly = BigDecimal.valueOf(0, 2);
+		Money setup = packageDefinition.getSetupFee();
+		Monies minimumMonthly = Monies.of(packageDefinition.getMonthlyRate());
 
 		// Find the maximum number of different resources and the cheapest options
 		int maxPowers = 0;
@@ -73,134 +74,134 @@ public class ServerConfiguration {
 			String resourceName = limit.getResource().getName();
 			if(resourceName.startsWith("hardware_power_")) {
 				int limitPower = limit.getHardLimit();
-				if(limitPower>0) {
+				if(limitPower > 0) {
 					if(limitPower>maxPowers) maxPowers = limitPower;
-					if(cheapestPower==null) cheapestPower = limit;
+					if(cheapestPower == null) cheapestPower = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestPower.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestPower = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestPower.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestPower = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_processor_")) {
 				int limitCpu = limit.getHardLimit();
-				if(limitCpu>0) {
+				if(limitCpu > 0) {
 					if(limitCpu>maxCPUs) maxCPUs = limitCpu;
-					if(cheapestCPU==null) cheapestCPU = limit;
+					if(cheapestCPU == null) cheapestCPU = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestCPU.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestCPU = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestCPU.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestCPU = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_ram_")) {
 				int limitRAM = limit.getHardLimit();
-				if(limitRAM>0) {
+				if(limitRAM > 0) {
 					if(limitRAM>maxRAMs) maxRAMs = limitRAM;
-					if(cheapestRAM==null) cheapestRAM = limit;
+					if(cheapestRAM == null) cheapestRAM = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestRAM.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestRAM = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestRAM.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestRAM = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_controller_sata_")) {
 				int limitSataController = limit.getHardLimit();
-				if(limitSataController>0) {
+				if(limitSataController > 0) {
 					if(limitSataController>maxSataControllers) maxSataControllers = limitSataController;
-					if(cheapestSataController==null) cheapestSataController = limit;
+					if(cheapestSataController == null) cheapestSataController = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestSataController.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestSataController = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestSataController.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestSataController = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_controller_scsi_")) {
 				int limitScsiController = limit.getHardLimit();
-				if(limitScsiController>0) {
+				if(limitScsiController > 0) {
 					if(limitScsiController>maxScsiControllers) maxScsiControllers = limitScsiController;
-					if(cheapestScsiController==null) cheapestScsiController = limit;
+					if(cheapestScsiController == null) cheapestScsiController = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestScsiController.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestScsiController = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestScsiController.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestScsiController = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_")) {
 				int hardLimit = limit.getHardLimit();
-				if(hardLimit>0) {
-					if(cheapestDisk==null) cheapestDisk = limit;
+				if(hardLimit > 0) {
+					if(cheapestDisk == null) cheapestDisk = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal cheapestRate = cheapestDisk.getAdditionalRate();
-						if(cheapestRate==null) cheapestRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(cheapestRate)<0) cheapestDisk = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies cheapestRate = Monies.of(cheapestDisk.getAdditionalRate());
+						if(additionalRate.compareTo(cheapestRate) < 0) cheapestDisk = limit;
 					}
 					if(hardLimit>maxDisks) maxDisks = hardLimit;
 				}
 			}
 		}
-		if(cheapestCPU==null) throw new SQLException("Unable to find cheapestCPU");
-		if(cheapestRAM==null) throw new SQLException("Unable to find cheapestRAM");
-		if(cheapestDisk==null) throw new SQLException("Unable to find cheapestDisk");
+		if(cheapestCPU == null) throw new SQLException("Unable to find cheapestCPU");
+		if(cheapestRAM == null) throw new SQLException("Unable to find cheapestRAM");
+		if(cheapestDisk == null) throw new SQLException("Unable to find cheapestDisk");
 
 		// Build the Power descriptions
 		StringBuilder minimumPower = new StringBuilder();
-		if(cheapestPower!=null) {
-			if(maxPowers!=1) minimumPower.append(maxPowers).append('x');
+		if(cheapestPower != null) {
+			if(maxPowers != 1) minimumPower.append(maxPowers).append('×');
 			minimumPower.append(cheapestPower.getResource().toString());
 		}
 
 		// Add the Power costs
-		if(cheapestPower!=null && cheapestPower.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestPower.getAdditionalRate().multiply(BigDecimal.valueOf(maxPowers)));
+		if(cheapestPower != null && cheapestPower.getAdditionalRate() != null) {
+			minimumMonthly = minimumMonthly.add(cheapestPower.getAdditionalRate().multiply(BigDecimal.valueOf(maxPowers)));
+		}
 
 		// Build the CPU descriptions
-		if(cheapestCPU==null) throw new SQLException("Unable to find cheapestCPU");
+		if(cheapestCPU == null) throw new SQLException("Unable to find cheapestCPU");
 		StringBuilder minimumCpu = new StringBuilder();
-		if(maxCPUs!=1) minimumCpu.append(maxCPUs).append('x');
+		if(maxCPUs != 1) minimumCpu.append(maxCPUs).append('×');
 		minimumCpu.append(cheapestCPU.getResource().toString());
 
 		// Add the CPU costs
-		if(cheapestCPU.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestCPU.getAdditionalRate().multiply(BigDecimal.valueOf(maxCPUs)));
+		if(cheapestCPU.getAdditionalRate() != null) {
+			minimumMonthly = minimumMonthly.add(cheapestCPU.getAdditionalRate().multiply(BigDecimal.valueOf(maxCPUs)));
+		}
 
 		// Build the RAM description
-		if(cheapestRAM==null) throw new SQLException("Unable to find cheapestRAM");
+		if(cheapestRAM == null) throw new SQLException("Unable to find cheapestRAM");
 		StringBuilder minimumRam = new StringBuilder();
 		minimumRam.append(cheapestRAM.getResource().toString());
 
 		// Add the RAM cost
-		if(cheapestRAM.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestRAM.getAdditionalRate());
+		minimumMonthly = minimumMonthly.add(cheapestRAM.getAdditionalRate());
 
 		// Build the SATA controller description
 		StringBuilder minimumSataController = new StringBuilder();
-		if(cheapestSataController!=null) minimumSataController.append(cheapestSataController.getResource().toString());
+		if(cheapestSataController != null) {
+			minimumSataController.append(cheapestSataController.getResource().toString());
+		}
 
 		// Add the SataController cost
-		if(cheapestSataController!=null && cheapestSataController.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestSataController.getAdditionalRate());
+		if(cheapestSataController != null) {
+			minimumMonthly = minimumMonthly.add(cheapestSataController.getAdditionalRate());
+		}
 
 		// Build the SCSI controller description
 		StringBuilder minimumScsiController = new StringBuilder();
-		if(cheapestScsiController!=null) minimumScsiController.append(cheapestScsiController.getResource().toString());
+		if(cheapestScsiController != null) {
+			minimumScsiController.append(cheapestScsiController.getResource().toString());
+		}
 
 		// Add the ScsiController cost
-		if(cheapestScsiController!=null && cheapestScsiController.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestScsiController.getAdditionalRate());
+		if(cheapestScsiController != null) {
+			minimumMonthly = minimumMonthly.add(cheapestScsiController.getAdditionalRate());
+		}
 
 		// Build the disk description
 		String minimumDisk = getDiskDescription(1, cheapestDisk);
 
 		// Add the disk cost
-		if(cheapestDisk.getAdditionalRate()!=null) minimumMonthly = minimumMonthly.add(cheapestDisk.getAdditionalRate());
+		minimumMonthly = minimumMonthly.add(cheapestDisk.getAdditionalRate());
 
 		return new ServerConfiguration(
 			packageDefinition.getPkey(),
@@ -212,7 +213,7 @@ public class ServerConfiguration {
 			minimumScsiController.toString(),
 			minimumDisk,
 			setup,
-			minimumMonthly.compareTo(BigDecimal.ZERO)==0 ? null : minimumMonthly
+			minimumMonthly.isZero() ? null : minimumMonthly
 		);
 	}
 
@@ -220,9 +221,8 @@ public class ServerConfiguration {
 		List<PackageDefinitionLimit> limits = packageDefinition.getLimits();
 
 		// Calculate the total maximum monthly
-		BigDecimal setup = packageDefinition.getSetupFee();
-		BigDecimal maximumMonthly = packageDefinition.getMonthlyRate();
-		if(maximumMonthly==null) maximumMonthly = BigDecimal.valueOf(0, 2);
+		Money setup = packageDefinition.getSetupFee();
+		Monies maximumMonthly = Monies.of(packageDefinition.getMonthlyRate());
 
 		// Find the maximum number of different resources and the most expensive options
 		int maxPowers = 0;
@@ -241,80 +241,68 @@ public class ServerConfiguration {
 			String resourceName = limit.getResource().getName();
 			if(resourceName.startsWith("hardware_power_")) {
 				int limitPower = limit.getHardLimit();
-				if(limitPower>0) {
+				if(limitPower > 0) {
 					if(limitPower>maxPowers) maxPowers = limitPower;
-					if(expensivePower==null) expensivePower = limit;
+					if(expensivePower == null) expensivePower = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensivePower.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensivePower = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensivePower.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensivePower = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_processor_")) {
 				int limitCpu = limit.getHardLimit();
-				if(limitCpu>0) {
+				if(limitCpu > 0) {
 					if(limitCpu>maxCPUs) maxCPUs = limitCpu;
-					if(expensiveCPU==null) expensiveCPU = limit;
+					if(expensiveCPU == null) expensiveCPU = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensiveCPU.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensiveCPU = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensiveCPU.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensiveCPU = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_ram_")) {
 				int limitRAM = limit.getHardLimit();
-				if(limitRAM>0) {
+				if(limitRAM > 0) {
 					if(limitRAM>maxRAMs) maxRAMs = limitRAM;
-					if(expensiveRAM==null) expensiveRAM = limit;
+					if(expensiveRAM == null) expensiveRAM = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensiveRAM.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensiveRAM = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensiveRAM.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensiveRAM = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_controller_sata_")) {
 				int limitSataController = limit.getHardLimit();
-				if(limitSataController>0) {
+				if(limitSataController > 0) {
 					if(limitSataController>maxSataControllers) maxSataControllers = limitSataController;
-					if(expensiveSataController==null) expensiveSataController = limit;
+					if(expensiveSataController == null) expensiveSataController = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensiveSataController.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensiveSataController = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensiveSataController.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensiveSataController = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_controller_scsi_")) {
 				int limitScsiController = limit.getHardLimit();
-				if(limitScsiController>0) {
+				if(limitScsiController > 0) {
 					if(limitScsiController>maxScsiControllers) maxScsiControllers = limitScsiController;
-					if(expensiveScsiController==null) expensiveScsiController = limit;
+					if(expensiveScsiController == null) expensiveScsiController = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensiveScsiController.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensiveScsiController = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensiveScsiController.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensiveScsiController = limit;
 					}
 				}
 			} else if(resourceName.startsWith("hardware_disk_")) {
 				int limitDisk = limit.getHardLimit();
-				if(limitDisk>0) {
+				if(limitDisk > 0) {
 					if(limitDisk>maxDisks) maxDisks = limitDisk;
-					if(expensiveDisk==null) expensiveDisk = limit;
+					if(expensiveDisk == null) expensiveDisk = limit;
 					else {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
-						BigDecimal expensiveRate = expensiveDisk.getAdditionalRate();
-						if(expensiveRate==null) expensiveRate=BigDecimal.valueOf(0, 2);
-						if(additionalRate.compareTo(expensiveRate)>0) expensiveDisk = limit;
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
+						Monies expensiveRate = Monies.of(expensiveDisk.getAdditionalRate());
+						if(additionalRate.compareTo(expensiveRate) > 0) expensiveDisk = limit;
 					}
 				}
 			}
@@ -322,57 +310,69 @@ public class ServerConfiguration {
 
 		// Build the Power descriptions
 		StringBuilder maximumPower = new StringBuilder();
-		if(expensivePower!=null) {
-			if(maxPowers!=1) maximumPower.append(maxPowers).append('x');
+		if(expensivePower != null) {
+			if(maxPowers != 1) maximumPower.append(maxPowers).append('×');
 			maximumPower.append(expensivePower.getResource().toString());
 		}
 
 		// Add the Power costs
-		if(expensivePower!=null && expensivePower.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensivePower.getAdditionalRate().multiply(BigDecimal.valueOf(maxPowers)));
+		if(expensivePower != null && expensivePower.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensivePower.getAdditionalRate().multiply(BigDecimal.valueOf(maxPowers)));
+		}
 
 		// Build the CPU descriptions
-		if(expensiveCPU==null) throw new SQLException("Unable to find expensiveCPU");
+		if(expensiveCPU == null) throw new SQLException("Unable to find expensiveCPU");
 		StringBuilder maximumCpu = new StringBuilder();
-		if(maxCPUs!=1) maximumCpu.append(maxCPUs).append('x');
+		if(maxCPUs != 1) maximumCpu.append(maxCPUs).append('×');
 		maximumCpu.append(expensiveCPU.getResource().toString());
 
 		// Add the CPU costs
-		if(expensiveCPU.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensiveCPU.getAdditionalRate().multiply(BigDecimal.valueOf(maxCPUs)));
+		if(expensiveCPU.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensiveCPU.getAdditionalRate().multiply(BigDecimal.valueOf(maxCPUs)));
+		}
 
 		// Build the RAM description
-		if(expensiveRAM==null) throw new SQLException("Unable to find expensiveRAM");
+		if(expensiveRAM == null) throw new SQLException("Unable to find expensiveRAM");
 		StringBuilder maximumRam = new StringBuilder();
-		if(maxRAMs>1) maximumRam.append(maxRAMs).append('x');
+		if(maxRAMs>1) maximumRam.append(maxRAMs).append('×');
 		maximumRam.append(expensiveRAM.getResource().toString());
 
 		// Add the RAM cost
-		if(expensiveRAM.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensiveRAM.getAdditionalRate().multiply(BigDecimal.valueOf(maxRAMs)));
+		if(expensiveRAM.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensiveRAM.getAdditionalRate().multiply(BigDecimal.valueOf(maxRAMs)));
+		}
 
 		// Build the SATA controller description
 		StringBuilder maximumSataController = new StringBuilder();
-		if(expensiveSataController!=null) {
-			if(maxSataControllers>1) maximumSataController.append(maxSataControllers).append('x');
+		if(expensiveSataController != null) {
+			if(maxSataControllers>1) maximumSataController.append(maxSataControllers).append('×');
 			maximumSataController.append(expensiveSataController.getResource().toString());
 		}
 
 		// Add the SataController cost
-		if(expensiveSataController!=null && expensiveSataController.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensiveSataController.getAdditionalRate().multiply(BigDecimal.valueOf(maxSataControllers)));
+		if(expensiveSataController != null && expensiveSataController.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensiveSataController.getAdditionalRate().multiply(BigDecimal.valueOf(maxSataControllers)));
+		}
 
 		// Build the SCSI controller description
 		StringBuilder maximumScsiController = new StringBuilder();
-		if(expensiveScsiController!=null) {
-			if(maxScsiControllers>1) maximumScsiController.append(maxScsiControllers).append('x');
+		if(expensiveScsiController != null) {
+			if(maxScsiControllers>1) maximumScsiController.append(maxScsiControllers).append('×');
 			maximumScsiController.append(expensiveScsiController.getResource().toString());
 		}
 
 		// Add the ScsiController cost
-		if(expensiveScsiController!=null && expensiveScsiController.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensiveScsiController.getAdditionalRate().multiply(BigDecimal.valueOf(maxScsiControllers)));
+		if(expensiveScsiController != null && expensiveScsiController.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensiveScsiController.getAdditionalRate().multiply(BigDecimal.valueOf(maxScsiControllers)));
+		}
 
 		// Build the disk description
 		String maximumDisk = getDiskDescription(maxDisks, expensiveDisk);
 
 		// Add the disk cost
-		if(expensiveDisk!=null && expensiveDisk.getAdditionalRate()!=null) maximumMonthly = maximumMonthly.add(expensiveDisk.getAdditionalRate().multiply(BigDecimal.valueOf(maxDisks)));
+		if(expensiveDisk != null && expensiveDisk.getAdditionalRate() != null) {
+			maximumMonthly = maximumMonthly.add(expensiveDisk.getAdditionalRate().multiply(BigDecimal.valueOf(maxDisks)));
+		}
 
 		return new ServerConfiguration(
 			packageDefinition.getPkey(),
@@ -384,7 +384,7 @@ public class ServerConfiguration {
 			maximumScsiController.toString(),
 			maximumDisk,
 			setup,
-			maximumMonthly.compareTo(BigDecimal.ZERO)==0 ? null : maximumMonthly
+			maximumMonthly.isZero() ? null : maximumMonthly
 		);
 	}
 
@@ -396,8 +396,8 @@ public class ServerConfiguration {
 	final private String sataController;
 	final private String scsiController;
 	final private String disk;
-	final private BigDecimal setup;
-	final private BigDecimal monthly;
+	final private Money setup;
+	final private Monies monthly;
 
 	public ServerConfiguration(
 		int packageDefinition,
@@ -408,8 +408,8 @@ public class ServerConfiguration {
 		String sataController,
 		String scsiController,
 		String disk,
-		BigDecimal setup,
-		BigDecimal monthly
+		Money setup,
+		Monies monthly
 	) {
 		this.packageDefinition = packageDefinition;
 		this.name = name;
@@ -451,11 +451,11 @@ public class ServerConfiguration {
 		return scsiController;
 	}
 
-	public BigDecimal getSetup() {
+	public Money getSetup() {
 		return setup;
 	}
 
-	public BigDecimal getMonthly() {
+	public Monies getMonthly() {
 		return monthly;
 	}
 

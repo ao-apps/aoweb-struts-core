@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -52,8 +52,8 @@ public class VirtualManaged7Action extends VirtualManagedStepAction {
 		boolean signupCustomizeServerFormComplete,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		boolean signupCustomizeManagementFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -62,7 +62,7 @@ public class VirtualManaged7Action extends VirtualManagedStepAction {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("virtual-managed-server-completed");
 		if(!signupCustomizeServerFormComplete) return mapping.findForward("virtual-managed-server-2-completed");
 		if(!signupCustomizeManagementFormComplete) return mapping.findForward("virtual-managed-server-3-completed");
-		if(!signupBusinessFormComplete) return mapping.findForward("virtual-managed-server-4-completed");
+		if(!signupOrganizationFormComplete) return mapping.findForward("virtual-managed-server-4-completed");
 		if(!signupTechnicalFormComplete) return mapping.findForward("virtual-managed-server-5-completed");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("virtual-managed-server-6-completed");
 
@@ -72,7 +72,7 @@ public class VirtualManaged7Action extends VirtualManagedStepAction {
 			signupSelectPackageForm,
 			signupCustomizeServerForm,
 			signupCustomizeManagementForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -86,7 +86,7 @@ public class VirtualManaged7Action extends VirtualManagedStepAction {
 		SignupSelectPackageForm signupSelectPackageForm,
 		SignupCustomizeServerForm signupCustomizeServerForm,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) throws IOException, SQLException {
@@ -95,7 +95,7 @@ public class VirtualManaged7Action extends VirtualManagedStepAction {
 		SignupSelectServerActionHelper.setConfirmationRequestAttributes(servletContext, request, signupSelectPackageForm);
 		SignupCustomizeServerActionHelper.setConfirmationRequestAttributes(servletContext, request, response, signupSelectPackageForm, signupCustomizeServerForm);
 		SignupCustomizeManagementActionHelper.setConfirmationRequestAttributes(servletContext, request, response, signupSelectPackageForm, signupCustomizeServerForm, signupCustomizeManagementForm);
-		SignupBusinessActionHelper.setConfirmationRequestAttributes(servletContext, request, signupBusinessForm);
+		SignupOrganizationActionHelper.setConfirmationRequestAttributes(servletContext, request, signupOrganizationForm);
 		SignupTechnicalActionHelper.setConfirmationRequestAttributes(servletContext, request, signupTechnicalForm);
 		SignupBillingInformationActionHelper.setConfirmationRequestAttributes(servletContext, request, signupBillingInformationForm);
 	}

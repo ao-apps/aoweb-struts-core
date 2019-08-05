@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -48,8 +48,8 @@ public class Dedicated3Action extends DedicatedStepAction {
 		boolean signupSelectPackageFormComplete,
 		DedicatedSignupCustomizeServerForm signupCustomizeServerForm,
 		boolean signupCustomizeServerFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -58,7 +58,7 @@ public class Dedicated3Action extends DedicatedStepAction {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("dedicated-server-completed");
 		if(!signupCustomizeServerFormComplete) return mapping.findForward("dedicated-server-2-completed");
 
-		SignupBusinessActionHelper.setRequestAttributes(getServlet().getServletContext(), request);
+		SignupOrganizationActionHelper.setRequestAttributes(getServlet().getServletContext(), request);
 
 		// Clear errors if they should not be displayed
 		clearErrors(request);

@@ -56,8 +56,8 @@ public class Managed7CompletedAction extends Managed7Action {
 		boolean signupCustomizeServerFormComplete,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		boolean signupCustomizeManagementFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -67,7 +67,7 @@ public class Managed7CompletedAction extends Managed7Action {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("managed-server-completed");
 		if(!signupCustomizeServerFormComplete) return mapping.findForward("managed-server-2-completed");
 		if(!signupCustomizeManagementFormComplete) return mapping.findForward("managed-server-3-completed");
-		if(!signupBusinessFormComplete) return mapping.findForward("managed-server-4-completed");
+		if(!signupOrganizationFormComplete) return mapping.findForward("managed-server-4-completed");
 		if(!signupTechnicalFormComplete) return mapping.findForward("managed-server-5-completed");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("managed-server-6-completed");
 
@@ -78,7 +78,7 @@ public class Managed7CompletedAction extends Managed7Action {
 			signupSelectPackageForm,
 			signupCustomizeServerForm,
 			signupCustomizeManagementForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -96,7 +96,7 @@ public class Managed7CompletedAction extends Managed7Action {
 		ServerConfirmationCompletedActionHelper.addOptions(options, signupCustomizeManagementForm);
 
 		// Store to the database
-		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupBusinessForm, signupTechnicalForm, signupBillingInformationForm, options);
+		ServerConfirmationCompletedActionHelper.storeToDatabase(myServlet, request, rootConn, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm, options);
 		String pkey = (String)request.getAttribute("pkey");
 		String statusKey = (String)request.getAttribute("statusKey");
 
@@ -110,7 +110,7 @@ public class Managed7CompletedAction extends Managed7Action {
 			packageDefinition,
 			signupCustomizeServerForm,
 			signupCustomizeManagementForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -125,7 +125,7 @@ public class Managed7CompletedAction extends Managed7Action {
 			packageDefinition,
 			signupCustomizeServerForm,
 			signupCustomizeManagementForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);

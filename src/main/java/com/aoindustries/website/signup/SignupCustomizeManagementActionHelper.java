@@ -27,6 +27,8 @@ import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.IOException;
@@ -81,16 +83,14 @@ final public class SignupCustomizeManagementActionHelper {
 				int limitPower = limit.getHardLimit();
 				if(limitPower==PackageDefinitionLimit.UNLIMITED || limitPower>0) {
 					// This is per gigabyte of physical space
-					BigDecimal additionalRate = limit.getAdditionalRate();
-					if(additionalRate==null) additionalRate = BigDecimal.valueOf(0, 2);
+					Monies additionalRate = Monies.of(limit.getAdditionalRate());
 					backupOnsiteOptions.add(new Option(limit.getPkey(), resource.toString(), additionalRate.multiply(BigDecimal.valueOf(totalHardwareDiskSpace))));
 				}
 			} else if(resourceName.startsWith("backup_offsite_")) {
 				int limitPower = limit.getHardLimit();
 				if(limitPower==PackageDefinitionLimit.UNLIMITED || limitPower>0) {
 					// This is per gigabyte of physical space
-					BigDecimal additionalRate = limit.getAdditionalRate();
-					if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
+					Monies additionalRate = Monies.of(limit.getAdditionalRate());
 					backupOffsiteOptions.add(new Option(limit.getPkey(), resource.toString(), additionalRate.multiply(BigDecimal.valueOf(totalHardwareDiskSpace))));
 				}
 			}
@@ -102,11 +102,10 @@ final public class SignupCustomizeManagementActionHelper {
 				servletContext.log(null, new SQLException("Unable to find Resource: " + Resource.DISTRIBUTION_SCAN));
 			} else {
 				PackageDefinitionLimit limit = packageDefinition.getLimit(resource);
-				if(limit!=null) {
+				if(limit != null) {
 					int hard = limit.getHardLimit();
 					if(hard==PackageDefinitionLimit.UNLIMITED || hard>0) {
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
 						distributionScanOptions.add(new Option(limit.getPkey(), resource.toString(), additionalRate));
 					}
 				}
@@ -119,12 +118,11 @@ final public class SignupCustomizeManagementActionHelper {
 				servletContext.log(null, new SQLException("Unable to find Resource: " + Resource.FAILOVER));
 			} else {
 				PackageDefinitionLimit limit = packageDefinition.getLimit(resource);
-				if(limit!=null) {
+				if(limit != null) {
 					int hard = limit.getHardLimit();
 					if(hard==PackageDefinitionLimit.UNLIMITED || hard>0) {
 						// This is per gigabyte of physical space
-						BigDecimal additionalRate = limit.getAdditionalRate();
-						if(additionalRate==null) additionalRate=BigDecimal.valueOf(0, 2);
+						Monies additionalRate = Monies.of(limit.getAdditionalRate());
 						additionalRate = additionalRate.multiply(BigDecimal.valueOf(totalHardwareDiskSpace));
 						failoverOptions.add(new Option(limit.getPkey(), resource.toString(), additionalRate));
 
@@ -134,11 +132,10 @@ final public class SignupCustomizeManagementActionHelper {
 							servletContext.log(null, new SQLException("Unable to find Resource: " + Resource.MYSQL_REPLICATION));
 						} else {
 							PackageDefinitionLimit mrLimit = packageDefinition.getLimit(mrResource);
-							if(mrLimit!=null) {
+							if(mrLimit != null) {
 								int mrHard = mrLimit.getHardLimit();
 								if(mrHard==PackageDefinitionLimit.UNLIMITED || mrHard>0) {
-									BigDecimal mrAdditionalRate = mrLimit.getAdditionalRate();
-									if(mrAdditionalRate==null) mrAdditionalRate=BigDecimal.valueOf(0, 2);
+									Monies mrAdditionalRate = Monies.of(mrLimit.getAdditionalRate());
 									failoverOptions.add(new Option(mrLimit.getPkey(), mrResource.toString(), additionalRate.add(mrAdditionalRate)));
 								}
 							}
@@ -148,34 +145,34 @@ final public class SignupCustomizeManagementActionHelper {
 			}
 		}
 
-		if(!backupOnsiteOptions.isEmpty()) backupOnsiteOptions.add(0, new Option(-1, "No On-Site Backup", BigDecimal.valueOf(0, 2)));
-		if(!backupOffsiteOptions.isEmpty()) backupOffsiteOptions.add(0, new Option(-1, "No Off-Site Backup", BigDecimal.valueOf(0, 2)));
-		if(!distributionScanOptions.isEmpty()) distributionScanOptions.add(0, new Option(-1, "No daily scans", BigDecimal.valueOf(0, 2)));
-		if(!failoverOptions.isEmpty()) failoverOptions.add(0, new Option(-1, "No Fail-Over Mirror", BigDecimal.valueOf(0, 2)));
+		if(!backupOnsiteOptions.isEmpty()) backupOnsiteOptions.add(0, new Option(-1, "No On-Site Backup", Monies.of()));
+		if(!backupOffsiteOptions.isEmpty()) backupOffsiteOptions.add(0, new Option(-1, "No Off-Site Backup", Monies.of()));
+		if(!distributionScanOptions.isEmpty()) distributionScanOptions.add(0, new Option(-1, "No daily scans", Monies.of()));
+		if(!failoverOptions.isEmpty()) failoverOptions.add(0, new Option(-1, "No Fail-Over Mirror", Monies.of()));
 
 		// Sort by price
-		Collections.sort(backupOnsiteOptions, new Option.PriceComparator());
-		Collections.sort(backupOffsiteOptions, new Option.PriceComparator());
-		Collections.sort(distributionScanOptions, new Option.PriceComparator());
-		Collections.sort(failoverOptions, new Option.PriceComparator());
+		Collections.sort(backupOnsiteOptions, Option.priceComparator);
+		Collections.sort(backupOffsiteOptions, Option.priceComparator);
+		Collections.sort(distributionScanOptions, Option.priceComparator);
+		Collections.sort(failoverOptions, Option.priceComparator);
 
 		// Clear any customization settings that are not part of the current package definition (this happens when they
 		// select a different package type)
-		if(signupCustomizeManagementForm.getBackupOnsiteOption()!=-1) {
+		if(signupCustomizeManagementForm.getBackupOnsiteOption() != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(signupCustomizeManagementForm.getBackupOnsiteOption());
-			if(pdl==null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setBackupOnsiteOption(-1);
+			if(pdl == null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setBackupOnsiteOption(-1);
 		}
-		if(signupCustomizeManagementForm.getBackupOffsiteOption()!=-1) {
+		if(signupCustomizeManagementForm.getBackupOffsiteOption() != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(signupCustomizeManagementForm.getBackupOffsiteOption());
-			if(pdl==null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setBackupOffsiteOption(-1);
+			if(pdl == null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setBackupOffsiteOption(-1);
 		}
-		if(signupCustomizeManagementForm.getDistributionScanOption()!=-1) {
+		if(signupCustomizeManagementForm.getDistributionScanOption() != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(signupCustomizeManagementForm.getDistributionScanOption());
-			if(pdl==null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setDistributionScanOption(-1);
+			if(pdl == null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setDistributionScanOption(-1);
 		}
-		if(signupCustomizeManagementForm.getFailoverOption()!=-1) {
+		if(signupCustomizeManagementForm.getFailoverOption() != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(signupCustomizeManagementForm.getFailoverOption());
-			if(pdl==null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setFailoverOption(-1);
+			if(pdl == null || !packageDefinition.equals(pdl.getPackageDefinition())) signupCustomizeManagementForm.setFailoverOption(-1);
 		}
 
 		// Store to request
@@ -257,68 +254,66 @@ final public class SignupCustomizeManagementActionHelper {
 		emailOut.print("    <tr>\n"
 					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
 					 + "        <td>").print(accessor.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt")).print("</td>\n"
-					 + "        <td>$").print(request.getAttribute("totalMonthlyRate")).print("</td>\n"
+					 + "        <td>").print(request.getAttribute("totalMonthlyRate")).print("</td>\n"
 					 + "    </tr>\n");
 	}
 
 	/**
 	 * Gets the total monthly rate for the server, basic server + hardware options + management options
 	 */
-	public static BigDecimal getTotalMonthlyRate(
+	public static Monies getTotalMonthlyRate(
 		AOServConnector rootConn,
 		SignupCustomizeServerForm signupCustomizeServerForm,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		PackageDefinition packageDefinition
 	) throws SQLException, IOException {
-		BigDecimal monthlyRate = SignupCustomizeServerActionHelper.getHardwareMonthlyRate(rootConn, signupCustomizeServerForm, packageDefinition);
+		Monies monthlyRate = SignupCustomizeServerActionHelper.getHardwareMonthlyRate(rootConn, signupCustomizeServerForm, packageDefinition);
 
 		int totalDiskSpace = SignupCustomizeServerActionHelper.getTotalHardwareDiskSpace(rootConn, signupCustomizeServerForm);
 
 		// Add the backup onsite option
 		int backupOnsiteOption = signupCustomizeManagementForm.getBackupOnsiteOption();
-		if(backupOnsiteOption!=-1) {
+		if(backupOnsiteOption != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(backupOnsiteOption);
-			BigDecimal rate = pdl.getAdditionalRate();
-			if(rate!=null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
+			Money rate = pdl.getAdditionalRate();
+			if(rate != null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
 		}
 
 		// Add the backup offsite option
 		int backupOffsiteOption = signupCustomizeManagementForm.getBackupOffsiteOption();
-		if(backupOffsiteOption!=-1) {
+		if(backupOffsiteOption != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(backupOffsiteOption);
-			BigDecimal rate = pdl.getAdditionalRate();
-			if(rate!=null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
+			Money rate = pdl.getAdditionalRate();
+			if(rate != null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
 		}
 
 		// Add the distributionScanOption option
 		int distributionScanOption = signupCustomizeManagementForm.getDistributionScanOption();
-		if(distributionScanOption!=-1) {
+		if(distributionScanOption != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(distributionScanOption);
-			BigDecimal rate = pdl.getAdditionalRate();
-			if(rate!=null) monthlyRate = monthlyRate.add(rate);
+			monthlyRate = monthlyRate.add(pdl.getAdditionalRate());
 		}
 
 		// Add the backup offsite option
 		int failoverOption = signupCustomizeManagementForm.getFailoverOption();
-		if(failoverOption!=-1) {
+		if(failoverOption != -1) {
 			PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(failoverOption);
 			String resourceName = pdl.getResource().getName();
 			if(Resource.FAILOVER.equals(resourceName)) {
 				// Failover mirror only
-				BigDecimal rate = pdl.getAdditionalRate();
-				if(rate!=null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
+				Money rate = pdl.getAdditionalRate();
+				if(rate != null) monthlyRate = monthlyRate.add(rate.multiply(BigDecimal.valueOf(totalDiskSpace)));
 			} else if(Resource.MYSQL_REPLICATION.equals(resourceName)) {
 				// Failover mirror plus MySQL replication
 				Resource failoverResource = rootConn.getBilling().getResource().get(Resource.FAILOVER);
 				if(failoverResource == null) throw new SQLException("Unable to find Resource: " + Resource.FAILOVER);
 				PackageDefinitionLimit failoverPDL = packageDefinition.getLimit(failoverResource);
-				if(failoverPDL==null) throw new SQLException("Unable to find PackageDefinitionLimit: "+Resource.FAILOVER+" on PackageDefinition #"+packageDefinition.getPkey());
-				BigDecimal additionalRate = BigDecimal.valueOf(0, 2);
-				BigDecimal failoverRate = failoverPDL.getAdditionalRate();
-				if(failoverRate!=null) additionalRate = failoverRate.multiply(BigDecimal.valueOf(totalDiskSpace));
-				BigDecimal rate = pdl.getAdditionalRate();
-				if(rate!=null) additionalRate = additionalRate.add(rate);
-				if(additionalRate!=null) monthlyRate = monthlyRate.add(additionalRate);
+				if(failoverPDL == null) throw new SQLException("Unable to find PackageDefinitionLimit: "+Resource.FAILOVER+" on PackageDefinition #"+packageDefinition.getPkey());
+				Monies additionalRate = Monies.of();
+				Money failoverRate = failoverPDL.getAdditionalRate();
+				if(failoverRate != null) additionalRate = additionalRate.add(failoverRate.multiply(BigDecimal.valueOf(totalDiskSpace)));
+				additionalRate = additionalRate.add(pdl.getAdditionalRate());
+				monthlyRate = monthlyRate.add(additionalRate);
 			}
 		}
 
@@ -327,34 +322,34 @@ final public class SignupCustomizeManagementActionHelper {
 
 	public static String getBackupOnsiteOption(AOServConnector rootConn, SignupCustomizeManagementForm signupCustomizeManagementForm) throws IOException, SQLException {
 		int option = signupCustomizeManagementForm.getBackupOnsiteOption();
-		if(option==-1) return null;
+		if(option == -1) return null;
 		PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(option);
 		return pdl.getResource().toString();
 	}
 
 	public static String getBackupOffsiteOption(AOServConnector rootConn, SignupCustomizeManagementForm signupCustomizeManagementForm) throws IOException, SQLException {
 		int option = signupCustomizeManagementForm.getBackupOffsiteOption();
-		if(option==-1) return null;
+		if(option == -1) return null;
 		PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(option);
 		return pdl.getResource().toString();
 	}
 
 	public static String getBackupDvdOption(AOServConnector rootConn, SignupCustomizeManagementForm signupCustomizeManagementForm) {
 		String option = signupCustomizeManagementForm.getBackupDvdOption();
-		if(option==null || option.length()==0) return null;
+		if(option == null || option.length() == 0) return null;
 		return option;
 	}
 
 	public static String getDistributionScanOption(AOServConnector rootConn, SignupCustomizeManagementForm signupCustomizeManagementForm) throws SQLException, IOException {
 		int option = signupCustomizeManagementForm.getDistributionScanOption();
-		if(option==-1) return null;
+		if(option == -1) return null;
 		PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(option);
 		return pdl.getResource().toString();
 	}
 
 	public static String getFailoverOption(AOServConnector rootConn, SignupCustomizeManagementForm signupCustomizeManagementForm) throws IOException, SQLException {
 		int option = signupCustomizeManagementForm.getFailoverOption();
-		if(option==-1) return null;
+		if(option == -1) return null;
 		PackageDefinitionLimit pdl = rootConn.getBilling().getPackageDefinitionLimit().get(option);
 		return pdl.getResource().toString();
 	}

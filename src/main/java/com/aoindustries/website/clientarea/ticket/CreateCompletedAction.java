@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -70,8 +70,8 @@ public class CreateCompletedAction extends PermissionAction {
 			return mapping.findForward("input");
 		}
 
-		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccounting()));
-		if(account == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccounting());
+		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(ticketForm.getAccount()));
+		if(account == null) throw new SQLException("Unable to find Account: " + ticketForm.getAccount());
 		Language language = aoConn.getTicket().getLanguage().get(locale.getLanguage());
 		if(language == null) {
 			language = aoConn.getTicket().getLanguage().get(Language.EN);

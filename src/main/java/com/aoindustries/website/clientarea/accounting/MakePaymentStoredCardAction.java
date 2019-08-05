@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,12 +24,15 @@ package com.aoindustries.website.clientarea.accounting;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
+import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +65,16 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
-		response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
+		String encoding = response.getCharacterEncoding();
+		response.sendRedirect(
+			response.encodeRedirectURL(
+				skin.getUrlBase(request)
+					+ "clientarea/accounting/make-payment-new-card.do?account="
+					+ URLEncoder.encode(request.getParameter("account"), encoding)
+					+ "&currency="
+					+ URLEncoder.encode(request.getParameter("currency"), encoding)
+			)
+		);
 		return null;
 	}
 
@@ -79,28 +91,41 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 	) throws Exception {
 		MakePaymentStoredCardForm makePaymentStoredCardForm = (MakePaymentStoredCardForm)form;
 
-		// Find the requested business
-		String accounting = makePaymentStoredCardForm.getAccounting();
-		Account account = accounting==null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) {
-			// Redirect back to make-payment if business not found
+		Account account;
+		try {
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(makePaymentStoredCardForm.getAccount()));
+		} catch(ValidationException e) {
+			return mapping.findForward("make-payment");
+		}
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
+		if(account == null || currency == null) {
+			// Redirect back to make-payment if account or currency not found
 			return mapping.findForward("make-payment");
 		}
 
-		// If the card pkey is "", new card was selected
-		String pkeyString = makePaymentStoredCardForm.getPkey();
-		if(pkeyString==null) {
-			// pkey not provided, redirect back to make-payment
+		// If the card id is "", new card was selected
+		String idString = makePaymentStoredCardForm.getId();
+		if(idString == null) {
+			// id not provided, redirect back to make-payment
 			return mapping.findForward("make-payment");
 		}
-		if("".equals(pkeyString)) {
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/accounting/make-payment-new-card.do?accounting="+request.getParameter("accounting")));
+		if(idString.isEmpty()) {
+			String encoding = response.getCharacterEncoding();
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					skin.getUrlBase(request)
+						+ "clientarea/accounting/make-payment-new-card.do?account="
+						+ URLEncoder.encode(request.getParameter("account"), encoding)
+						+ "&currency="
+						+ URLEncoder.encode(request.getParameter("currency"), encoding)
+				)
+			);
 			return null;
 		}
 
 		int id;
 		try {
-			id = Integer.parseInt(pkeyString);
+			id = Integer.parseInt(idString);
 		} catch(NumberFormatException err) {
 			// Can't parse int, redirect back to make-payment
 			return mapping.findForward("make-payment");
@@ -112,14 +137,15 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		}
 
 		// Prompt for amount of payment defaults to current balance.
-		BigDecimal balance = account.getAccountBalance();
-		if(balance.signum()>0) {
-			makePaymentStoredCardForm.setPaymentAmount(balance.toPlainString());
+		Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
+		if(balance != null && balance.getUnscaledValue() > 0) {
+			makePaymentStoredCardForm.setPaymentAmount(balance.getValue().toPlainString());
 		} else {
 			makePaymentStoredCardForm.setPaymentAmount("");
 		}
 
-		request.setAttribute("business", account);
+		request.setAttribute("account", account);
+		request.setAttribute("currency", currency);
 		request.setAttribute("creditCard", creditCard);
 
 		return mapping.findForward("success");

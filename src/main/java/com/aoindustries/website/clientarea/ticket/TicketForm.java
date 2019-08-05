@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2015, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -53,7 +53,7 @@ public class TicketForm extends ValidatorForm implements Serializable {
 		return result.toString();
 	}
 
-	private String accounting;
+	private String account;
 	private String clientPriority;
 	private String contactEmails;
 	private String contactPhoneNumbers;
@@ -65,7 +65,7 @@ public class TicketForm extends ValidatorForm implements Serializable {
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
-		setAccounting("");
+		setAccount("");
 		setClientPriority("");
 		setContactEmails("");
 		setContactPhoneNumbers("");
@@ -76,17 +76,17 @@ public class TicketForm extends ValidatorForm implements Serializable {
 	}
 
 	/**
-	 * @return the accounting
+	 * @return the account
 	 */
-	public String getAccounting() {
-		return accounting;
+	public String getAccount() {
+		return account;
 	}
 
 	/**
-	 * @param accounting the accounting to set
+	 * @param account the account to set
 	 */
-	public void setAccounting(String accounting) {
-		this.accounting = accounting;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	/**

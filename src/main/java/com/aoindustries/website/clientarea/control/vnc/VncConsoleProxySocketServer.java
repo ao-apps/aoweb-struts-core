@@ -54,12 +54,14 @@ public class VncConsoleProxySocketServer implements Runnable {
 
 	public void init(ServletContext servletContext) {
 		this.servletContext = servletContext;
-		(thread = new Thread(this, "VNC Console Proxy Socket Host")).start();
+		if(!"false".equals(servletContext.getInitParameter(VncConsoleProxySocketServer.class.getName() + ".enabled"))) {
+			(thread = new Thread(this, "VNC Console Proxy Socket Host")).start();
+		}
 	}
 
 	public void destroy() {
 		Thread T = this.thread;
-		if(T!=null) {
+		if(T != null) {
 			this.thread = null;
 			T.interrupt();
 		}

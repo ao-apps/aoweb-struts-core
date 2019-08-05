@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-06-24T09:19:33-0500"
+		dateModified="2019-08-05T15:19:44-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -51,7 +51,13 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				groupId="@{documented.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{documented.scm.url}"
-			/>
+			>
+				<ul>
+					<li>Updated for compatibility with <core:link book="/ao-lang" page="/changelog.jspx" element="release-notes-3.0.0">ao-lang-3.0.0</core:link>.</li>
+					<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.0.0">aocode-public-3.0.0</core:link>.</li>
+					<li>Updated for compatibility with <core:link book="/aoserv/client" page="/changelog.jspx" element="release-notes-1.83.1">aoserv-client-1.83.1</core:link>.</li>
+				</ul>
+			</changelog:release>
 		</c:if>
 
 		<changelog:release
@@ -88,7 +94,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						<li>Passing more values to <core:link book="/ao-credit-cards/api" page="/index.jspx">underlying credit card processing API</core:link>:
 							<ol type="a">
 								<li><code>principalName</code> from authenticated user</li>
-								<li><code>groupName</code> from accounting code</li>
+								<li><code>groupName</code> from account name</li>
 								<li><code>email</code> from account profile's first billing email address</li>
 								<li><code>phone</code> from account profile</li>
 								<li><code>fax</code> from account profile</li>

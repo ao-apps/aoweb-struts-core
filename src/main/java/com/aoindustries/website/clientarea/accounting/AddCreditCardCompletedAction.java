@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
-import com.aoindustries.aoserv.creditcards.BusinessGroup;
+import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.creditcards.CreditCardProcessor;
@@ -62,14 +62,14 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 	) throws Exception {
 		AddCreditCardForm addCreditCardForm=(AddCreditCardForm)form;
 
-		String accounting = addCreditCardForm.getAccounting();
-		if(GenericValidator.isBlankOrNull(accounting)) {
-			// Redirect back to credit-card-manager it no accounting selected
+		String account_name = addCreditCardForm.getAccount();
+		if(GenericValidator.isBlankOrNull(account_name)) {
+			// Redirect back to credit-card-manager if no account selected
 			return mapping.findForward("credit-card-manager");
 		}
-		Account account = accounting == null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
+		Account account = account_name == null ? null : aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name));
 		if(account == null) {
-			// Redirect back to credit-card-manager if business not found
+			// Redirect back to credit-card-manager if account not found
 			return mapping.findForward("credit-card-manager");
 		}
 
@@ -90,12 +90,11 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 		// Add card
 		if(!creditCardProcessor.canStoreCreditCards()) throw new SQLException("CreditCardProcessor indicates it does not support storing credit cards.");
 
-		String principalName = aoConn.getThisBusinessAdministrator().getUsername().getUsername().toString();
-		String groupName = accounting;
-		Profile profile = account.getBusinessProfile();
-		creditCardProcessor.storeCreditCard(
-			new AOServConnectorPrincipal(rootConn, principalName),
-			new BusinessGroup(aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting)), groupName),
+		String principalName = aoConn.getCurrentAdministrator().getUsername().getUsername().toString();
+		String groupName = account_name;
+		Profile profile = account.getProfile();
+		creditCardProcessor.storeCreditCard(new AOServConnectorPrincipal(rootConn, principalName),
+			new AccountGroup(aoConn.getAccount().getAccount().get(Account.Name.valueOf(account_name)), groupName),
 			new CreditCard(
 				null, // persistenceUniqueId
 				principalName,
@@ -113,7 +112,7 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 				MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile),
 				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone()),
 				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax()),
-				null, // customerId: TODO: Set from account.Account once there is a constant identifier
+				null, // customerId: TODO: Set from account.Account once there is a constant identifier (not subject to set_business_accounting command/API)
 				null, // customerTaxId
 				addCreditCardForm.getStreetAddress1(),
 				addCreditCardForm.getStreetAddress2(),

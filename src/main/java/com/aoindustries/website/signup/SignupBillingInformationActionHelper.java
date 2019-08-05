@@ -28,6 +28,7 @@ import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,7 @@ final public class SignupBillingInformationActionHelper {
 	public static void setBillingExpirationYearsRequestAttribute(HttpServletRequest request) {
 		// Build the list of years
 		List<String> billingExpirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
-		int startYear = Calendar.getInstance().get(Calendar.YEAR);
+		int startYear = new GregorianCalendar().get(Calendar.YEAR);
 		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) billingExpirationYears.add(Integer.toString(startYear + c));
 
 		// Store to request attributes

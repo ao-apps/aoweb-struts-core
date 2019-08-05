@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -45,15 +45,15 @@ public class Reseller2CompletedAction extends Reseller2Action {
 		Skin skin,
 		ResellerSignupSelectPackageForm signupSelectPackageForm,
 		boolean signupSelectPackageFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
 		boolean signupBillingInformationFormComplete
 	) throws Exception {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("reseller-completed");
-		if(!signupBusinessFormComplete) {
+		if(!signupOrganizationFormComplete) {
 			// Init values for the form
 			return super.executeResellerStep(
 				mapping,
@@ -64,8 +64,8 @@ public class Reseller2CompletedAction extends Reseller2Action {
 				skin,
 				signupSelectPackageForm,
 				signupSelectPackageFormComplete,
-				signupBusinessForm,
-				signupBusinessFormComplete,
+				signupOrganizationForm,
+				signupOrganizationFormComplete,
 				signupTechnicalForm,
 				signupTechnicalFormComplete,
 				signupBillingInformationForm,

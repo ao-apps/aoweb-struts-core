@@ -41,7 +41,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Prepares for business administrator password setting.  Populates lists in mySQLPasswordSetterForm.
+ * Prepares for MySQL user password setting.  Populates lists in mySQLPasswordSetterForm.
  *
  * @author  AO Industries, Inc.
  */
@@ -65,7 +65,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 		List<String> packages = new ArrayList<>(msus.size());
 		List<String> usernames = new ArrayList<>(msus.size());
 		List<String> mySQLServers = new ArrayList<>(msus.size());
-		List<String> aoServers = new ArrayList<>(msus.size());
+		List<String> servers = new ArrayList<>(msus.size());
 		List<String> newPasswords = new ArrayList<>(msus.size());
 		List<String> confirmPasswords = new ArrayList<>(msus.size());
 		for(UserServer msu : msus) {
@@ -76,7 +76,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 				packages.add(un.getPackage().getName().toString());
 				usernames.add(un.getUsername().toString());
 				mySQLServers.add(ms.getName().toString());
-				aoServers.add(ms.getAoServer().getHostname().toString());
+				servers.add(ms.getLinuxServer().getHostname().toString());
 				newPasswords.add("");
 				confirmPasswords.add("");
 			}
@@ -86,7 +86,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 		mySQLPasswordSetterForm.setPackages(packages);
 		mySQLPasswordSetterForm.setUsernames(usernames);
 		mySQLPasswordSetterForm.setMySQLServers(mySQLServers);
-		mySQLPasswordSetterForm.setAoServers(aoServers);
+		mySQLPasswordSetterForm.setServers(servers);
 		mySQLPasswordSetterForm.setNewPasswords(newPasswords);
 		mySQLPasswordSetterForm.setConfirmPasswords(confirmPasswords);
 

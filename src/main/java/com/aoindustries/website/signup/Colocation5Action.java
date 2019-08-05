@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -48,15 +48,15 @@ public class Colocation5Action extends ColocationStepAction {
 		Skin skin,
 		ColocationSignupSelectPackageForm signupSelectPackageForm,
 		boolean signupSelectPackageFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
 		boolean signupBillingInformationFormComplete
 	) throws Exception {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("colocation-completed");
-		if(!signupBusinessFormComplete) return mapping.findForward("colocation-2-completed");
+		if(!signupOrganizationFormComplete) return mapping.findForward("colocation-2-completed");
 		if(!signupTechnicalFormComplete) return mapping.findForward("colocation-3-completed");
 		if(!signupBillingInformationFormComplete) return mapping.findForward("colocation-4-completed");
 
@@ -64,7 +64,7 @@ public class Colocation5Action extends ColocationStepAction {
 			request,
 			response,
 			signupSelectPackageForm,
-			signupBusinessForm,
+			signupOrganizationForm,
 			signupTechnicalForm,
 			signupBillingInformationForm
 		);
@@ -76,14 +76,14 @@ public class Colocation5Action extends ColocationStepAction {
 		HttpServletRequest request,
 		HttpServletResponse response,
 		SignupSelectPackageForm signupSelectPackageForm,
-		SignupBusinessForm signupBusinessForm,
+		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm
 	) throws IOException, SQLException {
 		ServletContext servletContext = getServlet().getServletContext();
 
 		SignupSelectPackageActionHelper.setConfirmationRequestAttributes(servletContext, request, signupSelectPackageForm);
-		SignupBusinessActionHelper.setConfirmationRequestAttributes(servletContext, request, signupBusinessForm);
+		SignupOrganizationActionHelper.setConfirmationRequestAttributes(servletContext, request, signupOrganizationForm);
 		SignupTechnicalActionHelper.setConfirmationRequestAttributes(servletContext, request, signupTechnicalForm);
 		SignupBillingInformationActionHelper.setConfirmationRequestAttributes(servletContext, request, signupBillingInformationForm);
 	}

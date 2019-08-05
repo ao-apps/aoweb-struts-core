@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,7 +71,7 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 		// Reset passwords here and clear the passwords from the form
 		ActionMessages messages = new ActionMessages();
 		List<String> usernames = postgreSQLPasswordSetterForm.getUsernames();
-		List<String> aoServers = postgreSQLPasswordSetterForm.getAoServers();
+		List<String> servers = postgreSQLPasswordSetterForm.getServers();
 		List<String> postgreSQLServers = postgreSQLPasswordSetterForm.getPostgreSQLServers();
 		List<String> newPasswords = postgreSQLPasswordSetterForm.getNewPasswords();
 		List<String> confirmPasswords = postgreSQLPasswordSetterForm.getConfirmPasswords();
@@ -79,10 +79,10 @@ public class PostgreSQLPasswordSetterCompletedAction extends PermissionAction {
 			String newPassword = newPasswords.get(c);
 			if(newPassword.length()>0) {
 				User.Name username = User.Name.valueOf(usernames.get(c));
-				String hostname = aoServers.get(c);
+				String hostname = servers.get(c);
 				Host host = aoConn.getNet().getHost().get(hostname);
 				if(host == null) throw new SQLException("Unable to find Host: " + host);
-				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getAOServer();
+				com.aoindustries.aoserv.client.linux.Server linuxServer = host.getLinuxServer();
 				if(linuxServer == null) throw new SQLException("Unable to find Server: " + host);
 				Server.Name serverName = Server.Name.valueOf(postgreSQLServers.get(c));
 				Server ps = linuxServer.getPostgresServer(serverName);

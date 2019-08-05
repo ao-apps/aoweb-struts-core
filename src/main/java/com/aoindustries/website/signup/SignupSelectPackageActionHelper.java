@@ -69,25 +69,25 @@ final public class SignupSelectPackageActionHelper {
 	public static List<PackageDefinition> getPackageDefinitions(ServletContext servletContext, String packageCategoryName) throws IOException, SQLException {
 		AOServConnector rootConn = SiteSettings.getInstance(servletContext).getRootAOServConnector();
 		PackageCategory category = rootConn.getBilling().getPackageCategory().get(packageCategoryName);
-		Account rootBusiness = rootConn.getThisBusinessAdministrator().getUsername().getPackage().getBusiness();
-		List<PackageDefinition> packageDefinitions = rootBusiness.getPackageDefinitions(category);
+		Account rootAccount = rootConn.getCurrentAdministrator().getUsername().getPackage().getAccount();
+		List<PackageDefinition> packageDefinitions = rootAccount.getPackageDefinitions(category);
 		List<PackageDefinition> activePackageDefinitions = new ArrayList<>();
 
 		for(PackageDefinition packageDefinition : packageDefinitions) {
 			if(packageDefinition.isActive()) activePackageDefinitions.add(packageDefinition);
 		}
 
-		Collections.sort(activePackageDefinitions, new PackageDefinitionComparator());
+		Collections.sort(activePackageDefinitions, packageDefinitionComparator);
 
 		return activePackageDefinitions;
 	}
 
-	private static class PackageDefinitionComparator implements Comparator<PackageDefinition> {
+	private static final Comparator<PackageDefinition> packageDefinitionComparator = new Comparator<PackageDefinition>() {
 		@Override
 		public int compare(PackageDefinition pd1, PackageDefinition pd2) {
 			return pd1.getMonthlyRate().compareTo(pd2.getMonthlyRate());
 		}
-	}
+	};
 
 	public static void setConfirmationRequestAttributes(
 		ServletContext servletContext,

@@ -26,22 +26,24 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Administrator;
 import com.aoindustries.aoserv.client.account.Profile;
+import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.creditcards.CreditCard;
+import com.aoindustries.util.i18n.Money;
+import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import com.aoindustries.website.signup.SignupBusinessActionHelper;
+import com.aoindustries.website.signup.SignupOrganizationActionHelper;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.validator.GenericValidator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -64,19 +66,23 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		MakePaymentNewCardForm makePaymentNewCardForm=(MakePaymentNewCardForm)form;
+		MakePaymentNewCardForm makePaymentNewCardForm = (MakePaymentNewCardForm)form;
 
-		String accounting = makePaymentNewCardForm.getAccounting();
-		if(GenericValidator.isBlankOrNull(accounting)) {
-			// Redirect back to credit-card-manager it no accounting selected
+		Account account;
+		try {
+			account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(makePaymentNewCardForm.getAccount()));
+		} catch(ValidationException e) {
+			return mapping.findForward("make-payment");
+		}
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
+		if(account == null || currency == null) {
+			// Redirect back to make-payment if account or currency not found
 			return mapping.findForward("make-payment");
 		}
 
-		// Populate the initial details from the selected accounting code or authenticated user
-		Account account = aoConn.getAccount().getAccount().get(Account.Name.valueOf(accounting));
-		if(account == null) throw new SQLException("Unable to find Account: " + accounting);
-		Profile profile = account.getBusinessProfile();
-		if(profile!=null) {
+		// Populate the initial details from the selected account name or authenticated user
+		Profile profile = account.getProfile();
+		if(profile != null) {
 			makePaymentNewCardForm.setFirstName(AddCreditCardAction.getFirstName(profile.getBillingContact(), locale));
 			makePaymentNewCardForm.setLastName(AddCreditCardAction.getLastName(profile.getBillingContact(), locale));
 			makePaymentNewCardForm.setCompanyName(profile.getName());
@@ -87,7 +93,7 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 			makePaymentNewCardForm.setPostalCode(profile.getZIP());
 			makePaymentNewCardForm.setCountryCode(profile.getCountry().getCode());
 		} else {
-			Administrator thisBA = aoConn.getThisBusinessAdministrator();
+			Administrator thisBA = aoConn.getCurrentAdministrator();
 			makePaymentNewCardForm.setFirstName(AddCreditCardAction.getFirstName(thisBA.getName(), locale));
 			makePaymentNewCardForm.setLastName(AddCreditCardAction.getLastName(thisBA.getName(), locale));
 			makePaymentNewCardForm.setStreetAddress1(thisBA.getAddress1());
@@ -95,20 +101,21 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 			makePaymentNewCardForm.setCity(thisBA.getCity());
 			makePaymentNewCardForm.setState(thisBA.getState());
 			makePaymentNewCardForm.setPostalCode(thisBA.getZIP());
-			makePaymentNewCardForm.setCountryCode(thisBA.getCountry()==null ? "" : thisBA.getCountry().getCode());
+			makePaymentNewCardForm.setCountryCode(thisBA.getCountry() == null ? "" : thisBA.getCountry().getCode());
 		}
 
 		initRequestAttributes(request, getServlet().getServletContext());
 
 		// Prompt for amount of payment defaults to current balance.
-		BigDecimal balance = account.getAccountBalance();
-		if(balance.signum()>0) {
-			makePaymentNewCardForm.setPaymentAmount(balance.toPlainString());
+		Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
+		if(balance != null && balance.getUnscaledValue() > 0) {
+			makePaymentNewCardForm.setPaymentAmount(balance.getValue().toPlainString());
 		} else {
 			makePaymentNewCardForm.setPaymentAmount("");
 		}
 
-		request.setAttribute("business", account);
+		request.setAttribute("account", account);
+		request.setAttribute("currency", currency);
 
 		return mapping.findForward("success");
 	}
@@ -116,12 +123,12 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
 		List<String> expirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
-		int startYear = Calendar.getInstance().get(Calendar.YEAR);
+		int startYear = new GregorianCalendar().get(Calendar.YEAR);
 		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
 
 		// Build the list of countries
 		// We use the root connector to provide a better set of country values
-		List<SignupBusinessActionHelper.CountryOption> countryOptions = SignupBusinessActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
+		List<SignupOrganizationActionHelper.CountryOption> countryOptions = SignupOrganizationActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
 
 		// Store to request attributes
 		request.setAttribute("expirationYears", expirationYears);

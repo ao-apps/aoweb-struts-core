@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -49,8 +49,8 @@ public class Managed5CompletedAction extends Managed5Action {
 		boolean signupCustomizeServerFormComplete,
 		SignupCustomizeManagementForm signupCustomizeManagementForm,
 		boolean signupCustomizeManagementFormComplete,
-		SignupBusinessForm signupBusinessForm,
-		boolean signupBusinessFormComplete,
+		SignupOrganizationForm signupOrganizationForm,
+		boolean signupOrganizationFormComplete,
 		SignupTechnicalForm signupTechnicalForm,
 		boolean signupTechnicalFormComplete,
 		SignupBillingInformationForm signupBillingInformationForm,
@@ -59,7 +59,7 @@ public class Managed5CompletedAction extends Managed5Action {
 		if(!signupSelectPackageFormComplete) return mapping.findForward("managed-server-completed");
 		if(!signupCustomizeServerFormComplete)  return mapping.findForward("managed-server-2-completed");
 		if(!signupCustomizeManagementFormComplete) return mapping.findForward("managed-server-3-completed");
-		if(!signupBusinessFormComplete)  return mapping.findForward("managed-server-4-completed");
+		if(!signupOrganizationFormComplete)  return mapping.findForward("managed-server-4-completed");
 		if(!signupTechnicalFormComplete) {
 			// Init values for the form
 			return super.executeManagedStep(
@@ -75,8 +75,8 @@ public class Managed5CompletedAction extends Managed5Action {
 				signupCustomizeServerFormComplete,
 				signupCustomizeManagementForm,
 				signupCustomizeManagementFormComplete,
-				signupBusinessForm,
-				signupBusinessFormComplete,
+				signupOrganizationForm,
+				signupOrganizationFormComplete,
 				signupTechnicalForm,
 				signupTechnicalFormComplete,
 				signupBillingInformationForm,

@@ -58,16 +58,15 @@ public class DeleteCreditCardAction extends PermissionAction {
 	) throws Exception {
 		// Make sure the credit card still exists, redirect to credit-card-manager if doesn't
 		CreditCard creditCard = null;
-		String S = request.getParameter("pkey");
-		if(S!=null && S.length()>0) {
+		String id = request.getParameter("id");
+		if(id != null && !id.isEmpty()) {
 			try {
-				int id = Integer.parseInt(S);
-				creditCard = aoConn.getPayment().getCreditCard().get(id);
+				creditCard = aoConn.getPayment().getCreditCard().get(Integer.parseInt(id));
 			} catch(NumberFormatException err) {
 				getServlet().log(null, err);
 			}
 		}
-		if(creditCard==null) return mapping.findForward("credit-card-manager");
+		if(creditCard == null) return mapping.findForward("credit-card-manager");
 
 		// Set request attributes
 		request.setAttribute("creditCard", creditCard);
