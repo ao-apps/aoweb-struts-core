@@ -27,6 +27,7 @@ import com.aoindustries.creditcards.TransactionResult;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.util.i18n.CurrencyUtil;
 import com.aoindustries.util.i18n.Money;
+import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.SiteSettings;
 import java.io.IOException;
 import java.io.Serializable;
@@ -124,6 +125,7 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 			} else {
 				try {
 					BigDecimal pa = Money.parseMoneyAmount(
+						ThreadLocale.get(),
 						javaCurrency == null ? null : CurrencyUtil.getSymbol(javaCurrency),
 						this.paymentAmount
 					);
