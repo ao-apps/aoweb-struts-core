@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.validator.GenericValidator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -84,13 +85,11 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
-		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
-		if(account == null || currency == null) {
-			// Redirect back to make-payment if account or currency not found
+		if(account == null) {
+			// Redirect back to make-payment if account not found
 			return mapping.findForward("make-payment");
 		}
 		request.setAttribute("account", account);
-		request.setAttribute("currency", currency);
 
 		// If the card id in "", new card was selected
 		String idString = makePaymentStoredCardForm.getId();
@@ -100,15 +99,19 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		}
 		if(idString.isEmpty()) {
 			String encoding = response.getCharacterEncoding();
-			response.sendRedirect(
-				response.encodeRedirectURL(
-					skin.getUrlBase(request)
-						+ "clientarea/accounting/make-payment-new-card.do?account="
-						+ URLEncoder.encode(request.getParameter("account"), encoding)
-						+ "&currency="
-						+ URLEncoder.encode(request.getParameter("currency"), encoding)
-				)
-			);
+			StringBuilder href = new StringBuilder();
+			href
+				.append(skin.getUrlBase(request))
+				.append("clientarea/accounting/make-payment-new-card.do?account=")
+				.append(URLEncoder.encode(request.getParameter("account"), encoding));
+			String currency = request.getParameter("currency");
+			if(!GenericValidator.isBlankOrNull(currency)) {
+				href
+					.append("&currency=")
+					.append(URLEncoder.encode(currency, encoding));
+			}
+			// TODO: Many of these after-POST sendRedirect should be converted to 303 redirects
+			response.sendRedirect(response.encodeRedirectURL(href.toString()));
 			return null;
 		}
 
@@ -135,6 +138,9 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 
 			return mapping.findForward("input");
 		}
+
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
+		assert currency != null : "A valid form must have a valid currency";
 
 		// Convert to money
 		Money paymentAmount = new Money(currency.getCurrency(), new BigDecimal(makePaymentStoredCardForm.getPaymentAmount()));

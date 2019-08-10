@@ -74,9 +74,8 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
-		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
-		if(account == null || currency == null) {
-			// Redirect back to make-payment if account or currency not found
+		if(account == null) {
+			// Redirect back to make-payment if account not found
 			return mapping.findForward("make-payment");
 		}
 
@@ -106,16 +105,21 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 
 		initRequestAttributes(request, getServlet().getServletContext());
 
-		// Prompt for amount of payment defaults to current balance.
-		Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
-		if(balance != null && balance.getUnscaledValue() > 0) {
-			makePaymentNewCardForm.setPaymentAmount(balance.getValue().toPlainString());
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
+		if(currency != null) {
+			// Prompt for amount of payment defaults to current balance.
+			Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
+			if(balance != null && balance.getUnscaledValue() > 0) {
+				makePaymentNewCardForm.setPaymentAmount(balance.getValue().toPlainString());
+			} else {
+				makePaymentNewCardForm.setPaymentAmount("");
+			}
 		} else {
+			// No currency, no default payment amount
 			makePaymentNewCardForm.setPaymentAmount("");
 		}
 
 		request.setAttribute("account", account);
-		request.setAttribute("currency", currency);
 
 		return mapping.findForward("success");
 	}

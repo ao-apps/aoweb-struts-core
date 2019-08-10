@@ -109,13 +109,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
-		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
-		if(account == null || currency == null) {
-			// Redirect back to make-payment if account or currency not found
+		if(account == null) {
+			// Redirect back to make-payment if account not found
 			return mapping.findForward("make-payment");
 		}
 		request.setAttribute("account", account);
-		request.setAttribute("currency", currency);
 
 		// Validation
 		ActionMessages errors = makePaymentNewCardForm.validate(mapping, request);
@@ -124,6 +122,9 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 
 			return mapping.findForward("input");
 		}
+
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentNewCardForm.getCurrency());
+		assert currency != null : "A valid form must have a valid currency";
 
 		// Convert to money
 		Money paymentAmount = new Money(currency.getCurrency(), new BigDecimal(makePaymentNewCardForm.getPaymentAmount()));

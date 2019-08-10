@@ -98,7 +98,7 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 		try {
 			Currency javaCurrency;
 			if(GenericValidator.isBlankOrNull(currency)) {
-				errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.required"));
+				errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.currency.required"));
 				javaCurrency = null;
 			} else {
 				ActionServlet myServlet = getServlet();
@@ -108,14 +108,14 @@ public class MakePaymentNewCardForm extends AddCreditCardForm implements Seriali
 					if(aoservCurrency != null) {
 						javaCurrency = aoservCurrency.getCurrency();
 					} else {
-						errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
+						errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
 						javaCurrency = null;
 					}
 				} else {
 					try {
 						javaCurrency = Currency.getInstance(currency);
 					} catch(IllegalArgumentException e) {
-						errors.add("currency", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
+						errors.add("paymentAmount", new ActionMessage("makePaymentStoredCardForm.currency.invalid"));
 						javaCurrency = null;
 					}
 				}

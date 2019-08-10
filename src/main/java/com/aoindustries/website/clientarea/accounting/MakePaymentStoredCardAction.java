@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.validator.GenericValidator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -66,15 +67,18 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
 		String encoding = response.getCharacterEncoding();
-		response.sendRedirect(
-			response.encodeRedirectURL(
-				skin.getUrlBase(request)
-					+ "clientarea/accounting/make-payment-new-card.do?account="
-					+ URLEncoder.encode(request.getParameter("account"), encoding)
-					+ "&currency="
-					+ URLEncoder.encode(request.getParameter("currency"), encoding)
-			)
-		);
+		String currency = request.getParameter("currency");
+		StringBuilder href = new StringBuilder();
+		href
+			.append(skin.getUrlBase(request))
+			.append("clientarea/accounting/make-payment-new-card.do?account=")
+			.append(URLEncoder.encode(request.getParameter("account"), encoding));
+		if(!GenericValidator.isBlankOrNull(currency)) {
+			href
+				.append("&currency=")
+				.append(URLEncoder.encode(request.getParameter("currency"), encoding));
+		}
+		response.sendRedirect(response.encodeRedirectURL(href.toString()));
 		return null;
 	}
 
@@ -97,11 +101,12 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		} catch(ValidationException e) {
 			return mapping.findForward("make-payment");
 		}
-		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
-		if(account == null || currency == null) {
-			// Redirect back to make-payment if account or currency not found
+		if(account == null) {
+			// Redirect back to make-payment if account not found
 			return mapping.findForward("make-payment");
 		}
+
+		Currency currency = aoConn.getBilling().getCurrency().get(makePaymentStoredCardForm.getCurrency());
 
 		// If the card id is "", new card was selected
 		String idString = makePaymentStoredCardForm.getId();
@@ -111,15 +116,17 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		}
 		if(idString.isEmpty()) {
 			String encoding = response.getCharacterEncoding();
-			response.sendRedirect(
-				response.encodeRedirectURL(
-					skin.getUrlBase(request)
-						+ "clientarea/accounting/make-payment-new-card.do?account="
-						+ URLEncoder.encode(request.getParameter("account"), encoding)
-						+ "&currency="
-						+ URLEncoder.encode(request.getParameter("currency"), encoding)
-				)
-			);
+			StringBuilder href = new StringBuilder();
+			href
+				.append(skin.getUrlBase(request))
+				.append("clientarea/accounting/make-payment-new-card.do?account=")
+				.append(URLEncoder.encode(request.getParameter("account"), encoding));
+			if(currency != null) {
+				href
+					.append("&currency=")
+					.append(URLEncoder.encode(currency.getCurrencyCode(), encoding));
+			}
+			response.sendRedirect(response.encodeRedirectURL(href.toString()));
 			return null;
 		}
 
@@ -137,15 +144,19 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		}
 
 		// Prompt for amount of payment defaults to current balance.
-		Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
-		if(balance != null && balance.getUnscaledValue() > 0) {
-			makePaymentStoredCardForm.setPaymentAmount(balance.getValue().toPlainString());
+		if(currency != null) {
+			Money balance = aoConn.getBilling().getTransaction().getAccountBalance(account).get(currency.getCurrency());
+			if(balance != null && balance.getUnscaledValue() > 0) {
+				makePaymentStoredCardForm.setPaymentAmount(balance.getValue().toPlainString());
+			} else {
+				makePaymentStoredCardForm.setPaymentAmount("");
+			}
 		} else {
+			// No currency, no default payment amount
 			makePaymentStoredCardForm.setPaymentAmount("");
 		}
 
 		request.setAttribute("account", account);
-		request.setAttribute("currency", currency);
 		request.setAttribute("creditCard", creditCard);
 
 		return mapping.findForward("success");

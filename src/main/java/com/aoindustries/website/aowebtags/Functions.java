@@ -23,6 +23,9 @@
 package com.aoindustries.website.aowebtags;
 
 import com.aoindustries.creditcards.CreditCard;
+import com.aoindustries.servlet.filter.FunctionContext;
+import com.aoindustries.util.i18n.CurrencyUtil;
+import java.util.Currency;
 
 /**
  * EL functions.
@@ -50,5 +53,12 @@ public class Functions {
 		if(expirationMonth != null && expirationMonth == 0) expirationMonth = null;
 		if(expirationYear != null && expirationYear == 0) expirationYear = null;
 		return CreditCard.getExpirationDisplay(expirationMonth, expirationYear);
+	}
+
+	/**
+	 * @see  CurrencyUtil#getSymbol(java.util.Currency, java.util.Locale)
+	 */
+	public static String getCurrencySymbol(Currency currency) {
+		return CurrencyUtil.getSymbol(currency, FunctionContext.getResponse().getLocale());
 	}
 }

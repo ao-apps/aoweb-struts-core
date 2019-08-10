@@ -197,4 +197,16 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<function-signature>java.lang.String getExpirationDisplay(java.lang.Byte,java.lang.Short)</function-signature>
 		<example><![CDATA[<code>${aoweb:getExpirationDisplay(expirationMonth,expirationYear)}</code>]]></example>
 	</function>
+	<function>
+		<!-- datePublished="2019-08-10T10:18:30-0500" -->
+		<description><![CDATA[
+			<p>
+				Gets the symbol for a currency in the current response locale.
+			</p>
+		]]></description>
+		<name>getCurrencySymbol</name>
+		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
+		<function-signature>java.lang.String getCurrencySymbol(java.util.Currency)</function-signature>
+		<example><![CDATA[<code>${aoweb:getCurrencySymbol(currency)}</code>]]></example>
+	</function>
 </taglib>
