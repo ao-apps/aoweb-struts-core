@@ -69,9 +69,11 @@ public class LoginForm extends ValidatorForm implements Serializable {
 		ActionErrors errors = super.validate(mapping, request);
 		if(errors==null) errors = new ActionErrors();
 
-		ValidationResult usernameCheck = User.Name.validate(getUsername());
-		if(!usernameCheck.isValid()) {
-			errors.add("username", new ActionMessage(usernameCheck.toString(), false));
+		if(errors.size("username") == 0) {
+			ValidationResult usernameCheck = User.Name.validate(getUsername());
+			if(!usernameCheck.isValid()) {
+				errors.add("username", new ActionMessage(usernameCheck.toString(), false));
+			}
 		}
 		return errors;
 	}
