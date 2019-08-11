@@ -31,8 +31,8 @@ import com.aoindustries.aoserv.daemon.client.AOServDaemonConnection;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonConnector;
 import com.aoindustries.aoserv.daemon.client.AOServDaemonProtocol;
 import com.aoindustries.io.AOPool;
-import com.aoindustries.io.CompressedDataInputStream;
-import com.aoindustries.io.CompressedDataOutputStream;
+import com.aoindustries.io.stream.StreamableInput;
+import com.aoindustries.io.stream.StreamableOutput;
 import com.aoindustries.net.InetAddress;
 import com.aoindustries.website.LogFactory;
 import java.io.EOFException;
@@ -172,11 +172,11 @@ public class VncConsoleProxySocketHandler {
 							);
 							final AOServDaemonConnection daemonConn=daemonConnector.getConnection();
 							try {
-								final CompressedDataOutputStream daemonOut = daemonConn.getRequestOut(AOServDaemonProtocol.VNC_CONSOLE);
+								final StreamableOutput daemonOut = daemonConn.getRequestOut(AOServDaemonProtocol.VNC_CONSOLE);
 								daemonOut.writeLong(daemonAccess.getKey());
 								daemonOut.flush();
 
-								final CompressedDataInputStream daemonIn = daemonConn.getResponseIn();
+								final StreamableInput daemonIn = daemonConn.getResponseIn();
 								int result=daemonIn.read();
 								if(result==AOServDaemonProtocol.NEXT) {
 									// Authenticate to actual VNC
@@ -255,9 +255,7 @@ public class VncConsoleProxySocketHandler {
 													} finally {
 														daemonConn.close();
 													}
-												} catch(ThreadDeath TD) {
-													throw TD;
-												} catch(Throwable T) {
+												} catch(RuntimeException | IOException T) {
 													LogFactory.getLogger(servletContext, getClass()).log(Level.SEVERE, null, T);
 												}
 											}
@@ -286,8 +284,6 @@ public class VncConsoleProxySocketHandler {
 								daemonConnector.releaseConnection(daemonConn);
 							}
 						}
-					} catch(ThreadDeath TD) {
-						throw TD;
 					} catch(SocketException err) {
 						// Do not log any socket exceptions
 					} catch(SSLHandshakeException err) {
@@ -298,7 +294,7 @@ public class VncConsoleProxySocketHandler {
 						) {
 							LogFactory.getLogger(servletContext, getClass()).log(Level.INFO, null, err);
 						}
-					} catch(Throwable T) {
+					} catch(RuntimeException | IOException | InterruptedException | SQLException T) {
 						LogFactory.getLogger(servletContext, getClass()).log(Level.SEVERE, null, T);
 					} finally {
 						try {
