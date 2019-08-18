@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website;
 
+import com.aoindustries.servlet.http.Cookies;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.website.struts.ResourceBundleMessageResources;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.Action;
@@ -60,19 +60,9 @@ public class SiteSettingsAction extends Action {
 		boolean modifyAllText = false;
 		if(canEditResources) {
 			// Check for cookie
-			Cookie[] cookies = request.getCookies();
-			if(cookies!=null) {
-				for(Cookie cookie : cookies) {
-					if(
-						"EditableResourceBundleEditorVisibility".equals(cookie.getName())
-						&& "visible".equals(cookie.getValue())
-					) {
-						modifyAllText = true;
-						break;
-					}
-				}
+			if("visible".equals(Cookies.getCookie(request, "EditableResourceBundleEditorVisibility"))) {
+				modifyAllText = true;
 			}
-
 		}
 		ResourceBundleMessageResources.setCachedEnabled(!canEditResources);
 		EditableResourceBundle.resetRequest(
