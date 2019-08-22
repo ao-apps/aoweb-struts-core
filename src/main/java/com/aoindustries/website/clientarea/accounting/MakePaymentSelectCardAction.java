@@ -28,11 +28,11 @@ import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.client.payment.Payment;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,19 +67,24 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
-		String encoding = response.getCharacterEncoding();
 		StringBuilder href = new StringBuilder();
 		href
 			.append(skin.getUrlBase(request))
 			.append("clientarea/accounting/make-payment-new-card.do?account=")
-			.append(URLEncoder.encode(request.getParameter("account"), encoding));
+			.append(URIEncoder.encodeURIComponent(request.getParameter("account")));
 		String currency = request.getParameter("currency");
 		if(!GenericValidator.isBlankOrNull(currency)) {
 			href
 				.append("&currency=")
-				.append(URLEncoder.encode(currency, encoding));
+				.append(URIEncoder.encodeURIComponent(currency));
 		}
-		response.sendRedirect(response.encodeRedirectURL(href.toString()));
+		response.sendRedirect(
+			response.encodeRedirectURL(
+				URIEncoder.encodeURI(
+					href.toString()
+				)
+			)
+		);
 		return null;
 	}
 
@@ -116,18 +121,23 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 
 		if(creditCards.isEmpty()) {
 			// Redirect to new card if none stored
-			String encoding = response.getCharacterEncoding();
 			StringBuilder href = new StringBuilder();
 			href
 				.append(skin.getUrlBase(request))
 				.append("clientarea/accounting/make-payment-new-card.do?account=")
-				.append(URLEncoder.encode(request.getParameter("account"), encoding));
+				.append(URIEncoder.encodeURIComponent(request.getParameter("account")));
 			if(currency != null) {
 				href
 					.append("&currency=")
-					.append(URLEncoder.encode(currency.getCurrencyCode(), encoding));
+					.append(URIEncoder.encodeURIComponent(currency.getCurrencyCode()));
 			}
-			response.sendRedirect(response.encodeRedirectURL(href.toString()));
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						href.toString()
+					)
+				)
+			);
 			return null;
 		} else {
 			// Store to request attributes, return success

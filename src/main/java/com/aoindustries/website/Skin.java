@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2017, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,9 +23,10 @@
 package com.aoindustries.website;
 
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
-import com.aoindustries.net.UrlUtils;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ abstract public class Skin {
 			return "Shift_JIS";
 		} else {*/
 			// return "iso-8859-1";
-			return "UTF-8";
+			return StandardCharsets.UTF_8.name();
 		//}
 	}
 
@@ -78,11 +79,16 @@ abstract public class Skin {
 				String url = language.getUrl();
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
-						UrlUtils.encodeUrlPath(
-							url==null
-							? (fullPath+(fullPath.indexOf('?')==-1 ? "?" : "&")+"language="+language.getCode())
-							: url,
-							resp.getCharacterEncoding()
+						URIEncoder.encodeURI(
+							url == null
+							? (
+								fullPath
+								+ (fullPath.indexOf('?')==-1 ? "?" : "&")
+								+ "language="
+								+ URIEncoder.encodeURIComponent(language.getCode())
+							)
+							// TODO: Look for '#', too
+							: url
 						)
 					),
 					out
@@ -97,11 +103,16 @@ abstract public class Skin {
 				String url = language.getUrl();
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
-						UrlUtils.encodeUrlPath(
-							url==null
-							? (fullPath+(fullPath.indexOf('?')==-1 ? "?" : "&")+"language="+language.getCode())
-							: url,
-							resp.getCharacterEncoding()
+						URIEncoder.encodeURI(
+							url == null
+							? (
+								fullPath
+								+ (fullPath.indexOf('?')==-1 ? "?" : "&")
+								+ "language="
+								+ URIEncoder.encodeURIComponent(language.getCode())
+							)
+							// TODO: Look for '#', too
+							: url
 						)
 					),
 					out

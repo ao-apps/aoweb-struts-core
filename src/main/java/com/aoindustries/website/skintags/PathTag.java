@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,8 +24,8 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
 import com.aoindustries.io.buffer.BufferResult;
-import com.aoindustries.net.HttpParametersMap;
-import com.aoindustries.net.HttpParametersUtils;
+import com.aoindustries.net.URIParametersMap;
+import com.aoindustries.net.URIParametersUtils;
 import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.taglib.ParamsAttribute;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute 
 
 	private static final long serialVersionUID = 1L;
 
-	private HttpParametersMap params;
+	private URIParametersMap params;
 
 	@Override
 	public MediaType getContentType() {
@@ -56,7 +56,7 @@ public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute 
 
 	@Override
 	public void addParam(String name, String value) {
-		if(params==null) params = new HttpParametersMap();
+		if(params==null) params = new URIParametersMap();
 		params.addParameter(name, value);
 	}
 
@@ -65,7 +65,7 @@ public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute 
 		PageContext pageContext = (PageContext)getJspContext();
 		ServletResponse response = pageContext.getResponse();
 		String path = capturedBody.trim().toString();
-		path = HttpParametersUtils.addParams(path, params, response.getCharacterEncoding());
+		path = URIParametersUtils.addParams(path, params, response.getCharacterEncoding());
 		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
 		if(pageTag==null) {
 			PageAttributesBodyTag.getPageAttributes(pageContext).setPath(path);

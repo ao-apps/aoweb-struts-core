@@ -27,12 +27,12 @@ import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.Currency;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.payment.CreditCard;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -66,19 +66,24 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 		List<Permission> permissions
 	) throws Exception {
 		// Redirect when they don't have permissions to retrieve stored cards
-		String encoding = response.getCharacterEncoding();
 		String currency = request.getParameter("currency");
 		StringBuilder href = new StringBuilder();
 		href
 			.append(skin.getUrlBase(request))
 			.append("clientarea/accounting/make-payment-new-card.do?account=")
-			.append(URLEncoder.encode(request.getParameter("account"), encoding));
+			.append(URIEncoder.encodeURIComponent(request.getParameter("account")));
 		if(!GenericValidator.isBlankOrNull(currency)) {
 			href
 				.append("&currency=")
-				.append(URLEncoder.encode(request.getParameter("currency"), encoding));
+				.append(URIEncoder.encodeURIComponent(request.getParameter("currency")));
 		}
-		response.sendRedirect(response.encodeRedirectURL(href.toString()));
+		response.sendRedirect(
+			response.encodeRedirectURL(
+				URIEncoder.encodeURI(
+					href.toString()
+				)
+			)
+		);
 		return null;
 	}
 
@@ -115,18 +120,23 @@ public class MakePaymentStoredCardAction extends PermissionAction {
 			return mapping.findForward("make-payment");
 		}
 		if(idString.isEmpty()) {
-			String encoding = response.getCharacterEncoding();
 			StringBuilder href = new StringBuilder();
 			href
 				.append(skin.getUrlBase(request))
 				.append("clientarea/accounting/make-payment-new-card.do?account=")
-				.append(URLEncoder.encode(request.getParameter("account"), encoding));
+				.append(URIEncoder.encodeURIComponent(request.getParameter("account")));
 			if(currency != null) {
 				href
 					.append("&currency=")
-					.append(URLEncoder.encode(currency.getCurrencyCode(), encoding));
+					.append(URIEncoder.encodeURIComponent(currency.getCurrencyCode()));
 			}
-			response.sendRedirect(response.encodeRedirectURL(href.toString()));
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						href.toString()
+					)
+				)
+			);
 			return null;
 		}
 

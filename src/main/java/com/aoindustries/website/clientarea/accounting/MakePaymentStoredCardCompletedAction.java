@@ -39,12 +39,12 @@ import com.aoindustries.creditcards.CreditCardProcessor;
 import com.aoindustries.creditcards.TokenizedCreditCard;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,20 +98,26 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			return mapping.findForward("make-payment");
 		}
 		if(idString.isEmpty()) {
-			String encoding = response.getCharacterEncoding();
 			StringBuilder href = new StringBuilder();
 			href
 				.append(skin.getUrlBase(request))
 				.append("clientarea/accounting/make-payment-new-card.do?account=")
-				.append(URLEncoder.encode(request.getParameter("account"), encoding));
+				.append(URIEncoder.encodeURIComponent(request.getParameter("account")));
 			String currency = request.getParameter("currency");
 			if(!GenericValidator.isBlankOrNull(currency)) {
 				href
 					.append("&currency=")
-					.append(URLEncoder.encode(currency, encoding));
+					.append(URIEncoder.encodeURIComponent(currency));
 			}
 			// TODO: Many of these after-POST sendRedirect should be converted to 303 redirects
-			response.sendRedirect(response.encodeRedirectURL(href.toString()));
+			// TODO: Make sure all these redirects are in UTF-8
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						href.toString()
+					)
+				)
+			);
 			return null;
 		}
 

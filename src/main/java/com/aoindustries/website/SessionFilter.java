@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -33,12 +33,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Prevents the <code>;jsessionid</code> from being added for SEO purposes.
+ * Filter to write selective values into URL when cookies disabled for SEO purposes.
  * If the client doesn't support cookies:
  * <ol>
  *   <li>If this site supports more than one language, adds a language parameter if it doesn't exist.</li>
  *   <li>If this site supports more than one skin, adds a layout parameter if it doesn't exist.</li>
  * </ol>
+ * <p>
+ * This should be used for both the REQUEST and ERROR dispatchers.
+ * </p>
+ * <p>
+ * <strong>This must be first in the filter chain</strong>, or at least before all filters that
+ * perform any URL rewriting.  This filter selectively does not pass the URL
+ * rewriting up the filter chain, as it is intended to block default session
+ * URL rewriting provided by servlet contains.
+ * </p>
  *
  * @author  AO Industries, Inc.
  */

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,6 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
+import com.aoindustries.net.URIEncoder;
 import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,13 @@ abstract public class AuthenticatedServlet extends HttpServlet {
 			} else {
 				url = "https://"+request.getServerName()+request.getContextPath()+"/login.do";
 			}
-			response.sendRedirect(response.encodeRedirectURL(url));
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						url
+					)
+				)
+			);
 		} else {
 			doGet(request, response, aoConn);
 		}

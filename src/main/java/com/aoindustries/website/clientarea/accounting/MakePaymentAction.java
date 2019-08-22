@@ -25,12 +25,12 @@ package com.aoindustries.website.clientarea.accounting;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionTable;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.net.URLEncoder;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -100,14 +100,15 @@ public class MakePaymentAction extends AuthenticatedAction {
 			Set<Currency> currencies = accountBalance.getCurrencies();
 			if(currencies.size() == 1) {
 				// Redirect, only one option
-				String encoding = response.getCharacterEncoding();
 				response.sendRedirect(
 					response.encodeRedirectURL(
-						skin.getUrlBase(request)
+						URIEncoder.encodeURI(
+							skin.getUrlBase(request)
 							+ "clientarea/accounting/make-payment-select-card.do?account="
-							+ URLEncoder.encode(entry.getKey().getName().toString(), encoding)
+							+ URIEncoder.encodeURIComponent(entry.getKey().getName().toString())
 							+ "&currency="
-							+ URLEncoder.encode(currencies.iterator().next().getCurrencyCode(), encoding)
+							+ URIEncoder.encodeURIComponent(currencies.iterator().next().getCurrencyCode())
+						)
 					)
 				);
 				return null;

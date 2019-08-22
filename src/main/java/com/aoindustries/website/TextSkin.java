@@ -30,14 +30,13 @@ import com.aoindustries.encoding.TextInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import com.aoindustries.encoding.TextInXhtmlEncoder;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
-import com.aoindustries.net.UrlUtils;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.website.skintags.Child;
 import com.aoindustries.website.skintags.Meta;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -138,7 +137,7 @@ public class TextSkin extends Skin {
 			String path = pageAttributes.getPath();
 			if(path.startsWith("/")) path=path.substring(1);
 			final String fullPath = urlBase + path;
-			final String encodedFullPath = resp.encodeURL(UrlUtils.encodeUrlPath(fullPath, resp.getCharacterEncoding()));
+			final String encodedFullPath = resp.encodeURL(URIEncoder.encodeURI(fullPath));
 			ServletContext servletContext = session.getServletContext();
 			SiteSettings settings = SiteSettings.getInstance(servletContext);
 			List<Skin> skins = settings.getSkins();
@@ -166,10 +165,13 @@ public class TextSkin extends Skin {
 				encodeTextInXhtmlAttribute(";URL=", out);
 				encodeTextInXhtmlAttribute(
 					resp.encodeRedirectURL(
-						urlBase
-							+ "session-timeout.do?target=")
-							+ URLEncoder.encode(fullPath, resp.getCharacterEncoding()),
-						out
+						URIEncoder.encodeURI(
+							urlBase
+							+ "session-timeout.do?target="
+							+ URIEncoder.encodeURIComponent(fullPath)
+						)
+					),
+					out
 				);
 				out.print("\" />\n");
 			}
@@ -234,24 +236,36 @@ public class TextSkin extends Skin {
 			printAlternativeLinks(resp, out, fullPath, languages);
 			out.print("    <link rel='stylesheet' href='");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase+"textskin/global.css"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/global.css"
+					)
+				),
 				out
 			);
 			out.print("' type='text/css' />\n"
 					+ "    <!--[if IE 6]>\n"
 					+ "      <link rel='stylesheet' href='");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase+"textskin/global-ie6.css"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/global-ie6.css"
+					)
+				),
 				out
 			);
 			out.print("' type='text/css' />\n"
 					+ "    <![endif]-->\n");
 			printCssIncludes(resp, out, urlBase);
-			defaultPrintLinks(out, pageAttributes, resp.getCharacterEncoding());
+			defaultPrintLinks(out, pageAttributes);
 			printJavaScriptSources(resp, out, urlBase);
 			out.print("    <script type='text/javascript' src='");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "commons-validator-1.3.1-compress.js"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "commons-validator-1.3.1-compress.js"
+					)
+				),
 				out
 			);
 			out.print("'></script>\n");
@@ -279,7 +293,11 @@ public class TextSkin extends Skin {
 				out.print(applicationResources.getMessage(locale, "TextSkin.logoutPrompt"));
 				out.print("<form style='display:inline;' id='logout_form' method='post' action='");
 				encodeTextInXhtmlAttribute(
-					resp.encodeURL(urlBase+"logout.do"),
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "logout.do"
+						)
+					),
 					out
 				);
 				out.print("'><div style='display:inline;'><input type='hidden' name='target' value='");
@@ -293,7 +311,11 @@ public class TextSkin extends Skin {
 				out.print(applicationResources.getMessage(locale, "TextSkin.loginPrompt"));
 				out.print("<form style='display:inline;' id='login_form' method='post' action='");
 				encodeTextInXhtmlAttribute(
-					resp.encodeURL(urlBase+"login.do"),
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "login.do"
+						)
+					),
 					out
 				);
 				out.print("'><div style='display:inline;'>");
@@ -317,7 +339,15 @@ public class TextSkin extends Skin {
 					NewEncodingUtils.encodeTextInJavaScriptInXhtml(skin.getName(), out);
 					out.print("') window.top.location.href='");
 					NewEncodingUtils.encodeTextInJavaScriptInXhtml(
-						resp.encodeURL(fullPath+(fullPath.indexOf('?')==-1 ? '?' : '&')+"layout="+skin.getName()),
+						resp.encodeURL(
+							URIEncoder.encodeURI(
+								fullPath
+								+ (fullPath.indexOf('?')==-1 ? '?' : '&')
+								+ "layout="
+								+ URIEncoder.encodeURIComponent(skin.getName())
+							)
+						),
+						// TODO: Look for '#', too
 						out
 					);
 					out.print("';\n");
@@ -348,11 +378,16 @@ public class TextSkin extends Skin {
 						out.print("&#160;<a href='");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
-								UrlUtils.encodeUrlPath(
-									url==null
-									? (fullPath+(fullPath.indexOf('?')==-1 ? "?" : "&")+"language="+language.getCode())
-									: url,
-									resp.getCharacterEncoding()
+								URIEncoder.encodeURI(
+									url == null
+									? (
+										fullPath
+										+ (fullPath.indexOf('?')==-1 ? "?" : "&")
+										+ "language="
+										+ URIEncoder.encodeURIComponent(language.getCode())
+									)
+									// TODO: Look for '#', too
+									: url
 								)
 							),
 							out
@@ -364,7 +399,11 @@ public class TextSkin extends Skin {
 						);
 						out.print("'><img src='");
 						encodeTextInXhtmlAttribute(
-							resp.encodeURL(urlBase + language.getFlagOnSrc(req, locale)),
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase + language.getFlagOnSrc(req, locale)
+								)
+							),
 							out
 						);
 						out.print("' style='border:1px solid; vertical-align:bottom' width='");
@@ -378,11 +417,16 @@ public class TextSkin extends Skin {
 						out.print("&#160;<a href='");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
-								UrlUtils.encodeUrlPath(
+								URIEncoder.encodeURI(
 									url==null
-									? (fullPath+(fullPath.indexOf('?')==-1 ? "?" : "&")+"language="+language.getCode())
-									: url,
-									resp.getCharacterEncoding()
+									? (
+										fullPath
+										+ (fullPath.indexOf('?')==-1 ? "?" : "&")
+										+ "language="
+										+ URIEncoder.encodeURIComponent(language.getCode())
+									)
+									// TODO: Look for '#', too
+									: url
 								)
 							),
 							out
@@ -395,14 +439,35 @@ public class TextSkin extends Skin {
 						out.print("' onmouseover='document.images[\"flagSelector_");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(language.getCode(), out);
 						out.print("\"].src=\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(resp.encodeURL(urlBase + language.getFlagOnSrc(req, locale)), out);
+						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase
+									+ language.getFlagOnSrc(req, locale)
+								)
+							),
+							out
+						);
 						out.print("\";' onmouseout='document.images[\"flagSelector_");
 						out.print(language.getCode());
 						out.print("\"].src=\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(resp.encodeURL(urlBase + language.getFlagOffSrc(req, locale)), out);
+						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase
+									+ language.getFlagOffSrc(req, locale)
+								)
+							),
+							out
+						);
 						out.print("\";'><img src='");
 						encodeTextInXhtmlAttribute(
-							resp.encodeURL(urlBase + language.getFlagOffSrc(req, locale)),
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase
+									+ language.getFlagOffSrc(req, locale)
+								)
+							),
 							out
 						);
 						out.print("' id='flagSelector_");
@@ -414,7 +479,15 @@ public class TextSkin extends Skin {
 						out.print("' alt='");
 						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
 						out.print("' /></a>");
-						ChainWriter.writeHtmlImagePreloadJavaScript(resp.encodeURL(urlBase + language.getFlagOnSrc(req, locale)), out);
+						ChainWriter.writeHtmlImagePreloadJavaScript(
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase
+									+ language.getFlagOnSrc(req, locale)
+								)
+							),
+							out
+						);
 					}
 				}
 				out.print("<br />\n");
@@ -434,7 +507,12 @@ public class TextSkin extends Skin {
 				if(parentPath.startsWith("/")) parentPath=parentPath.substring(1);
 				out.print("            <a href='");
 				encodeTextInXhtmlAttribute(
-					resp.encodeURL(urlBase + UrlUtils.encodeUrlPath(parentPath, resp.getCharacterEncoding())),
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase
+							+ URIEncoder.encodeURI(parentPath)
+						)
+					),
 					out
 				);
 				out.print("'>");
@@ -467,7 +545,12 @@ public class TextSkin extends Skin {
 				if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
 				out.print("          <a href='");
 				encodeTextInXhtmlAttribute(
-					resp.encodeURL(urlBase + UrlUtils.encodeUrlPath(siblingPath, resp.getCharacterEncoding())),
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase
+							+ URIEncoder.encodeURI(siblingPath)
+						)
+					),
 					out
 				);
 				out.print("'>");
@@ -485,7 +568,7 @@ public class TextSkin extends Skin {
 		}
 	}
 
-	public static void defaultPrintLinks(JspWriter out, PageAttributes pageAttributes, String encoding) throws JspException {
+	public static void defaultPrintLinks(JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
 				String conditionalCommentExpression = link.getConditionalCommentExpression();
@@ -498,7 +581,7 @@ public class TextSkin extends Skin {
 				out.print("    <link rel=\"");
 				encodeTextInXhtmlAttribute(link.getRel(), out);
 				out.print("\" href=\"");
-				encodeTextInXhtmlAttribute(UrlUtils.encodeUrlPath(link.getHref(), encoding), out);
+				encodeTextInXhtmlAttribute(URIEncoder.encodeURI(link.getHref()), out);
 				out.print("\" type=\"");
 				encodeTextInXhtmlAttribute(link.getType(), out);
 				out.print("\" />\n");
@@ -830,7 +913,12 @@ public class TextSkin extends Skin {
 				out.print("  <tr>\n"
 						+ "    <td style=\"white-space:nowrap\"><a class='aoLightLink' href='");
 				encodeTextInXhtmlAttribute(
-					resp.encodeURL(urlBase + UrlUtils.encodeUrlPath(siblingPath, resp.getCharacterEncoding())),
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase
+							+ URIEncoder.encodeURI(siblingPath)
+						)
+					),
 					out
 				);
 				out.print("'>");
@@ -959,7 +1047,12 @@ public class TextSkin extends Skin {
 			out.print(popupId);
 			out.print("\" class=\"aoPopupAnchor\"><img class=\"aoPopupAnchorImg\" src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + applicationResources.getMessage(locale, "TextSkin.popup.src")),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase
+						+ applicationResources.getMessage(locale, "TextSkin.popup.src")
+					)
+				),
 				out
 			);
 			out.print("\" alt=\"");
@@ -1012,19 +1105,31 @@ public class TextSkin extends Skin {
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupTL\"><img src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_topleft.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_topleft.gif"
+					)
+				),
 				out
 			);
 			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
 					+ "                <td class=\"aoPopupTop\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_top.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_top.gif"
+					)
+				),
 				out
 			);
 			out.print(");\"></td>\n"
 					+ "                <td class=\"aoPopupTR\"><img src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_topright.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_topright.gif"
+					)
+				),
 				out
 			);
 			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
@@ -1032,7 +1137,11 @@ public class TextSkin extends Skin {
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupLeft\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_left.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_left.gif"
+					)
+				),
 				out
 			);
 			out.print(");\"></td>\n"
@@ -1063,7 +1172,11 @@ public class TextSkin extends Skin {
 
 			out.print("<img class=\"aoPopupClose\" src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")
+					)
+				),
 				out
 			);
 			out.print("\" alt=\"");
@@ -1098,7 +1211,11 @@ public class TextSkin extends Skin {
 			out.print("</td>\n"
 					+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_right.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_right.gif"
+					)
+				),
 				out
 			);
 			out.print(");\"></td>\n"
@@ -1106,19 +1223,31 @@ public class TextSkin extends Skin {
 					+ "            <tr>\n" 
 					+ "                <td class=\"aoPopupBL\"><img src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_bottomleft.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_bottomleft.gif"
+					)
+				),
 				out
 			);
 			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
 					+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_bottom.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_bottom.gif"
+					)
+				),
 				out
 			);
 			out.print(");\"></td>\n"
 					+ "                <td class=\"aoPopupBR\"><img src=\"");
 			encodeTextInXhtmlAttribute(
-				resp.encodeURL(urlBase + "textskin/popup_bottomright.gif"),
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_bottomright.gif"
+					)
+				),
 				out
 			);
 			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"

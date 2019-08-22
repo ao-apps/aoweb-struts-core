@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website;
 
+import com.aoindustries.net.URIEncoder;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +56,13 @@ public class LogoutAction extends SkinAction {
 		// Try redirect
 		String target = request.getParameter("target");
 		if(target!=null && target.length()>0) {
-			response.sendRedirect(response.encodeRedirectURL(target));
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						target
+					)
+				)
+			);
 			return null;
 		}
 

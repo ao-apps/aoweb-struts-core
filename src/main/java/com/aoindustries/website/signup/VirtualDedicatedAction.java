@@ -23,6 +23,7 @@
 package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.billing.PackageCategory;
+import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.util.List;
@@ -61,9 +62,11 @@ public class VirtualDedicatedAction extends VirtualDedicatedStepAction {
 		if(servers.size()==1) {
 			response.sendRedirect(
 				response.encodeRedirectURL(
-					skin.getUrlBase(request)
-					+"signup/virtual-dedicated-server-completed.do?packageDefinition="
-					+servers.get(0).getMinimumConfiguration().getPackageDefinition()
+					URIEncoder.encodeURI(
+						skin.getUrlBase(request)
+						+ "signup/virtual-dedicated-server-completed.do?packageDefinition="
+						+ URIEncoder.encodeURIComponent(Integer.toString(servers.get(0).getMinimumConfiguration().getPackageDefinition()))
+					)
 				)
 			);
 			return null;

@@ -24,6 +24,7 @@ package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
+import com.aoindustries.net.URIEncoder;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -78,12 +79,24 @@ public class LoginCompletedAction extends SkinAction {
 			String target = (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);   // Get from session
 			if(target==null) target = request.getParameter(Constants.AUTHENTICATION_TARGET); // With no cookies will be encoded in URL
 			if(target!=null && target.length()>0) {
-				response.sendRedirect(response.encodeRedirectURL(target));
+				response.sendRedirect(
+					response.encodeRedirectURL(
+						URIEncoder.encodeURI(
+							target
+						)
+					)
+				);
 				return null;
 			}
 
 			// Redirect to the clientarea instead of returning mapping because of switch from HTTPS to HTTP
-			response.sendRedirect(response.encodeRedirectURL(skin.getUrlBase(request)+"clientarea/index.do"));
+			response.sendRedirect(
+				response.encodeRedirectURL(
+					URIEncoder.encodeURI(
+						skin.getUrlBase(request) + "clientarea/index.do"
+					)
+				)
+			);
 			return null;
 			// Return success
 			//return mapping.findForward("success");

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -49,6 +49,7 @@ public class Constants {
 
 	/**
 	 * The session key that stores the authentication target.
+	 * // TODO: Review AUTHENTICATION_TARGET stored as decodedURI
 	 */
 	public static final String AUTHENTICATION_TARGET="authenticationTarget";
 
