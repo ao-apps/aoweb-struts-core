@@ -46,7 +46,8 @@ public class LinkTag
 
 	@Override
 	public MediaType getContentType() {
-		return MediaType.URL;
+		return MediaType.TEXT;
+		// TODO: Find a way to validate content only after trimming, then use: return MediaType.URL;
 	}
 
 	@Override
