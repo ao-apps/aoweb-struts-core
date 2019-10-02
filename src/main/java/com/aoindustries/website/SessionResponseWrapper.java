@@ -243,7 +243,6 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 					}
 				}
 
-				String documentEncoding = getCharacterEncoding();
 				URIParameters splitURIParameters = null;
 				MutableURIParameters cookieParams = null;
 
@@ -252,7 +251,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				if(authenticationTarget==null) authenticationTarget = request.getParameter(Constants.AUTHENTICATION_TARGET);
 				//System.err.println("DEBUG: addNoCookieParameters: authenticationTarget="+authenticationTarget);
 				if(authenticationTarget != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString(), documentEncoding);
+					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
 					if(!splitURIParameters.getParameterMap().containsKey(Constants.AUTHENTICATION_TARGET)) {
 						if(cookieParams == null) cookieParams = new URIParametersMap();
 						cookieParams.addParameter(Constants.AUTHENTICATION_TARGET, authenticationTarget);
@@ -271,7 +270,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 						if(!code.equals(defaultLocale.getLanguage())) {
 							for(Skin.Language language : languages) {
 								if(language.getCode().equals(code)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString(), documentEncoding);
+									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
 									if(!splitURIParameters.getParameterMap().containsKey("language")) {
 										if(cookieParams == null) cookieParams = new URIParametersMap();
 										cookieParams.addParameter("language", code);
@@ -293,7 +292,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							// Make sure it is one of the allowed skins
 							for(Skin skin : skins) {
 								if(skin.getName().equals(layout)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString(), documentEncoding);
+									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
 									if(!splitURIParameters.getParameterMap().containsKey("layout")) {
 										if(cookieParams == null) cookieParams = new URIParametersMap();
 										cookieParams.addParameter("layout", layout);
@@ -307,13 +306,13 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				// Add any "su"
 				String su = (String)session.getAttribute(Constants.SU_REQUESTED);
 				if(su != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString(), documentEncoding);
+					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
 					if(!splitURIParameters.getParameterMap().containsKey("su")) {
 						if(cookieParams == null) cookieParams = new URIParametersMap();
 						cookieParams.addParameter("su", su);
 					}
 				}
-				url = anyURI.addParameters(cookieParams, documentEncoding).toString();
+				url = anyURI.addParameters(cookieParams).toString();
 			} else {
 				//System.err.println("DEBUG: addNoCookieParameters: Not adding parameters to skipped type: "+url);
 			}

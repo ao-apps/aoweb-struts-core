@@ -30,7 +30,6 @@ import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.taglib.ParamsAttribute;
 import java.io.IOException;
 import java.io.Writer;
-import javax.servlet.ServletResponse;
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -64,9 +63,8 @@ public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute 
 	@Override
 	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
 		PageContext pageContext = (PageContext)getJspContext();
-		ServletResponse response = pageContext.getResponse();
 		String path = capturedBody.trim().toString();
-		path = URIParametersUtils.addParams(path, params, response.getCharacterEncoding());
+		path = URIParametersUtils.addParams(path, params);
 		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
 		if(pageTag==null) {
 			PageAttributesBodyTag.getPageAttributes(pageContext).setPath(path);
