@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.net.AnyURI;
+import com.aoindustries.net.IRI;
 import com.aoindustries.net.MutableURIParameters;
 import com.aoindustries.net.URIParameters;
 import com.aoindustries.net.URIParametersMap;
@@ -166,28 +166,26 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Adds the no cookie parameters (language and layout) if needed and not already set.
 	 */
-	// TODO: org.xbib.net.URL or org.apache.http.client.utils.URIBuilder
 	private String addNoCookieParameters(String url, boolean isRedirect) throws JspException, IOException, SQLException {
 		HttpSession session = request.getSession();
 		if(session.isNew() || request.isRequestedSessionIdFromURL()) {
-			AnyURI anyURI = new AnyURI(url);
+			IRI iri = new IRI(url);
 			// Don't add for certains file types
 			if(
 				// Matches LocaleFilter
 				// Matches NoSessionFilter
-				// TODO: This will fail on overly %-encoded paths, but they would be an anomaly anyway
-				!anyURI.pathEndsWithIgnoreCase(".bmp")
-				&& !anyURI.pathEndsWithIgnoreCase(".css")
-				&& !anyURI.pathEndsWithIgnoreCase(".exe")
-				&& !anyURI.pathEndsWithIgnoreCase(".gif")
-				&& !anyURI.pathEndsWithIgnoreCase(".ico")
-				&& !anyURI.pathEndsWithIgnoreCase(".jpeg")
-				&& !anyURI.pathEndsWithIgnoreCase(".jpg")
-				&& !anyURI.pathEndsWithIgnoreCase(".js")
-				&& !anyURI.pathEndsWithIgnoreCase(".png")
-				&& !anyURI.pathEndsWithIgnoreCase(".svg")
-				&& !anyURI.pathEndsWithIgnoreCase(".txt")
-				&& !anyURI.pathEndsWithIgnoreCase(".zip")
+				!iri.pathEndsWithIgnoreCase(".bmp")
+				&& !iri.pathEndsWithIgnoreCase(".css")
+				&& !iri.pathEndsWithIgnoreCase(".exe")
+				&& !iri.pathEndsWithIgnoreCase(".gif")
+				&& !iri.pathEndsWithIgnoreCase(".ico")
+				&& !iri.pathEndsWithIgnoreCase(".jpeg")
+				&& !iri.pathEndsWithIgnoreCase(".jpg")
+				&& !iri.pathEndsWithIgnoreCase(".js")
+				&& !iri.pathEndsWithIgnoreCase(".png")
+				&& !iri.pathEndsWithIgnoreCase(".svg")
+				&& !iri.pathEndsWithIgnoreCase(".txt")
+				&& !iri.pathEndsWithIgnoreCase(".zip")
 			) {
 				// Use the default servlet container jsessionid when any session object exists besides
 				// the three values that will be encoded into the URL as parameters below.
@@ -251,7 +249,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				if(authenticationTarget==null) authenticationTarget = request.getParameter(Constants.AUTHENTICATION_TARGET);
 				//System.err.println("DEBUG: addNoCookieParameters: authenticationTarget="+authenticationTarget);
 				if(authenticationTarget != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
+					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 					if(!splitURIParameters.getParameterMap().containsKey(Constants.AUTHENTICATION_TARGET)) {
 						if(cookieParams == null) cookieParams = new URIParametersMap();
 						cookieParams.addParameter(Constants.AUTHENTICATION_TARGET, authenticationTarget);
@@ -270,7 +268,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 						if(!code.equals(defaultLocale.getLanguage())) {
 							for(Skin.Language language : languages) {
 								if(language.getCode().equals(code)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
+									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 									if(!splitURIParameters.getParameterMap().containsKey("language")) {
 										if(cookieParams == null) cookieParams = new URIParametersMap();
 										cookieParams.addParameter("language", code);
@@ -292,7 +290,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							// Make sure it is one of the allowed skins
 							for(Skin skin : skins) {
 								if(skin.getName().equals(layout)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
+									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 									if(!splitURIParameters.getParameterMap().containsKey("layout")) {
 										if(cookieParams == null) cookieParams = new URIParametersMap();
 										cookieParams.addParameter("layout", layout);
@@ -306,13 +304,13 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				// Add any "su"
 				String su = (String)session.getAttribute(Constants.SU_REQUESTED);
 				if(su != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(anyURI.getQueryString());
+					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 					if(!splitURIParameters.getParameterMap().containsKey("su")) {
 						if(cookieParams == null) cookieParams = new URIParametersMap();
 						cookieParams.addParameter("su", su);
 					}
 				}
-				url = anyURI.addParameters(cookieParams).toString();
+				url = iri.addParameters(cookieParams).toASCIIString();
 			} else {
 				//System.err.println("DEBUG: addNoCookieParameters: Not adding parameters to skipped type: "+url);
 			}
