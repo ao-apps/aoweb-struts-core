@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-04T01:31:12-0500"
+		dateModified="2019-10-04T03:00:44-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -58,6 +58,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Updated for compatibility with <core:link book="/aoserv/client" page="/changelog.jspx" element="release-notes-1.83.1">aoserv-client-1.83.1</core:link>.</li>
 					<li>Cookie names, values, comments, and paths are now URI-encoded.</li>
 					<li>No longer URL rewriting <code>file:</code> and <code>data:</code> URLs.</li>
+					<li>
+						Using new filter <code>EncodeURIFilter</code> which encodes the URL to either
+						<ao:a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URI</ao:a> US-ASCII format
+						or <ao:a href="https://tools.ietf.org/html/rfc3987">RFC 3987 IRI</ao:a> Unicode format.
+					</li>
 				</ul>
 			</changelog:release>
 		</c:if>
