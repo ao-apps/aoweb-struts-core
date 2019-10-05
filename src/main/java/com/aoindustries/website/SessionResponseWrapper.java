@@ -28,6 +28,7 @@ import com.aoindustries.net.URIParameters;
 import com.aoindustries.net.URIParametersMap;
 import com.aoindustries.net.URIParametersUtils;
 import com.aoindustries.net.URIParser;
+import com.aoindustries.servlet.http.Canonical;
 import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.tempfiles.servlet.ServletTempFileContext;
 import com.aoindustries.util.WrappedException;
@@ -65,6 +66,8 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	private String encode(String url, boolean isRedirect) {
+		// Don't rewrite canonical URLs
+		if(Canonical.get()) return url;
 		// Don't rewrite empty or anchor-only URLs
 		if(url.isEmpty() || url.charAt(0) == '#') return url;
 		try {
@@ -169,9 +172,8 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	 * Adds the no cookie parameters (language and layout) if needed and not already set.
 	 */
 	private String addNoCookieParameters(String url, boolean isRedirect) throws JspException, IOException, SQLException {
-		// TODO: Can we avoid creating a session here?
-		HttpSession session = request.getSession();
-		if(session.isNew() || request.isRequestedSessionIdFromURL()) {
+		HttpSession session = request.getSession(false);
+		if(session == null || session.isNew() || request.isRequestedSessionIdFromURL()) {
 			IRI iri = new IRI(url);
 			// Don't add for certains file types
 			if(
@@ -191,58 +193,60 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				&& !iri.pathEndsWithIgnoreCase(".txt")
 				&& !iri.pathEndsWithIgnoreCase(".zip")
 			) {
-				// Use the default servlet container jsessionid when any session object exists besides
-				// the three values that will be encoded into the URL as parameters below.
-				Enumeration<String> attributeNames = session.getAttributeNames();
-				String whyNeedsJsessionid = null;
-				while(attributeNames.hasMoreElements()) {
-					String name = attributeNames.nextElement();
-					if(
-						!Constants.AUTHENTICATION_TARGET.equals(name)
-						&& !Globals.LOCALE_KEY.equals(name)
-						&& !Constants.LAYOUT.equals(name)
-						&& !Constants.SU_REQUESTED.equals(name)
-						// JSTL 1.1
-						&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
-						&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
-						// Allow session-based temporary file context
-						&& !ServletTempFileContext.SESSION_ATTRIBUTE_NAME.equals(name)
-					) {
-						// These will always trigger jsessionid
+				ServletContext servletContext = request.getServletContext();
+				if(session != null) {
+					// Use the default servlet container jsessionid when any session object exists besides
+					// the three values that will be encoded into the URL as parameters below.
+					Enumeration<String> attributeNames = session.getAttributeNames();
+					String whyNeedsJsessionid = null;
+					while(attributeNames.hasMoreElements()) {
+						String name = attributeNames.nextElement();
 						if(
-							Constants.AO_CONN.equals(name)
-							|| Constants.AUTHENTICATED_AO_CONN.equals(name)
+							!Constants.AUTHENTICATION_TARGET.equals(name)
+							&& !Globals.LOCALE_KEY.equals(name)
+							&& !Constants.LAYOUT.equals(name)
+							&& !Constants.SU_REQUESTED.equals(name)
+							// JSTL 1.1
+							&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
+							&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
+							// Allow session-based temporary file context
+							&& !ServletTempFileContext.SESSION_ATTRIBUTE_NAME.equals(name)
 						) {
-							whyNeedsJsessionid = name;
-							break;
-						}
-						// Must be an SessionActionForm if none of the above
-						Object sessionObject = session.getAttribute(name);
-						if(sessionObject instanceof SessionActionForm) {
-							SessionActionForm sessionActionForm = (SessionActionForm)sessionObject;
-							if(!sessionActionForm.isEmpty()) {
+							// These will always trigger jsessionid
+							if(
+								Constants.AO_CONN.equals(name)
+								|| Constants.AUTHENTICATED_AO_CONN.equals(name)
+							) {
 								whyNeedsJsessionid = name;
 								break;
 							}
-						} else {
-							Class<?> clazz = (sessionObject == null) ? null : sessionObject.getClass();
-							throw new AssertionError("Session object is neither an expected value nor a SessionActionForm.  name="+name+", sessionObject.class="+(clazz == null ? null : clazz.getName()));
+							// Must be an SessionActionForm if none of the above
+							Object sessionObject = session.getAttribute(name);
+							if(sessionObject instanceof SessionActionForm) {
+								SessionActionForm sessionActionForm = (SessionActionForm)sessionObject;
+								if(!sessionActionForm.isEmpty()) {
+									whyNeedsJsessionid = name;
+									break;
+								}
+							} else {
+								Class<?> clazz = (sessionObject == null) ? null : sessionObject.getClass();
+								throw new AssertionError("Session object is neither an expected value nor a SessionActionForm.  name="+name+", sessionObject.class="+(clazz == null ? null : clazz.getName()));
+							}
 						}
 					}
-				}
-				ServletContext servletContext = session.getServletContext();
-				if(whyNeedsJsessionid!=null) {
-					if(HttpServletUtil.isGooglebot(request)) {
-						// Create or update a ticket about the problem
-						getLogger(servletContext).logp(
-							Level.WARNING,
-							SessionResponseWrapper.class.getName(),
-							"addNoCookieParameters",
-							"Refusing to send jsessionid to Googlebot eventhough request would normally need jsessionid.  Other search engines may be affected.  Reason: "+whyNeedsJsessionid
-						);
-					} else {
-						// System.out.println("DEBUG: Why needs jsessionid: "+whyNeedsJsessionid);
-						return isRedirect ? response.encodeRedirectURL(url) : response.encodeURL(url);
+					if(whyNeedsJsessionid!=null) {
+						if(HttpServletUtil.isGooglebot(request)) {
+							// Create or update a ticket about the problem
+							getLogger(servletContext).logp(
+								Level.WARNING,
+								SessionResponseWrapper.class.getName(),
+								"addNoCookieParameters",
+								"Refusing to send jsessionid to Googlebot eventhough request would normally need jsessionid.  Other search engines may be affected.  Reason: "+whyNeedsJsessionid
+							);
+						} else {
+							// System.out.println("DEBUG: Why needs jsessionid: "+whyNeedsJsessionid);
+							return isRedirect ? response.encodeRedirectURL(url) : response.encodeURL(url);
+						}
 					}
 				}
 
@@ -250,7 +254,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				MutableURIParameters cookieParams = null;
 
 				// Add the Constants.AUTHENTICATION_TARGET if needed
-				String authenticationTarget = (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);
+				String authenticationTarget = (session == null) ? null : (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);
 				if(authenticationTarget==null) authenticationTarget = request.getParameter(Constants.AUTHENTICATION_TARGET);
 				//System.err.println("DEBUG: addNoCookieParameters: authenticationTarget="+authenticationTarget);
 				if(authenticationTarget != null) {
@@ -261,58 +265,60 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 					}
 				}
 
-				// Only add the language if there is more than one possibility
-				SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
-				List<Skin.Language> languages = siteSettings.getLanguages(request);
-				if(languages.size()>1) {
-					Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-					if(locale!=null) {
-						String code = locale.getLanguage();
-						// Don't add if is the default language
-						Locale defaultLocale = LocaleAction.getDefaultLocale(siteSettings, request);
-						if(!code.equals(defaultLocale.getLanguage())) {
-							for(Skin.Language language : languages) {
-								if(language.getCode().equals(code)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-									if(!splitURIParameters.getParameterMap().containsKey("language")) {
-										if(cookieParams == null) cookieParams = new URIParametersMap();
-										cookieParams.addParameter("language", code);
+				if(session != null) {
+					// Only add the language if there is more than one possibility
+					SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
+					List<Skin.Language> languages = siteSettings.getLanguages(request);
+					if(languages.size()>1) {
+						Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+						if(locale!=null) {
+							String code = locale.getLanguage();
+							// Don't add if is the default language
+							Locale defaultLocale = LocaleAction.getDefaultLocale(siteSettings, request);
+							if(!code.equals(defaultLocale.getLanguage())) {
+								for(Skin.Language language : languages) {
+									if(language.getCode().equals(code)) {
+										if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+										if(!splitURIParameters.getParameterMap().containsKey("language")) {
+											if(cookieParams == null) cookieParams = new URIParametersMap();
+											cookieParams.addParameter("language", code);
+										}
+										break;
 									}
-									break;
 								}
 							}
 						}
 					}
-				}
-				// Only add the layout if there is more than one possibility
-				List<Skin> skins = siteSettings.getSkins();
-				if(skins.size()>1) {
-					String layout = (String)session.getAttribute(Constants.LAYOUT);
-					if(layout!=null) {
-						// Don't add if is the default layout
-						Skin defaultSkin = SkinAction.getDefaultSkin(skins, request);
-						if(!layout.equals(defaultSkin.getName())) {
-							// Make sure it is one of the allowed skins
-							for(Skin skin : skins) {
-								if(skin.getName().equals(layout)) {
-									if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-									if(!splitURIParameters.getParameterMap().containsKey("layout")) {
-										if(cookieParams == null) cookieParams = new URIParametersMap();
-										cookieParams.addParameter("layout", layout);
+					// Only add the layout if there is more than one possibility
+					List<Skin> skins = siteSettings.getSkins();
+					if(skins.size()>1) {
+						String layout = (String)session.getAttribute(Constants.LAYOUT);
+						if(layout!=null) {
+							// Don't add if is the default layout
+							Skin defaultSkin = SkinAction.getDefaultSkin(skins, request);
+							if(!layout.equals(defaultSkin.getName())) {
+								// Make sure it is one of the allowed skins
+								for(Skin skin : skins) {
+									if(skin.getName().equals(layout)) {
+										if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+										if(!splitURIParameters.getParameterMap().containsKey("layout")) {
+											if(cookieParams == null) cookieParams = new URIParametersMap();
+											cookieParams.addParameter("layout", layout);
+										}
+										break;
 									}
-									break;
 								}
 							}
 						}
 					}
-				}
-				// Add any "su"
-				String su = (String)session.getAttribute(Constants.SU_REQUESTED);
-				if(su != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-					if(!splitURIParameters.getParameterMap().containsKey("su")) {
-						if(cookieParams == null) cookieParams = new URIParametersMap();
-						cookieParams.addParameter("su", su);
+					// Add any "su"
+					String su = (String)session.getAttribute(Constants.SU_REQUESTED);
+					if(su != null) {
+						if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+						if(!splitURIParameters.getParameterMap().containsKey("su")) {
+							if(cookieParams == null) cookieParams = new URIParametersMap();
+							cookieParams.addParameter("su", su);
+						}
 					}
 				}
 				url = iri.addParameters(cookieParams).toASCIIString();
