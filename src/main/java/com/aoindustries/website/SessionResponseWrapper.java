@@ -66,6 +66,15 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	private String encode(String url, boolean isRedirect) {
+		boolean canonical = Canonical.get();
+		SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
+		List<Skin.Language> languages = siteSettings.getLanguages(request);
+		// Short-cut canonical URL processing when there are not multiple languages
+		if(canonical && languages.size() <= 1) {
+			// Canonical URLs may only include the language, and there is not multiple
+			// languages, leave URL unaltered:
+			return url;
+		}
 		// Don't rewrite empty or anchor-only URLs
 		if(url.isEmpty() || url.charAt(0) == '#') return url;
 		try {
@@ -101,7 +110,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 			) {
 				return url;
 			} else {
-				return addNoCookieParameters(url, isRedirect);
+				return addNoCookieParameters(canonical, languages, url, isRedirect);
 			}
 			int slashPos = remaining.indexOf('/');
 			if(slashPos == -1) slashPos = remaining.length();
@@ -113,7 +122,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				// TODO: What about [...] IPv6 addresses?
 				host.equalsIgnoreCase(request.getServerName())
 			) {
-				String withCookies = addNoCookieParameters(remaining.substring(slashPos), isRedirect);
+				String withCookies = addNoCookieParameters(canonical, languages, remaining.substring(slashPos), isRedirect);
 				int newUrlLen = protocol.length() + hostPort.length() + withCookies.length();
 				if(newUrlLen == url.length()) {
 					assert url.equals(protocol + hostPort + withCookies);
@@ -169,8 +178,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * Adds the no cookie parameters (language and layout) if needed and not already set.
 	 */
-	private String addNoCookieParameters(String url, boolean isRedirect) throws JspException, IOException, SQLException {
-		boolean canonical = Canonical.get();
+	private String addNoCookieParameters(boolean canonical, List<Skin.Language> languages, String url, boolean isRedirect) throws JspException, IOException, SQLException {
 		HttpSession session = request.getSession(false);
 		if(canonical || session == null || session.isNew() || request.isRequestedSessionIdFromURL()) {
 			IRI iri = new IRI(url);
@@ -192,7 +200,6 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				&& !iri.pathEndsWithIgnoreCase(".txt")
 				&& !iri.pathEndsWithIgnoreCase(".zip")
 			) {
-				ServletContext servletContext = request.getServletContext();
 				if(!canonical && session != null) {
 					// Use the default servlet container jsessionid when any session object exists besides
 					// the three values that will be encoded into the URL as parameters below.
@@ -236,7 +243,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 					if(whyNeedsJsessionid!=null) {
 						if(HttpServletUtil.isGooglebot(request)) {
 							// Create or update a ticket about the problem
-							getLogger(servletContext).logp(
+							getLogger(request.getServletContext()).logp(
 								Level.WARNING,
 								SessionResponseWrapper.class.getName(),
 								"addNoCookieParameters",
@@ -268,8 +275,6 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 
 				if(session != null) {
 					// Only add the language if there is more than one possibility
-					SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
-					List<Skin.Language> languages = siteSettings.getLanguages(request);
 					if(languages.size()>1) {
 						Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
 						if(locale!=null) {
