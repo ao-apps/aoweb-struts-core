@@ -66,8 +66,6 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	private String encode(String url, boolean isRedirect) {
-		// Don't rewrite canonical URLs
-		if(Canonical.get()) return url;
 		// Don't rewrite empty or anchor-only URLs
 		if(url.isEmpty() || url.charAt(0) == '#') return url;
 		try {
@@ -172,8 +170,9 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	 * Adds the no cookie parameters (language and layout) if needed and not already set.
 	 */
 	private String addNoCookieParameters(String url, boolean isRedirect) throws JspException, IOException, SQLException {
+		boolean canonical = Canonical.get();
 		HttpSession session = request.getSession(false);
-		if(session == null || session.isNew() || request.isRequestedSessionIdFromURL()) {
+		if(canonical || session == null || session.isNew() || request.isRequestedSessionIdFromURL()) {
 			IRI iri = new IRI(url);
 			// Don't add for certains file types
 			if(
@@ -194,7 +193,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				&& !iri.pathEndsWithIgnoreCase(".zip")
 			) {
 				ServletContext servletContext = request.getServletContext();
-				if(session != null) {
+				if(!canonical && session != null) {
 					// Use the default servlet container jsessionid when any session object exists besides
 					// the three values that will be encoded into the URL as parameters below.
 					Enumeration<String> attributeNames = session.getAttributeNames();
@@ -253,15 +252,17 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				URIParameters splitURIParameters = null;
 				MutableURIParameters cookieParams = null;
 
-				// Add the Constants.AUTHENTICATION_TARGET if needed
-				String authenticationTarget = (session == null) ? null : (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);
-				if(authenticationTarget==null) authenticationTarget = request.getParameter(Constants.AUTHENTICATION_TARGET);
-				//System.err.println("DEBUG: addNoCookieParameters: authenticationTarget="+authenticationTarget);
-				if(authenticationTarget != null) {
-					if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-					if(!splitURIParameters.getParameterMap().containsKey(Constants.AUTHENTICATION_TARGET)) {
-						if(cookieParams == null) cookieParams = new URIParametersMap();
-						cookieParams.addParameter(Constants.AUTHENTICATION_TARGET, authenticationTarget);
+				if(!canonical) {
+					// Add the Constants.AUTHENTICATION_TARGET if needed
+					String authenticationTarget = (session == null) ? null : (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);
+					if(authenticationTarget==null) authenticationTarget = request.getParameter(Constants.AUTHENTICATION_TARGET);
+					//System.err.println("DEBUG: addNoCookieParameters: authenticationTarget="+authenticationTarget);
+					if(authenticationTarget != null) {
+						if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+						if(!splitURIParameters.getParameterMap().containsKey(Constants.AUTHENTICATION_TARGET)) {
+							if(cookieParams == null) cookieParams = new URIParametersMap();
+							cookieParams.addParameter(Constants.AUTHENTICATION_TARGET, authenticationTarget);
+						}
 					}
 				}
 
@@ -289,35 +290,37 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							}
 						}
 					}
-					// Only add the layout if there is more than one possibility
-					List<Skin> skins = siteSettings.getSkins();
-					if(skins.size()>1) {
-						String layout = (String)session.getAttribute(Constants.LAYOUT);
-						if(layout!=null) {
-							// Don't add if is the default layout
-							Skin defaultSkin = SkinAction.getDefaultSkin(skins, request);
-							if(!layout.equals(defaultSkin.getName())) {
-								// Make sure it is one of the allowed skins
-								for(Skin skin : skins) {
-									if(skin.getName().equals(layout)) {
-										if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-										if(!splitURIParameters.getParameterMap().containsKey("layout")) {
-											if(cookieParams == null) cookieParams = new URIParametersMap();
-											cookieParams.addParameter("layout", layout);
+					if(!canonical) {
+						// Only add the layout if there is more than one possibility
+						List<Skin> skins = siteSettings.getSkins();
+						if(skins.size()>1) {
+							String layout = (String)session.getAttribute(Constants.LAYOUT);
+							if(layout!=null) {
+								// Don't add if is the default layout
+								Skin defaultSkin = SkinAction.getDefaultSkin(skins, request);
+								if(!layout.equals(defaultSkin.getName())) {
+									// Make sure it is one of the allowed skins
+									for(Skin skin : skins) {
+										if(skin.getName().equals(layout)) {
+											if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+											if(!splitURIParameters.getParameterMap().containsKey("layout")) {
+												if(cookieParams == null) cookieParams = new URIParametersMap();
+												cookieParams.addParameter("layout", layout);
+											}
+											break;
 										}
-										break;
 									}
 								}
 							}
 						}
-					}
-					// Add any "su"
-					String su = (String)session.getAttribute(Constants.SU_REQUESTED);
-					if(su != null) {
-						if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
-						if(!splitURIParameters.getParameterMap().containsKey("su")) {
-							if(cookieParams == null) cookieParams = new URIParametersMap();
-							cookieParams.addParameter("su", su);
+						// Add any "su"
+						String su = (String)session.getAttribute(Constants.SU_REQUESTED);
+						if(su != null) {
+							if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
+							if(!splitURIParameters.getParameterMap().containsKey("su")) {
+								if(cookieParams == null) cookieParams = new URIParametersMap();
+								cookieParams.addParameter("su", su);
+							}
 						}
 					}
 				}

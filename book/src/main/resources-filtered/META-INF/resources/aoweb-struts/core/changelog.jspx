@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-05T05:52:55-0500"
+		dateModified="2019-10-05T07:46:53-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -65,8 +65,19 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					</li>
 					<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
 					<li>
-						<code>SessionResponseWrapper</code> will now not write cookie parameters into
-						<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>.
+						<code>SessionResponseWrapper</code> now supports
+						<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>,
+						with the following behavior:
+						<ol>
+							<li><code>;jsessionid</code> is never used</li>
+							<li><code>language</code> parameter is always added for non-default language</li>
+							<li>
+								All other cookie parameters are skipped, such as <code>authenticationTarget</code>,
+								<code>layout</code>, and <code>su</code>.
+							</li>
+						</ol>
+						This should result in URLs consistent with what search engines see, assuming search engines
+						never supply cookies, never change the layout, and never tried to login or "su".
 					</li>
 					<li>Minimized session creation.</li>
 				</ul>
