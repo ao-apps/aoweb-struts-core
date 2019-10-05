@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -68,7 +68,10 @@ abstract public class AuthenticatedAction extends SkinAction {
 				if(queryString!=null) target = target+'?'+queryString;
 				request.getSession().setAttribute(Constants.AUTHENTICATION_TARGET, target);
 			} else {
-				request.getSession().removeAttribute(Constants.AUTHENTICATION_TARGET);
+				HttpSession session = request.getSession(false);
+				if(session != null) {
+					session.removeAttribute(Constants.AUTHENTICATION_TARGET);
+				}
 			}
 			return mapping.findForward("login");
 		}
@@ -84,7 +87,8 @@ abstract public class AuthenticatedAction extends SkinAction {
 	 * the user performs a switch user ("su")..
 	 */
 	public static AOServConnector getAuthenticatedAoConn(HttpServletRequest request, HttpServletResponse response) {
-		return (AOServConnector)request.getSession().getAttribute(Constants.AUTHENTICATED_AO_CONN);
+		HttpSession session = request.getSession(false);
+		return (session == null) ? null : (AOServConnector)session.getAttribute(Constants.AUTHENTICATED_AO_CONN);
 	}
 
 	/**
@@ -92,14 +96,14 @@ abstract public class AuthenticatedAction extends SkinAction {
 	 * stored in the session by <code>SkinAction</code>.
 	 */
 	public static AOServConnector getAoConn(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
 		AOServConnector authenticatedAoConn = getAuthenticatedAoConn(request, response);
 		// Not logged in
 		if(authenticatedAoConn==null) return null;
 
+		HttpSession session = request.getSession();
 		// Is a "su" requested?
-		String su=(String)session.getAttribute(Constants.SU_REQUESTED);
-		if(su!=null) {
+		String su = (String)session.getAttribute(Constants.SU_REQUESTED);
+		if(su != null) {
 			session.removeAttribute(Constants.SU_REQUESTED);
 			try {
 				AOServConnector aoConn;

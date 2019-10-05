@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -78,6 +78,7 @@ public class SkinAction extends LocaleAction {
 		// Trim and set to null if empty
 		if(layout!=null && (layout=layout.trim()).length()==0) layout=null;
 
+		// TODO: Avoid creating session and don't store in session for default layout?
 		HttpSession session = req.getSession();
 
 		if(layout!=null) {

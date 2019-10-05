@@ -75,7 +75,6 @@ public class Backup5CompletedAction extends Backup5Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -115,7 +114,10 @@ public class Backup5CompletedAction extends Backup5Action {
 		);
 
 		// Clear backup signup-specific forms from the session
-		session.removeAttribute("backupSignupSelectPackageForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("backupSignupSelectPackageForm");
+		}
 
 		return mapping.findForward("success");
 	}

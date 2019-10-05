@@ -84,7 +84,6 @@ public class Managed7CompletedAction extends Managed7Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		ServletContext servletContext = myServlet.getServletContext();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
@@ -131,9 +130,12 @@ public class Managed7CompletedAction extends Managed7Action {
 		);
 
 		// Clear managed signup-specific forms from the session
-		session.removeAttribute("managedSignupSelectPackageForm");
-		session.removeAttribute("managedSignupCustomizeServerForm");
-		session.removeAttribute("managedSignupCustomizeManagementForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("managedSignupSelectPackageForm");
+			session.removeAttribute("managedSignupCustomizeServerForm");
+			session.removeAttribute("managedSignupCustomizeManagementForm");
+		}
 
 		return mapping.findForward("success");
 	}

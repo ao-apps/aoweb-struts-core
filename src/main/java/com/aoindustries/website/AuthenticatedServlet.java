@@ -28,6 +28,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Ensures the user is logged in.  Forwards to "login" if not logged in.  Next it checks the user permissions and returns status 403 if they don't have the
@@ -45,16 +46,20 @@ abstract public class AuthenticatedServlet extends HttpServlet {
 		HttpServletResponse response
 	) throws IOException {
 		// Must be logged in
-		AOServConnector aoConn = (AOServConnector)request.getSession().getAttribute("aoConn");
+		HttpSession session = request.getSession(false);
+		AOServConnector aoConn = (session == null) ? null : (AOServConnector)session.getAttribute("aoConn");
 		if(aoConn==null) {
 			// Save target for later
 			String target = request.getRequestURL().toString();
 			if(!target.endsWith("/login.do")) {
 				String queryString = request.getQueryString();
 				if(queryString!=null) target = target+'?'+queryString;
-				request.getSession().setAttribute(Constants.AUTHENTICATION_TARGET, target);
+				if(session == null) session = request.getSession();
+				session.setAttribute(Constants.AUTHENTICATION_TARGET, target);
 			} else {
-				request.getSession().removeAttribute(Constants.AUTHENTICATION_TARGET);
+				if(session != null) {
+					session.removeAttribute(Constants.AUTHENTICATION_TARGET);
+				}
 			}
 
 			int port = request.getServerPort();

@@ -75,7 +75,6 @@ public class Colocation5CompletedAction extends Colocation5Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -115,7 +114,10 @@ public class Colocation5CompletedAction extends Colocation5Action {
 		);
 
 		// Clear colocation signup-specific forms from the session
-		session.removeAttribute("colocationSignupSelectPackageForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("colocationSignupSelectPackageForm");
+		}
 
 		return mapping.findForward("success");
 	}

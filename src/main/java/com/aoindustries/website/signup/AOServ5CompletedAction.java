@@ -75,7 +75,6 @@ public class AOServ5CompletedAction extends AOServ5Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -117,7 +116,10 @@ public class AOServ5CompletedAction extends AOServ5Action {
 		);
 
 		// Clear aoserv signup-specific forms from the session
-		session.removeAttribute("aoservSignupSelectPackageForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("aoservSignupSelectPackageForm");
+		}
 
 		return mapping.findForward("success");
 	}

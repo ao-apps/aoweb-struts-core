@@ -75,7 +75,6 @@ public class Reseller5CompletedAction extends Reseller5Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -115,7 +114,10 @@ public class Reseller5CompletedAction extends Reseller5Action {
 		);
 
 		// Clear reseller signup-specific forms from the session
-		session.removeAttribute("resellerSignupSelectPackageForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("resellerSignupSelectPackageForm");
+		}
 
 		return mapping.findForward("success");
 	}

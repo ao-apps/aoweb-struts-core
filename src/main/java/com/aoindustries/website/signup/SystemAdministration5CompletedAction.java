@@ -75,7 +75,6 @@ public class SystemAdministration5CompletedAction extends SystemAdministration5A
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -115,7 +114,10 @@ public class SystemAdministration5CompletedAction extends SystemAdministration5A
 		);
 
 		// Clear system administration signup-specific forms from the session
-		session.removeAttribute("systemAdministrationSignupSelectPackageForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("systemAdministrationSignupSelectPackageForm");
+		}
 
 		return mapping.findForward("success");
 	}

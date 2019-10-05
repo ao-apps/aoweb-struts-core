@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -42,6 +44,25 @@ import org.apache.struts.action.ActionMapping;
  * @author AO Industries, Inc.
  */
 public class LocaleAction extends SiteSettingsAction {
+
+	/**
+	 * Gets the selected locale or the default locale if none has been selected.
+	 */
+	public static Locale getLocale(ServletContext servletContext, HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+			if(locale != null) return locale;
+		}
+		if(servletContext != null) {
+			try {
+				return getDefaultLocale(SiteSettings.getInstance(servletContext), request);
+			} catch(IOException | SQLException | JspException err) {
+				LogFactory.getLogger(servletContext, LocaleAction.class).log(Level.SEVERE, "Using default local", err);
+			}
+		}
+		return Locale.getDefault();
+	}
 
 	/**
 	 * Selects the <code>Locale</code>, sets the request attribute "locale", then the subclass execute method is invoked.

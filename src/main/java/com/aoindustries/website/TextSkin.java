@@ -46,7 +46,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
 
 /**
@@ -75,8 +74,7 @@ public class TextSkin extends Skin {
 
 	@Override
 	public String getDisplay(HttpServletRequest req) throws JspException {
-		HttpSession session = req.getSession();
-		Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+		Locale locale = LocaleAction.getLocale(req.getServletContext(), req);
 		MessageResources applicationResources = (MessageResources)req.getAttribute("/ApplicationResources");
 		if(applicationResources==null) throw new JspException("Unable to load resources: /ApplicationResources");
 		return applicationResources.getMessage(locale, "TextSkin.name");
@@ -130,15 +128,14 @@ public class TextSkin extends Skin {
 		try {
 			String layout = pageAttributes.getLayout();
 			if(!layout.equals(PageAttributes.LAYOUT_NORMAL)) throw new JspException("TODO: Implement layout: "+layout);
-			HttpSession session = req.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+			ServletContext servletContext = req.getServletContext();
+			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 			String urlBase = getUrlBase(req);
 			String path = pageAttributes.getPath();
 			if(path.startsWith("/")) path=path.substring(1);
 			final String fullPath = urlBase + path;
 			final String encodedFullPath = resp.encodeURL(URIEncoder.encodeURI(fullPath));
-			ServletContext servletContext = session.getServletContext();
 			SiteSettings settings = SiteSettings.getInstance(servletContext);
 			List<Skin> skins = settings.getSkins();
 			boolean isOkResponseStatus;
@@ -159,7 +156,9 @@ public class TextSkin extends Skin {
 					+ "    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n");
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
-			if(isOkResponseStatus && aoConn!=null) {
+			HttpSession session = req.getSession(false);
+			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
+			if(isOkResponseStatus && aoConn != null && session != null) {
 				out.print("    <meta http-equiv=\"Refresh\" content=\"");
 				encodeTextInXhtmlAttribute(Integer.toString(Math.max(60, session.getMaxInactiveInterval()-60)), out);
 				encodeTextInXhtmlAttribute(";URL=", out);
@@ -786,7 +785,7 @@ public class TextSkin extends Skin {
 				4,
 				true
 			);
-			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getSession().getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
+			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
 			out.print("  </body>\n");
 		} catch(IOException | SQLException err) {
 			throw new JspException(err);
@@ -1037,8 +1036,7 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width, String urlBase) throws JspException {
 		try {
-			HttpSession session = req.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+			Locale locale = LocaleAction.getLocale(req.getServletContext(), req);
 			MessageResources applicationResources = getMessageResources(req);
 
 			out.print("<div id=\"aoPopupAnchor_");
@@ -1166,8 +1164,7 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String urlBase) throws JspException {
 		try {
-			HttpSession session = req.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+			Locale locale = LocaleAction.getLocale(req.getServletContext(), req);
 			MessageResources applicationResources = getMessageResources(req);
 
 			out.print("<img class=\"aoPopupClose\" src=\"");

@@ -83,7 +83,6 @@ public class VirtualManaged7CompletedAction extends VirtualManaged7Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
@@ -129,9 +128,12 @@ public class VirtualManaged7CompletedAction extends VirtualManaged7Action {
 		);
 
 		// Clear virtualManaged signup-specific forms from the session
-		session.removeAttribute("virtualManagedSignupSelectPackageForm");
-		session.removeAttribute("virtualManagedSignupCustomizeServerForm");
-		session.removeAttribute("virtualManagedSignupCustomizeManagementForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("virtualManagedSignupSelectPackageForm");
+			session.removeAttribute("virtualManagedSignupCustomizeServerForm");
+			session.removeAttribute("virtualManagedSignupCustomizeManagementForm");
+		}
 
 		return mapping.findForward("success");
 	}

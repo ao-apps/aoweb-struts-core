@@ -47,11 +47,13 @@ public class LogoutAction extends SkinAction {
 		Skin skin
 	) throws Exception {
 		// Handle logout
-		HttpSession session = request.getSession();
-		session.removeAttribute(Constants.AO_CONN);
-		session.removeAttribute(Constants.AUTHENTICATED_AO_CONN);
-		session.removeAttribute(Constants.AUTHENTICATION_TARGET);
-		session.removeAttribute(Constants.SU_REQUESTED);
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute(Constants.AO_CONN);
+			session.removeAttribute(Constants.AUTHENTICATED_AO_CONN);
+			session.removeAttribute(Constants.AUTHENTICATION_TARGET);
+			session.removeAttribute(Constants.SU_REQUESTED);
+		}
 
 		// Try redirect
 		String target = request.getParameter("target");

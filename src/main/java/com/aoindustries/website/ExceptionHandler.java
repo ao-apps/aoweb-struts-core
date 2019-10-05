@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,12 +23,15 @@
 package com.aoindustries.website;
 
 import com.aoindustries.util.WrappedExceptions;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -42,7 +45,7 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 
 	@Override
 	public ActionForward execute(Exception exception, ExceptionConfig config, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-		ServletContext servletContext = request.getSession().getServletContext();
+		ServletContext servletContext = request.getServletContext();
 		Logger logger = LogFactory.getLogger(servletContext, ExceptionHandler.class);
 
 		// There are two sources for exceptions, not sure if these are the same because the original exception from a bean access in JSP is lost
@@ -72,7 +75,7 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 		Locale locale;
 		try {
 			locale = LocaleAction.getEffectiveLocale(siteSettings, request, response);
-		} catch(Exception err) {
+		} catch(RuntimeException | IOException | SQLException | JspException err) {
 			logger.log(Level.SEVERE, null, err);
 			// Use default locale
 			locale = Locale.getDefault();
@@ -83,7 +86,7 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 		Skin skin;
 		try {
 			skin = SkinAction.getSkin(siteSettings, request, response);
-		} catch(Exception err) {
+		} catch(RuntimeException | JspException err) {
 			logger.log(Level.SEVERE, null, err);
 			// Use text skin
 			skin = TextSkin.getInstance();

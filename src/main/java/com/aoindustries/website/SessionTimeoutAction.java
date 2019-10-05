@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -47,16 +47,19 @@ public class SessionTimeoutAction extends SkinAction {
 		Skin skin
 	) throws Exception {
 		// Logout, just in case session not actually expired
-		HttpSession session = request.getSession();
-		session.removeAttribute(Constants.AO_CONN);
-		session.removeAttribute(Constants.AUTHENTICATED_AO_CONN);
-		session.removeAttribute(Constants.AUTHENTICATION_TARGET);
-		session.removeAttribute(Constants.SU_REQUESTED);
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute(Constants.AO_CONN);
+			session.removeAttribute(Constants.AUTHENTICATED_AO_CONN);
+			session.removeAttribute(Constants.AUTHENTICATION_TARGET);
+			session.removeAttribute(Constants.SU_REQUESTED);
+		}
 
 		// Save the target so authentication will return to the previous page
 		String target = request.getParameter("target");
 		if(target!=null && target.length()>0 && !target.endsWith("/login.do")) {
-			request.getSession().setAttribute(Constants.AUTHENTICATION_TARGET, target);
+			if(session == null) session = request.getSession();
+			session.setAttribute(Constants.AUTHENTICATION_TARGET, target);
 		}
 
 		// Set the authenticationMessage

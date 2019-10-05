@@ -80,7 +80,6 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		ServletContext servletContext = myServlet.getServletContext();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
@@ -126,8 +125,11 @@ public class Dedicated6CompletedAction extends Dedicated6Action {
 		);
 
 		// Clear dedicated signup-specific forms from the session
-		session.removeAttribute("dedicatedSignupSelectPackageForm");
-		session.removeAttribute("dedicatedSignupCustomizeServerForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("dedicatedSignupSelectPackageForm");
+			session.removeAttribute("dedicatedSignupCustomizeServerForm");
+		}
 
 		return mapping.findForward("success");
 	}

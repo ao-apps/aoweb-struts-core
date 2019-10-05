@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -141,7 +142,8 @@ abstract public class SignupCustomizeServerForm extends ActionForm implements Se
 			// Find the current package definition
 			PackageDefinition pd = null;
 			if(rootConn!=null) {
-				SignupSelectPackageForm signupSelectPackageForm = (SignupSelectPackageForm)request.getSession().getAttribute(getSignupSelectPackageFormName());
+				HttpSession session = request.getSession(false);
+				SignupSelectPackageForm signupSelectPackageForm = (session == null) ? null : (SignupSelectPackageForm)session.getAttribute(getSignupSelectPackageFormName());
 				if(signupSelectPackageForm!=null) {
 					pd = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
 				}

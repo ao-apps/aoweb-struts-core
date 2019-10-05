@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-04T08:59:56-0500"
+		dateModified="2019-10-05T05:52:55-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -64,6 +64,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						or <ao:a href="https://tools.ietf.org/html/rfc3987">RFC 3987 IRI</ao:a> Unicode format.
 					</li>
 					<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
+					<li>Minimized session creation.</li>
 				</ul>
 			</changelog:release>
 		</c:if>

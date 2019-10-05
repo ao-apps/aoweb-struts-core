@@ -169,6 +169,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 	 * Adds the no cookie parameters (language and layout) if needed and not already set.
 	 */
 	private String addNoCookieParameters(String url, boolean isRedirect) throws JspException, IOException, SQLException {
+		// TODO: Can we avoid creating a session here?
 		HttpSession session = request.getSession();
 		if(session.isNew() || request.isRequestedSessionIdFromURL()) {
 			IRI iri = new IRI(url);
@@ -224,7 +225,8 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 								break;
 							}
 						} else {
-							throw new AssertionError("Session object is neither an expected value nor a SessionActionForm.  name="+name+", sessionObject.class="+sessionObject.getClass().getName());
+							Class<?> clazz = (sessionObject == null) ? null : sessionObject.getClass();
+							throw new AssertionError("Session object is neither an expected value nor a SessionActionForm.  name="+name+", sessionObject.class="+(clazz == null ? null : clazz.getName()));
 						}
 					}
 				}

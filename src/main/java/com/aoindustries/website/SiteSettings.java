@@ -170,8 +170,8 @@ public class SiteSettings {
 	 * The off version is created by filling with black, opacity 25% in gimp 2.
 	 */
 	public List<Skin.Language> getLanguages(HttpServletRequest req) throws IOException, SQLException {
-		HttpSession session = req.getSession();
-		Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
+		HttpSession session = req.getSession(false);
+		Locale locale = (session == null) ? null : (Locale)session.getAttribute(Globals.LOCALE_KEY);
 		if(locale==null) locale = Locale.getDefault(); // Can't use: LocaleAction.getDefaultLocale(req); due to stack overflow
 		boolean isUnitedStates = locale.getCountry().equals(Locale.US.getCountry());
 

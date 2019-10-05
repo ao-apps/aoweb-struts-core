@@ -80,7 +80,6 @@ public class VirtualDedicated6CompletedAction extends VirtualDedicated6Action {
 		);
 
 		// Used later
-		HttpSession session = request.getSession();
 		ActionServlet myServlet = getServlet();
 		ServletContext servletContext = myServlet.getServletContext();
 		AOServConnector rootConn = siteSettings.getRootAOServConnector();
@@ -126,8 +125,11 @@ public class VirtualDedicated6CompletedAction extends VirtualDedicated6Action {
 		);
 
 		// Clear virtualDedicated signup-specific forms from the session
-		session.removeAttribute("virtualDedicatedSignupSelectPackageForm");
-		session.removeAttribute("virtualDedicatedSignupCustomizeServerForm");
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.removeAttribute("virtualDedicatedSignupSelectPackageForm");
+			session.removeAttribute("virtualDedicatedSignupCustomizeServerForm");
+		}
 
 		return mapping.findForward("success");
 	}
