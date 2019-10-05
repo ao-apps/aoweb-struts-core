@@ -320,7 +320,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 						}
 						// Add any "su"
 						String su = (String)session.getAttribute(Constants.SU_REQUESTED);
-						if(su != null) {
+						if(su != null && !su.isEmpty()) {
 							if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 							if(!splitURIParameters.getParameterMap().containsKey("su")) {
 								if(cookieParams == null) cookieParams = new URIParametersMap();
