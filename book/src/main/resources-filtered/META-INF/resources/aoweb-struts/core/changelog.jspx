@@ -64,6 +64,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						or <ao:a href="https://tools.ietf.org/html/rfc3987">RFC 3987 IRI</ao:a> Unicode format.
 					</li>
 					<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
+					<li>
+						<code>SessionResponseWrapper</code> will now not write cookie parameters into
+						<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>.
+					</li>
 					<li>Minimized session creation.</li>
 				</ul>
 			</changelog:release>
