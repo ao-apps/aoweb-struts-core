@@ -270,6 +270,7 @@ public class TextSkin extends Skin {
 			out.print("'></script>\n");
 			String googleAnalyticsNewTrackingCode = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			if(googleAnalyticsNewTrackingCode!=null) {
+				// TODO: Global site tag (gtag.js) once HTML 5
 				out.print("    <script type='text/javascript' src='");
 				out.print(req.isSecure() ? "https://ssl.google-analytics.com/ga.js" : "http://www.google-analytics.com/ga.js");
 				out.print("'></script>\n");
@@ -785,6 +786,7 @@ public class TextSkin extends Skin {
 				4,
 				true
 			);
+			// TODO: Global site tag (gtag.js) once HTML 5
 			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
 			out.print("  </body>\n");
 		} catch(IOException | SQLException err) {
@@ -793,10 +795,11 @@ public class TextSkin extends Skin {
 	}
 
 	/**
-	 * Reusable implemention of Google analytics pageview tracking script.
+	 * Reusable implementation of Google analytics pageview tracking script.
 	 *
 	 * @param googleAnalyticsNewTrackingCode if <code>null</code> will not print anything
 	 */
+	// TODO: Global site tag (gtag.js) once HTML 5
 	public static void printGoogleAnalyticsTrackPageViewScript(HttpServletRequest req, Appendable out, String googleAnalyticsNewTrackingCode) throws IOException {
 		if(googleAnalyticsNewTrackingCode!=null) {
 			Integer responseStatus = (Integer)req.getAttribute(Constants.HTTP_SERVLET_RESPONSE_STATUS);
