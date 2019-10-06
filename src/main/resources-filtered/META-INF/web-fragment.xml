@@ -27,11 +27,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
                       http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
   version="3.0"
   metadata-complete="false">
-	<name>aoweb-struts-core</name>
-	<!-- Causes: The display name was defined in multiple fragments with different value
-    <display-name>AOWeb Struts Core</display-name>
+	<name>@{project.artifactId}-@{project.version}</name>
+	<!-- Causes error: "The display name was defined in multiple fragments with different value"
+    <display-name>@{project.name}</display-name>
 	-->
-	<description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</description>
+	<description>@{project.description}</description>
 
 	<!-- Filter to write selective values into URL when cookies disabled for SEO purposes. -->
 	<filter>
