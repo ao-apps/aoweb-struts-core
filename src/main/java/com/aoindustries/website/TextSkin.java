@@ -341,14 +341,10 @@ public class TextSkin extends Skin {
 					out.print("') window.top.location.href='");
 					NewEncodingUtils.encodeTextInJavaScriptInXhtml(
 						resp.encodeURL(
-							URIEncoder.encodeURI(
-								fullPath
-								+ (fullPath.indexOf('?')==-1 ? '?' : '&')
-								+ "layout="
-								+ URIEncoder.encodeURIComponent(skin.getName())
-							)
+							new AnyURI(fullPath)
+								.addEncodedParameter("layout", URIEncoder.encodeURIComponent(skin.getName()))
+								.toASCIIString()
 						),
-						// TODO: Look for '#', too
 						out
 					);
 					out.print("';\n");
