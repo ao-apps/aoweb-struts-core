@@ -110,7 +110,6 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					.append(URIEncoder.encodeURIComponent(currency));
 			}
 			// TODO: Many of these after-POST sendRedirect should be converted to 303 redirects
-			// TODO: Make sure all these redirects are in UTF-8
 			response.sendRedirect(
 				response.encodeRedirectURL(
 					URIEncoder.encodeURI(
