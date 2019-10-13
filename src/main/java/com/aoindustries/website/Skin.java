@@ -23,6 +23,7 @@
 package com.aoindustries.website;
 
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
+import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
@@ -76,19 +77,15 @@ abstract public class Skin {
 			{
 				Language language = languages.get(0);
 				out.append("    <link rel='alternate' hreflang='x-default' href='");
-				String url = language.getUrl();
+				AnyURI uri = language.getUri();
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
-							url == null
-							? (
-								fullPath
-								+ (fullPath.indexOf('?')==-1 ? "?" : "&")
-								+ "language="
-								+ URIEncoder.encodeURIComponent(language.getCode())
-							)
-							// TODO: Look for '#', too
-							: url
+							(
+								uri == null
+								? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+								: uri
+							).toASCIIString()
 						)
 					),
 					out
@@ -100,19 +97,15 @@ abstract public class Skin {
 				out.append("    <link rel='alternate' hreflang='");
 				encodeTextInXhtmlAttribute(language.getCode(), out);
 				out.append("' href='");
-				String url = language.getUrl();
+				AnyURI uri = language.getUri();
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
-							url == null
-							? (
-								fullPath
-								+ (fullPath.indexOf('?')==-1 ? "?" : "&")
-								+ "language="
-								+ URIEncoder.encodeURIComponent(language.getCode())
-							)
-							// TODO: Look for '#', too
-							: url
+							(
+								uri == null
+								? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+								: uri
+							).toASCIIString()
 						)
 					),
 					out
@@ -239,7 +232,7 @@ abstract public class Skin {
 		private final String flagWidthKey;
 		private final String flagHeightResourcesKey;
 		private final String flagHeightKey;
-		private final String url;
+		private final AnyURI uri;
 
 		/**
 		 * @param url the constant URL to use or <code>null</code> to have automatically set.
@@ -256,7 +249,7 @@ abstract public class Skin {
 			String flagWidthKey,
 			String flagHeightResourcesKey,
 			String flagHeightKey,
-			String url
+			AnyURI uri
 		) {
 			this.code = code;
 			this.displayResourcesKey = displayResourcesKey;
@@ -269,7 +262,7 @@ abstract public class Skin {
 			this.flagWidthKey = flagWidthKey;
 			this.flagHeightResourcesKey = flagHeightResourcesKey;
 			this.flagHeightKey = flagHeightKey;
-			this.url = url;
+			this.uri = uri;
 		}
 
 		public String getCode() {
@@ -307,11 +300,11 @@ abstract public class Skin {
 		}
 
 		/**
-		 * Gets the absolute URL to use for this language or <code>null</code>
+		 * Gets the {@linkplain AnyURI URL} to use for this language or <code>null</code>
 		 * to change language on the existing page.
 		 */
-		public String getUrl() {
-			return url;
+		public AnyURI getUri() {
+			return uri;
 		}
 	}
 

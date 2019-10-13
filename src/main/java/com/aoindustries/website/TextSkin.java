@@ -30,6 +30,7 @@ import com.aoindustries.encoding.TextInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import com.aoindustries.encoding.TextInXhtmlEncoder;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
+import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.website.skintags.Child;
@@ -373,21 +374,17 @@ public class TextSkin extends Skin {
 			if(languages.size()>1) {
 				out.print("            ");
 				for(Language language : languages) {
-					String url = language.getUrl();
+					AnyURI uri = language.getUri();
 					if(language.getCode().equalsIgnoreCase(locale.getLanguage())) {
 						out.print("&#160;<a href='");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
-									url == null
-									? (
-										fullPath
-										+ (fullPath.indexOf('?')==-1 ? "?" : "&")
-										+ "language="
-										+ URIEncoder.encodeURIComponent(language.getCode())
-									)
-									// TODO: Look for '#', too
-									: url
+									(
+										uri == null
+										?  new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+										: uri
+									).toASCIIString()
 								)
 							),
 							out
@@ -418,15 +415,11 @@ public class TextSkin extends Skin {
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
-									url==null
-									? (
-										fullPath
-										+ (fullPath.indexOf('?')==-1 ? "?" : "&")
-										+ "language="
-										+ URIEncoder.encodeURIComponent(language.getCode())
-									)
-									// TODO: Look for '#', too
-									: url
+									(
+										uri == null
+										? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+										: uri
+									).toASCIIString()
 								)
 							),
 							out
