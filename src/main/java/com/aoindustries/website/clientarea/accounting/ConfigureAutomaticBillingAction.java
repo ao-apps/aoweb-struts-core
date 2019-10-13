@@ -31,8 +31,10 @@ import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.validator.GenericValidator;
@@ -92,16 +94,15 @@ public class ConfigureAutomaticBillingAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<Permission.Name> permissions;
-	static {
-		List<Permission.Name> newList = new ArrayList<>(2);
-		newList.add(Permission.Name.get_credit_cards);
-		newList.add(Permission.Name.edit_credit_card);
-		permissions = Collections.unmodifiableList(newList);
-	}
+	private static final Set<Permission.Name> permissions = Collections.unmodifiableSet(
+		EnumSet.of(
+			Permission.Name.get_credit_cards,
+			Permission.Name.edit_credit_card
+		)
+	);
 
 	@Override
-	public List<Permission.Name> getPermissions() {
+	public Set<Permission.Name> getPermissions() {
 		return permissions;
 	}
 }

@@ -36,8 +36,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -247,16 +249,16 @@ public class MySQLReplicationMonitorAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<Permission.Name> permissions = new ArrayList<>(2);
-	static {
-		permissions.add(Permission.Name.get_mysql_master_status);
-		permissions.add(Permission.Name.get_mysql_slave_status);
-	}
-	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
+	private static final Set<Permission.Name> permissions = Collections.unmodifiableSet(
+		EnumSet.of(
+			Permission.Name.get_mysql_master_status,
+			Permission.Name.get_mysql_slave_status
+		)
+	);
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return unmodifiablePermissions;
+	public Set<Permission.Name> getPermissions() {
+		return permissions;
 	}
 
 	public static class MySQLServerRow {

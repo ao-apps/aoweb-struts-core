@@ -30,10 +30,8 @@ import com.aoindustries.util.StringUtility;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -97,14 +95,8 @@ public class EditAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
-	private static final List<Permission.Name> permissions = new ArrayList<>(2);
-	private static final List<Permission.Name> unmodifiablePermissions = Collections.unmodifiableList(permissions);
-	static {
-		permissions.add(Permission.Name.add_ticket);
-		permissions.add(Permission.Name.edit_ticket);
-	}
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return unmodifiablePermissions;
+	public Set<Permission.Name> getPermissions() {
+		return EditCompletedAction.permissions;
 	}
 }

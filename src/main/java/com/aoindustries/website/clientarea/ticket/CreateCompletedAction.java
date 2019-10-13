@@ -34,8 +34,8 @@ import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -100,7 +100,7 @@ public class CreateCompletedAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.add_ticket);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.add_ticket);
 	}
 }

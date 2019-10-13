@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -59,7 +60,7 @@ abstract public class PermissionAction extends AuthenticatedAction {
 		Skin skin,
 		AOServConnector aoConn
 	) throws Exception {
-		List<Permission.Name> permissions = getPermissions();
+		Set<Permission.Name> permissions = getPermissions();
 
 		// No permissions defined, default to denied
 		if(permissions==null || permissions.isEmpty()) {
@@ -143,10 +144,9 @@ abstract public class PermissionAction extends AuthenticatedAction {
 	}
 
 	/**
-	 * Gets the list of permissions that are required for this action.  Returning a null or empty list will result in nothing being allowed.
+	 * Gets the set of permissions that are required for this action.  Returning a null or empty set will result in nothing being allowed.
 	 *
 	 * @see  Permission
 	 */
-	// TODO: Should this be EnumSet?
-	abstract public List<Permission.Name> getPermissions();
+	abstract public Set<Permission.Name> getPermissions();
 }

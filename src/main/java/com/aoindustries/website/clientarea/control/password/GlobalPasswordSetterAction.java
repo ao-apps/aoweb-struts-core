@@ -31,6 +31,7 @@ import com.aoindustries.website.Skin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -82,12 +83,7 @@ public class GlobalPasswordSetterAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		List<Permission.Name> permissions = new ArrayList<>();
-		permissions.add(Permission.Name.set_business_administrator_password);
-		permissions.add(Permission.Name.set_linux_server_account_password);
-		permissions.add(Permission.Name.set_mysql_server_user_password);
-		permissions.add(Permission.Name.set_postgres_server_user_password);
-		return permissions;
+	public Set<Permission.Name> getPermissions() {
+		return GlobalPasswordSetterCompletedAction.permissions;
 	}
 }

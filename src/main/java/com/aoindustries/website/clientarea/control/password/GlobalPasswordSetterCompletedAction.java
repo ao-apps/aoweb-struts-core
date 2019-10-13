@@ -29,9 +29,11 @@ import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -87,13 +89,17 @@ public class GlobalPasswordSetterCompletedAction extends PermissionAction {
 		return mapping.findForward("success");
 	}
 
+	static final Set<Permission.Name> permissions = Collections.unmodifiableSet(
+		EnumSet.of(
+			Permission.Name.set_business_administrator_password,
+			Permission.Name.set_linux_server_account_password,
+			Permission.Name.set_mysql_server_user_password,
+			Permission.Name.set_postgres_server_user_password
+		)
+	);
+
 	@Override
-	public List<Permission.Name> getPermissions() {
-		List<Permission.Name> permissions = new ArrayList<>();
-		permissions.add(Permission.Name.set_business_administrator_password);
-		permissions.add(Permission.Name.set_linux_server_account_password);
-		permissions.add(Permission.Name.set_mysql_server_user_password);
-		permissions.add(Permission.Name.set_postgres_server_user_password);
+	public Set<Permission.Name> getPermissions() {
 		return permissions;
 	}
 }

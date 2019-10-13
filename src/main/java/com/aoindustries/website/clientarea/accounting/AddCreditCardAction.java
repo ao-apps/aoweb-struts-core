@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -159,7 +160,7 @@ public class AddCreditCardAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.add_credit_card);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.add_credit_card);
 	}
 }

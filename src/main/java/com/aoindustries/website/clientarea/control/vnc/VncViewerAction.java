@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2018  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -30,8 +30,8 @@ import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -82,7 +82,7 @@ public class VncViewerAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.vnc_console);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.vnc_console);
 	}
 }

@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
@@ -94,7 +95,7 @@ public class MySQLPasswordSetterAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.set_mysql_server_user_password);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.set_mysql_server_user_password);
 	}
 }

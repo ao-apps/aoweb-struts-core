@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-05T07:46:53-0500"
+		dateModified="2019-10-12T20:18:26-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -80,6 +80,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						never supply cookies, never change the layout, and never tried to login or "su".
 					</li>
 					<li>Minimized session creation.</li>
+					<li><code>PermissionAction.getPermissions()</code> changed from <code>List</code> to <code>Set</code>.</li>
 				</ul>
 			</changelog:release>
 		</c:if>

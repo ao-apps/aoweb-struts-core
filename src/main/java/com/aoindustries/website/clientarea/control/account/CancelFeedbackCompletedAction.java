@@ -29,8 +29,8 @@ import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.validator.GenericValidator;
@@ -80,7 +80,7 @@ public class CancelFeedbackCompletedAction  extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.cancel_business);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.cancel_business);
 	}
 }

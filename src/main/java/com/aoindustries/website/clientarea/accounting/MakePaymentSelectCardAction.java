@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.validator.GenericValidator;
@@ -150,7 +151,7 @@ public class MakePaymentSelectCardAction extends PermissionAction {
 	}
 
 	@Override
-	public List<Permission.Name> getPermissions() {
-		return Collections.singletonList(Permission.Name.get_credit_cards);
+	public Set<Permission.Name> getPermissions() {
+		return Collections.singleton(Permission.Name.get_credit_cards);
 	}
 }
