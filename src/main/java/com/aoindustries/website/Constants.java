@@ -49,7 +49,6 @@ public class Constants {
 
 	/**
 	 * The session key that stores the authentication target.
-	 * // TODO: Review AUTHENTICATION_TARGET stored as decodedURI
 	 */
 	public static final String AUTHENTICATION_TARGET="authenticationTarget";
 
