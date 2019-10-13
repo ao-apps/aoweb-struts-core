@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-12T20:56:19-0500"
+		dateModified="2019-10-12T22:59:07-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -51,40 +51,49 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				groupId="@{documented.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{documented.scm.url}"
-			>
-				<ul>
-					<li>Updated for compatibility with <core:link book="/ao-lang" page="/changelog.jspx" element="release-notes-3.0.0">ao-lang-3.0.0</core:link>.</li>
-					<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.1.0">aocode-public-3.1.0</core:link>.</li>
-					<li>Updated for compatibility with <core:link book="/aoserv/client" page="/changelog.jspx" element="release-notes-1.83.1">aoserv-client-1.83.1</core:link>.</li>
-					<li>Cookie names, values, comments, and paths are now URI-encoded.</li>
-					<li>No longer URL rewriting <code>file:</code> and <code>data:</code> URLs.</li>
-					<li>
-						Using new filter <code>EncodeURIFilter</code> which encodes the URL to either
-						<ao:a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URI</ao:a> US-ASCII format
-						or <ao:a href="https://tools.ietf.org/html/rfc3987">RFC 3987 IRI</ao:a> Unicode format.
-					</li>
-					<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
-					<li>
-						<code>SessionResponseWrapper</code> now supports
-						<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>,
-						with the following behavior:
-						<ol>
-							<li><code>;jsessionid</code> is never used</li>
-							<li><code>language</code> parameter is always added for non-default language</li>
-							<li>
-								All other cookie parameters are skipped, such as <code>authenticationTarget</code>,
-								<code>layout</code>, and <code>su</code>.
-							</li>
-						</ol>
-						This should result in URLs consistent with what search engines see, assuming search engines
-						never supply cookies, never change the layout, and never tried to login or "su".
-					</li>
-					<li>Minimized session creation.</li>
-					<li><code>PermissionAction.getPermissions()</code> changed from <code>List</code> to <code>Set</code>.</li>
-					<li><code>Skin.Language</code> now uses <code>AnyURI</code> instead of <code>String</code> for URLs.</li>
-				</ul>
-			</changelog:release>
+			/>
 		</c:if>
+
+		<changelog:release
+			projectName="@{documented.name}"
+			version="2.0.0"
+			datePublished="2019-10-12T22:59:07-0500"
+			groupId="@{documented.groupId}"
+			artifactId="@{documented.artifactId}"
+			scmUrl="@{documented.scm.url}"
+		>
+			<ul>
+				<li>Updated for compatibility with <core:link book="/ao-lang" page="/changelog.jspx" element="release-notes-3.0.0">ao-lang-3.0.0</core:link>.</li>
+				<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.1.0">aocode-public-3.1.0</core:link>.</li>
+				<li>Updated for compatibility with <core:link book="/aoserv/client" page="/changelog.jspx" element="release-notes-1.83.1">aoserv-client-1.83.1</core:link>.</li>
+				<li>Cookie names, values, comments, and paths are now URI-encoded.</li>
+				<li>No longer URL rewriting <code>file:</code> and <code>data:</code> URLs.</li>
+				<li>
+					Using new filter <code>EncodeURIFilter</code> which encodes the URL to either
+					<ao:a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URI</ao:a> US-ASCII format
+					or <ao:a href="https://tools.ietf.org/html/rfc3987">RFC 3987 IRI</ao:a> Unicode format.
+				</li>
+				<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
+				<li>
+					<code>SessionResponseWrapper</code> now supports
+					<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>,
+					with the following behavior:
+					<ol>
+						<li><code>;jsessionid</code> is never used</li>
+						<li><code>language</code> parameter is always added for non-default language</li>
+						<li>
+							All other cookie parameters are skipped, such as <code>authenticationTarget</code>,
+							<code>layout</code>, and <code>su</code>.
+						</li>
+					</ol>
+					This should result in URLs consistent with what search engines see, assuming search engines
+					never supply cookies, never change the layout, and never tried to login or "su".
+				</li>
+				<li>Minimized session creation.</li>
+				<li><code>PermissionAction.getPermissions()</code> changed from <code>List</code> to <code>Set</code>.</li>
+				<li><code>Skin.Language</code> now uses <code>AnyURI</code> instead of <code>String</code> for URLs.</li>
+			</ul>
+		</changelog:release>
 
 		<changelog:release
 			projectName="@{documented.name}"
