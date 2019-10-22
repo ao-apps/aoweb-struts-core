@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,13 +22,16 @@
  */
 package com.aoindustries.website.aowebtags;
 
+import com.aoindustries.encoding.MediaWriter;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import static com.aoindustries.website.ApplicationResources.accessor;
+import java.io.CharArrayWriter;
 import java.io.IOException;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -46,13 +49,13 @@ public class ScriptGroupTag extends BodyTagSupport {
 	/**
 	 * The request attribute name used to store the sequence.
 	 */
-	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = ScriptGroupTag.class.getName()+".sequence";
+	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = ScriptGroupTag.class.getName() + ".sequence";
 
 	private static final long serialVersionUID = 1L;
 
 	private String onloadMode;
 
-	final private StringBuilder scriptOut = new StringBuilder();
+	private CharArrayWriter scriptOut = new CharArrayWriter();
 
 	public ScriptGroupTag() {
 		init();
@@ -61,11 +64,11 @@ public class ScriptGroupTag extends BodyTagSupport {
 	private void init() {
 		onloadMode = "none";
 		// Bring back down to size if exceeds MAX_PERSISTENT_BUFFER_SIZE
-		if(scriptOut.length()>MAX_PERSISTENT_BUFFER_SIZE) {
-			scriptOut.setLength(MAX_PERSISTENT_BUFFER_SIZE);
-			scriptOut.trimToSize();
+		if(scriptOut.size() > MAX_PERSISTENT_BUFFER_SIZE) {
+			scriptOut = new CharArrayWriter();
+		} else {
+			scriptOut.reset();
 		}
-		scriptOut.setLength(0);
 	}
 
 	@Override
@@ -76,49 +79,36 @@ public class ScriptGroupTag extends BodyTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			if(scriptOut.length()>0) {
-				JspWriter out = pageContext.getOut();
-				if("none".equals(onloadMode)) {
-					out.print("<script type='text/javascript'>\n"
-							+ "  // <![CDATA[\n");
-					out.print(scriptOut);
-					out.print("  // ]]>\n"
-							+ "</script>\n");
-				} else {
-					ServletRequest request = pageContext.getRequest();
-					Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
-					if(sequence==null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
-					long sequenceId = sequence.getNextSequenceValue();
-					if("before".equals(onloadMode)) {
-						out.print("<script type='text/javascript'>\n"
-								+ "  // <![CDATA[\n"
-								+ "  var scriptOutOldOnload"); out.print(sequenceId); out.print("=window.onload;\n"
-								+ "  function scriptOutOnload"); out.print(sequenceId); out.print("() {\n");
-						out.print(scriptOut);
-						out.print("    if(scriptOutOldOnload"); out.print(sequenceId); out.print(") {\n"
-								+ "      scriptOutOldOnload"); out.print(sequenceId); out.print("();\n"
-								+ "      scriptOutOldOnload"); out.print(sequenceId); out.print("=null;\n"
-								+ "    }\n"
-								+ "  }\n"
-								+ "  window.onload = scriptOutOnload"); out.print(sequenceId); out.print(";\n"
-								+ "  // ]]>\n"
-								+ "</script>\n");
-					} else if("after".equals(onloadMode)) {
-						out.print("<script type='text/javascript'>\n"
-								+ "  // <![CDATA[\n"
-								+ "  var scriptOutOldOnload"); out.print(sequenceId); out.print("=window.onload;\n"
-								+ "  function scriptOutOnload"); out.print(sequenceId); out.print("() {\n"
-								+ "    if(scriptOutOldOnload"); out.print(sequenceId); out.print(") {\n"
-								+ "      scriptOutOldOnload"); out.print(sequenceId); out.print("();\n"
-								+ "      scriptOutOldOnload"); out.print(sequenceId); out.print("=null;\n"
-								+ "    }\n");
-						out.print(scriptOut);
-						out.print("  }\n"
-								+ "  window.onload = scriptOutOnload"); out.print(sequenceId); out.print(";\n"
-								+ "  // ]]>\n"
-								+ "</script>\n");
+			if(scriptOut.size() > 0) {
+				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+				Html html = HtmlEE.get(pageContext.getServletContext(), request, pageContext.getOut());
+				try (MediaWriter script = html.script().out()) {
+					if("none".equals(onloadMode)) {
+						scriptOut.writeTo(script);
 					} else {
-						throw new JspException(accessor.getMessage("aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode));
+						Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
+						if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
+						String sequenceId = Long.toString(sequence.getNextSequenceValue());
+						boolean wroteScript = false;
+						script.write("  var scriptOutOldOnload"); script.write(sequenceId); script.write("=window.onload;\n"
+								+ "  function scriptOutOnload"); script.write(sequenceId); script.write("() {\n");
+						if("before".equals(onloadMode)) {
+							scriptOut.writeTo(script);
+							wroteScript = true;
+						}
+						script.write("    if(scriptOutOldOnload"); script.write(sequenceId); script.write(") {\n"
+								+ "      scriptOutOldOnload"); script.write(sequenceId); script.write("();\n"
+								+ "      scriptOutOldOnload"); script.write(sequenceId); script.write("=null;\n"
+								+ "    }\n");
+						if(!wroteScript && "after".equals(onloadMode)) {
+							scriptOut.writeTo(script);
+							wroteScript = true;
+						}
+						script.write("  }\n"
+								+ "  window.onload = scriptOutOnload"); script.write(sequenceId); script.write(";\n");
+						if(!wroteScript) {
+							throw new JspException(accessor.getMessage("aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode));
+						}
 					}
 				}
 			}

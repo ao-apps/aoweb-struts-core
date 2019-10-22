@@ -484,16 +484,75 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-27T16:59:13-0500" -->
 		<description><![CDATA[
 			<p>
-				Writes the skin between the HTML tags and the page content.
+				Sets up the request and response, then writes all of the HTML
+				preceding and following the content of the page.
 			</p>
 		]]></description>
 		<name>skin</name>
 		<tag-class>com.aoindustries.website.skintags.SkinTag</tag-class>
 		<tei-class>com.aoindustries.website.skintags.SkinTagTEI</tei-class>
 		<body-content>JSP</body-content>
+		<attribute>
+			<description><![CDATA[
+				<p>
+					When <code>SGML</code>, forces the content-type to be <code>text/html</code>.
+					When <code>XML</code>, forces the content-type to be <code>application/xhtml+xml</code>.
+					When <code>auto</code> (the default), the following steps are performed to resolve the serialization:
+				</p>
+				<ol>
+					<li>Use the serialization active on the current request.</li>
+					<li>
+						Use the application <a rel="nofollow" href="@{javac.link.javaeeApi.6}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
+						<code>com.aoindustries.html.Serialization.default</code>
+						that allows an application to control the selection of HTML versus XHTML.
+					</li>
+					<li>
+						When this context-param is unspecified or <code>auto</code>,
+						determine the serialization based on the client's <code>Accept</code> header.
+					</li>
+				</ol>
+				<p>
+					This should normally be left with the default value of <code>auto</code>.  This is used
+					when the content is known to contain invalid markup that can not be parsed as XML.
+				</p>
+			]]></description>
+			<name>serialization</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+				<p>
+					The <a href="https://www.w3schools.com/tags/tag_doctype.asp">&lt;!DOCTYPE&gt;</a> to use,
+					must be one of <code>default</code>, <code>HTML5</code>, <code>STRICT</code>, <code>TRANSITIONAL</code>,
+					<code>FRAMESET</code>, or <code>NONE</code>.
+					Defaults to <code>HTML5</code>.  <code>NONE</code> will suppress the output of a doctype.
+				</p>
+				<p>
+					When <code>default</code>, the following steps are performed to resolve the doctype:
+				</p>
+				<ol>
+					<li>Use the doctype active on the current request.</li>
+					<li>
+						Use the application <a rel="nofollow" href="@{javac.link.javaeeApi.6}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
+						<code>com.aoindustries.html.Doctype.default</code>
+						that allows an application to control the default doctype.
+					</li>
+					<li>
+						When this context-param is unspecified or <code>default</code>,
+						defaults to <code>HTML5</code>.
+					</li>
+				</ol>
+			]]></description>
+			<name>doctype</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
 		<attribute>
 			<description><![CDATA[
 				<p>
@@ -531,7 +590,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-24T00:57:53-0500" -->
 		<description><![CDATA[
 			<p>
 				Surrounds the body with a light area.
@@ -543,7 +602,23 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<attribute>
 			<description><![CDATA[
 				<p>
+					The alignment for this area.
+				</p>
+			]]></description>
+			<name>align</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+				<p>
 					An optional width for the area.
+				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
 				</p>
 			]]></description>
 			<name>width</name>
@@ -566,7 +641,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-24T00:57:53-0500" -->
 		<description><![CDATA[
 			<p>
 				Surrounds the body with a white area.
@@ -578,7 +653,23 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<attribute>
 			<description><![CDATA[
 				<p>
+					The alignment for this area.
+				</p>
+			]]></description>
+			<name>align</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+				<p>
 					An optional width for the area.
+				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
 				</p>
 			]]></description>
 			<name>width</name>
@@ -601,20 +692,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2019-04-15T19:37:13-0500" -->
-		<description><![CDATA[
-			<p>
-				Sets the content type appropriately for the current
-				<a rel="nofollow" href="@{javac.link.javaApi}java/util/Locale.html">Locale</a>.
-			</p>
-		]]></description>
-		<name>setContentType</name>
-		<tag-class>com.aoindustries.website.skintags.SetContentTypeTag</tag-class>
-		<body-content>empty</body-content>
-	</tag>
-	<tag>
-		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-23T23:01:09-0500" -->
 		<description><![CDATA[
 			<p>
 				Writes the advanced content area with skin-provided formatting.
@@ -641,6 +719,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<p>
 					An optional width for the content area.
 				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
+				</p>
 			]]></description>
 			<name>width</name>
 			<required>false</required>
@@ -662,7 +745,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-23T23:01:09-0500" -->
 		<description><![CDATA[
 			<p>
 				Prints a line of content in a content area.
@@ -700,9 +783,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<attribute>
 			<description><![CDATA[
 				<p>
-					The width for the content starting this line.  This should be formatted for use
-					in a <code>style="width:…"</code> attribute, such as <code>100px</code> or
-					<code>33%</code>.
+					The width for the content starting this line.
+				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
 				</p>
 			]]></description>
 			<name>width</name>
@@ -726,7 +812,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-23T23:01:09-0500" -->
 		<description><![CDATA[
 			<p>
 				Prints a vertical divider within the content line.
@@ -788,9 +874,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<attribute>
 			<description><![CDATA[
 				<p>
-					The width for the content following the divider.  This should be formatted for use
-					in a <code>style="width:…"</code> attribute, such as <code>100px</code> or
-					<code>33%</code>.
+					The width for the content following the divider.
+				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
 				</p>
 			]]></description>
 			<name>width</name>
@@ -869,7 +958,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2019-10-23T23:01:09-0500" -->
 		<description><![CDATA[
 			<p>
 				A popup will display extra information when the mouse is moved over
@@ -885,6 +974,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					An optional width for the popup.
+				</p>
+				<p>
+					This should be formatted for use in a <code>style="width:…"</code> attribute,
+					such as <code>100px</code> or <code>33%</code>.
+					When a non-zero integer, "px" is automatically added.
 				</p>
 			]]></description>
 			<name>width</name>

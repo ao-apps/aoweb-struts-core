@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -36,6 +36,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 
 	private static final long serialVersionUID = 1L;
 
+	private String align;
 	private String width;
 	private boolean nowrap;
 
@@ -44,6 +45,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	}
 
 	private void init() {
+		align = null;
 		width = null;
 		nowrap = false;
 	}
@@ -52,7 +54,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
 		Skin skin = SkinTag.getSkin(pageContext);
 
-		skin.beginWhiteArea((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse(), pageContext.getOut(), width, nowrap);
+		skin.beginWhiteArea((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse(), pageContext.getOut(), align, width, nowrap);
 
 		return EVAL_BODY_INCLUDE;
 	}
@@ -68,6 +70,14 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 		} finally {
 			init();
 		}
+	}
+
+	public String getAlign() {
+		return align;
+	}
+
+	public void setAlign(String align) {
+		this.align = align;
 	}
 
 	public String getWidth() {

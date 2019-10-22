@@ -22,12 +22,14 @@
  */
 package com.aoindustries.website;
 
-import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.Link;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -54,31 +56,20 @@ abstract public class Skin {
 	;
 
 	/**
-	 * Provides the correct character set for the given locale.
-	 */
-	static public String getCharacterSet(Locale locale) {
-		/*if(locale!=null && locale.getLanguage().equals(Locale.JAPANESE.getLanguage())) {
-			//return "euc-jp";
-			return "Shift_JIS";
-		} else {*/
-			// return "iso-8859-1";
-			return StandardCharsets.UTF_8.name();
-		//}
-	}
-
-	/**
 	 * Prints the links to the alternate translations of this page.
 	 *
 	 * <a href="https://support.google.com/webmasters/answer/189077?hl=en">https://support.google.com/webmasters/answer/189077?hl=en</a>
 	 */
-	public static void printAlternativeLinks(HttpServletResponse resp, Appendable out, String fullPath, List<Language> languages) throws IOException {
+	public static void printAlternativeLinks(HttpServletRequest req, HttpServletResponse resp, Writer out, String fullPath, List<Language> languages) throws IOException {
 		if(languages.size()>1) {
+			Html html = HtmlEE.get(req, out);
 			// Default language
 			{
 				Language language = languages.get(0);
-				out.append("    <link rel='alternate' hreflang='x-default' href='");
 				AnyURI uri = language.getUri();
-				encodeTextInXhtmlAttribute(
+				out.append("    ");
+				// TODO: hreflang attribute
+				html.link().rel(Link.Rel.ALTERNATE).attribute("hreflang", "x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -87,18 +78,14 @@ abstract public class Skin {
 								: uri
 							).toASCIIString()
 						)
-					),
-					out
-				);
-				out.append("' />\n");
+					)
+				).__().nl();
 			}
 			// All languages
 			for(Language language : languages) {
-				out.append("    <link rel='alternate' hreflang='");
-				encodeTextInXhtmlAttribute(language.getCode(), out);
-				out.append("' href='");
 				AnyURI uri = language.getUri();
-				encodeTextInXhtmlAttribute(
+				out.append("    ");
+				html.link().rel(Link.Rel.ALTERNATE).attribute("hreflang", language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -107,10 +94,8 @@ abstract public class Skin {
 								: uri
 							).toASCIIString()
 						)
-					),
-					out
-				);
-				out.append("' />\n");
+					)
+				).__().nl();
 			}
 		}
 	}
@@ -156,7 +141,14 @@ abstract public class Skin {
 	}
 
 	/**
-	 * Writes the contents between the HTML tag and the page content (not including the HTML tag itself).
+	 * Writes all of the HTML preceding the content of the page.
+	 * <p>
+	 * Both the {@link Serialization} and {@link Doctype} may have been set
+	 * on the request, and these must be considered in the HTML generation.
+	 * </p>
+	 *
+	 * @see Serialization#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
+	 * @see Doctype#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
 	abstract public void startSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException;
 
@@ -196,14 +188,21 @@ abstract public class Skin {
 	abstract public void endContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans) throws JspException;
 
 	/**
-	 * Writes the contents between the page content and the HTML tag (not including the HTML tag itself).
+	 * Writes all of the HTML following the content of the page,
+	 * <p>
+	 * Both the {@link Serialization} and {@link Doctype} may have been set
+	 * on the request, and these must be considered in the HTML generation.
+	 * </p>
+	 *
+	 * @see Serialization#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
+	 * @see Doctype#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
 	abstract public void endSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException;
 
 	/**
 	 * Begins a light area.
 	 */
-	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String width, boolean nowrap) throws JspException;
+	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException;
 
 	/**
 	 * Ends a light area.
@@ -213,7 +212,7 @@ abstract public class Skin {
 	/**
 	 * Begins a white area.
 	 */
-	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String width, boolean nowrap) throws JspException;
+	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException;
 
 	/**
 	 * Ends a white area.
@@ -235,7 +234,7 @@ abstract public class Skin {
 		private final AnyURI uri;
 
 		/**
-		 * @param url the constant URL to use or <code>null</code> to have automatically set.
+		 * @param uri the constant URL to use or {@code null} to have automatically set.
 		 */
 		public Language(
 			String code,
@@ -316,12 +315,12 @@ abstract public class Skin {
 	/**
 	 * Begins a popup group.
 	 */
-	abstract public void beginPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException;
+	abstract public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException;
 
 	/**
 	 * Ends a popup group.
 	 */
-	abstract public void endPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException;
+	abstract public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException;
 
 	/**
 	 * Begins a popup that is in a popup group.

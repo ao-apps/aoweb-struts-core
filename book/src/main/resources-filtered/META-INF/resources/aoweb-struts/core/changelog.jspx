@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2019-10-12T22:59:07-0500"
+		dateModified="2019-10-23T19:30:38-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -51,7 +51,22 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				groupId="@{documented.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{documented.scm.url}"
-			/>
+			>
+				<ul>
+					<li>
+						Now outputting HTML or XHTML based on the current response content type.
+						This should eliminate validator warnings when used as HTML.
+					</li>
+					<li>Now supports skin attributes for <code>serialization</code> (default "auto") and <code>doctype</code> (default "HTML5").</li>
+					<li>Skins are now responsible for writing the DOCTYPE and html tag, too.</li>
+					<li>Removed setContentType tag.</li>
+					<li>Removed <code>Skin.getCharacterSet(Locale)</code>, since the default encoding is always <code>UTF-8</code>.</li>
+					<li>
+						<code>SkinTag</code> now sets Struts <code>Globals.XHTML_KEY</code> based on serialization.
+						No need to use the <![CDATA[&lt;html:xhtml /&gt;]]> tag anymore.
+					</li>
+				</ul>
+			</changelog:release>
 		</c:if>
 
 		<changelog:release

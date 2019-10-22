@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -41,7 +41,7 @@ public final class ApplicationResources_ja extends EditableResourceBundle {
 		super(
 			Locale.JAPANESE,
 			ApplicationResources.bundleSet,
-			new File(System.getProperty("user.home")+"/maven2/ao/aoweb-struts/aoweb-struts-webapp/src/main/java/classes/com/aoindustries/website/signup/ApplicationResources_ja.properties")
+			new File(System.getProperty("user.home")+"/maven2/ao/aoweb-struts/core/src/main/resources/com/aoindustries/website/signup/ApplicationResources_ja.properties")
 		);
 	}
 }

@@ -25,19 +25,31 @@ package com.aoindustries.website;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
-import com.aoindustries.encoding.TextInJavaScriptEncoder;
+import static com.aoindustries.encoding.TextInJavaScriptEncoder.encodeTextInJavaScript;
+import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
-import com.aoindustries.encoding.TextInXhtmlEncoder;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
+import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.Input;
+import com.aoindustries.html.Link;
+import com.aoindustries.html.Serialization;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
+import com.aoindustries.servlet.filter.EncodeURIFilter;
+import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
+import static com.aoindustries.taglib.AttributeUtils.trimNullIfEmpty;
+import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.website.skintags.Child;
 import com.aoindustries.website.skintags.Meta;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
 import java.io.IOException;
+import java.io.Writer;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -103,19 +115,19 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints the lines to include any CSS files.
 	 */
-	public void printCssIncludes(HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
+	public void printCssIncludes(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
 	}
 
 	/**
 	 * Prints the lines for any JavaScript sources.
 	 */
-	public void printJavaScriptSources(HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
+	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
 	}
 
 	/**
 	 * Prints the line for the favicon.
 	 */
-	public void printFavIcon(HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
+	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
 	}
 
 	public static MessageResources getMessageResources(HttpServletRequest req) throws JspException {
@@ -127,9 +139,17 @@ public class TextSkin extends Skin {
 	@Override
 	public void startSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
+			ServletContext servletContext = req.getServletContext();
+			// Write doctype
+			Html html = HtmlEE.get(servletContext, req, out);
+			html.xmlDeclaration(resp.getCharacterEncoding());
+			html.doctype();
+			// Write <html>
+			HtmlTag.beginHtmlTag(resp, out, html.serialization, null);
+			out.write('\n');
+			
 			String layout = pageAttributes.getLayout();
 			if(!layout.equals(PageAttributes.LAYOUT_NORMAL)) throw new JspException("TODO: Implement layout: "+layout);
-			ServletContext servletContext = req.getServletContext();
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 			String urlBase = getUrlBase(req);
@@ -149,12 +169,16 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				out.print("    <meta name=\"ROBOTS\" content=\"NOINDEX, NOFOLLOW\" />\n");
+				out.print("    <meta name=\"ROBOTS\" content=\"NOINDEX, NOFOLLOW\"");
+				html.selfClose();
+				out.print('\n');
 				robotsMetaUsed = true;
 			}
 			// Default style language
-			out.print("    <meta http-equiv=\"Content-Style-Type\" content=\"text/css\" />\n"
-					+ "    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n");
+			out.print("    <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"");
+			html.selfClose().nl();
+			out.print("    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\"");
+			html.selfClose().nl();
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
 			HttpSession session = req.getSession(false);
@@ -173,7 +197,8 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("\" />\n");
+				out.print('"');
+				html.selfClose().nl();
 			}
 			for(Meta meta : pageAttributes.getMetas()) {
 				// Skip ROBOTS if not on default skin
@@ -190,7 +215,7 @@ public class TextSkin extends Skin {
 						encodeTextInXhtmlAttribute(meta.getContent(), out);
 						out.write('"');
 					}
-					out.print(" />\n");
+					html.selfClose().nl();
 					if(isRobots) robotsMetaUsed = true;
 				}
 			}
@@ -205,78 +230,90 @@ public class TextSkin extends Skin {
 			 */
 			encodeTextInXhtml(pageAttributes.getTitle(), out);
 			out.print("</title>\n"
-					+ "    <meta http-equiv='Content-Type' content='");
-			out.print(resp.getContentType());
-			out.print("' />\n");
+					+ "    <meta http-equiv=\"Content-Type\" content=\"");
+			encodeTextInXhtmlAttribute(resp.getContentType(), out);
+			out.print('"');
+			html.selfClose().nl();
 			Brand brand = settings.getBrand();
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify!=null) {
-					out.print("    <meta name=\"verify-v1\" content=\""); encodeTextInXhtmlAttribute(googleVerify, out); out.print("\" />\n");
+					out.print("    <meta name=\"verify-v1\" content=\"");
+					encodeTextInXhtmlAttribute(googleVerify, out);
+					out.print('"');
+					html.selfClose().nl();
 				}
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords!=null && keywords.length()>0) {
-				out.print("    <meta name='keywords' content='"); encodeTextInXhtmlAttribute(keywords, out); out.print("' />\n");
+				out.print("    <meta name=\"keywords\" content=\"");
+				encodeTextInXhtmlAttribute(keywords, out);
+				out.print('"');
+				html.selfClose().nl();
 			}
 			String description = pageAttributes.getDescription();
 			if(description!=null && description.length()>0) {
-				out.print("    <meta name='description' content='"); encodeTextInXhtmlAttribute(description, out); out.print("' />\n"
-						+ "    <meta name='abstract' content='"); encodeTextInXhtmlAttribute(description, out); out.print("' />\n");
+				out.print("    <meta name=\"description\" content=\"");
+				encodeTextInXhtmlAttribute(description, out);
+				out.print('"');
+				html.selfClose().nl();
+				out.print("    <meta name=\"abstract\" content=\"");
+				encodeTextInXhtmlAttribute(description, out);
+				out.print('"');
+				html.selfClose().nl();
 			}
 			String copyright = pageAttributes.getCopyright();
 			if(copyright!=null && copyright.length()>0) {
-				out.print("    <meta name='copyright' content='"); encodeTextInXhtmlAttribute(copyright, out); out.print("' />\n");
+				out.print("    <meta name=\"copyright\" content=\"");
+				encodeTextInXhtmlAttribute(copyright, out);
+				out.print('"');
+				html.selfClose().nl();
 			}
 			String author = pageAttributes.getAuthor();
 			if(author!=null && author.length()>0) {
-				out.print("    <meta name='author' content='"); encodeTextInXhtmlAttribute(author, out); out.print("' />\n");
+				out.print("    <meta name=\"author\" content=\"");
+				encodeTextInXhtmlAttribute(author, out);
+				out.print('"');
+				html.selfClose().nl();
 			}
 			List<Language> languages = settings.getLanguages(req);
-			printAlternativeLinks(resp, out, fullPath, languages);
-			out.print("    <link rel='stylesheet' href='");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
+			printAlternativeLinks(req, resp, out, fullPath, languages);
+			out.print("    ");
+			html.link().rel(Link.Rel.STYLESHEET).href(
+				resp.encodeURL( // TODO: Put URL encoding into HTML class via EncodingContext?
 					URIEncoder.encodeURI(
 						urlBase + "textskin/global.css"
 					)
-				),
-				out
-			);
-			out.print("' type='text/css' />\n"
-					+ "    <!--[if IE 6]>\n"
-					+ "      <link rel='stylesheet' href='");
-			encodeTextInXhtmlAttribute(
+				)
+			).__().nl();
+			out.print("    <!--[if IE 6]>\n"
+					+ "      ");
+			html.link().rel(Link.Rel.STYLESHEET).href(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
 						urlBase + "textskin/global-ie6.css"
 					)
-				),
-				out
-			);
-			out.print("' type='text/css' />\n"
-					+ "    <![endif]-->\n");
-			printCssIncludes(resp, out, urlBase);
-			defaultPrintLinks(out, pageAttributes);
-			printJavaScriptSources(resp, out, urlBase);
-			out.print("    <script type='text/javascript' src='");
-			encodeTextInXhtmlAttribute(
+				)
+			).__().nl();
+			out.print("    <![endif]-->\n");
+			printCssIncludes(req, resp, out, urlBase);
+			defaultPrintLinks(req, resp, out, pageAttributes);
+			printJavaScriptSources(req, resp, out, urlBase);
+			out.print("    ");
+			html.script().src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
 						urlBase + "commons-validator-1.3.1-compress.js"
 					)
-				),
-				out
-			);
-			out.print("'></script>\n");
+				)
+			).__().nl();
 			String googleAnalyticsNewTrackingCode = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			if(googleAnalyticsNewTrackingCode!=null) {
 				// TODO: Global site tag (gtag.js) once HTML 5
-				out.print("    <script type='text/javascript' src='");
-				out.print(req.isSecure() ? "https://ssl.google-analytics.com/ga.js" : "http://www.google-analytics.com/ga.js");
-				out.print("'></script>\n");
+				out.print("    ");
+				html.script().src(req.isSecure() ? "https://ssl.google-analytics.com/ga.js" : "http://www.google-analytics.com/ga.js").__().nl();
 			}
-			printFavIcon(resp, out, urlBase);
+			printFavIcon(req, resp, out, urlBase);
 			out.print("  </head>\n"
 					+ "  <body");
 			String onload = pageAttributes.getOnload();
@@ -284,15 +321,16 @@ public class TextSkin extends Skin {
 				out.print(" onload=\""); out.print(onload); out.print('"');
 			}
 			out.print(">\n"
-					+ "    <table cellspacing='10' cellpadding='0'>\n"
+					+ "    <table cellspacing=\"10\" cellpadding=\"0\">\n"
 					+ "      <tr>\n"
-					+ "        <td valign='top'>\n");
+					+ "        <td valign=\"top\">\n");
 			printLogo(req, resp, out, urlBase);
 			if(aoConn!=null) {
-				out.print("          <hr />\n"
-						+ "          ");
+				out.print("          ");
+				html.hr__().nl();
+				out.print("          ");
 				out.print(applicationResources.getMessage(locale, "TextSkin.logoutPrompt"));
-				out.print("<form style='display:inline;' id='logout_form' method='post' action='");
+				out.print("<form style=\"display:inline\" id=\"logout_form\" method=\"post\" action=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -301,16 +339,17 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("'><div style='display:inline;'><input type='hidden' name='target' value='");
-				encodeTextInXhtmlAttribute(fullPath, out);
-				out.print("' /><input type='submit' value='");
-				encodeTextInXhtmlAttribute(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel"), out);
-				out.print("' /></div></form>\n");
+				out.print("\"><div style=\"display:inline;\">");
+				html.input(Input.Type.HIDDEN).name("target").value(fullPath).__();
+				// Variant that takes ResourceBundle?
+				html.input(Input.Type.SUBMIT).value(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel")).__();
+				out.print("</div></form>\n");
 			} else {
-				out.print("          <hr />\n"
-						+ "          ");
+				out.print("          ");
+				html.hr__().nl();
+				out.print("          ");
 				out.print(applicationResources.getMessage(locale, "TextSkin.loginPrompt"));
-				out.print("<form style='display:inline;' id='login_form' method='post' action='");
+				out.print("<form style=\"display:inline\" id=\"login_form\" method=\"post\" action=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -319,95 +358,63 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("'><div style='display:inline;'>");
+				out.print("\"><div style=\"display:inline\">");
 				// Only include the target when they are not in the /clientarea/ part of the site
 				if(path.startsWith("clientarea/")) {
-					out.print("<input type='hidden' name='target' value='");
-					encodeTextInXhtmlAttribute(fullPath, out);
-					out.print("' />");
+					html.input(Input.Type.HIDDEN).name("target").value(fullPath).__();
 				}
-				out.print("<input type='submit' value='");
-				encodeTextInXhtmlAttribute(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"), out);
-				out.print("' /></div></form>\n");
+				html.input(Input.Type.SUBMIT).value(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel")).__();
+				out.print("</div></form>\n");
 			}
-			out.print("          <hr />\n"
-					+ "          <div style='white-space: nowrap'>\n");
+			out.print("          ");
+			html.hr__().nl();
+			out.print("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size()>1) {
-				out.print("<script type='text/javascript'>\n"
-						+ "  function selectLayout(layout) {\n");
-				for(Skin skin : skins) {
-					out.print("    if(layout=='");
-					NewEncodingUtils.encodeTextInJavaScriptInXhtml(skin.getName(), out);
-					out.print("') window.top.location.href='");
-					NewEncodingUtils.encodeTextInJavaScriptInXhtml(
-						resp.encodeURL(
-							new AnyURI(fullPath)
-								.addEncodedParameter("layout", URIEncoder.encodeURIComponent(skin.getName()))
-								.toASCIIString()
-						),
-						out
-					);
-					out.print("';\n");
+				try (MediaWriter script = html.script().out()) {
+					script.write("  function selectLayout(layout) {\n");
+					for(Skin skin : skins) {
+						script.write("    if(layout==\"");
+						NewEncodingUtils.encodeTextInJavaScriptInXhtml(skin.getName(), script);
+						script.write("\") window.top.location.href=\"");
+						NewEncodingUtils.encodeTextInJavaScriptInXhtml(
+							resp.encodeURL(
+								new AnyURI(fullPath)
+									.addEncodedParameter("layout", URIEncoder.encodeURIComponent(skin.getName()))
+									.toASCIIString()
+							),
+							script
+						);
+						script.write("\";\n");
+					}
+					script.write("  }\n");
 				}
-				out.print("  }\n"
-						+ "</script>\n"
-						+ "            <form action='' style='display:inline;'><div style='display:inline;'>\n"
+				html.nl();
+				out.print("            <form action=\"\" style=\"display:inline\"><div style=\"display:inline\">\n"
 						+ "              ");
 				out.print(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"));
-				out.print("<select name='layout_selector' onchange='selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);'>\n");
+				out.print("<select name=\"layout_selector\" onchange=\"selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);\">\n");
 				for(Skin skin : skins) {
-					out.print("                <option value='");
+					out.print("                <option value=\"");
 					encodeTextInXhtmlAttribute(skin.getName(), out);
-					out.print('\'');
-					if(getName().equals(skin.getName())) out.print(" selected='selected'");
+					out.print('"');
+					if(getName().equals(skin.getName())) {
+						out.print(" selected");
+						if(html.serialization == Serialization.XML) out.print("=\"selected\"");
+					}
 					out.print('>');
 					encodeTextInXhtml(skin.getDisplay(req), out);
 					out.print("</option>\n");
 				}
 				out.print("              </select>\n"
-						+ "            </div></form><br />\n");
+						+ "            </div></form>");
+				html.br__().nl();
 			}
 			if(languages.size()>1) {
 				out.print("            ");
 				for(Language language : languages) {
 					AnyURI uri = language.getUri();
 					if(language.getCode().equalsIgnoreCase(locale.getLanguage())) {
-						out.print("&#160;<a href='");
-						encodeTextInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									(
-										uri == null
-										?  new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
-										: uri
-									).toASCIIString()
-								)
-							),
-							out
-						);
-						out.print("' hreflang='");
-						encodeTextInXhtmlAttribute(
-							language.getCode(),
-							out
-						);
-						out.print("'><img src='");
-						encodeTextInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									urlBase + language.getFlagOnSrc(req, locale)
-								)
-							),
-							out
-						);
-						out.print("' style='border:1px solid; vertical-align:bottom' width='");
-						out.print(language.getFlagWidth(req, locale));
-						out.print("' height='");
-						out.print(language.getFlagHeight(req, locale));
-						out.print("' alt='");
-						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
-						out.print("' /></a>");
-					} else {
-						out.print("&#160;<a href='");
+						out.print("&#160;<a href=\"");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -420,14 +427,51 @@ public class TextSkin extends Skin {
 							),
 							out
 						);
-						out.print("' hreflang='");
+						out.print("\" hreflang=\"");
 						encodeTextInXhtmlAttribute(
 							language.getCode(),
 							out
 						);
-						out.print("' onmouseover='document.images[\"flagSelector_");
+						out.print("\"><img src=\"");
+						encodeTextInXhtmlAttribute(
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									urlBase + language.getFlagOnSrc(req, locale)
+								)
+							),
+							out
+						);
+						out.print("\" style=\"border:1px solid; vertical-align:bottom\" width=\"");
+						out.print(language.getFlagWidth(req, locale));
+						out.print("\" height=\"");
+						out.print(language.getFlagHeight(req, locale));
+						out.print("\" alt=\"");
+						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
+						out.print('"');
+						html.selfClose();
+						out.print("</a>");
+					} else {
+						out.print("&#160;<a href=\"");
+						encodeTextInXhtmlAttribute(
+							resp.encodeURL(
+								URIEncoder.encodeURI(
+									(
+										uri == null
+										? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+										: uri
+									).toASCIIString()
+								)
+							),
+							out
+						);
+						out.print("\" hreflang=\"");
+						encodeTextInXhtmlAttribute(
+							language.getCode(),
+							out
+						);
+						out.print("\" onmouseover='document.images.flagSelector_");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(language.getCode(), out);
-						out.print("\"].src=\"");
+						out.print(".src=\"");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -437,9 +481,9 @@ public class TextSkin extends Skin {
 							),
 							out
 						);
-						out.print("\";' onmouseout='document.images[\"flagSelector_");
+						out.print("\";' onmouseout='document.images.flagSelector_");
 						out.print(language.getCode());
-						out.print("\"].src=\"");
+						out.print(".src=\"");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -449,7 +493,7 @@ public class TextSkin extends Skin {
 							),
 							out
 						);
-						out.print("\";'><img src='");
+						out.print("\";'><img src=\"");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -459,15 +503,17 @@ public class TextSkin extends Skin {
 							),
 							out
 						);
-						out.print("' id='flagSelector_");
+						out.print("\" id=\"flagSelector_");
 						out.print(language.getCode());
-						out.print("' style='border:1px solid; vertical-align:bottom' width='");
+						out.print("\" style=\"border:1px solid; vertical-align:bottom\" width=\"");
 						out.print(language.getFlagWidth(req, locale));
-						out.print("' height='");
+						out.print("\" height=\"");
 						out.print(language.getFlagHeight(req, locale));
-						out.print("' alt='");
+						out.print("\" alt=\"");
 						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
-						out.print("' /></a>");
+						out.print('"');
+						html.selfClose();
+						out.print("</a>");
 						ChainWriter.writeHtmlImagePreloadJavaScript(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -479,22 +525,24 @@ public class TextSkin extends Skin {
 						);
 					}
 				}
-				out.print("<br />\n");
+				html.br__().nl();
 			}
 			printSearch(req, resp, out);
 			out.print("          </div>\n"
-					+ "          <hr />\n"
+					+ "          ");
+			html.hr__().nl();
 			// Display the parents
-					+ "          <b>");
+			out.print("          <b>");
 			out.print(applicationResources.getMessage(locale, "TextSkin.currentLocation"));
-			out.print("</b><br />\n"
-					+ "          <div style='white-space:nowrap'>\n");
+			out.print("</b>");
+			html.br__().nl();
+			out.print("          <div style=\"white-space:nowrap\">\n");
 			List<Parent> parents = pageAttributes.getParents();
 			for(Parent parent : parents) {
 				String navAlt = parent.getNavImageAlt();
 				String parentPath = parent.getPath();
 				if(parentPath.startsWith("/")) parentPath=parentPath.substring(1);
-				out.print("            <a href='");
+				out.print("            <a href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -504,26 +552,30 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("'>");
+				out.print("\">");
 				encodeTextInXhtml(navAlt, out);
-				out.print("</a><br />\n");
+				out.print("</a>");
+				html.br__().nl();
 			}
 			// Always include the current page in the current location area
-			out.print("            <a href='");
+			out.print("            <a href=\"");
 			encodeTextInXhtmlAttribute(
 				encodedFullPath,
 				out
 			);
-			out.print("'>");
+			out.print("\">");
 			encodeTextInXhtml(pageAttributes.getNavImageAlt(), out);
-			out.print("</a><br />\n"
-					+ "          </div>\n"
-					+ "          <hr />\n"
-					+ "          <b>");
+			out.print("</a>");
+			html.br__().nl();
+			out.print("          </div>\n"
+					+ "          ");
+			html.hr__().nl();
+			out.print("          <b>");
 			out.print(applicationResources.getMessage(locale, "TextSkin.relatedPages"));
-			out.print("</b><br />\n"
+			out.print("</b>");
+			html.br__().nl();
 			// Display the siblings
-					+ "          <div style='white-space:nowrap'>\n");
+			out.print("          <div style=\"white-space:nowrap\">\n");
 			List<Child> siblings = pageAttributes.getChildren();
 			if(siblings.isEmpty() && !parents.isEmpty()) {
 				siblings = parents.get(parents.size()-1).getChildren();
@@ -532,7 +584,7 @@ public class TextSkin extends Skin {
 				String navAlt=sibling.getNavImageAlt();
 				String siblingPath = sibling.getPath();
 				if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
-				out.print("          <a href='");
+				out.print("          <a href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -542,23 +594,25 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("'>");
+				out.print("\">");
 				encodeTextInXhtml(navAlt, out);
-				out.print("</a><br />\n");
+				out.print("</a>");
+				html.br__().nl();
 			}
-			out.print("          </div>\n"
-					+ "          <hr />\n");
+			out.print("          </div>\n");
+			html.hr__().nl();
 			printBelowRelatedPages(req, out);
 			out.print("        </td>\n"
-					+ "        <td valign='top'>\n");
+					+ "        <td valign=\"top\">\n");
 			printCommonPages(req, resp, out);
 		} catch(IOException | SQLException err) {
 			throw new JspException(err);
 		}
 	}
 
-	public static void defaultPrintLinks(JspWriter out, PageAttributes pageAttributes) throws JspException {
+	public static void defaultPrintLinks(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, out);
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
 				String conditionalCommentExpression = link.getConditionalCommentExpression();
 				if(conditionalCommentExpression!=null) {
@@ -567,13 +621,13 @@ public class TextSkin extends Skin {
 					out.print("]>\n"
 							+ "  ");
 				}
-				out.print("    <link rel=\"");
-				encodeTextInXhtmlAttribute(link.getRel(), out);
-				out.print("\" href=\"");
-				encodeTextInXhtmlAttribute(URIEncoder.encodeURI(link.getHref()), out);
-				out.print("\" type=\"");
-				encodeTextInXhtmlAttribute(link.getType(), out);
-				out.print("\" />\n");
+				out.print("    ");
+				html.link()
+					.rel(link.getRel())
+					.href(EncodeURIFilter.getActiveFilter(req).encode(link.getHref(), resp.getCharacterEncoding()))
+					.type(link.getType())
+					.__().nl();
+
 				if(conditionalCommentExpression!=null) out.print("    <![endif]-->\n");
 			}
 		} catch(IOException err) {
@@ -583,12 +637,14 @@ public class TextSkin extends Skin {
 
 	@Override
 	public void startContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans, String width) throws JspException {
+		width = trimNullIfEmpty(width);
 		try {
-			out.print("          <table cellpadding='0' cellspacing='0'");
-			if(width!=null && (width=width.trim()).length()>0) {
-				out.print(" width='");
-				out.print(width);
-				out.print('\'');
+			Html html = HtmlEE.get(req, out);
+			out.print("          <table cellpadding=\"0\" cellspacing=\"0\"");
+			if(width != null) {
+				out.print(" style=\"");
+				appendWidthStyle(width, out);
+				out.print('"');
 			}
 			out.print(">\n"
 					+ "            <tr>\n");
@@ -599,11 +655,13 @@ public class TextSkin extends Skin {
 			}
 			out.print("              <td");
 			if(totalColumns!=1) {
-				out.print(" colspan='");
+				out.print(" colspan=\"");
 				out.print(totalColumns);
-				out.print('\'');
+				out.print('"');
 			}
-			out.print("><hr /></td>\n"
+			out.print(">");
+			html.hr__();
+			out.print("</td>\n"
 					+ "            </tr>\n");
 		} catch(IOException err) {
 			throw new JspException(err);
@@ -625,24 +683,28 @@ public class TextSkin extends Skin {
 
 	@Override
 	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int colspan, String align, String width) throws JspException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
 		try {
 			out.print("            <tr>\n"
 					+ "              <td");
-			if(width!=null && width.length()>0) {
-				out.append(" style='width:");
-				out.append(width);
-				out.append('\'');
+			if(align != null || width != null) {
+				out.append(" style=\"");
+				if(align != null) {
+					out.append("text-align:");
+					encodeTextInXhtmlAttribute(align, out);
+				}
+				if(width != null) {
+					if(align != null) out.append(';');
+					appendWidthStyle(width, out);
+				}
+				out.append('"');
 			}
-			out.print(" valign='top'");
+			out.print(" valign=\"top\"");
 			if(colspan!=1) {
-				out.print(" colspan='");
+				out.print(" colspan=\"");
 				out.print(colspan);
-				out.print('\'');
-			}
-			if(align!=null && (align=align.trim()).length()>0) {
-				out.print(" align='");
-				out.print(align);
-				out.print('\'');
+				out.print('"');
 			}
 			out.print('>');
 		} catch(IOException err) {
@@ -652,30 +714,34 @@ public class TextSkin extends Skin {
 
 	@Override
 	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, JspWriter out, boolean visible, int colspan, int rowspan, String align, String width) throws JspException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
 		try {
 			out.print("              </td>\n");
 			if(visible) out.print("              <td>&#160;</td>\n");
 			out.print("              <td");
-			if(width!=null && width.length()>0) {
-				out.append(" style='width:");
-				out.append(width);
-				out.append('\'');
+			if(align != null || width != null) {
+				out.append(" style=\"");
+				if(align != null) {
+					out.append("text-align:");
+					encodeTextInXhtmlAttribute(align, out);
+				}
+				if(width != null) {
+					if(align != null) out.append(';');
+					appendWidthStyle(width, out);
+				}
+				out.append('"');
 			}
-			out.print(" valign='top'");
+			out.print(" valign=\"top\"");
 			if(colspan!=1) {
-				out.print(" colspan='");
+				out.print(" colspan=\"");
 				out.print(colspan);
-				out.print('\'');
+				out.print('"');
 			}
 			if(rowspan!=1) {
-				out.print(" rowspan='");
+				out.print(" rowspan=\"");
 				out.print(rowspan);
-				out.print('\'');
-			}
-			if(align!=null && (align=align.trim()).length()>0) {
-				out.print(" align='");
-				out.print(align);
-				out.print('\'');
+				out.print('"');
 			}
 			out.print('>');
 		} catch(IOException err) {
@@ -696,6 +762,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int[] colspansAndDirections, boolean endsInternal) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, out);
 			out.print("            <tr>\n");
 			for(int c=0;c<colspansAndDirections.length;c+=2) {
 				if(c>0) {
@@ -717,11 +784,13 @@ public class TextSkin extends Skin {
 				int colspan=colspansAndDirections[c];
 				out.print("              <td");
 				if(colspan!=1) {
-					out.print(" colspan='");
+					out.print(" colspan=\"");
 					out.print(colspan);
-					out.print('\'');
+					out.print('"');
 				}
-				out.print("><hr /></td>\n");
+				out.print('>');
+				html.hr__();
+				out.print("</td>\n");
 			}
 			out.print("            </tr>\n");
 		} catch(IOException err) {
@@ -732,6 +801,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void endContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, out);
 			int totalColumns=0;
 			for(int c=0;c<colspans.length;c++) {
 				if(c>0) totalColumns+=1;
@@ -739,20 +809,22 @@ public class TextSkin extends Skin {
 			}
 			out.print("            <tr><td");
 			if(totalColumns!=1) {
-				out.print(" colspan='");
+				out.print(" colspan=\"");
 				out.print(totalColumns);
-				out.print('\'');
+				out.print('"');
 			}
-			out.print("><hr /></td></tr>\n");
+			out.print('>');
+			html.hr__();
+			out.print("</td></tr>\n");
 			String copyright = pageAttributes.getCopyright();
 			if(copyright!=null && copyright.length()>0) {
 				out.print("            <tr><td");
 				if(totalColumns!=1) {
-					out.print(" colspan='");
+					out.print(" colspan=\"");
 					out.print(totalColumns);
-					out.print('\'');
+					out.print('"');
 				}
-				out.print(" align='center'><span style='font-size: x-small;'>");
+				out.print(" style=\"text-align:center\"><span style=\"font-size: x-small\">");
 				out.print(copyright);
 				out.print("</span></td></tr>\n");
 			}
@@ -769,8 +841,8 @@ public class TextSkin extends Skin {
 					+ "      </tr>\n"
 					+ "    </table>\n");
 			EditableResourceBundle.printEditableResourceBundleLookups(
-				TextInJavaScriptEncoder.textInJavaScriptEncoder,
-				TextInXhtmlEncoder.textInXhtmlEncoder,
+				textInJavaScriptEncoder,
+				textInXhtmlEncoder,
 				out,
 				4,
 				true
@@ -778,6 +850,8 @@ public class TextSkin extends Skin {
 			// TODO: Global site tag (gtag.js) once HTML 5
 			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
 			out.print("  </body>\n");
+			HtmlTag.endHtmlTag(out);
+			out.write('\n');
 		} catch(IOException | SQLException err) {
 			throw new JspException(err);
 		}
@@ -789,49 +863,49 @@ public class TextSkin extends Skin {
 	 * @param googleAnalyticsNewTrackingCode if <code>null</code> will not print anything
 	 */
 	// TODO: Global site tag (gtag.js) once HTML 5
-	public static void printGoogleAnalyticsTrackPageViewScript(HttpServletRequest req, Appendable out, String googleAnalyticsNewTrackingCode) throws IOException {
-		if(googleAnalyticsNewTrackingCode!=null) {
+	public static void printGoogleAnalyticsTrackPageViewScript(HttpServletRequest req, Writer out, String googleAnalyticsNewTrackingCode) throws IOException {
+		if(googleAnalyticsNewTrackingCode != null) {
+			Html html = HtmlEE.get(req, out);
 			Integer responseStatus = (Integer)req.getAttribute(Constants.HTTP_SERVLET_RESPONSE_STATUS);
-			boolean isOk = responseStatus==null || responseStatus==HttpServletResponse.SC_OK;
-			out.append("    <script type=\"text/javascript\">\n");
-			if(!isOk) out.append("      // <![CDATA[\n");
-			out.append("      try {\n"
-					+ "        var pageTracker = _gat._getTracker(\""); out.append(googleAnalyticsNewTrackingCode); out.append("\");\n");
-			if(isOk) {
-				out.append("        pageTracker._trackPageview();\n");
-			} else {
-				assert responseStatus != null;
-				out.append("        pageTracker._trackPageview(\"/");
-				out.append(responseStatus.toString());
-				out.append(".html?page=\"+document.location.pathname+document.location.search+\"&from=\"+document.referrer);\n");
+			try (MediaWriter script = html.script().out()) {
+				script.append("try {\n"
+						+ "  var pageTracker = _gat._getTracker(\"");
+				encodeTextInJavaScript(googleAnalyticsNewTrackingCode, script);
+				script.append("\");\n");
+				if(responseStatus==null || responseStatus==HttpServletResponse.SC_OK) {
+					script.append("  pageTracker._trackPageview();\n");
+				} else {
+					assert responseStatus != null;
+					script.append("  pageTracker._trackPageview(\"/");
+					encodeTextInJavaScript(responseStatus.toString(), script);
+					script.append(".html?page=\"+document.location.pathname+document.location.search+\"&from=\"+document.referrer);\n");
+				}
+				script.append("} catch(err) {\n"
+						+ "}\n");
 			}
-			out.append("      } catch(err) {\n"
-					+ "      }\n");
-			if(!isOk) out.append("      // ]]>\n");
-			out.append("    </script>\n");
+			html.nl();
 		}
 	}
 
 	@Override
-	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String width, boolean nowrap) throws JspException {
+	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table style='border:5px outset #a0a0a0;");
-			if(width!=null && (width=width.trim()).length()>0) {
-				out.print(" width:");
-				try {
-					int intWidth = Integer.parseInt(width);
-					out.print(intWidth);
-					out.print("px");
-				} catch(NumberFormatException err) {
-					out.print(width);
-				}
+			out.print("<table style=\"border:5px outset #a0a0a0");
+			if(width != null) {
 				out.print(';');
+				appendWidthStyle(width, out);
 			}
-			out.print("' cellpadding='0' cellspacing='0'>\n"
+			out.print("\" cellpadding=\"0\" cellspacing=\"0\">\n"
 					+ "  <tr>\n"
-					+ "    <td class='aoLightRow' style='padding:4px;");
-			if(nowrap) out.print(" white-space:nowrap;");
-			out.print("'>");
+					+ "    <td class=\"aoLightRow\" style=\"padding:4px");
+			if(align != null) {
+				out.append(";text-align:");
+				encodeTextInXhtmlAttribute(align, out);
+			}
+			if(nowrap) out.print(";white-space:nowrap;");
+			out.print("\">");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -849,25 +923,24 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String width, boolean nowrap) throws JspException {
+	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table style='border:5px outset #a0a0a0;");
-			if(width!=null && (width=width.trim()).length()>0) {
-				out.print(" width:");
-				try {
-					int intWidth = Integer.parseInt(width);
-					out.print(intWidth);
-					out.print("px");
-				} catch(NumberFormatException err) {
-					out.print(width);
-				}
+			out.print("<table style=\"border:5px outset #a0a0a0");
+			if(width != null) {
 				out.print(';');
+				appendWidthStyle(width, out);
 			}
-			out.print("' cellpadding='0' cellspacing='0'>\n"
+			out.print("\" cellpadding=\"0\" cellspacing=\"0\">\n"
 					+ "  <tr>\n"
-					+ "    <td class='aoWhiteRow' style='padding:4px;");
+					+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
+			if(align != null) {
+				out.append(";text-align:");
+				encodeTextInXhtmlAttribute(align, out);
+			}
 			if(nowrap) out.print(" white-space:nowrap;");
-			out.print("'>");
+			out.print("\">");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -890,7 +963,7 @@ public class TextSkin extends Skin {
 			String urlBase = getUrlBase(req);
 			//Locale locale = resp.getLocale();
 
-			out.print("<table cellpadding='0' cellspacing='10'>\n");
+			out.print("<table cellpadding=\"0\" cellspacing=\"10\">\n");
 			List<Child> siblings = pageAttributes.getChildren();
 			if(siblings.isEmpty()) {
 				List<Parent> parents = pageAttributes.getParents();
@@ -902,7 +975,7 @@ public class TextSkin extends Skin {
 				if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
 
 				out.print("  <tr>\n"
-						+ "    <td style=\"white-space:nowrap\"><a class='aoLightLink' href='");
+						+ "    <td style=\"white-space:nowrap\"><a class=\"aoLightLink\" href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -912,7 +985,7 @@ public class TextSkin extends Skin {
 					),
 					out
 				);
-				out.print("'>");
+				out.print("\">");
 				encodeTextInXhtml(navAlt, out);
 				out.print("</a></td>\n"
 						+ "    <td style=\"width:12px; white-space:nowrap\">&#160;</td>\n"
@@ -950,47 +1023,48 @@ public class TextSkin extends Skin {
 	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.jsp.JspWriter, long)
 	 */
 	@Override
-	public void beginPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException {
-		defaultBeginPopupGroup(req, out, groupId);
+	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
+		defaultBeginPopupGroup(req, resp, out, groupId);
 	}
 
 	/**
 	 * Default implementation of beginPopupGroup.
 	 */
-	public static void defaultBeginPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException {
+	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
 		try {
-			out.print("<script type='text/javascript'>\n"
-					+ "    // <![CDATA[\n"
-					+ "    var popupGroupTimer"); out.print(groupId); out.print("=null;\n"
-					+ "    var popupGroupAuto"); out.print(groupId); out.print("=null;\n"
-					+ "    function popupGroupHideAllDetails"); out.print(groupId); out.print("() {\n"
-					+ "        var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");\n"
-					+ "        for (var c=0; c < spanElements.length; c++) {\n"
-					+ "            if(spanElements[c].id.indexOf(\"aoPopup_"); out.print(groupId); out.print("_\")==0) {\n"
-					+ "                spanElements[c].style.visibility=\"hidden\";\n"
-					+ "            }\n"
-					+ "        }\n"
+			Html html = HtmlEE.get(req, out);
+			try (MediaWriter script = html.script().out()) {
+				String groupIdStr = Long.toString(groupId);
+				script.write("  var popupGroupTimer"); script.write(groupIdStr); script.write("=null;\n"
+					+ "  var popupGroupAuto"); script.write(groupIdStr); script.write("=null;\n"
+					+ "  function popupGroupHideAllDetails"); script.write(groupIdStr); script.write("() {\n"
+					+ "    var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");\n"
+					+ "    for (var c=0; c < spanElements.length; c++) {\n"
+					+ "      if(spanElements[c].id.indexOf(\"aoPopup_"); script.write(groupIdStr); script.write("_\")==0) {\n"
+					+ "        spanElements[c].style.visibility=\"hidden\";\n"
+					+ "      }\n"
 					+ "    }\n"
-					+ "    function popupGroupToggleDetails"); out.print(groupId); out.print("(popupId) {\n"
-					+ "        if(popupGroupTimer"); out.print(groupId); out.print("!=null) clearTimeout(popupGroupTimer"); out.print(groupId); out.print(");\n"
-					+ "        var elemStyle = document.getElementById(\"aoPopup_"); out.print(groupId); out.print("_\"+popupId).style;\n"
-					+ "        if(elemStyle.visibility==\"visible\") {\n"
-					+ "            elemStyle.visibility=\"hidden\";\n"
-					+ "        } else {\n"
-					+ "            popupGroupHideAllDetails"); out.print(groupId); out.print("();\n"
-					+ "            elemStyle.visibility=\"visible\";\n"
-					+ "        }\n"
+					+ "  }\n"
+					+ "  function popupGroupToggleDetails"); script.write(groupIdStr); script.write("(popupId) {\n"
+					+ "    if(popupGroupTimer"); script.write(groupIdStr); script.write("!=null) clearTimeout(popupGroupTimer"); script.write(groupIdStr); script.write(");\n"
+					+ "    var elemStyle = document.getElementById(\"aoPopup_"); script.write(groupIdStr); script.write("_\"+popupId).style;\n"
+					+ "    if(elemStyle.visibility==\"visible\") {\n"
+					+ "      elemStyle.visibility=\"hidden\";\n"
+					+ "    } else {\n"
+					+ "      popupGroupHideAllDetails"); script.write(groupIdStr); script.write("();\n"
+					+ "      elemStyle.visibility=\"visible\";\n"
 					+ "    }\n"
-					+ "    function popupGroupShowDetails"); out.print(groupId); out.print("(popupId) {\n"
-					+ "        if(popupGroupTimer"); out.print(groupId); out.print("!=null) clearTimeout(popupGroupTimer"); out.print(groupId); out.print(");\n"
-					+ "        var elemStyle = document.getElementById(\"aoPopup_"); out.print(groupId); out.print("_\"+popupId).style;\n"
-					+ "        if(elemStyle.visibility!=\"visible\") {\n"
-					+ "            popupGroupHideAllDetails"); out.print(groupId); out.print("();\n"
-					+ "            elemStyle.visibility=\"visible\";\n"
-					+ "        }\n"
+					+ "  }\n"
+					+ "  function popupGroupShowDetails"); script.write(groupIdStr); script.write("(popupId) {\n"
+					+ "    if(popupGroupTimer"); script.write(groupIdStr); script.write("!=null) clearTimeout(popupGroupTimer"); script.write(groupIdStr); script.write(");\n"
+					+ "    var elemStyle = document.getElementById(\"aoPopup_"); script.write(groupIdStr); script.write("_\"+popupId).style;\n"
+					+ "    if(elemStyle.visibility!=\"visible\") {\n"
+					+ "      popupGroupHideAllDetails"); script.write(groupIdStr); script.write("();\n"
+					+ "      elemStyle.visibility=\"visible\";\n"
 					+ "    }\n"
-					+ "    // ]]>\n"
-					+ "</script>\n");
+					+ "  }\n");
+			}
+			html.nl();
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -1002,14 +1076,14 @@ public class TextSkin extends Skin {
 	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.jsp.JspWriter, long)
 	 */
 	@Override
-	public void endPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException {
-		defaultEndPopupGroup(req, out, groupId);
+	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
+		defaultEndPopupGroup(req, resp, out, groupId);
 	}
 
 	/**
 	 * Default implementation of endPopupGroup.
 	 */
-	public static void defaultEndPopupGroup(HttpServletRequest req, JspWriter out, long groupId) throws JspException {
+	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
 		// Nothing at the popup group end
 	}
 
@@ -1027,8 +1101,11 @@ public class TextSkin extends Skin {
 	 * Default implementation of beginPopup.
 	 */
 	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width, String urlBase) throws JspException {
+		width = trimNullIfEmpty(width);
 		try {
-			Locale locale = LocaleAction.getLocale(req.getServletContext(), req);
+			ServletContext servletContext = req.getServletContext();
+			Html html = HtmlEE.get(servletContext, req, out);
+			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
 			out.print("<div id=\"aoPopupAnchor_");
@@ -1073,24 +1150,20 @@ public class TextSkin extends Skin {
 			out.print(groupId);
 			out.print('(');
 			out.print(popupId);
-			out.print(");\" />\n"
+			out.print(");\"");
+			html.selfClose();
+			out.print("\n"
 					+ "    <div id=\"aoPopup_"); // Used to be span width=\"100%\"
 			out.print(groupId);
 			out.print('_');
 			out.print(popupId);
-			out.print("\" class=\"aoPopupMain\" style=\"");
-			if(width!=null && width.length()>0) {
-				out.print("width:");
-				try {
-					int widthInt = Integer.parseInt(width);
-					out.print(widthInt);
-					out.print("px");
-				} catch(NumberFormatException err) {
-					out.print(width);
-				}
-				out.print(';');
+			out.print("\" class=\"aoPopupMain\"");
+			if(width != null) {
+				out.print(" style=\"");
+				appendWidthStyle(width, out);
+				out.print('"');
 			}
-			out.print("\">\n"
+			out.print(">\n"
 					+ "        <table class=\"aoPopupTable\" cellpadding=\"0\" cellspacing=\"0\">\n"
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupTL\"><img src=\"");
@@ -1102,7 +1175,9 @@ public class TextSkin extends Skin {
 				),
 				out
 			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
+			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
+			html.selfClose();
+			out.print("</td>\n"
 					+ "                <td class=\"aoPopupTop\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
@@ -1122,7 +1197,9 @@ public class TextSkin extends Skin {
 				),
 				out
 			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
+			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
+			html.selfClose();
+			out.print("</td>\n"
 					+ "            </tr>\n"
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupLeft\" style=\"background-image:url(");
@@ -1156,7 +1233,9 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String urlBase) throws JspException {
 		try {
-			Locale locale = LocaleAction.getLocale(req.getServletContext(), req);
+			ServletContext servletContext = req.getServletContext();
+			Html html = HtmlEE.get(servletContext, req, out);
+			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
 			out.print("<img class=\"aoPopupClose\" src=\"");
@@ -1176,7 +1255,8 @@ public class TextSkin extends Skin {
 			out.print(applicationResources.getMessage(locale, "TextSkin.popupClose.height"));
 			out.print("\" onclick=\"popupGroupHideAllDetails");
 			out.print(groupId);
-			out.print("();\" />");
+			out.print("();\"");
+			html.selfClose();
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -1197,8 +1277,9 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width, String urlBase) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, out);
 			out.print("</td>\n"
-					+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
+				+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
@@ -1208,9 +1289,9 @@ public class TextSkin extends Skin {
 				out
 			);
 			out.print(");\"></td>\n"
-					+ "            </tr>\n"
-					+ "            <tr>\n" 
-					+ "                <td class=\"aoPopupBL\"><img src=\"");
+				+ "            </tr>\n"
+				+ "            <tr>\n" 
+				+ "                <td class=\"aoPopupBL\"><img src=\"");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
@@ -1219,8 +1300,10 @@ public class TextSkin extends Skin {
 				),
 				out
 			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
-					+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
+			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
+			html.selfClose();
+			out.print("</td>\n"
+				+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
@@ -1230,7 +1313,7 @@ public class TextSkin extends Skin {
 				out
 			);
 			out.print(");\"></td>\n"
-					+ "                <td class=\"aoPopupBR\"><img src=\"");
+				+ "                <td class=\"aoPopupBR\"><img src=\"");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
@@ -1239,131 +1322,133 @@ public class TextSkin extends Skin {
 				),
 				out
 			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\" /></td>\n"
-					+ "            </tr>\n"
-					+ "        </table>\n"
-					+ "    </div>\n"
-					+ "</div>\n"
-					+ "<script type='text/javascript'>\n"
-					+ "    // <![CDATA[\n"
-					+ "    // Override onload\n"
-					+ "    var aoPopupOldOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(" = window.onload;\n"
-					+ "    function adjustPositionOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("() {\n"
-					+ "        adjustPosition_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("();\n"
-					+ "        if(aoPopupOldOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(") {\n"
-					+ "            aoPopupOldOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("();\n"
-					+ "            aoPopupOldOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(" = null;\n"
-					+ "        }\n"
-					+ "    }\n"
-					+ "    window.onload = adjustPositionOnload_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(";\n"
-					+ "    // Override onresize\n"
-					+ "    var aoPopupOldOnresize_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(" = window.onresize;\n"
-					+ "    function adjustPositionOnresize_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("() {\n"
-					+ "        adjustPosition_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("();\n"
-					+ "        if(aoPopupOldOnresize_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(") {\n"
-					+ "            aoPopupOldOnresize_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("();\n"
-					+ "        }\n"
-					+ "    }\n"
-					+ "    window.onresize = adjustPositionOnresize_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print(";\n"
-					+ "    function adjustPosition_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("() {\n"
-					+ "        var popupAnchor = document.getElementById(\"aoPopupAnchor_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("\");\n"
-					+ "        var popup = document.getElementById(\"aoPopup_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("\");\n"
-					+ "        // Find the screen position of the anchor\n"
-					+ "        var popupAnchorLeft = 0;\n"
-					+ "        var obj = popupAnchor;\n"
-					+ "        if(obj.offsetParent) {\n"
-					+ "            popupAnchorLeft = obj.offsetLeft\n"
-					+ "            while (obj = obj.offsetParent) {\n"
-					+ "                popupAnchorLeft += obj.offsetLeft\n"
-					+ "            }\n"
-					+ "        }\n"
-					+ "        var popupAnchorRight = popupAnchorLeft + popupAnchor.offsetWidth;\n"
-					+ "        // Find the width of the popup\n"
-					+ "        var popupWidth = popup.offsetWidth;\n"
-					+ "        // Find the width of the screen\n"
-					+ "        var screenWidth = (document.compatMode && document.compatMode == \"CSS1Compat\") ? document.documentElement.clientWidth : document.body.clientWidth;\n"
-					+ "        // Find the desired screen position of the popup\n"
-					+ "        var popupScreenPosition = 0;\n"
-					+ "        if(screenWidth<=(popupWidth+12)) {\n"
-					+ "            popupScreenPosition = 0;\n"
-					+ "        } else {\n"
-					+ "            popupScreenPosition = screenWidth - popupWidth - 12;\n"
-					+ "            if(popupAnchorRight < popupScreenPosition) popupScreenPosition = popupAnchorRight;\n"
-					+ "        }\n"
-					+ "        popup.style.left=(popupScreenPosition-popupAnchorLeft)+\"px\";\n"
-					+ "    }\n"
-					+ "    // Call once at parse time for when the popup is activated while page loading (before onload called)\n"
-					+ "    adjustPosition_");
-			out.print(groupId);
-			out.print('_');
-			out.print(popupId);
-			out.print("();\n"
-					+ "  // ]]>\n"
-					+ "</script>");
+			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
+			html.selfClose();
+			out.print("</td>\n"
+				+ "            </tr>\n"
+				+ "        </table>\n"
+				+ "    </div>\n"
+				+ "</div>\n");
+			try (MediaWriter script = html.script().out()) {
+				String groupIdStr = Long.toString(groupId);
+				String popupIdStr = Long.toString(popupId);
+				script.write("\t// Override onload\n"
+					+ "\tvar aoPopupOldOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(" = window.onload;\n"
+					+ "\tfunction adjustPositionOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("() {\n"
+					+ "\t\tadjustPosition_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("();\n"
+					+ "\t\tif(aoPopupOldOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(") {\n"
+					+ "\t\t\taoPopupOldOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("();\n"
+					+ "\t\t\taoPopupOldOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(" = null;\n"
+					+ "\t\t}\n"
+					+ "\t}\n"
+					+ "\twindow.onload = adjustPositionOnload_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(";\n"
+					+ "\t// Override onresize\n"
+					+ "\tvar aoPopupOldOnresize_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(" = window.onresize;\n"
+					+ "\tfunction adjustPositionOnresize_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("() {\n"
+					+ "\t\tadjustPosition_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("();\n"
+					+ "\t\tif(aoPopupOldOnresize_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(") {\n"
+					+ "\t\t\taoPopupOldOnresize_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("();\n"
+					+ "\t\t}\n"
+					+ "\t}\n"
+					+ "\twindow.onresize = adjustPositionOnresize_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write(";\n"
+					+ "\tfunction adjustPosition_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("() {\n"
+					+ "\t\tvar popupAnchor = document.getElementById(\"aoPopupAnchor_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("\");\n"
+					+ "\t\tvar popup = document.getElementById(\"aoPopup_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("\");\n"
+					+ "\t\t// Find the screen position of the anchor\n"
+					+ "\t\tvar popupAnchorLeft = 0;\n"
+					+ "\t\tvar obj = popupAnchor;\n"
+					+ "\t\tif(obj.offsetParent) {\n"
+					+ "\t\t\tpopupAnchorLeft = obj.offsetLeft\n"
+					+ "\t\t\twhile (obj = obj.offsetParent) {\n"
+					+ "\t\t\t\tpopupAnchorLeft += obj.offsetLeft\n"
+					+ "\t\t\t}\n"
+					+ "\t\t}\n"
+					+ "\t\tvar popupAnchorRight = popupAnchorLeft + popupAnchor.offsetWidth;\n"
+					+ "\t\t// Find the width of the popup\n"
+					+ "\t\tvar popupWidth = popup.offsetWidth;\n"
+					+ "\t\t// Find the width of the screen\n"
+					+ "\t\tvar screenWidth = (document.compatMode && document.compatMode == \"CSS1Compat\") ? document.documentElement.clientWidth : document.body.clientWidth;\n"
+					+ "\t\t// Find the desired screen position of the popup\n"
+					+ "\t\tvar popupScreenPosition = 0;\n"
+					+ "\t\tif(screenWidth<=(popupWidth+12)) {\n"
+					+ "\t\t\tpopupScreenPosition = 0;\n"
+					+ "\t\t} else {\n"
+					+ "\t\t\tpopupScreenPosition = screenWidth - popupWidth - 12;\n"
+					+ "\t\t\tif(popupAnchorRight < popupScreenPosition) popupScreenPosition = popupAnchorRight;\n"
+					+ "\t\t}\n"
+					+ "\t\tpopup.style.left=(popupScreenPosition-popupAnchorLeft)+\"px\";\n"
+					+ "\t}\n"
+					+ "\t// Call once at parse time for when the popup is activated while page loading (before onload called)\n"
+					+ "\tadjustPosition_");
+				script.write(groupIdStr);
+				script.write('_');
+				script.write(popupIdStr);
+				script.write("();\n");
+			}
 		} catch(IOException err) {
 			throw new JspException(err);
 		}

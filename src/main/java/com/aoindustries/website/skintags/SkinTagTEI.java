@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,12 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.Doctype;
+import com.aoindustries.html.Serialization;
+import com.aoindustries.util.MinimalList;
 import static com.aoindustries.website.ApplicationResources.accessor;
+import java.util.List;
+import java.util.Locale;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.ValidationMessage;
@@ -34,14 +39,50 @@ public class SkinTagTEI extends TagExtraInfo {
 
 	@Override
 	public ValidationMessage[] validate(TagData data) {
-		Object o = data.getAttribute("layout");
+		List<ValidationMessage> messages = MinimalList.emptyList();
+		Object serializationAttr = data.getAttribute("serialization");
 		if(
-			o != null
-			&& o != TagData.REQUEST_TIME_VALUE
+			serializationAttr != null
+			&& serializationAttr != TagData.REQUEST_TIME_VALUE
 		) {
-			if(PageAttributes.LAYOUT_NORMAL.equals(o) || PageAttributes.LAYOUT_MINIMAL.equals(o)) return null;
-			else {
-				return new ValidationMessage[] {
+			String serialization = ((String)serializationAttr).trim();
+			if(!serialization.isEmpty() && !"auto".equalsIgnoreCase(serialization)) {
+				try {
+					Serialization.valueOf(serialization.toUpperCase(Locale.ROOT));
+				} catch(IllegalArgumentException e) {
+					messages = MinimalList.add(
+						messages,
+						new ValidationMessage(data.getId(), com.aoindustries.taglib.ApplicationResources.accessor.getMessage("HtmlTag.serialization.invalid", serialization))
+					);
+				}
+			}
+		}
+		Object doctypeAttr = data.getAttribute("doctype");
+		if(
+			doctypeAttr != null
+			&& doctypeAttr != TagData.REQUEST_TIME_VALUE
+		) {
+			String doctype = ((String)doctypeAttr).trim();
+			if(!doctype.isEmpty() && !"default".equalsIgnoreCase(doctype)) {
+				try {
+					Doctype.valueOf(doctype.toUpperCase(Locale.ROOT));
+				} catch(IllegalArgumentException e) {
+					messages = MinimalList.add(
+						messages,
+						new ValidationMessage(data.getId(), com.aoindustries.taglib.ApplicationResources.accessor.getMessage("HtmlTag.doctype.invalid", doctype))
+					);
+				}
+			}
+		}
+		Object layoutAttr = data.getAttribute("layout");
+		if(
+			layoutAttr != null
+			&& layoutAttr != TagData.REQUEST_TIME_VALUE
+		) {
+			String layout = ((String)layoutAttr).trim();
+			if(!PageAttributes.LAYOUT_NORMAL.equals(layout) && !PageAttributes.LAYOUT_MINIMAL.equals(layout)) {
+				messages = MinimalList.add(
+					messages,
 					new ValidationMessage(
 						data.getId(),
 						accessor.getMessage(
@@ -50,10 +91,9 @@ public class SkinTagTEI extends TagExtraInfo {
 							"skintags.SkinTagTEI.validate.layout.invalid"
 						)
 					)
-				};
+				);
 			}
-		} else {
-			return null;
 		}
+		return messages.isEmpty() ? null : messages.toArray(new ValidationMessage[messages.size()]);
 	}
 }

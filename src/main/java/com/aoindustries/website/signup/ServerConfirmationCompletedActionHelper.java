@@ -28,14 +28,19 @@ import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.payment.CountryCode;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.encoding.MediaWriter;
+import com.aoindustries.html.Doctype;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.Serialization;
+import com.aoindustries.io.IoUtils;
 import com.aoindustries.net.Email;
 import com.aoindustries.net.HostAddress;
 import com.aoindustries.net.InetAddress;
+import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.Mailer;
 import com.aoindustries.website.SiteSettings;
-import com.aoindustries.website.Skin;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -245,36 +250,36 @@ final public class ServerConfirmationCompletedActionHelper {
 		SignupBillingInformationForm signupBillingInformationForm
 	) {
 		try {
-			Locale userLocale = ThreadLocale.get();
 			// Find the locale and related resource bundles
-			String charset = Skin.getCharacterSet(userLocale);
+			Locale userLocale = ThreadLocale.get();
+			String charset = Html.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
 
 			// Generate the email contents
+			// TODO: Test emails
 			CharArrayWriter cout = new CharArrayWriter();
 			ChainWriter emailOut = new ChainWriter(cout);
-			String htmlLang = getHtmlLang(userLocale);
-			emailOut.print("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-					+ "<html xmlns=\"http://www.w3.org/1999/xhtml\"");
-			if(htmlLang!=null) emailOut.print(" lang=\"").print(htmlLang).print("\" xml:lang=\"").print(htmlLang).print('"');
-			emailOut.print(">\n"
+			Html html = new Html(Serialization.SGML, Doctype.STRICT, cout);
+			html.xmlDeclaration(charset);
+			html.doctype();
+			HtmlTag.beginHtmlTag(userLocale, cout, html.serialization, charset);
+			emailOut.print("\n"
 						 + "<head>\n"
-						 + "    <meta http-equiv='Content-Type' content='text/html; charset=").print(charset).print("' />\n");
+						 + "    <meta http-equiv=\"Content-Type\" content=\"").encodeXmlAttribute(html.serialization.getContentType()).print("; charset=").encodeXmlAttribute(charset).print('"');
+			html.selfClose().nl();
 			// Embed the text-only style sheet
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream("/textskin/global.css");
-			if(cssIn!=null) {
+			if(cssIn != null) {
 				try {
-					emailOut.print("    <style type=\"text/css\">\n"
-								 + "      /* <![CDATA[ */\n");
-					Reader cssReader = new InputStreamReader(cssIn);
-					try {
-						char[] buff = new char[4096];
-						int ret;
-						while((ret=cssReader.read(buff, 0, 4096))!=-1) emailOut.write(buff, 0, ret);
-					} finally {
-						cssIn.close();
+					emailOut.print("    ");
+					try (MediaWriter style = html.style().out()) {
+						Reader cssReader = new InputStreamReader(cssIn);
+						try {
+							IoUtils.copy(cssReader, style);
+						} finally {
+							cssIn.close();
+						}
 					}
-					emailOut.print("      /* ]]> */\n"
-								 + "    </style>\n");
+					html.nl();
 				} finally {
 					cssIn.close();
 				}
@@ -283,13 +288,17 @@ final public class ServerConfirmationCompletedActionHelper {
 			}
 			emailOut.print("</head>\n"
 						 + "<body>\n"
-						 + "<table style='border:0px' cellpadding=\"0\" cellspacing=\"0\">\n"
-						 + "    <tr><td style='white-space:nowrap' colspan=\"3\">\n"
-						 + "        ").print(accessor.getMessage(statusKey, pkey)).print("<br />\n"
-						 + "        <br />\n"
-						 + "        ").print(accessor.getMessage("serverConfirmationCompleted.belowIsSummary")).print("<br />\n"
-						 + "        <hr />\n"
-						 + "    </td></tr>\n"
+						 + "<table style=\"border:0px\" cellpadding=\"0\" cellspacing=\"0\">\n"
+						 + "    <tr><td style=\"white-space:nowrap\" colspan=\"3\">\n"
+						 + "        ").print(accessor.getMessage(statusKey, pkey));
+			html.br__().nl();
+			emailOut.print("        ");
+			html.br__().nl();
+			emailOut.print("        ").print(accessor.getMessage("serverConfirmationCompleted.belowIsSummary"));
+			html.br__().nl();
+			emailOut.print("        ");
+			html.hr__();
+			emailOut.print("    </td></tr>\n"
 						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.selectServer.label")).print("</th></tr>\n");
 			SignupSelectServerActionHelper.printConfirmation(emailOut, packageDefinition);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
@@ -316,15 +325,16 @@ final public class ServerConfirmationCompletedActionHelper {
 						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.billingInformation.label")).print("</th></tr>\n");
 			SignupBillingInformationActionHelper.printConfirmation(emailOut, signupBillingInformationForm);
 			emailOut.print("</table>\n"
-						 + "</body>\n"
-						 + "</html>\n");
+						 + "</body>\n");
+			HtmlTag.endHtmlTag(emailOut);
+			emailOut.print('\n');
 			emailOut.flush();
 
 			// Send the email
 			Brand brand = siteSettings.getBrand();
 			Mailer.sendEmail(
 				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getLinuxServer().getHostname()),
-				"text/html",
+				html.serialization.getContentType(),
 				charset,
 				brand.getSignupEmailAddress().toString(),
 				brand.getSignupEmailDisplay(),
@@ -338,19 +348,5 @@ final public class ServerConfirmationCompletedActionHelper {
 			servlet.log("Unable to send sign up details to "+recipient, err);
 			return false;
 		}
-	}
-
-	public static String getHtmlLang(Locale locale) {
-		String language = locale.getLanguage();
-		if(language!=null) {
-			String country = locale.getCountry();
-			if(country!=null) {
-				String variant = locale.getVariant();
-				if(variant!=null) return language+"-"+country+"-"+variant;
-				return language+"-"+country;
-			}
-			return language;
-		}
-		return null;
 	}
 }

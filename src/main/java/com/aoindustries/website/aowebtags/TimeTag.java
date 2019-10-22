@@ -23,10 +23,14 @@
 package com.aoindustries.website.aowebtags;
 
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.encoding.MediaWriter;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
+import java.io.CharArrayWriter;
 import java.io.IOException;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -39,7 +43,7 @@ public class TimeTag extends BodyTagSupport {
 	/**
 	 * The request attribute name used to store the sequence.
 	 */
-	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = TimeTag.class.getName()+".sequence";
+	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = TimeTag.class.getName() + ".sequence";
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,27 +59,24 @@ public class TimeTag extends BodyTagSupport {
 	public int doEndTag() throws JspException {
 		try {
 			String millisString = getBodyContent().getString().trim();
-			Long time;
-			if(millisString.isEmpty()) time = null;
-			else time = Long.parseLong(millisString);
-			// Resolve the sequence
-			ServletRequest request = pageContext.getRequest();
-			Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
-			if(sequence==null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
-			// Resolve the scriptOut
-			ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
-			if(scriptGroupTag!=null) {
-				ChainWriter.writeTimeJavaScript(time, sequence, pageContext.getOut(), scriptGroupTag.getScriptOut());
-			} else {
-				StringBuilder scriptOut = new StringBuilder();
-				ChainWriter.writeTimeJavaScript(time, sequence, pageContext.getOut(), scriptOut);
-				if(scriptOut.length() > 0) {
-					JspWriter out = pageContext.getOut();
-					out.print("<script type='text/javascript'>\n"
-							+ "  // <![CDATA[\n");
-					out.print(scriptOut);
-					out.print("  // ]]>\n"
-							+ "</script>\n");
+			if(!millisString.isEmpty()) {
+				Long time = Long.parseLong(millisString);
+				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+				JspWriter out = pageContext.getOut();
+				// Resolve the sequence
+				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
+				if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
+				// Resolve the scriptOut
+				ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
+				if(scriptGroupTag != null) {
+					ChainWriter.writeTimeJavaScript(time, sequence, out, scriptGroupTag.getScriptOut());
+				} else {
+					CharArrayWriter scriptOut = new CharArrayWriter();
+					ChainWriter.writeTimeJavaScript(time, sequence, out, scriptOut);
+					Html html = HtmlEE.get(pageContext.getServletContext(), request, out);
+					try (MediaWriter script = html.script().out()) {
+						scriptOut.writeTo(script);
+					}
 				}
 			}
 			return EVAL_PAGE;

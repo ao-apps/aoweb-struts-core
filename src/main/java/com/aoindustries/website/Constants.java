@@ -88,5 +88,6 @@ public class Constants {
 	 * To allow code to detect the current status, anytime the status is set one should
 	 * also set the request attribute of this name to a java.lang.Integer of the status.
 	 */
+	// TODO: Kill this - we're on Servlet 3.0 now
 	public static final String HTTP_SERVLET_RESPONSE_STATUS = "httpServletResponseStatus";
 }

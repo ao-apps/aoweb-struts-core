@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,14 +22,25 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.Doctype;
+import com.aoindustries.html.Html;
+import com.aoindustries.html.Serialization;
+import com.aoindustries.html.servlet.DoctypeEE;
+import com.aoindustries.html.servlet.SerializationEE;
+import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.website.Constants;
 import com.aoindustries.website.Skin;
 import java.util.Locale;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TryCatchFinally;
 import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
 
@@ -38,7 +49,7 @@ import org.apache.struts.util.MessageResources;
  *
  * @author  AO Industries, Inc.
  */
-public class SkinTag extends PageAttributesBodyTag {
+public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,6 +67,8 @@ public class SkinTag extends PageAttributesBodyTag {
 		return skin;
 	}
 
+	private Serialization serialization;
+	private Doctype doctype;
 	private String layout;
 	private String onload;
 
@@ -64,36 +77,122 @@ public class SkinTag extends PageAttributesBodyTag {
 	}
 
 	private void init() {
+		serialization = null;
+		doctype = Doctype.HTML5;
 		layout = "normal";
 		onload = null;
 	}
 
+	private Serialization oldSerialization;
+	private boolean setSerialization;
+	private Doctype oldDoctype;
+	private boolean setDoctype;
+
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
-		pageAttributes.setLayout(layout);
-		pageAttributes.setOnload(onload);
+		try {
+			pageAttributes.setLayout(layout);
+			pageAttributes.setOnload(onload);
 
-		Skin skin = SkinTag.getSkin(pageContext);
+			Skin skin = SkinTag.getSkin(pageContext);
 
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		skin.startSkin(req, resp, pageContext.getOut(), pageAttributes);
+			ServletContext servletContext = pageContext.getServletContext();
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 
-		return EVAL_BODY_INCLUDE;
+			if(serialization == null) {
+				serialization = SerializationEE.get(servletContext, req);
+				oldSerialization = null;
+				setSerialization = false;
+			} else {
+				oldSerialization = SerializationEE.replace(req, serialization);
+				setSerialization = true;
+			}
+			if(doctype == null) {
+				doctype = DoctypeEE.get(servletContext, req);
+				oldDoctype = null;
+				setDoctype = false;
+			} else {
+				oldDoctype = DoctypeEE.replace(req, doctype);
+				setDoctype = true;
+			}
+
+			// Clear the output buffer
+			resp.resetBuffer();
+
+			// Set the content type
+			ServletUtil.setContentType(resp, serialization.getContentType(), Html.ENCODING.name());
+
+			// Set the response locale from the Struts locale
+			Locale locale = (Locale)pageContext.getSession().getAttribute(Globals.LOCALE_KEY);
+			resp.setLocale(locale);
+
+			// Set the Struts XHTML mode by Serialization
+			pageContext.setAttribute(
+				Globals.XHTML_KEY,
+				(serialization == Serialization.XML) ? "true" : "false",
+	            PageContext.PAGE_SCOPE
+			);
+
+			// Start the skin
+			skin.startSkin(req, resp, pageContext.getOut(), pageAttributes);
+
+			return EVAL_BODY_INCLUDE;
+		} catch(ServletException e) {
+			throw new JspTagException(e);
+		}
 	}
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+		Skin skin = SkinTag.getSkin(pageContext);
+
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		skin.endSkin(req, resp, pageContext.getOut(), pageAttributes);
+
+		return EVAL_PAGE;
+	}
+
+	@Override
+	public void doCatch(Throwable t) throws Throwable {
+		throw t;
+	}
+
+	@Override
+	public void doFinally() {
 		try {
-			Skin skin = SkinTag.getSkin(pageContext);
-
-			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.endSkin(req, resp, pageContext.getOut(), pageAttributes);
-
-			return EVAL_PAGE;
+			ServletRequest req = pageContext.getRequest();
+			if(setDoctype) DoctypeEE.set(req, oldDoctype);
+			if(setSerialization) SerializationEE.set(req, oldSerialization);
 		} finally {
 			init();
+		}
+	}
+
+	public String getSerialization() {
+		return (serialization == null) ? null : serialization.name();
+	}
+
+	public void setSerialization(String serialization) {
+		if(serialization == null) {
+			this.serialization = null;
+		} else {
+			serialization = serialization.trim();
+			this.serialization = (serialization.isEmpty() || "auto".equalsIgnoreCase(serialization)) ? null : Serialization.valueOf(serialization.toUpperCase(Locale.ROOT));
+		}
+	}
+
+	public String getDoctype() {
+		return (doctype == null) ? null : doctype.name();
+	}
+
+	public void setDoctype(String doctype) {
+		if(doctype == null) {
+			this.doctype = null;
+		} else {
+			doctype = doctype.trim();
+			this.doctype = (doctype.isEmpty() || "default".equalsIgnoreCase(doctype)) ? null : Doctype.valueOf(doctype.toUpperCase(Locale.ROOT));
 		}
 	}
 
@@ -102,7 +201,7 @@ public class SkinTag extends PageAttributesBodyTag {
 	}
 
 	public void setLayout(String layout) {
-		this.layout = layout;
+		this.layout = layout.trim();
 	}
 
 	public String getOnload() {
