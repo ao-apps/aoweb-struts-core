@@ -222,6 +222,31 @@ public class TextSkin extends Skin {
 					)
 				).__().nl();
 			}
+			out.print("    <title>");
+			// No more page stack, just show current page only
+			/*
+			List<Parent> parents = pageAttributes.getParents();
+			for(Parent parent : parents) {
+				encodeTextInXhtml(parent.getTitle(), out);
+				out.print(" - ");
+			}
+			 */
+			encodeTextInXhtml(pageAttributes.getTitle(), out);
+			out.print("</title>\n");
+			String description = pageAttributes.getDescription();
+			if(description != null && (description = description.trim()).length() > 0) {
+				out.print("    <meta name=\"description\" content=\"");
+				encodeTextInXhtmlAttribute(description, out);
+				out.print('"');
+				html.selfClose().nl();
+			}
+			String keywords = pageAttributes.getKeywords();
+			if(keywords != null && (keywords = keywords.trim()).length() > 0) {
+				out.print("    <meta name=\"keywords\" content=\"");
+				encodeTextInXhtmlAttribute(keywords, out);
+				out.print('"');
+				html.selfClose().nl();
+			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
@@ -263,17 +288,6 @@ public class TextSkin extends Skin {
 					if(isRobots) robotsMetaUsed = true;
 				}
 			}
-			out.print("    <title>");
-			// No more page stack, just show current page only
-			/*
-			List<Parent> parents = pageAttributes.getParents();
-			for(Parent parent : parents) {
-				encodeTextInXhtml(parent.getTitle(), out);
-				out.print(" - ");
-			}
-			 */
-			encodeTextInXhtml(pageAttributes.getTitle(), out);
-			out.print("</title>\n");
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify!=null) {
@@ -282,24 +296,6 @@ public class TextSkin extends Skin {
 					out.print('"');
 					html.selfClose().nl();
 				}
-			}
-			String keywords = pageAttributes.getKeywords();
-			if(keywords!=null && keywords.length()>0) {
-				out.print("    <meta name=\"keywords\" content=\"");
-				encodeTextInXhtmlAttribute(keywords, out);
-				out.print('"');
-				html.selfClose().nl();
-			}
-			String description = pageAttributes.getDescription();
-			if(description!=null && description.length()>0) {
-				out.print("    <meta name=\"description\" content=\"");
-				encodeTextInXhtmlAttribute(description, out);
-				out.print('"');
-				html.selfClose().nl();
-				out.print("    <meta name=\"abstract\" content=\"");
-				encodeTextInXhtmlAttribute(description, out);
-				out.print('"');
-				html.selfClose().nl();
 			}
 			String copyright = pageAttributes.getCopyright();
 			if(copyright!=null && copyright.length()>0) {
