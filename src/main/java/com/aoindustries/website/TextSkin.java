@@ -32,6 +32,7 @@ import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScript
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
+import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Input;
 import com.aoindustries.html.Link;
@@ -170,15 +171,26 @@ public class TextSkin extends Skin {
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
 				out.print("    <meta name=\"ROBOTS\" content=\"NOINDEX, NOFOLLOW\"");
-				html.selfClose();
-				out.print('\n');
+				html.selfClose().nl();
 				robotsMetaUsed = true;
 			}
-			// Default style language
-			out.print("    <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"");
-			html.selfClose().nl();
-			out.print("    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\"");
-			html.selfClose().nl();
+			if(html.doctype == Doctype.HTML5) {
+				out.print("    <meta charset=\"");
+				encodeTextInXhtmlAttribute(resp.getCharacterEncoding(), out);
+				out.print('"');
+				html.selfClose().nl();
+			} else {
+				out.print("    <meta http-equiv=\"Content-Type\" content=\"");
+				encodeTextInXhtmlAttribute(resp.getContentType(), out);
+				out.print('"');
+				html.selfClose().nl();
+				// Default style language
+				out.print("    <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"");
+				html.selfClose().nl();
+				out.print("    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\"");
+				html.selfClose().nl();
+			}
+			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
 			HttpSession session = req.getSession(false);
@@ -229,11 +241,7 @@ public class TextSkin extends Skin {
 			}
 			 */
 			encodeTextInXhtml(pageAttributes.getTitle(), out);
-			out.print("</title>\n"
-					+ "    <meta http-equiv=\"Content-Type\" content=\"");
-			encodeTextInXhtmlAttribute(resp.getContentType(), out);
-			out.print('"');
-			html.selfClose().nl();
+			out.print("</title>\n");
 			Brand brand = settings.getBrand();
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
