@@ -43,6 +43,7 @@ import org.apache.struts.util.MessageResources;
  *
  * @author  AO Industries, Inc.
  */
+// TODO: Throw IOException on most/all methods where is given a writer, then won't need so many exception conversions in implementations.
 abstract public class Skin {
 
 	/**

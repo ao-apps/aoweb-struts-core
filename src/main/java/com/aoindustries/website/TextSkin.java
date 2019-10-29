@@ -27,7 +27,6 @@ import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
-import static com.aoindustries.encoding.TextInJavaScriptEncoder.encodeTextInJavaScript;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
@@ -38,6 +37,7 @@ import com.aoindustries.html.Input;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Serialization;
 import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.servlet.filter.EncodeURIFilter;
@@ -50,7 +50,6 @@ import com.aoindustries.website.skintags.Meta;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
 import java.io.IOException;
-import java.io.Writer;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
@@ -141,6 +140,9 @@ public class TextSkin extends Skin {
 	public void startSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
 			ServletContext servletContext = req.getServletContext();
+			SiteSettings settings = SiteSettings.getInstance(servletContext);
+			Brand brand = settings.getBrand();
+			String trackingId = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			// Write doctype
 			Html html = HtmlEE.get(servletContext, req, out);
 			html.xmlDeclaration(resp.getCharacterEncoding());
@@ -158,7 +160,6 @@ public class TextSkin extends Skin {
 			if(path.startsWith("/")) path=path.substring(1);
 			final String fullPath = urlBase + path;
 			final String encodedFullPath = resp.encodeURL(URIEncoder.encodeURI(fullPath));
-			SiteSettings settings = SiteSettings.getInstance(servletContext);
 			List<Skin> skins = settings.getSkins();
 			boolean isOkResponseStatus;
 			{
@@ -190,6 +191,12 @@ public class TextSkin extends Skin {
 				out.print("    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\"");
 				html.selfClose().nl();
 			}
+			if(html.doctype == Doctype.HTML5) {
+				GoogleAnalytics.writeGlobalSiteTag(html, trackingId);
+			} else {
+				GoogleAnalytics.writeAnalyticsJs(html, trackingId);
+			}
+			// TODO: Canonical?
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
@@ -242,7 +249,6 @@ public class TextSkin extends Skin {
 			 */
 			encodeTextInXhtml(pageAttributes.getTitle(), out);
 			out.print("</title>\n");
-			Brand brand = settings.getBrand();
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify!=null) {
@@ -315,12 +321,6 @@ public class TextSkin extends Skin {
 					)
 				)
 			).__().nl();
-			String googleAnalyticsNewTrackingCode = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
-			if(googleAnalyticsNewTrackingCode!=null) {
-				// TODO: Global site tag (gtag.js) once HTML 5
-				out.print("    ");
-				html.script().src(req.isSecure() ? "https://ssl.google-analytics.com/ga.js" : "http://www.google-analytics.com/ga.js").__().nl();
-			}
 			printFavIcon(req, resp, out, urlBase);
 			out.print("  </head>\n"
 					+ "  <body");
@@ -848,6 +848,7 @@ public class TextSkin extends Skin {
 			out.print("        </td>\n"
 					+ "      </tr>\n"
 					+ "    </table>\n");
+			// TODO: SemanticCMS component for this, also make sure in other layouts and skins
 			EditableResourceBundle.printEditableResourceBundleLookups(
 				textInJavaScriptEncoder,
 				textInXhtmlEncoder,
@@ -855,43 +856,11 @@ public class TextSkin extends Skin {
 				4,
 				true
 			);
-			// TODO: Global site tag (gtag.js) once HTML 5
-			printGoogleAnalyticsTrackPageViewScript(req, out, SiteSettings.getInstance(req.getServletContext()).getBrand().getAowebStrutsGoogleAnalyticsNewTrackingCode());
 			out.print("  </body>\n");
 			HtmlTag.endHtmlTag(out);
 			out.write('\n');
-		} catch(IOException | SQLException err) {
+		} catch(IOException  err) {
 			throw new JspException(err);
-		}
-	}
-
-	/**
-	 * Reusable implementation of Google analytics pageview tracking script.
-	 *
-	 * @param googleAnalyticsNewTrackingCode if <code>null</code> will not print anything
-	 */
-	// TODO: Global site tag (gtag.js) once HTML 5
-	public static void printGoogleAnalyticsTrackPageViewScript(HttpServletRequest req, Writer out, String googleAnalyticsNewTrackingCode) throws IOException {
-		if(googleAnalyticsNewTrackingCode != null) {
-			Html html = HtmlEE.get(req, out);
-			Integer responseStatus = (Integer)req.getAttribute(Constants.HTTP_SERVLET_RESPONSE_STATUS);
-			try (MediaWriter script = html.script().out()) {
-				script.append("try {\n"
-						+ "  var pageTracker = _gat._getTracker(\"");
-				encodeTextInJavaScript(googleAnalyticsNewTrackingCode, script);
-				script.append("\");\n");
-				if(responseStatus==null || responseStatus==HttpServletResponse.SC_OK) {
-					script.append("  pageTracker._trackPageview();\n");
-				} else {
-					assert responseStatus != null;
-					script.append("  pageTracker._trackPageview(\"/");
-					encodeTextInJavaScript(responseStatus.toString(), script);
-					script.append(".html?page=\"+document.location.pathname+document.location.search+\"&from=\"+document.referrer);\n");
-				}
-				script.append("} catch(err) {\n"
-						+ "}\n");
-			}
-			html.nl();
 		}
 	}
 
