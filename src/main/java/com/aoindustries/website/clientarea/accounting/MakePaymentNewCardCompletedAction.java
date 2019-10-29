@@ -41,6 +41,7 @@ import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
 import com.aoindustries.net.Email;
+import com.aoindustries.util.StringUtility;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
@@ -73,12 +74,6 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	static final boolean DEBUG_AUTHORIZE_THEN_CAPTURE = false;
 
 	static final int DUPLICATE_WINDOW = 120;
-
-	static String trimNullIfEmpty(String s) {
-		if(s == null) return null;
-		s = s.trim();
-		return s.isEmpty() ? null : s;
-	}
 
 	static String getFirstBillingEmail(Profile profile) {
 		if(profile == null) return null;
@@ -149,8 +144,8 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			makePaymentNewCardForm.getLastName(),
 			makePaymentNewCardForm.getCompanyName(),
 			getFirstBillingEmail(profile),
-			profile == null ? null : trimNullIfEmpty(profile.getPhone()),
-			profile == null ? null : trimNullIfEmpty(profile.getFax()),
+			profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone()),
+			profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax()),
 			null, // customerId: TODO: Set from account.Account once there is a constant identifier
 			null, // customerTaxId
 			makePaymentNewCardForm.getStreetAddress1(),

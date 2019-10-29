@@ -29,6 +29,7 @@ import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.CreditCardProcessor;
+import com.aoindustries.util.StringUtility;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
@@ -106,8 +107,8 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		// Get the values that are simply copied from account profile, instead of cluttering the credit card form with too many fields
 		Profile profile = rootCreditCard.getAccount().getProfile();
 		String profileEmail = MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile);
-		String profilePhone = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone());
-		String profileFax = profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax());
+		String profilePhone = profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone());
+		String profileFax = profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax());
 		if(
 			!nullOrBlankEquals(editCreditCardForm.getFirstName(), creditCard.getFirstName())
 			|| !nullOrBlankEquals(editCreditCardForm.getLastName(), creditCard.getLastName())

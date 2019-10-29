@@ -30,6 +30,7 @@ import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.creditcards.CreditCardProcessor;
+import com.aoindustries.util.StringUtility;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
@@ -110,8 +111,8 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 				addCreditCardForm.getLastName(),
 				addCreditCardForm.getCompanyName(),
 				MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile),
-				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getPhone()),
-				profile == null ? null : MakePaymentNewCardCompletedAction.trimNullIfEmpty(profile.getFax()),
+				profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone()),
+				profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax()),
 				null, // customerId: TODO: Set from account.Account once there is a constant identifier (not subject to set_business_accounting command/API)
 				null, // customerTaxId
 				addCreditCardForm.getStreetAddress1(),
