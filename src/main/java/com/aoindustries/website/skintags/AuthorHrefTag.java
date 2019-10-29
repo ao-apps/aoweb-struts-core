@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,39 +22,37 @@
  */
 package com.aoindustries.website.skintags;
 
-import java.util.Collection;
-import java.util.Stack;
-import javax.servlet.jsp.JspException;
+import com.aoindustries.encoding.MediaType;
+import com.aoindustries.io.buffer.BufferResult;
+import com.aoindustries.taglib.AutoEncodingBufferedTag;
+import java.io.IOException;
+import java.io.Writer;
+import javax.servlet.jsp.PageContext;
 
 /**
- * Adds a child to the hierarchy at the same level as this page.
- *
  * @author  AO Industries, Inc.
  */
-public class ChildTag extends PageTag {
-
-	private static final long serialVersionUID = 1L;
+public class AuthorHrefTag extends AutoEncodingBufferedTag {
 
 	@Override
-	@SuppressWarnings("unchecked")
-	protected int doEndTag(
-		String title,
-		String navImageAlt,
-		String description,
-		String author,
-		String authorHref,
-		String copyright,
-		String path,
-		String keywords,
-		Collection<Meta> metas
-	) throws JspException {
-		Child child = new Child(title, navImageAlt, description, author, authorHref, copyright, path, keywords, metas);
-		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(ParentTag.STACK_ATTRIBUTE_NAME);
-		if(stack==null || stack.isEmpty()) {
-			PageAttributesBodyTag.getPageAttributes(pageContext).addChild(child);
+	public MediaType getContentType() {
+		return MediaType.TEXT;
+	}
+
+	@Override
+	public MediaType getOutputType() {
+		return null;
+	}
+
+	@Override
+	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+		PageContext pageContext = (PageContext)getJspContext();
+		String authorHref = capturedBody.trim().toString();
+		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());
+		if(pageTag==null) {
+			PageAttributesBodyTag.getPageAttributes(pageContext).setAuthorHref(authorHref);
 		} else {
-			stack.peek().addChild(child);
+			pageTag.setAuthorHref(authorHref);
 		}
-		return EVAL_PAGE;
 	}
 }

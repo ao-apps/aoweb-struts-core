@@ -82,6 +82,7 @@ public class ParentTag extends PageTag {
 		String navImageAlt,
 		String description,
 		String author,
+		String authorHref,
 		String copyright,
 		String path,
 		String keywords,
@@ -91,7 +92,7 @@ public class ParentTag extends PageTag {
 		if(stack!=null && !stack.isEmpty() && stack.peek()==this) stack.pop();
 
 		PageAttributesBodyTag.getPageAttributes(pageContext).addParent(
-			new Parent(title, navImageAlt, description, author, copyright, path, keywords, metas, children)
+			new Parent(title, navImageAlt, description, author, authorHref, copyright, path, keywords, metas, children)
 		);
 		return EVAL_PAGE;
 	}

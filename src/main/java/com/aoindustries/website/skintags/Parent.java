@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -35,8 +35,8 @@ public class Parent extends Page {
 
 	private final List<Child> children;
 
-	public Parent(String title, String navImageAlt, String description, String author, String copyright, String path, String keywords, Collection<Meta> metas, List<Child> children) {
-		super(title, navImageAlt, description, author, copyright, path, keywords, metas);
+	public Parent(String title, String navImageAlt, String description, String author, String authorHref, String copyright, String path, String keywords, Collection<Meta> metas, List<Child> children) {
+		super(title, navImageAlt, description, author, authorHref, copyright, path, keywords, metas);
 		this.children = children;
 	}
 

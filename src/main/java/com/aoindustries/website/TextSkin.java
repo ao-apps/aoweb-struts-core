@@ -196,7 +196,32 @@ public class TextSkin extends Skin {
 			} else {
 				GoogleAnalytics.writeAnalyticsJs(html, trackingId);
 			}
-			// TODO: Canonical?
+			// Mobile support
+			out.print("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"");
+			html.selfClose().nl();
+			out.print("    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"");
+			html.selfClose().nl();
+			out.print("    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\"");
+			html.selfClose().nl();
+			// Authors
+			// TODO: dcterms copyright
+			String author = pageAttributes.getAuthor();
+			if(author != null && (author = author.trim()).length() > 0) {
+				out.print("    <meta name=\"author\" content=\"");
+				encodeTextInXhtmlAttribute(author, out);
+				out.print('"');
+				html.selfClose().nl();
+			}
+			String authorHref = pageAttributes.getAuthorHref();
+			if(authorHref != null && (authorHref = authorHref.trim()).length() > 0) {
+				out.print("    ");
+				// TODO: RFC 3986-only always?
+				html.link().rel(Link.Rel.AUTHOR).href(
+					resp.encodeURL(
+						URIEncoder.encodeURI(authorHref)
+					)
+				).__().nl();
+			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(req, resp);
@@ -283,13 +308,6 @@ public class TextSkin extends Skin {
 				out.print('"');
 				html.selfClose().nl();
 			}
-			String author = pageAttributes.getAuthor();
-			if(author!=null && author.length()>0) {
-				out.print("    <meta name=\"author\" content=\"");
-				encodeTextInXhtmlAttribute(author, out);
-				out.print('"');
-				html.selfClose().nl();
-			}
 			List<Language> languages = settings.getLanguages(req);
 			printAlternativeLinks(req, resp, out, fullPath, languages);
 			out.print("    ");
@@ -322,6 +340,7 @@ public class TextSkin extends Skin {
 				)
 			).__().nl();
 			printFavIcon(req, resp, out, urlBase);
+			// TODO: Canonical?
 			out.print("  </head>\n"
 					+ "  <body");
 			String onload = pageAttributes.getOnload();

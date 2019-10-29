@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -36,12 +36,13 @@ abstract public class Page {
 	private final String navImageAlt;
 	private final String description;
 	private final String author;
+	private final String authorHref;
 	private final String copyright;
 	private final String path;
 	private final String keywords;
 	private final Collection<Meta> metas;
 
-	public Page(String title, String navImageAlt, String description, String author, String copyright, String path, String keywords, Collection<Meta> metas) {
+	public Page(String title, String navImageAlt, String description, String author, String authorHref, String copyright, String path, String keywords, Collection<Meta> metas) {
 		if(title==null) throw new IllegalArgumentException("title is null");
 		if(description==null) throw new IllegalArgumentException("description is null");
 		if(path==null) throw new IllegalArgumentException("path is null");
@@ -50,6 +51,7 @@ abstract public class Page {
 		this.navImageAlt = navImageAlt;
 		this.description = description;
 		this.author = author;
+		this.authorHref = authorHref;
 		this.copyright = copyright;
 		this.path = path;
 		this.keywords = keywords;
@@ -75,6 +77,10 @@ abstract public class Page {
 
 	public String getAuthor() {
 		return author;
+	}
+
+	public String getAuthorHref() {
+		return authorHref;
 	}
 
 	public String getCopyright() {

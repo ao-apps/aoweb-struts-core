@@ -86,6 +86,21 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
+		<!-- datePublished="2019-10-29T03:35:08-0500" -->
+		<description><![CDATA[
+			<p>
+				Provides an author href to its
+				<a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageTag.html">PageTag</a>
+				parent tag or the
+				<a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageAttributes.html">page overall</a>
+				if parent not found.
+			</p>
+		]]></description>
+		<name>authorHref</name>
+		<tag-class>com.aoindustries.website.skintags.AuthorHrefTag</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
 		<!-- dateModified="2016-11-10T22:36:09-0600" -->
 		<description><![CDATA[

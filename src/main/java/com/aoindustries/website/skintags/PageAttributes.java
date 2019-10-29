@@ -115,6 +115,7 @@ public class PageAttributes {
 	private String keywords;
 	private String description;
 	private String author;
+	private String authorHref;
 	private String copyright;
 	private List<Meta> metas;
 	private List<Meta> unmodifiableMetas;
@@ -161,6 +162,14 @@ public class PageAttributes {
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public String getAuthorHref() {
+		return authorHref;
+	}
+
+	public void setAuthorHref(String authorHref) {
+		this.authorHref = authorHref;
 	}
 
 	public String getCopyright() {

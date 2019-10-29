@@ -58,6 +58,7 @@ abstract public class PageTag extends BodyTagSupport {
 	private String navImageAlt;
 	private String description;
 	private String author;
+	private String authorHref;
 	private String copyright;
 	private String path;
 	private String keywords;
@@ -72,6 +73,7 @@ abstract public class PageTag extends BodyTagSupport {
 		navImageAlt = null;
 		description = null;
 		author = null;
+		authorHref = null;
 		copyright = null;
 		path = null;
 		keywords = null;
@@ -102,6 +104,10 @@ abstract public class PageTag extends BodyTagSupport {
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public void setAuthorHref(String authorHref) {
+		this.authorHref = authorHref;
 	}
 
 	public void setCopyright(String copyright) {
@@ -135,7 +141,7 @@ abstract public class PageTag extends BodyTagSupport {
 			if(myNavImageAlt == null || myNavImageAlt.length()==0) myNavImageAlt=title;
 			String myDescription = this.description;
 			if(myDescription == null || myDescription.length()==0) myDescription=title;
-			return doEndTag(title, myNavImageAlt, myDescription, author, copyright, path, keywords, metas);
+			return doEndTag(title, myNavImageAlt, myDescription, author, authorHref, copyright, path, keywords, metas);
 		} finally {
 			request.setAttribute(PAGE_TAG_ATTRIBUTE, oldPageTag);
 			init();
@@ -147,6 +153,7 @@ abstract public class PageTag extends BodyTagSupport {
 		String navImageAlt,
 		String description,
 		String author,
+		String authorHref,
 		String copyright,
 		String path,
 		String keywords,
