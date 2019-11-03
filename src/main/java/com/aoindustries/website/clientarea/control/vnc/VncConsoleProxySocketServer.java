@@ -28,9 +28,14 @@ import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.website.LogFactory;
 import com.aoindustries.website.SiteSettings;
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.logging.Level;
 import javax.net.ssl.KeyManagerFactory;
@@ -102,9 +107,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 						new VncConsoleProxySocketHandler(servletContext, rootConn, socket);
 					}
 				}
-			} catch(ThreadDeath TD) {
-				throw TD;
-			} catch(Throwable T) {
+			} catch(RuntimeException | IOException | InvalidAlgorithmParameterException | KeyManagementException | NoSuchAlgorithmException | SQLException T) {
 				LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.SEVERE, null, T);
 			}
 			if(currentThread==this.thread) {

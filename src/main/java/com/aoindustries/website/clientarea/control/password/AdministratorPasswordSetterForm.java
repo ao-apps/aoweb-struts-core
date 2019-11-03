@@ -54,10 +54,10 @@ public class AdministratorPasswordSetterForm extends ActionForm implements Seria
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
-		setPackages(new AutoGrowArrayList<String>());
-		setUsernames(new AutoGrowArrayList<String>());
-		setNewPasswords(new AutoGrowArrayList<String>());
-		setConfirmPasswords(new AutoGrowArrayList<String>());
+		setPackages(new AutoGrowArrayList<>());
+		setUsernames(new AutoGrowArrayList<>());
+		setNewPasswords(new AutoGrowArrayList<>());
+		setConfirmPasswords(new AutoGrowArrayList<>());
 	}
 
 	public List<String> getPackages() {

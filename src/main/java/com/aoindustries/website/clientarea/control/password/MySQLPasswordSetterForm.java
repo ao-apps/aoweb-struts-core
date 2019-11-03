@@ -55,12 +55,12 @@ public class MySQLPasswordSetterForm extends ActionForm implements Serializable 
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		super.reset(mapping, request);
-		setPackages(new AutoGrowArrayList<String>());
-		setUsernames(new AutoGrowArrayList<String>());
-		setMySQLServers(new AutoGrowArrayList<String>());
-		setServers(new AutoGrowArrayList<String>());
-		setNewPasswords(new AutoGrowArrayList<String>());
-		setConfirmPasswords(new AutoGrowArrayList<String>());
+		setPackages(new AutoGrowArrayList<>());
+		setUsernames(new AutoGrowArrayList<>());
+		setMySQLServers(new AutoGrowArrayList<>());
+		setServers(new AutoGrowArrayList<>());
+		setNewPasswords(new AutoGrowArrayList<>());
+		setConfirmPasswords(new AutoGrowArrayList<>());
 	}
 
 	public List<String> getPackages() {

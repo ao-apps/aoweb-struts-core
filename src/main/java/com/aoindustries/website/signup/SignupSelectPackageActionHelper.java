@@ -82,12 +82,8 @@ final public class SignupSelectPackageActionHelper {
 		return activePackageDefinitions;
 	}
 
-	private static final Comparator<PackageDefinition> packageDefinitionComparator = new Comparator<PackageDefinition>() {
-		@Override
-		public int compare(PackageDefinition pd1, PackageDefinition pd2) {
-			return pd1.getMonthlyRate().compareTo(pd2.getMonthlyRate());
-		}
-	};
+	private static final Comparator<PackageDefinition> packageDefinitionComparator =
+		(pd1, pd2) -> pd1.getMonthlyRate().compareTo(pd2.getMonthlyRate());
 
 	public static void setConfirmationRequestAttributes(
 		ServletContext servletContext,

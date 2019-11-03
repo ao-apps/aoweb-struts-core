@@ -161,7 +161,7 @@ final public class SignupCustomizeServerActionHelper {
 		List<Option> sataControllerOptions = new ArrayList<>();
 		List<Option> scsiControllerOptions = new ArrayList<>();
 		List<List<Option>> diskOptions = new ArrayList<>();
-		for(int c=0;c<maxDisks;c++) diskOptions.add(new ArrayList<Option>());
+		for(int c=0;c<maxDisks;c++) diskOptions.add(new ArrayList<>());
 		for(PackageDefinitionLimit limit : limits) {
 			Resource resource = limit.getResource();
 			String resourceName = resource.getName();

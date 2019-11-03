@@ -61,7 +61,7 @@ abstract public class SignupCustomizeServerForm extends ActionForm implements Se
 		setRamOption(-1);
 		setSataControllerOption(-1);
 		setScsiControllerOption(-1);
-		setDiskOptions(new AutoGrowArrayList<String>());
+		setDiskOptions(new AutoGrowArrayList<>());
 	}
 
 	@Override

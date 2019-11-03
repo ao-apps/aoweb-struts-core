@@ -30,12 +30,8 @@ import java.util.Comparator;
  */
 public class Option {
 
-	public static final Comparator<Option> priceComparator = new Comparator<Option>() {
-		@Override
-		public int compare(Option pdl1, Option pdl2) {
-			return pdl1.getPriceDifference().compareTo(pdl2.getPriceDifference());
-		}
-	};
+	public static final Comparator<Option> priceComparator =
+		(pdl1, pdl2) -> pdl1.getPriceDifference().compareTo(pdl2.getPriceDifference());
 
 	final private int packageDefinitionLimit;
 	final private String display;
