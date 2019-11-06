@@ -33,7 +33,6 @@ import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
-import com.aoindustries.html.Input;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Serialization;
 import com.aoindustries.html.servlet.HtmlEE;
@@ -363,9 +362,9 @@ public class TextSkin extends Skin {
 					out
 				);
 				out.print("\"><div style=\"display:inline;\">");
-				html.input(Input.Type.HIDDEN).name("target").value(fullPath).__();
+				html.input.hidden().name("target").value(fullPath).__();
 				// Variant that takes ResourceBundle?
-				html.input(Input.Type.SUBMIT).value(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel")).__();
+				html.input.submit().value(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel")).__();
 				out.print("</div></form>\n");
 			} else {
 				out.print("          ");
@@ -384,9 +383,9 @@ public class TextSkin extends Skin {
 				out.print("\"><div style=\"display:inline\">");
 				// Only include the target when they are not in the /clientarea/ part of the site
 				if(path.startsWith("clientarea/")) {
-					html.input(Input.Type.HIDDEN).name("target").value(fullPath).__();
+					html.input.hidden().name("target").value(fullPath).__();
 				}
-				html.input(Input.Type.SUBMIT).value(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel")).__();
+				html.input.submit().value(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel")).__();
 				out.print("</div></form>\n");
 			}
 			out.print("          ");
