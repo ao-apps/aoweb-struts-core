@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -364,7 +364,7 @@ public class TextSkin extends Skin {
 				out.print("\"><div style=\"display:inline;\">");
 				html.input.hidden().name("target").value(fullPath).__();
 				// Variant that takes ResourceBundle?
-				html.input.submit().value(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel")).__();
+				html.input.submit__(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel"));
 				out.print("</div></form>\n");
 			} else {
 				out.print("          ");
@@ -385,7 +385,7 @@ public class TextSkin extends Skin {
 				if(path.startsWith("clientarea/")) {
 					html.input.hidden().name("target").value(fullPath).__();
 				}
-				html.input.submit().value(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel")).__();
+				html.input.submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"));
 				out.print("</div></form>\n");
 			}
 			out.print("          ");
