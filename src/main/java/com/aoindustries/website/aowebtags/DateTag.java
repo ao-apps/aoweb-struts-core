@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -74,7 +74,8 @@ public class DateTag extends BodyTagSupport {
 					CharArrayWriter scriptOut = new CharArrayWriter();
 					ChainWriter.writeDateJavaScript(date, sequence, out, scriptOut);
 					Html html = HtmlEE.get(pageContext.getServletContext(), request, out);
-					try (MediaWriter script = html.script().out()) {
+					// TODO: Can write to out(Object) directly due to underlying coercion?  Review other uses, too.
+					try (MediaWriter script = html.script().out__()) {
 						scriptOut.writeTo(script);
 					}
 				}

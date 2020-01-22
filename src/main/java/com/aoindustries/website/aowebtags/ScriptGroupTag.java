@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -82,7 +82,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 			if(scriptOut.size() > 0) {
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 				Html html = HtmlEE.get(pageContext.getServletContext(), request, pageContext.getOut());
-				try (MediaWriter script = html.script().out()) {
+				try (MediaWriter script = html.script().out__()) {
 					if("none".equals(onloadMode)) {
 						scriptOut.writeTo(script);
 					} else {

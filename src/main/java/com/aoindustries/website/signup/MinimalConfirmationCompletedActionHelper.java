@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -150,7 +150,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 			if(cssIn != null) {
 				try {
 					emailOut.print("    ");
-					try (MediaWriter style = html.style().out()) {
+					try (MediaWriter style = html.style().out__()) {
 						Reader cssReader = new InputStreamReader(cssIn);
 						try {
 							IoUtils.copy(cssReader, style);

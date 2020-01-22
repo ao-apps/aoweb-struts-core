@@ -392,7 +392,7 @@ public class TextSkin extends Skin {
 			html.hr__().nl();
 			out.print("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size()>1) {
-				try (MediaWriter script = html.script().out()) {
+				try (MediaWriter script = html.script().out__()) {
 					script.write("  function selectLayout(layout) {\n");
 					for(Skin skin : skins) {
 						script.write("    if(layout==\"");
@@ -1024,7 +1024,7 @@ public class TextSkin extends Skin {
 	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
 		try {
 			Html html = HtmlEE.get(req, out);
-			try (MediaWriter script = html.script().out()) {
+			try (MediaWriter script = html.script().out__()) {
 				String groupIdStr = Long.toString(groupId);
 				script.write("  var popupGroupTimer"); script.write(groupIdStr); script.write("=null;\n"
 					+ "  var popupGroupAuto"); script.write(groupIdStr); script.write("=null;\n"
@@ -1320,7 +1320,7 @@ public class TextSkin extends Skin {
 				+ "        </table>\n"
 				+ "    </div>\n"
 				+ "</div>\n");
-			try (MediaWriter script = html.script().out()) {
+			try (MediaWriter script = html.script().out__()) {
 				String groupIdStr = Long.toString(groupId);
 				String popupIdStr = Long.toString(popupId);
 				script.write("\t// Override onload\n"
