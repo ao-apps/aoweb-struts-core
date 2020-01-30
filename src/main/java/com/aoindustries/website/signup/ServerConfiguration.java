@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -207,7 +207,7 @@ public class ServerConfiguration {
 			packageDefinition.getPkey(),
 			packageDefinition.getDisplay(),
 			minimumPower.toString(),
-			minimumCpu.toString(), //.replaceAll(", ", "<br />&#160;&#160;&#160;&#160;"),
+			minimumCpu.toString(),
 			minimumRam.toString(),
 			minimumSataController.toString(),
 			minimumScsiController.toString(),
@@ -378,7 +378,7 @@ public class ServerConfiguration {
 			packageDefinition.getPkey(),
 			packageDefinition.getDisplay(),
 			maximumPower.toString(),
-			maximumCpu.toString(), // .replaceAll(", ", "<br />&#160;&#160;&#160;&#160;"),
+			maximumCpu.toString(),
 			maximumRam.toString(),
 			maximumSataController.toString(),
 			maximumScsiController.toString(),

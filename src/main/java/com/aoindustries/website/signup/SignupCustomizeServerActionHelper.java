@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -382,8 +382,8 @@ final public class SignupCustomizeServerActionHelper {
 	public static String getCpuOption(AOServConnector rootConn, SignupCustomizeServerForm signupCustomizeServerForm) throws IOException, SQLException {
 		PackageDefinitionLimit cpuPDL = rootConn.getBilling().getPackageDefinitionLimit().get(signupCustomizeServerForm.getCpuOption());
 		int numCpu = cpuPDL.getHardLimit();
-		if(numCpu == 1) return cpuPDL.getResource().toString(); //.replaceAll(", ", "<br />&#160;&#160;&#160;&#160;");
-		else return numCpu + "x" + cpuPDL.getResource().toString(); //.replaceAll(", ", "<br />&#160;&#160;&#160;&#160;");
+		if(numCpu == 1) return cpuPDL.getResource().toString();
+		else return numCpu + "x" + cpuPDL.getResource().toString();
 	}
 
 	public static String getRamOption(AOServConnector rootConn, SignupCustomizeServerForm signupCustomizeServerForm) throws IOException, SQLException {
