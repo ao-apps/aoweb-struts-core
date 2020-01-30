@@ -662,7 +662,7 @@ public class TextSkin extends Skin {
 		width = trimNullIfEmpty(width);
 		try {
 			Html html = HtmlEE.get(req, out);
-			out.print("          <table cellpadding=\"0\" cellspacing=\"0\"");
+			out.print("          <table class=\"packed\"");
 			if(width != null) {
 				out.print(" style=\"");
 				appendWidthStyle(width, out);
@@ -883,12 +883,12 @@ public class TextSkin extends Skin {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table style=\"border:5px outset #a0a0a0");
+			out.print("<table class=\"packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
 				out.print(';');
 				appendWidthStyle(width, out);
 			}
-			out.print("\" cellpadding=\"0\" cellspacing=\"0\">\n"
+			out.print("\">\n"
 					+ "  <tr>\n"
 					+ "    <td class=\"aoLightRow\" style=\"padding:4px");
 			if(align != null) {
@@ -918,12 +918,12 @@ public class TextSkin extends Skin {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table style=\"border:5px outset #a0a0a0");
+			out.print("<table class=\"packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
 				out.print(';');
 				appendWidthStyle(width, out);
 			}
-			out.print("\" cellpadding=\"0\" cellspacing=\"0\">\n"
+			out.print("\">\n"
 					+ "  <tr>\n"
 					+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
 			if(align != null) {
@@ -1155,7 +1155,7 @@ public class TextSkin extends Skin {
 				out.print('"');
 			}
 			out.print(">\n"
-					+ "        <table class=\"aoPopupTable\" cellpadding=\"0\" cellspacing=\"0\">\n"
+					+ "        <table class=\"aoPopupTable packed\">\n"
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupTL\"><img src=\"");
 			encodeTextInXhtmlAttribute(
