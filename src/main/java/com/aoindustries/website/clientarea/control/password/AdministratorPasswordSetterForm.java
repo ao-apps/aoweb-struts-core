@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2013, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2000-2013, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,6 +26,8 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Administrator;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.password.PasswordChecker;
+import com.aoindustries.html.Serialization;
+import com.aoindustries.html.servlet.SerializationEE;
 import com.aoindustries.util.AutoGrowArrayList;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
@@ -111,7 +113,14 @@ public class AdministratorPasswordSetterForm extends ActionForm implements Seria
 						// Check the password strength
 						List<PasswordChecker.Result> results = Administrator.checkPassword(User.Name.valueOf(username), newPassword);
 						if(PasswordChecker.hasResults(results)) {
-							errors.add("confirmPasswords[" + c + "].confirmPasswords", new ActionMessage(PasswordChecker.getResultsHtml(results), false));
+							Serialization serialization = SerializationEE.get(request);
+							errors.add(
+								"confirmPasswords[" + c + "].confirmPasswords",
+								new ActionMessage(
+									PasswordChecker.getResultsHtml(results, serialization == Serialization.XML),
+									false
+								)
+							);
 						}
 					}
 				}
