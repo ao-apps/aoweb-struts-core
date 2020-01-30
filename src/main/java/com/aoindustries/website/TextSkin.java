@@ -1011,7 +1011,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Begins a popup group.
 	 *
-	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.jsp.JspWriter, long)
+	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.jsp.JspWriter, long)
 	 */
 	@Override
 	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
@@ -1064,7 +1064,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup group.
 	 *
-	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.jsp.JspWriter, long)
+	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, javax.servlet.jsp.JspWriter, long)
 	 */
 	@Override
 	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
