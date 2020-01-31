@@ -25,6 +25,7 @@ package com.aoindustries.website;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
+import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
@@ -339,8 +340,10 @@ public class TextSkin extends Skin {
 			out.print("  </head>\n"
 					+ "  <body");
 			String onload = pageAttributes.getOnload();
-			if(onload!=null && onload.length()>0) {
-				out.print(" onload=\""); out.print(onload); out.print('"');
+			if(onload != null && !onload.isEmpty()) {
+				out.print(" onload=\"");
+				encodeJavaScriptInXhtmlAttribute(onload, out);
+				out.print('"');
 			}
 			out.print(">\n"
 					+ "    <table cellspacing=\"10\" cellpadding=\"0\">\n"
