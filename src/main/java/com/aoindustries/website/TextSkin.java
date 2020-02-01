@@ -394,10 +394,10 @@ public class TextSkin extends Skin {
 			html.hr__().nl();
 			out.print("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size()>1) {
-				try (MediaWriter script = html.script().out__()) {
-					script.write("  function selectLayout(layout) {\n");
+				html.script().out(script -> {
+					script.write("function selectLayout(layout) {\n");
 					for(Skin skin : skins) {
-						script.write("    if(layout==\"");
+						script.write("  if(layout==\"");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtml(skin.getName(), script);
 						script.write("\") window.top.location.href=\"");
 						NewEncodingUtils.encodeTextInJavaScriptInXhtml(
@@ -410,9 +410,8 @@ public class TextSkin extends Skin {
 						);
 						script.write("\";\n");
 					}
-					script.write("  }\n");
-				}
-				html.nl();
+					script.write('}');
+				}).__().nl();
 				out.print("            <form action=\"\" style=\"display:inline\"><div style=\"display:inline\">\n"
 						+ "              ");
 				out.print(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"));
