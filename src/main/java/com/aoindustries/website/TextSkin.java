@@ -24,7 +24,6 @@ package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.encoding.ChainWriter;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
@@ -37,6 +36,7 @@ import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.html.util.GoogleAnalytics;
+import com.aoindustries.html.util.ImagePreload;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.servlet.filter.EncodeURIFilter;
@@ -530,14 +530,13 @@ public class TextSkin extends Skin {
 						out.print('"');
 						html.selfClose();
 						out.print("</a>");
-						ChainWriter.writeHtmlImagePreloadJavaScript(
+						ImagePreload.writeImagePreloadScript(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
-									urlBase
-									+ language.getFlagOnSrc(req, locale)
+									urlBase + language.getFlagOnSrc(req, locale)
 								)
 							),
-							out
+							html
 						);
 					}
 				}
