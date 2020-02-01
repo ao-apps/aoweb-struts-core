@@ -35,7 +35,6 @@ import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
-import com.aoindustries.html.Serialization;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.net.AnyURI;
@@ -419,16 +418,8 @@ public class TextSkin extends Skin {
 				out.print(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"));
 				out.print("<select name=\"layout_selector\" onchange=\"selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);\">\n");
 				for(Skin skin : skins) {
-					out.print("                <option value=\"");
-					encodeTextInXhtmlAttribute(skin.getName(), out);
-					out.print('"');
-					if(getName().equals(skin.getName())) {
-						out.print(" selected");
-						if(html.serialization == Serialization.XML) out.print("=\"selected\"");
-					}
-					out.print('>');
-					encodeTextInXhtml(skin.getDisplay(req), out);
-					out.print("</option>\n");
+					out.print("                ");
+					html.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req)).nl();
 				}
 				out.print("              </select>\n"
 						+ "            </div></form>");
