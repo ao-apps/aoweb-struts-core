@@ -27,6 +27,7 @@ import com.aoindustries.aoserv.client.reseller.Brand;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
+import static com.aoindustries.encoding.TextInJavaScriptEncoder.encodeTextInJavaScript;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
@@ -447,23 +448,19 @@ public class TextSkin extends Skin {
 							language.getCode(),
 							out
 						);
-						out.print("\"><img src=\"");
-						encodeTextInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									urlBase + language.getFlagOnSrc(req, locale)
+						out.print("\">");
+						html.img()
+							.src(
+								resp.encodeURL(
+									URIEncoder.encodeURI(
+										urlBase + language.getFlagOnSrc(req, locale)
+									)
 								)
-							),
-							out
-						);
-						out.print("\" style=\"border:1px solid; vertical-align:bottom\" width=\"");
-						out.print(language.getFlagWidth(req, locale));
-						out.print("\" height=\"");
-						out.print(language.getFlagHeight(req, locale));
-						out.print("\" alt=\"");
-						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
-						out.print('"');
-						html.selfClose();
+							).style("border:1px solid; vertical-align:bottom")
+							.width(language.getFlagWidth(req, locale))
+							.height(language.getFlagHeight(req, locale))
+							.alt(language.getDisplay(req, locale))
+							.__();
 						out.print("</a>");
 					} else {
 						out.print("&#160;<a href=\"");
@@ -508,26 +505,21 @@ public class TextSkin extends Skin {
 							),
 							out
 						);
-						out.print("\";'><img src=\"");
-						encodeTextInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									urlBase
-									+ language.getFlagOffSrc(req, locale)
+						out.print("\";'>");
+						html.img()
+							.src(
+								resp.encodeURL(
+									URIEncoder.encodeURI(
+										urlBase
+										+ language.getFlagOffSrc(req, locale)
+									)
 								)
-							),
-							out
-						);
-						out.print("\" id=\"flagSelector_");
-						out.print(language.getCode());
-						out.print("\" style=\"border:1px solid; vertical-align:bottom\" width=\"");
-						out.print(language.getFlagWidth(req, locale));
-						out.print("\" height=\"");
-						out.print(language.getFlagHeight(req, locale));
-						out.print("\" alt=\"");
-						encodeTextInXhtmlAttribute(language.getDisplay(req, locale), out);
-						out.print('"');
-						html.selfClose();
+							).id("flagSelector_" + language.getCode())
+							.style("border:1px solid; vertical-align:bottom")
+							.width(language.getFlagWidth(req, locale))
+							.height(language.getFlagHeight(req, locale))
+							.alt(language.getDisplay(req, locale))
+							.__();
 						out.print("</a>");
 						ImagePreload.writeImagePreloadScript(
 							resp.encodeURL(
@@ -1084,6 +1076,12 @@ public class TextSkin extends Skin {
 	 * Default implementation of beginPopup.
 	 */
 	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width, String urlBase) throws JspException {
+		if(groupId < 0) throw new IllegalArgumentException("groupId < 0: " + groupId);
+		final String groupIdStr = Long.toString(groupId);
+
+		if(popupId < 0) throw new IllegalArgumentException("popupId < 0: " + popupId);
+		final String popupIdStr = Long.toString(popupId);
+
 		width = trimNullIfEmpty(width);
 		try {
 			ServletContext servletContext = req.getServletContext();
@@ -1092,54 +1090,55 @@ public class TextSkin extends Skin {
 			MessageResources applicationResources = getMessageResources(req);
 
 			out.print("<div id=\"aoPopupAnchor_");
-			out.print(groupId);
+			out.print(groupIdStr);
 			out.print('_');
-			out.print(popupId);
-			out.print("\" class=\"aoPopupAnchor\"><img class=\"aoPopupAnchorImg\" src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase
-						+ applicationResources.getMessage(locale, "TextSkin.popup.src")
+			out.print(popupIdStr);
+			out.print("\" class=\"aoPopupAnchor\">");
+			html.img()
+				.clazz("aoPopupAnchorImg")
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase
+							+ applicationResources.getMessage(locale, "TextSkin.popup.src")
+						)
 					)
-				),
-				out
-			);
-			out.print("\" alt=\"");
-			encodeTextInXhtmlAttribute(applicationResources.getMessage(locale, "TextSkin.popup.alt"), out);
-			out.print("\" width=\"");
-			out.print(applicationResources.getMessage(locale, "TextSkin.popup.width"));
-			out.print("\" height=\"");
-			out.print(applicationResources.getMessage(locale, "TextSkin.popup.height"));
-			out.print("\" onmouseover=\"popupGroupTimer");
-			out.print(groupId);
-			out.print("=setTimeout('popupGroupAuto");
-			out.print(groupId);
-			out.print("=true; popupGroupShowDetails");
-			out.print(groupId);
-			out.print('(');
-			out.print(popupId);
-			out.print(")', 1000);\" onmouseout=\"if(popupGroupAuto");
-			out.print(groupId);
-			out.print(") popupGroupHideAllDetails");
-			out.print(groupId);
-			out.print("(); if(popupGroupTimer");
-			out.print(groupId);
-			out.print("!=null) clearTimeout(popupGroupTimer");
-			out.print(groupId);
-			out.print(");\" onclick=\"popupGroupAuto");
-			out.print(groupId);
-			out.print("=false; popupGroupToggleDetails");
-			out.print(groupId);
-			out.print('(');
-			out.print(popupId);
-			out.print(");\"");
-			html.selfClose();
-			out.print("\n"
-					+ "    <div id=\"aoPopup_"); // Used to be span width=\"100%\"
-			out.print(groupId);
+				).alt(applicationResources.getMessage(locale, "TextSkin.popup.alt"))
+				.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.width")))
+				.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.height")))
+				.onmouseover(onmouseover -> {
+					onmouseover.write("popupGroupTimer");
+					onmouseover.write(groupIdStr);
+					onmouseover.write("=setTimeout(\"popupGroupAuto");
+					onmouseover.write(groupIdStr);
+					onmouseover.write("=true; popupGroupShowDetails");
+					onmouseover.write(groupIdStr);
+					onmouseover.write('(');
+					onmouseover.write(popupIdStr);
+					onmouseover.write(")\", 1000);");
+				}).onmouseout(onmouseout -> {
+					onmouseout.write("if(popupGroupAuto");
+					onmouseout.write(groupIdStr);
+					onmouseout.write(") popupGroupHideAllDetails");
+					onmouseout.write(groupIdStr);
+					onmouseout.write("(); if(popupGroupTimer");
+					onmouseout.write(groupIdStr);
+					onmouseout.write("!=null) clearTimeout(popupGroupTimer");
+					onmouseout.write(groupIdStr);
+					onmouseout.write(");");
+				}).onclick(onclick -> {
+					onclick.write("popupGroupAuto");
+					onclick.write(groupIdStr);
+					onclick.write("=false; popupGroupToggleDetails");
+					onclick.write(groupIdStr);
+					onclick.write('(');
+					onclick.write(popupIdStr);
+					onclick.write(");");
+				}).__().nl();
+			out.print("    <div id=\"aoPopup_"); // Used to be span width=\"100%\"
+			out.print(groupIdStr);
 			out.print('_');
-			out.print(popupId);
+			out.print(popupIdStr);
 			out.print("\" class=\"aoPopupMain\"");
 			if(width != null) {
 				out.print(" style=\"");
@@ -1149,17 +1148,15 @@ public class TextSkin extends Skin {
 			out.print(">\n"
 					+ "        <table class=\"aoPopupTable packed\">\n"
 					+ "            <tr>\n"
-					+ "                <td class=\"aoPopupTL\"><img src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_topleft.gif"
+					+ "                <td class=\"aoPopupTL\">");
+			html.img()
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "textskin/popup_topleft.gif"
+						)
 					)
-				),
-				out
-			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
-			html.selfClose();
+				).width(12).height(12).alt("").__();
 			out.print("</td>\n"
 					+ "                <td class=\"aoPopupTop\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
@@ -1171,17 +1168,15 @@ public class TextSkin extends Skin {
 				out
 			);
 			out.print(");\"></td>\n"
-					+ "                <td class=\"aoPopupTR\"><img src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_topright.gif"
+					+ "                <td class=\"aoPopupTR\">");
+			html.img()
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "textskin/popup_topright.gif"
+						)
 					)
-				),
-				out
-			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
-			html.selfClose();
+				).width(12).height(12).alt("").__();
 			out.print("</td>\n"
 					+ "            </tr>\n"
 					+ "            <tr>\n"
@@ -1221,25 +1216,19 @@ public class TextSkin extends Skin {
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
-			out.print("<img class=\"aoPopupClose\" src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")
+			html.img()
+				.clazz("aoPopupClose")
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")
+						)
 					)
-				),
-				out
-			);
-			out.print("\" alt=\"");
-			encodeTextInXhtmlAttribute(applicationResources.getMessage(locale, "TextSkin.popupClose.alt"), out);
-			out.print("\" width=\"");
-			out.print(applicationResources.getMessage(locale, "TextSkin.popupClose.width"));
-			out.print("\" height=\"");
-			out.print(applicationResources.getMessage(locale, "TextSkin.popupClose.height"));
-			out.print("\" onclick=\"popupGroupHideAllDetails");
-			out.print(groupId);
-			out.print("();\"");
-			html.selfClose();
+				).alt(applicationResources.getMessage(locale, "TextSkin.popupClose.alt"))
+				.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.width")))
+				.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.height")))
+				.onclick("popupGroupHideAllDetails" + groupId + "();")
+				.__();
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -1274,17 +1263,15 @@ public class TextSkin extends Skin {
 			out.print(");\"></td>\n"
 				+ "            </tr>\n"
 				+ "            <tr>\n" 
-				+ "                <td class=\"aoPopupBL\"><img src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_bottomleft.gif"
+				+ "                <td class=\"aoPopupBL\">");
+			html.img()
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "textskin/popup_bottomleft.gif"
+						)
 					)
-				),
-				out
-			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
-			html.selfClose();
+				).width(12).height(12).alt("").__();
 			out.print("</td>\n"
 				+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
@@ -1296,17 +1283,15 @@ public class TextSkin extends Skin {
 				out
 			);
 			out.print(");\"></td>\n"
-				+ "                <td class=\"aoPopupBR\"><img src=\"");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_bottomright.gif"
+				+ "                <td class=\"aoPopupBR\">");
+			html.img()
+				.src(
+					resp.encodeURL(
+						URIEncoder.encodeURI(
+							urlBase + "textskin/popup_bottomright.gif"
+						)
 					)
-				),
-				out
-			);
-			out.print("\" width=\"12\" height=\"12\" alt=\"\"");
-			html.selfClose();
+				).width(12).height(12).alt("").__();
 			out.print("</td>\n"
 				+ "            </tr>\n"
 				+ "        </table>\n"

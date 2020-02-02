@@ -291,16 +291,16 @@ abstract public class Skin {
 			return applicationResources.getMessage(locale, flagOffSrcKey);
 		}
 
-		public String getFlagWidth(HttpServletRequest req, Locale locale) throws JspException {
+		public int getFlagWidth(HttpServletRequest req, Locale locale) throws JspException {
 			MessageResources applicationResources = (MessageResources)req.getAttribute(flagWidthResourcesKey);
 			if(applicationResources==null) throw new JspException("Unable to load resources: "+flagWidthResourcesKey);
-			return applicationResources.getMessage(locale, flagWidthKey);
+			return Integer.parseInt(applicationResources.getMessage(locale, flagWidthKey));
 		}
 
-		public String getFlagHeight(HttpServletRequest req, Locale locale) throws JspException {
+		public int getFlagHeight(HttpServletRequest req, Locale locale) throws JspException {
 			MessageResources applicationResources = (MessageResources)req.getAttribute(flagHeightResourcesKey);
 			if(applicationResources==null) throw new JspException("Unable to load resources: "+flagHeightResourcesKey);
-			return applicationResources.getMessage(locale, flagHeightKey);
+			return Integer.parseInt(applicationResources.getMessage(locale, flagHeightKey));
 		}
 
 		/**
