@@ -31,6 +31,7 @@ import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
+import com.aoindustries.html.Meta;
 import com.aoindustries.html.Serialization;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.net.Email;
@@ -264,8 +265,12 @@ final public class ServerConfirmationCompletedActionHelper {
 			HtmlTag.beginHtmlTag(userLocale, cout, html.serialization, charset);
 			emailOut.print("\n"
 						 + "<head>\n"
-						 + "    <meta http-equiv=\"Content-Type\" content=\"").encodeXmlAttribute(html.serialization.getContentType()).print("; charset=").encodeXmlAttribute(charset).print('"');
-			html.selfClose().nl();
+						 + "    ");
+			html.meta(Meta.HttpEquiv.CONTENT_TYPE).content(content -> {
+				content.write(html.serialization.getContentType());
+				content.write("; charset=");
+				content.write(charset);
+			}).__().nl();
 			// Embed the text-only style sheet
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream("/textskin/global.css");
 			if(cssIn != null) {

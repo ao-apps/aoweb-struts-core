@@ -74,7 +74,7 @@ abstract public class Skin {
 				AnyURI uri = language.getUri();
 				out.append("    ");
 				// TODO: hreflang attribute
-				html.link().rel(Link.Rel.ALTERNATE).attribute("hreflang", "x-default").href(
+				html.link(Link.Rel.ALTERNATE).attribute("hreflang", "x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -90,7 +90,7 @@ abstract public class Skin {
 			for(Language language : languages) {
 				AnyURI uri = language.getUri();
 				out.append("    ");
-				html.link().rel(Link.Rel.ALTERNATE).attribute("hreflang", language.getCode()).href(
+				html.link(Link.Rel.ALTERNATE).attribute("hreflang", language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(

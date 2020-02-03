@@ -27,7 +27,6 @@ import com.aoindustries.aoserv.client.reseller.Brand;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
-import static com.aoindustries.encoding.TextInJavaScriptEncoder.encodeTextInJavaScript;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
@@ -35,6 +34,9 @@ import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
+import com.aoindustries.html.Meta;
+import com.aoindustries.html.Script;
+import com.aoindustries.html.Style;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.html.util.ImagePreload;
@@ -46,7 +48,6 @@ import com.aoindustries.taglib.HtmlTag;
 import static com.aoindustries.util.StringUtility.trimNullIfEmpty;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.website.skintags.Child;
-import com.aoindustries.website.skintags.Meta;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
 import java.io.IOException;
@@ -171,25 +172,20 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				out.print("    <meta name=\"ROBOTS\" content=\"NOINDEX, NOFOLLOW\"");
-				html.selfClose().nl();
-				robotsMetaUsed = true;
+				out.print("    ");
+				html.meta(Meta.Name.ROBOTS).content("noindex, nofollow").__().nl();
 			}
 			if(html.doctype == Doctype.HTML5) {
-				out.print("    <meta charset=\"");
-				encodeTextInXhtmlAttribute(resp.getCharacterEncoding(), out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta().charset(resp.getCharacterEncoding()).__().nl();
 			} else {
-				out.print("    <meta http-equiv=\"Content-Type\" content=\"");
-				encodeTextInXhtmlAttribute(resp.getContentType(), out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta(Meta.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().nl();
 				// Default style language
-				out.print("    <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"");
-				html.selfClose().nl();
-				out.print("    <meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\"");
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(Style.Type.TEXT_CSS).__().nl();
+				out.print("    ");
+				html.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
 			}
 			if(html.doctype == Doctype.HTML5) {
 				GoogleAnalytics.writeGlobalSiteTag(html, trackingId);
@@ -197,26 +193,24 @@ public class TextSkin extends Skin {
 				GoogleAnalytics.writeAnalyticsJs(html, trackingId);
 			}
 			// Mobile support
-			out.print("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"");
-			html.selfClose().nl();
-			out.print("    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\"");
-			html.selfClose().nl();
-			out.print("    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\"");
-			html.selfClose().nl();
+			out.print("    ");
+			html.meta(Meta.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().nl();
+			out.print("    ");
+			html.meta(Meta.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().nl();
+			out.print("    ");
+			html.meta(Meta.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
 			// Authors
 			// TODO: dcterms copyright
 			String author = pageAttributes.getAuthor();
 			if(author != null && (author = author.trim()).length() > 0) {
-				out.print("    <meta name=\"author\" content=\"");
-				encodeTextInXhtmlAttribute(author, out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta(Meta.Name.AUTHOR).content(author).__().nl();
 			}
 			String authorHref = pageAttributes.getAuthorHref();
 			if(authorHref != null && (authorHref = authorHref.trim()).length() > 0) {
 				out.print("    ");
 				// TODO: RFC 3986-only always?
-				html.link().rel(Link.Rel.AUTHOR).href(
+				html.link(Link.Rel.AUTHOR).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(authorHref)
 					)
@@ -235,17 +229,13 @@ public class TextSkin extends Skin {
 			out.print("</title>\n");
 			String description = pageAttributes.getDescription();
 			if(description != null && (description = description.trim()).length() > 0) {
-				out.print("    <meta name=\"description\" content=\"");
-				encodeTextInXhtmlAttribute(description, out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta(Meta.Name.DESCRIPTION).content(description).__().nl();
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords != null && (keywords = keywords.trim()).length() > 0) {
-				out.print("    <meta name=\"keywords\" content=\"");
-				encodeTextInXhtmlAttribute(keywords, out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				html.meta(Meta.Name.KEYWORDS).content(keywords).__().nl();
 			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
@@ -253,61 +243,47 @@ public class TextSkin extends Skin {
 			HttpSession session = req.getSession(false);
 			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
 			if(isOkResponseStatus && aoConn != null && session != null) {
-				out.print("    <meta http-equiv=\"Refresh\" content=\"");
-				encodeTextInXhtmlAttribute(Integer.toString(Math.max(60, session.getMaxInactiveInterval()-60)), out);
-				encodeTextInXhtmlAttribute(";URL=", out);
-				encodeTextInXhtmlAttribute(
-					resp.encodeRedirectURL(
-						URIEncoder.encodeURI(
-							urlBase
-							+ "session-timeout.do?target="
-							+ URIEncoder.encodeURIComponent(fullPath)
+				out.print("    ");
+				html.meta(Meta.HttpEquiv.REFRESH).content(content -> {
+					content.write(Integer.toString(Math.max(60, session.getMaxInactiveInterval() - 60)));
+					content.write(";URL=");
+					content.write(
+						resp.encodeRedirectURL(
+							URIEncoder.encodeURI(
+								urlBase
+								+ "session-timeout.do?target="
+								+ URIEncoder.encodeURIComponent(fullPath)
+							)
 						)
-					),
-					out
-				);
-				out.print('"');
-				html.selfClose().nl();
+					);
+				}).__().nl();
 			}
-			for(Meta meta : pageAttributes.getMetas()) {
-				// Skip ROBOTS if not on default skin
-				boolean isRobots = meta.getName().equalsIgnoreCase("ROBOTS");
+			for(com.aoindustries.website.skintags.Meta meta : pageAttributes.getMetas()) {
+				// Skip robots if not on default skin
+				boolean isRobots = meta.getName().equalsIgnoreCase("robots");
 				if(!robotsMetaUsed || !isRobots) {
-					out.print("    <meta");
-					if(meta.getName() != null) {
-						out.print(" name=\"");
-						encodeTextInXhtmlAttribute(meta.getName(), out);
-						out.write('"');
-					}
-					if(meta.getContent() != null) {
-						out.print(" content=\"");
-						encodeTextInXhtmlAttribute(meta.getContent(), out);
-						out.write('"');
-					}
-					html.selfClose().nl();
+					out.print("    ");
+					html.meta().name(meta.getName()).content(meta.getContent()).__().nl();
 					if(isRobots) robotsMetaUsed = true;
 				}
 			}
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify!=null) {
-					out.print("    <meta name=\"verify-v1\" content=\"");
-					encodeTextInXhtmlAttribute(googleVerify, out);
-					out.print('"');
-					html.selfClose().nl();
+					out.print("    ");
+					html.meta().name("verify-v1").content(googleVerify).__().nl();
 				}
 			}
 			String copyright = pageAttributes.getCopyright();
 			if(copyright!=null && copyright.length()>0) {
-				out.print("    <meta name=\"copyright\" content=\"");
-				encodeTextInXhtmlAttribute(copyright, out);
-				out.print('"');
-				html.selfClose().nl();
+				out.print("    ");
+				// TODO: Dublin Core: https://stackoverflow.com/questions/6665312/is-the-copyright-meta-tag-valid-in-html5
+				html.meta().name("copyright").content(copyright).__().nl();
 			}
 			List<Language> languages = settings.getLanguages(req);
 			printAlternativeLinks(req, resp, out, fullPath, languages);
 			out.print("    ");
-			html.link().rel(Link.Rel.STYLESHEET).href(
+			html.link(Link.Rel.STYLESHEET).href(
 				resp.encodeURL( // TODO: Put URL encoding into HTML class via EncodingContext?
 					URIEncoder.encodeURI(
 						urlBase + "textskin/global.css"
@@ -316,7 +292,7 @@ public class TextSkin extends Skin {
 			).__().nl();
 			out.print("    <!--[if IE 6]>\n"
 					+ "      ");
-			html.link().rel(Link.Rel.STYLESHEET).href(
+			html.link(Link.Rel.STYLESHEET).href(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
 						urlBase + "textskin/global-ie6.css"
