@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -27,6 +27,7 @@ import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.html.Html;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.IOException;
@@ -99,10 +100,14 @@ final public class SignupSelectPackageActionHelper {
 		request.setAttribute("setup", packageDefinition.getSetupFee());
 	}
 
-	public static void printConfirmation(ChainWriter emailOut, PackageDefinition packageDefinition) throws IOException {
+	public static void printConfirmation(ChainWriter emailOut, Html html, PackageDefinition packageDefinition) throws IOException {
 		emailOut.print("    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupSelectPackageForm.packageDefinition.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupSelectPackageForm.packageDefinition.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(packageDefinition.getDisplay()).print("</td>\n"
 					 + "    </tr>\n");
 	}

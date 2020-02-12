@@ -36,7 +36,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-01-29T23:21:09-0600"
+		dateModified="2020-02-12T09:02:41-0600"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -71,6 +71,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						New CSS classes for table formatting:
 						<code>thinTable</code>, <code>outsideBorder</code>, <code>noborder</code>, <code>packed</code>, and <code>spread</code>.
 					</li>
+					<li><code><![CDATA[&lt;skin:contentTitle /&gt;]]></code> is now <code>scriptless</code>.</li>
 				</ul>
 			</changelog:release>
 		</c:if>

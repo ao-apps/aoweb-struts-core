@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
-Copyright (C) 2007-2009, 2016, 2017, 2019  AO Industries, Inc.
+Copyright (C) 2007-2009, 2016, 2017, 2019, 2020  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -748,7 +748,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
+		<!-- dateModified="2020-02-12T09:02:41-0600" -->
 		<description><![CDATA[
 			<p>
 				Prints the content title line, must be nested in a content tag.
@@ -756,7 +756,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		]]></description>
 		<name>contentTitle</name>
 		<tag-class>com.aoindustries.website.skintags.ContentTitleTag</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->

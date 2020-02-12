@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,6 +25,7 @@ package com.aoindustries.website.signup;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.password.PasswordGenerator;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.html.Html;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.IOException;
@@ -85,82 +86,142 @@ final public class SignupTechnicalActionHelper {
 		request.setAttribute("baCountry", getBaCountry(rootConn, signupTechnicalForm));
 	}
 
-	public static void printConfirmation(ChainWriter emailOut, AOServConnector rootConn, SignupTechnicalForm signupTechnicalForm) throws IOException, SQLException {
+	public static void printConfirmation(ChainWriter emailOut, Html html, AOServConnector rootConn, SignupTechnicalForm signupTechnicalForm) throws IOException, SQLException {
 		emailOut.print("    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baName.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.required"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baName.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baTitle.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baTitle.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaTitle()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baWorkPhone.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.required"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baWorkPhone.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaWorkPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baCellPhone.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baCellPhone.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaCellPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baHomePhone.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baHomePhone.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaHomePhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baFax.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baFax.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaFax()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baEmail.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.required"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baEmail.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaEmail()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baAddress1.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baAddress1.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaAddress1()).print("</td>\n"
 					 + "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupTechnicalForm.getBaAddress2())) {
 			emailOut.print("    <tr>\n"
-						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baAddress2.prompt")).print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baAddress2.prompt"));
+		emailOut.print("</td>\n"
 						 + "        <td>").encodeXhtml(signupTechnicalForm.getBaAddress2()).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baCity.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baCity.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baState.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baState.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baCountry.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baCountry.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(getBaCountry(rootConn, signupTechnicalForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baZip.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baZip.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaZip()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.required")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baUsername.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.required"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baUsername.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaUsername()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupTechnicalForm.baPassword.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupTechnicalForm.baPassword.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaPassword()).print("</td>\n"
 					 + "    </tr>\n");
 	}

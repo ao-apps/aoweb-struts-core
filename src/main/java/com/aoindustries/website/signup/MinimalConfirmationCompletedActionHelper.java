@@ -183,18 +183,26 @@ final public class MinimalConfirmationCompletedActionHelper {
 			emailOut.print("        ");
 			html.hr__();
 			emailOut.print("    </td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.selectPackage.label")).print("</th></tr>\n");
-			SignupSelectPackageActionHelper.printConfirmation(emailOut, packageDefinition);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.selectPackage.label"));
+			emailOut.print("</th></tr>\n");
+			SignupSelectPackageActionHelper.printConfirmation(emailOut, html, packageDefinition);
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.organizationInfo.label")).print("</th></tr>\n");
-			SignupOrganizationActionHelper.printConfirmation(emailOut, rootConn, signupOrganizationForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.organizationInfo.label"));
+			emailOut.print("</th></tr>\n");
+			SignupOrganizationActionHelper.printConfirmation(emailOut, html, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.technicalInfo.label")).print("</th></tr>\n");
-			SignupTechnicalActionHelper.printConfirmation(emailOut, rootConn, signupTechnicalForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.technicalInfo.label"));
+			emailOut.print("</th></tr>\n");
+			SignupTechnicalActionHelper.printConfirmation(emailOut, html, rootConn, signupTechnicalForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.billingInformation.label")).print("</th></tr>\n");
-			SignupBillingInformationActionHelper.printConfirmation(emailOut, signupBillingInformationForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.billingInformation.label"));
+			emailOut.print("</th></tr>\n");
+			SignupBillingInformationActionHelper.printConfirmation(emailOut, html, signupBillingInformationForm);
 			emailOut.print("</table>\n"
 						 + "</body>\n");
 			HtmlTag.endHtmlTag(emailOut);

@@ -304,31 +304,44 @@ final public class ServerConfirmationCompletedActionHelper {
 			emailOut.print("        ");
 			html.hr__();
 			emailOut.print("    </td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.selectServer.label")).print("</th></tr>\n");
-			SignupSelectServerActionHelper.printConfirmation(emailOut, packageDefinition);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.selectServer.label"));
+			emailOut.print("</th></tr>\n");
+			SignupSelectServerActionHelper.printConfirmation(emailOut, html, packageDefinition);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.customizeServer.label")).print("</th></tr>\n");
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.customizeServer.label"));
+			emailOut.print("</th></tr>\n");
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			SignupCustomizeServerActionHelper.printConfirmation(request, emailOut, rootConn, packageDefinition, signupCustomizeServerForm);
+			SignupCustomizeServerActionHelper.printConfirmation(request, emailOut, html, rootConn, packageDefinition, signupCustomizeServerForm);
 			if(signupCustomizeManagementForm!=null) {
 				emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-							 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.customizeManagement.label")).print("</th></tr>\n");
+							 + "    <tr><th colspan=\"3\">");
+				html.text(accessor.getMessage("steps.customizeManagement.label"));
+				emailOut.print("</th></tr>\n");
 				SignupCustomizeManagementActionHelper.printConfirmation(
 					request,
 					emailOut,
+					html,
 					rootConn,
 					signupCustomizeManagementForm
 				);
 			}
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.organizationInfo.label")).print("</th></tr>\n");
-			SignupOrganizationActionHelper.printConfirmation(emailOut, rootConn, signupOrganizationForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.organizationInfo.label"));
+			emailOut.print("</th></tr>\n");
+			SignupOrganizationActionHelper.printConfirmation(emailOut, html, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.technicalInfo.label")).print("</th></tr>\n");
-			SignupTechnicalActionHelper.printConfirmation(emailOut, rootConn, signupTechnicalForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.technicalInfo.label"));
+			emailOut.print("</th></tr>\n");
+			SignupTechnicalActionHelper.printConfirmation(emailOut, html, rootConn, signupTechnicalForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-						 + "    <tr><th colspan=\"3\">").print(accessor.getMessage("steps.billingInformation.label")).print("</th></tr>\n");
-			SignupBillingInformationActionHelper.printConfirmation(emailOut, signupBillingInformationForm);
+						 + "    <tr><th colspan=\"3\">");
+			html.text(accessor.getMessage("steps.billingInformation.label"));
+			emailOut.print("</th></tr>\n");
+			SignupBillingInformationActionHelper.printConfirmation(emailOut, html, signupBillingInformationForm);
 			emailOut.print("</table>\n"
 						 + "</body>\n");
 			HtmlTag.endHtmlTag(emailOut);

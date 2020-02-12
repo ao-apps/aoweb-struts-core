@@ -27,6 +27,7 @@ import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.html.Html;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
@@ -446,6 +447,7 @@ final public class SignupCustomizeServerActionHelper {
 	public static void printConfirmation(
 		HttpServletRequest request,
 		ChainWriter emailOut,
+		Html html,
 		AOServConnector rootConn,
 		PackageDefinition packageDefinition,
 		SignupCustomizeServerForm signupCustomizeServerForm
@@ -453,47 +455,75 @@ final public class SignupCustomizeServerActionHelper {
 		String powerOption = getPowerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(powerOption)) {
 			emailOut.print("    <tr>\n"
-						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.power.prompt")).print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.power.prompt"));
+		emailOut.print("</td>\n"
 						 + "        <td>").print(powerOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.cpu.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.cpu.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").print(getCpuOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.ram.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.ram.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").encodeXhtml(getRamOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
 					 + "    </tr>\n");
 		String sataControllerOption = getSataControllerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(sataControllerOption)) {
 			emailOut.print("    <tr>\n"
-						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.sataController.prompt")).print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+						 + "        <td>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.sataController.prompt"));
+		emailOut.print("</td>\n"
 						 + "        <td>").print(sataControllerOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		String scsiControllerOption = getScsiControllerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(scsiControllerOption)) {
 			emailOut.print("    <tr>\n"
-						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.scsiController.prompt")).print("</td>\n"
+						 + "        <td>");
+			html.text(accessor.getMessage("signup.notRequired"));
+			emailOut.print("</td>\n"
+						 + "        <td>");
+			html.text(accessor.getMessage("signupCustomizeServerConfirmation.scsiController.prompt"));
+			emailOut.print("</td>\n"
 						 + "        <td>").print(scsiControllerOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		for(String diskOption : getDiskOptions(rootConn, signupCustomizeServerForm)) {
 			emailOut.print("    <tr>\n"
-						 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-						 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.disk.prompt")).print("</td>\n"
+						 + "        <td>");
+			html.text(accessor.getMessage("signup.notRequired"));
+			emailOut.print("</td>\n"
+						 + "        <td>");
+			html.text(accessor.getMessage("signupCustomizeServerConfirmation.disk.prompt"));
+			emailOut.print("</td>\n"
 						 + "        <td>").encodeXhtml(diskOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td>").print(accessor.getMessage("signupCustomizeServerConfirmation.setup.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.setup.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>\n");
 		Money setup = packageDefinition.getSetupFee();
 		if(setup == null) {
@@ -504,8 +534,12 @@ final public class SignupCustomizeServerActionHelper {
 		emailOut.print("        </td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
-					 + "        <td>").print(accessor.getMessage("signup.notRequired")).print("</td>\n"
-					 + "        <td style='white-space:nowrap'>").print(accessor.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt")).print("</td>\n"
+					 + "        <td>");
+		html.text(accessor.getMessage("signup.notRequired"));
+		emailOut.print("</td>\n"
+					 + "        <td style='white-space:nowrap'>");
+		html.text(accessor.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt"));
+		emailOut.print("</td>\n"
 					 + "        <td>").print(request.getAttribute("monthlyRate")).print("</td>\n"
 					 + "    </tr>\n");
 	}

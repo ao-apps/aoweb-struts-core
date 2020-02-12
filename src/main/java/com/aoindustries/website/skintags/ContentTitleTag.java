@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,12 +22,18 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.encoding.MediaType;
+import com.aoindustries.io.buffer.BufferResult;
+import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.website.Skin;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
@@ -35,27 +41,30 @@ import org.apache.struts.util.MessageResources;
 /**
  * @author  AO Industries, Inc.
  */
-public class ContentTitleTag extends BodyTagSupport {
+public class ContentTitleTag extends AutoEncodingBufferedTag {
 
-	private static final long serialVersionUID = 1L;
-
-	public ContentTitleTag() {
+	@Override
+	public MediaType getContentType() {
+		return MediaType.TEXT;
 	}
 
 	@Override
-	public int doStartTag() {
-		return EVAL_BODY_BUFFERED;
+	public MediaType getOutputType() {
+		return MediaType.XHTML;
 	}
 
 	@Override
-	public int doEndTag() throws JspException {
-		String title = getBodyContent().getString().trim();
+	protected void doTag(BufferResult capturedBody, Writer out) throws JspException, IOException {
+		PageContext pageContext = (PageContext)getJspContext();
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		String title = capturedBody.trim().toString();
 
 		ContentTag contentTag = (ContentTag)findAncestorWithClass(this, ContentTag.class);
 		if(contentTag==null) {
 			HttpSession session = pageContext.getSession();
 			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
+			MessageResources applicationResources = (MessageResources)req.getAttribute("/ApplicationResources");
 			throw new JspException(applicationResources.getMessage(locale, "skintags.ContentTitleTag.mustNestInContentTag"));
 		}
 
@@ -65,10 +74,6 @@ public class ContentTitleTag extends BodyTagSupport {
 		int totalColspan = 0;
 		for(int c=0;c<colspans.length;c++) totalColspan += colspans[c];
 
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 		skin.printContentTitle(req, resp, pageContext.getOut(), title, totalColspan);
-
-		return EVAL_PAGE;
 	}
 }
