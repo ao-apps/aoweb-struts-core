@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,11 +22,12 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.Doctype;
+import com.aoindustries.encoding.Doctype;
+import com.aoindustries.encoding.EncodingContext;
+import com.aoindustries.encoding.Serialization;
+import com.aoindustries.encoding.servlet.DoctypeEE;
+import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Html;
-import com.aoindustries.html.Serialization;
-import com.aoindustries.html.servlet.DoctypeEE;
-import com.aoindustries.html.servlet.SerializationEE;
 import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.website.Constants;
 import com.aoindustries.website.Skin;
@@ -78,7 +79,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
 	private void init() {
 		serialization = null;
-		doctype = Doctype.HTML5;
+		doctype = EncodingContext.DEFAULT_DOCTYPE;
 		layout = "normal";
 		onload = null;
 	}

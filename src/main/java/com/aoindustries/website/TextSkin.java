@@ -24,6 +24,7 @@ package com.aoindustries.website;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
+import com.aoindustries.encoding.Doctype;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.NewEncodingUtils;
@@ -31,7 +32,6 @@ import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScript
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
-import com.aoindustries.html.Doctype;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Meta;
@@ -138,6 +138,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void startSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
 			ServletContext servletContext = req.getServletContext();

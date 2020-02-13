@@ -22,13 +22,13 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.html.Doctype;
+import com.aoindustries.encoding.Doctype;
+import com.aoindustries.encoding.Serialization;
+import com.aoindustries.encoding.servlet.DoctypeEE;
+import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
-import com.aoindustries.html.Serialization;
-import com.aoindustries.html.servlet.DoctypeEE;
 import com.aoindustries.html.servlet.HtmlEE;
-import com.aoindustries.html.servlet.SerializationEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.skintags.PageAttributes;
@@ -74,7 +74,7 @@ abstract public class Skin {
 				AnyURI uri = language.getUri();
 				out.append("    ");
 				// TODO: hreflang attribute
-				html.link(Link.Rel.ALTERNATE).attribute("hreflang", "x-default").href(
+				html.link(Link.Rel.ALTERNATE).hreflang("x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -90,7 +90,7 @@ abstract public class Skin {
 			for(Language language : languages) {
 				AnyURI uri = language.getUri();
 				out.append("    ");
-				html.link(Link.Rel.ALTERNATE).attribute("hreflang", language.getCode()).href(
+				html.link(Link.Rel.ALTERNATE).hreflang(language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(

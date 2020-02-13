@@ -26,11 +26,11 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
+import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Doctype;
+import com.aoindustries.encoding.Serialization;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Meta;
-import com.aoindustries.html.Serialization;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.net.HostAddress;
 import com.aoindustries.taglib.HtmlTag;
@@ -117,6 +117,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 	/**
 	 * Sends a summary email and returns <code>true</code> if successful.
 	 */
+	@SuppressWarnings("deprecation")
 	private static boolean sendSummaryEmail(
 		ActionServlet servlet,
 		HttpServletRequest request,

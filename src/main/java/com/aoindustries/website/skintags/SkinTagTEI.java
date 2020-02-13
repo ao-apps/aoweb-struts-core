@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.Doctype;
-import com.aoindustries.html.Serialization;
+import com.aoindustries.encoding.Doctype;
+import com.aoindustries.encoding.Serialization;
 import com.aoindustries.util.MinimalList;
 import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.List;
