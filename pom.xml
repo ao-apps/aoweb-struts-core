@@ -45,7 +45,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<li><a target="_top" href="${project.url}aoweb-struts-aoweb.tld/">AOWeb Taglib Reference</a></li>
 			<li><a target="_top" href="${project.url}aoweb-struts-skin.tld/">Skin Taglib Reference</a></li>
 		]]></javadoc.taglibReference>
-		<javac.link.javamailApi>https://javaee.github.io/javamail/docs/api/</javac.link.javamailApi>
 	</properties>
 
 	<name>AOWeb Struts Core</name>
