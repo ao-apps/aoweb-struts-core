@@ -607,7 +607,13 @@ public class TextSkin extends Skin {
 				out.print("    ");
 				html.link()
 					.rel(link.getRel())
-					.href(EncodeURIFilter.getActiveFilter(req).encode(link.getHref(), resp.getCharacterEncoding()))
+					.href(
+						EncodeURIFilter.getActiveFilter(req).encode(
+							link.getHref(),
+							html.doctype,
+							resp.getCharacterEncoding()
+						)
+					)
 					.type(link.getType())
 					.__().nl();
 
