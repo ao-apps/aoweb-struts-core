@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-02-12T09:02:41-0600"
+		dateModified="2020-02-25T13:14:52-0600"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -68,10 +68,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						No need to use the <![CDATA[&lt;html:xhtml /&gt;]]> tag anymore.
 					</li>
 					<li>Added <code><![CDATA[&lt;link rel="author" href="…" /&gt;]]></code> support.</li>
-					<li>
-						New CSS classes for table formatting:
-						<code>thinTable</code>, <code>outsideBorder</code>, <code>noborder</code>, <code>packed</code>, and <code>spread</code>.
-					</li>
 					<li><code><![CDATA[&lt;skin:contentTitle /&gt;]]></code> is now <code>scriptless</code>.</li>
 				</ul>
 			</changelog:release>

@@ -629,7 +629,7 @@ public class TextSkin extends Skin {
 		width = trimNullIfEmpty(width);
 		try {
 			Html html = HtmlEE.get(req, out);
-			out.print("          <table class=\"packed\"");
+			out.print("          <table class=\"ao-packed\"");
 			if(width != null) {
 				out.print(" style=\"");
 				appendWidthStyle(width, out);
@@ -850,7 +850,7 @@ public class TextSkin extends Skin {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table class=\"packed\" style=\"border:5px outset #a0a0a0");
+			out.print("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
 				out.print(';');
 				appendWidthStyle(width, out);
@@ -885,7 +885,7 @@ public class TextSkin extends Skin {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			out.print("<table class=\"packed\" style=\"border:5px outset #a0a0a0");
+			out.print("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
 				out.print(';');
 				appendWidthStyle(width, out);
@@ -1129,7 +1129,7 @@ public class TextSkin extends Skin {
 				out.print('"');
 			}
 			out.print(">\n"
-					+ "        <table class=\"aoPopupTable packed\">\n"
+					+ "        <table class=\"aoPopupTable ao-packed\">\n"
 					+ "            <tr>\n"
 					+ "                <td class=\"aoPopupTL\">");
 			html.img()
