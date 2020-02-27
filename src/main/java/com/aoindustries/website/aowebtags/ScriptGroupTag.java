@@ -49,7 +49,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 	/**
 	 * The request attribute name used to store the sequence.
 	 */
-	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = ScriptGroupTag.class.getName() + ".sequence";
+	private static final String SEQUENCE_REQUEST_ATTRIBUTE = ScriptGroupTag.class.getName() + ".sequence";
 
 	private static final long serialVersionUID = 1L;
 
@@ -86,8 +86,8 @@ public class ScriptGroupTag extends BodyTagSupport {
 					if("none".equals(onloadMode)) {
 						scriptOut.writeTo(script);
 					} else {
-						Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
-						if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
+						Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
+						if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 						String sequenceId = Long.toString(sequence.getNextSequenceValue());
 						boolean wroteScript = false;
 						script.write("  var scriptOutOldOnload"); script.write(sequenceId); script.write("=window.onload;\n"

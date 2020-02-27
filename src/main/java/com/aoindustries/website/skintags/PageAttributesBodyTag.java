@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -39,13 +39,17 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 	public PageAttributesBodyTag() {
 	}
 
-	static PageAttributes getPageAttributes(PageContext pageContext) {
-		PageAttributes pageAttributes = (PageAttributes)pageContext.getAttribute(PageAttributes.ATTRIBUTE_KEY, PageAttributes.ATTRIBUTE_SCOPE);
-		if(pageAttributes==null) {
-			pageAttributes = new PageAttributes((HttpServletRequest)pageContext.getRequest());
-			pageContext.setAttribute(PageAttributes.ATTRIBUTE_KEY, pageAttributes, PageAttributes.ATTRIBUTE_SCOPE);
+	static PageAttributes getPageAttributes(HttpServletRequest request) {
+		PageAttributes pageAttributes = (PageAttributes)request.getAttribute(PageAttributes.REQUEST_ATTRIBUTE);
+		if(pageAttributes == null) {
+			pageAttributes = new PageAttributes(request);
+			request.setAttribute(PageAttributes.REQUEST_ATTRIBUTE, pageAttributes);
 		}
 		return pageAttributes;
+	}
+
+	static PageAttributes getPageAttributes(PageContext pageContext) {
+		return getPageAttributes((HttpServletRequest)pageContext.getRequest());
 	}
 
 	@Override

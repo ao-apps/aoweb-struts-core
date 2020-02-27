@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -46,7 +46,7 @@ public class PopupTag extends BodyTagSupport {
 	/**
 	 * The request attribute name used to store the sequence.
 	 */
-	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = PopupTag.class.getName()+".sequence";
+	private static final String SEQUENCE_REQUEST_ATTRIBUTE = PopupTag.class.getName() + ".sequence";
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,8 +64,8 @@ public class PopupTag extends BodyTagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
-		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
+		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
+		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 		sequenceId = sequence.getNextSequenceValue();
 		Skin skin = SkinTag.getSkin(pageContext);
 		// Look for containing popupGroup

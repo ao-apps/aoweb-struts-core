@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,9 +28,14 @@ import com.aoindustries.aoserv.client.ticket.TicketLoggingHandler;
 import com.aoindustries.util.ErrorPrinter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * Provides static access to the logging facilities.  The logs are written
@@ -43,7 +48,29 @@ public class LogFactory {
 	private LogFactory() {
 	}
 
-	public static final String ATTRIBUTE_NAME = LogFactory.class.getName();
+	private static final String INSTANCES_APPLICATION_ATTRIBUTE = LogFactory.class.getName() + ".instances";
+
+	@WebListener
+	public static class Initializer implements ServletContextListener {
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			getInstances(event.getServletContext());
+		}
+		@Override
+		public void contextDestroyed(ServletContextEvent event) {
+			// Do nothing
+		}
+	}
+
+	private static ConcurrentMap<String,Logger> getInstances(ServletContext servletContext) {
+		@SuppressWarnings("unchecked")
+		ConcurrentMap<String,Logger> instances = (ConcurrentMap<String,Logger>)servletContext.getAttribute(INSTANCES_APPLICATION_ATTRIBUTE);
+		if(instances == null) {
+			instances = new ConcurrentHashMap<>();
+			servletContext.setAttribute(INSTANCES_APPLICATION_ATTRIBUTE, instances);
+		}
+		return instances;
+	}
 
 	/**
 	 * Gets the logger for the provided ServletContext and class.
@@ -55,7 +82,7 @@ public class LogFactory {
 	/**
 	 * <p>
 	 * Gets the logger for the provided ServletContext and name.  The logger
-	 * is stored as a context attribute under the name (ATTRIBUTE_NAME+'.'+name).
+	 * is stored as a context attribute under the name (APPLICATION_ATTRIBUTE + '.' + name).
 	 * Subsequent calls to this method will return the previously created logger.
 	 * If an error occurs while creating the logger it will return the default
 	 * logger.  In this case, it will not add the logger to the servletContext,
@@ -63,15 +90,15 @@ public class LogFactory {
 	 * available.
 	 * </p>
 	 * <p>
-	 * Callers of this class should reqest a logger each time they need one
+	 * Callers of this class should request a logger each time they need one
 	 * and not cache/reuse the logger provided by this method.  This allows
 	 * for the automatic retry on logger creation.
 	 * </p>
 	 */
-	synchronized public static Logger getLogger(ServletContext servletContext, String name) {
-		String contextKey = ATTRIBUTE_NAME + '.' + name;
-		Logger logger = (Logger)servletContext.getAttribute(contextKey);
-		if(logger==null) {
+	public static Logger getLogger(ServletContext servletContext, String name) {
+		ConcurrentMap<String,Logger> instances = getInstances(servletContext);
+		Logger logger = instances.get(name);
+		if(logger == null) {
 			Handler handler;
 			try {
 				SiteSettings siteSettings = SiteSettings.getInstance(servletContext);
@@ -87,17 +114,24 @@ public class LogFactory {
 				handler = null;
 			}
 			logger = Logger.getLogger(name);
-			if(handler!=null) {
+			if(handler != null) {
 				synchronized(logger) {
 					boolean foundHandler = false;
 					for(Handler oldHandler : logger.getHandlers()) {
-						if(oldHandler==handler) foundHandler = true;
-						else logger.removeHandler(oldHandler);
+						if(oldHandler == handler) {
+							foundHandler = true;
+						} else {
+							logger.removeHandler(oldHandler);
+						}
 					}
-					if(!foundHandler) logger.addHandler(handler);
+					if(!foundHandler) {
+						logger.addHandler(handler);
+					}
 					logger.setUseParentHandlers(false);
 				}
-				servletContext.setAttribute(contextKey, logger);
+				// Only store the instance once fully associated with the correct handler
+				Logger existing = instances.putIfAbsent(name, logger);
+				if(existing != null) logger = existing;
 			}
 		}
 		return logger;

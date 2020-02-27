@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,20 +25,21 @@ package com.aoindustries.website;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.reseller.Brand;
+import com.aoindustries.util.StringUtility;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.struts.Globals;
@@ -55,34 +56,49 @@ public class SiteSettings {
 	 * due to RootAOServConnector being used as part of the logging process.
 	 */
 	private static final Logger logger = Logger.getLogger(SiteSettings.class.getName());
+
 	// <editor-fold desc="Instance Selection">
-	/**
-	 * Only one instance is created per unique classname.
-	 */
-	private static final Map<String,SiteSettings> instanceCache = new HashMap<>();
+	
+	private static final String INIT_PARAM_NAME = SiteSettings.class.getName() + ".classname";
+
+	private static final String APPLICATION_ATTRIBUTE = SiteSettings.class.getName();
+
+	@WebListener
+	public static class Initializer implements ServletContextListener {
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			getInstance(event.getServletContext());
+		}
+		@Override
+		public void contextDestroyed(ServletContextEvent event) {
+			// Do nothing
+		}
+	}
 
 	/**
 	 * Gets the proper settings instance as configured in the web.xml file.
 	 * This allows 
 	 */
 	public static SiteSettings getInstance(ServletContext servletContext) {
-		String classname = servletContext.getInitParameter("com.aoindustries.website.SiteSettings.classname");
-		if(classname==null) classname = SiteSettings.class.getName();
-		try {
-			synchronized(instanceCache) {
-				SiteSettings settings = instanceCache.get(classname);
-				if(settings==null) {
-					// Create through reflection
+		SiteSettings settings = (SiteSettings)servletContext.getAttribute(APPLICATION_ATTRIBUTE);
+		if(settings == null) {
+			String classname = StringUtility.trimNullIfEmpty(servletContext.getInitParameter(INIT_PARAM_NAME));
+			if(classname == null || classname.equals(SiteSettings.class.getName())) {
+				settings = new SiteSettings(servletContext);
+			} else {
+				// Create through reflection
+				try {
 					Class<? extends SiteSettings> clazz = Class.forName(classname).asSubclass(SiteSettings.class);
-					Constructor<? extends SiteSettings> constructor = clazz.getConstructor(new Class<?>[] {ServletContext.class});
-					settings = constructor.newInstance(new Object[] {servletContext});
-					instanceCache.put(classname, settings);
+					Constructor<? extends SiteSettings> constructor = clazz.getConstructor(ServletContext.class);
+					settings = constructor.newInstance(servletContext);
+					// TODO: Review all other uses of individual exception types
+				} catch(ReflectiveOperationException err) {
+					throw new RuntimeException("classname=" + classname, err);
 				}
-				return settings;
 			}
-		} catch(ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException err) {
-			throw new RuntimeException("classname="+classname, err);
+			servletContext.setAttribute(APPLICATION_ATTRIBUTE, settings);
 		}
+		return settings;
 	}
 
 	private final ServletContext servletContext;

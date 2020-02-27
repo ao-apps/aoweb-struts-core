@@ -43,7 +43,7 @@ public class TimeTag extends BodyTagSupport {
 	/**
 	 * The request attribute name used to store the sequence.
 	 */
-	private static final String SEQUENCE_REQUEST_ATTRIBUTE_NAME = TimeTag.class.getName() + ".sequence";
+	private static final String SEQUENCE_REQUEST_ATTRIBUTE = TimeTag.class.getName() + ".sequence";
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,8 +64,8 @@ public class TimeTag extends BodyTagSupport {
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 				JspWriter out = pageContext.getOut();
 				// Resolve the sequence
-				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME);
-				if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE_NAME, sequence = new UnsynchronizedSequence());
+				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
+				if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 				// Resolve the scriptOut
 				ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
 				if(scriptGroupTag != null) {

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -216,7 +216,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
 							&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
 							// Allow session-based temporary file context
-							&& !ServletTempFileContext.SESSION_ATTRIBUTE_NAME.equals(name)
+							&& !ServletTempFileContext.SESSION_ATTRIBUTE.equals(name)
 						) {
 							// These will always trigger jsessionid
 							if(

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
 
 /**
  * During the processing of the skin, page attributes are built and stored here, one instance per request.
@@ -48,12 +47,7 @@ public class PageAttributes {
 	/**
 	 * The following key is used to store the objects in the page attributes.
 	 */
-	public static final String ATTRIBUTE_KEY = "pageAttributes";
-
-	/**
-	 * The following scope is used to store the objects in the page attributes.
-	 */
-	public static final int ATTRIBUTE_SCOPE = PageContext.REQUEST_SCOPE;
+	public static final String REQUEST_ATTRIBUTE = "pageAttributes";
 
 	public static class Link {
 

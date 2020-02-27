@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -39,7 +39,7 @@ public class ParentTag extends PageTag {
 
 	private static final long serialVersionUID = 1L;
 
-	static final String STACK_ATTRIBUTE_NAME = ParentTag.class.getName()+".stack";
+	static final String STACK_REQUEST_ATTRIBUTE = ParentTag.class.getName() + ".stack";
 
 	private List<Child> children;
 
@@ -53,8 +53,8 @@ public class ParentTag extends PageTag {
 	@SuppressWarnings("unchecked")
 	public int doStartTag() {
 		ServletRequest request = pageContext.getRequest();
-		Stack<ParentTag> stack = (Stack)request.getAttribute(STACK_ATTRIBUTE_NAME);
-		if(stack==null) request.setAttribute(STACK_ATTRIBUTE_NAME, stack = new Stack<>());
+		Stack<ParentTag> stack = (Stack)request.getAttribute(STACK_REQUEST_ATTRIBUTE);
+		if(stack==null) request.setAttribute(STACK_REQUEST_ATTRIBUTE, stack = new Stack<>());
 		stack.push(this);
 		return super.doStartTag();
 	}
@@ -88,7 +88,7 @@ public class ParentTag extends PageTag {
 		String keywords,
 		Collection<Meta> metas
 	) throws JspException {
-		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(STACK_ATTRIBUTE_NAME);
+		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(STACK_REQUEST_ATTRIBUTE);
 		if(stack!=null && !stack.isEmpty() && stack.peek()==this) stack.pop();
 
 		PageAttributesBodyTag.getPageAttributes(pageContext).addParent(

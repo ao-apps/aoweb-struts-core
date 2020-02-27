@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -49,7 +49,7 @@ public class ChildTag extends PageTag {
 		Collection<Meta> metas
 	) throws JspException {
 		Child child = new Child(title, navImageAlt, description, author, authorHref, copyright, path, keywords, metas);
-		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(ParentTag.STACK_ATTRIBUTE_NAME);
+		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(ParentTag.STACK_REQUEST_ATTRIBUTE);
 		if(stack==null || stack.isEmpty()) {
 			PageAttributesBodyTag.getPageAttributes(pageContext).addChild(child);
 		} else {
