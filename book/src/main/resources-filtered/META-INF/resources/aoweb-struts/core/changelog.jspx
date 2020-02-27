@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-02-26T20:09:57-0600"
+		dateModified="2020-02-27T17:23:43-0600"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -70,6 +70,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Added <code><![CDATA[&lt;link rel="author" href="…" /&gt;]]></code> support.</li>
 					<li><code><![CDATA[&lt;skin:contentTitle /&gt;]]></code> is now <code>scriptless</code>.</li>
 					<li>Optimized ServletContext attribute initialization and concurrency.</li>
+					<li>
+						<code>TicketLoggingHandler</code> automatically loaded on start-up via
+						<code>@WebListener</code>.  No more <code>LogFactory</code>.  Now just use
+						<code>Logger.getLogger(…)</code> like normal.
+					</li>
 				</ul>
 			</changelog:release>
 		</c:if>

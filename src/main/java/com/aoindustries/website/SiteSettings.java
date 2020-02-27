@@ -25,6 +25,7 @@ package com.aoindustries.website;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.reseller.Brand;
+import com.aoindustries.exception.ConfigurationException;
 import com.aoindustries.util.StringUtility;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
@@ -151,7 +152,7 @@ public class SiteSettings {
 	 * Gets the root connector.  Because this potentially has unrestricted privileges, this must be used at an absolute minimum for situations
 	 * where a user isn't logged-in but access to the master is required, such as for sign up requests.
 	 */
-	public AOServConnector getRootAOServConnector() throws IOException {
+	public AOServConnector getRootAOServConnector() throws ConfigurationException {
 		synchronized(rootAOServConnectorLock) {
 			if(rootAOServConnector==null) {
 				rootAOServConnector = AOServConnector.getConnector(

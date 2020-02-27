@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -52,9 +51,7 @@ import org.apache.struts.Globals;
  */
 public class SessionResponseWrapper extends HttpServletResponseWrapper {
 
-	private static Logger getLogger(ServletContext servletContext) {
-		return LogFactory.getLogger(servletContext, SessionResponseWrapper.class);
-	}
+	private static final Logger logger = Logger.getLogger(SessionResponseWrapper.class.getName());
 
 	final private HttpServletRequest request;
 	final private HttpServletResponse response;
@@ -243,7 +240,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 					if(whyNeedsJsessionid!=null) {
 						if(HttpServletUtil.isGooglebot(request)) {
 							// Create or update a ticket about the problem
-							getLogger(request.getServletContext()).logp(
+							logger.logp(
 								Level.WARNING,
 								SessionResponseWrapper.class.getName(),
 								"addNoCookieParameters",

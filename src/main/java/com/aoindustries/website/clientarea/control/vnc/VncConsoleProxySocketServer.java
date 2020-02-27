@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,7 +25,6 @@ package com.aoindustries.website.clientarea.control.vnc;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.net.Bind;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.website.LogFactory;
 import com.aoindustries.website.SiteSettings;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.KeyStoreBuilderParameters;
 import javax.net.ssl.ManagerFactoryParameters;
@@ -53,6 +53,8 @@ import javax.servlet.ServletContext;
  * @author  AO Industries, Inc.
  */
 public class VncConsoleProxySocketServer implements Runnable {
+
+	private static final Logger logger = Logger.getLogger(VncConsoleProxySocketServer.class.getName());
 
 	private ServletContext servletContext;
 	private volatile Thread thread;
@@ -108,14 +110,14 @@ public class VncConsoleProxySocketServer implements Runnable {
 					}
 				}
 			} catch(RuntimeException | IOException | InvalidAlgorithmParameterException | KeyManagementException | NoSuchAlgorithmException | SQLException T) {
-				LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.SEVERE, null, T);
+				logger.log(Level.SEVERE, null, T);
 			}
 			if(currentThread==this.thread) {
 				try {
 					Thread.sleep(60000);
 				} catch(InterruptedException err) {
 					if(currentThread==this.thread) {
-						LogFactory.getLogger(myServletContext, VncConsoleProxySocketServer.class).log(Level.WARNING, null, err);
+						logger.log(Level.WARNING, null, err);
 					}
 				}
 			}

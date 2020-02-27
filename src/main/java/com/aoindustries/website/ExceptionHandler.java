@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -43,10 +43,11 @@ import org.apache.struts.config.ExceptionConfig;
  */
 public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler {
 
+	private static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());
+
 	@Override
 	public ActionForward execute(Exception exception, ExceptionConfig config, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		ServletContext servletContext = request.getServletContext();
-		Logger logger = LogFactory.getLogger(servletContext, ExceptionHandler.class);
 
 		// There are two sources for exceptions, not sure if these are the same because the original exception from a bean access in JSP is lost
 		// 1) The exception passed in here

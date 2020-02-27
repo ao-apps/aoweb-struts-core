@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,7 @@ import com.aoindustries.net.URIEncoder;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,8 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class LoginCompletedAction extends SkinAction {
+
+	private static final Logger logger = Logger.getLogger(LoginCompletedAction.class.getName());
 
 	@Override
 	public ActionForward execute(
@@ -67,7 +70,7 @@ public class LoginCompletedAction extends SkinAction {
 		ServletContext servletContext = getServlet().getServletContext();
 		try {
 			// Get connector
-			AOServConnector aoConn = AOServConnector.getConnector(username, password, LogFactory.getLogger(servletContext, LoginCompletedAction.class));
+			AOServConnector aoConn = AOServConnector.getConnector(username, password, logger);
 			aoConn.ping();
 
 			// Store in session
@@ -110,7 +113,7 @@ public class LoginCompletedAction extends SkinAction {
 				else message=null;
 			}
 			if(message!=null) request.setAttribute(Constants.AUTHENTICATION_MESSAGE, message);
-			else LogFactory.getLogger(servletContext, LoginCompletedAction.class).log(Level.SEVERE, null, err);
+			else logger.log(Level.SEVERE, null, err);
 			return mapping.findForward("failure");
 		}
 	}

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,8 @@ import org.apache.struts.action.ActionMapping;
  */
 public class LocaleAction extends SiteSettingsAction {
 
+	private static final Logger logger = Logger.getLogger(LocaleAction.class.getName());
+
 	/**
 	 * Gets the selected locale or the default locale if none has been selected.
 	 */
@@ -58,7 +61,7 @@ public class LocaleAction extends SiteSettingsAction {
 			try {
 				return getDefaultLocale(SiteSettings.getInstance(servletContext), request);
 			} catch(IOException | SQLException | JspException err) {
-				LogFactory.getLogger(servletContext, LocaleAction.class).log(Level.SEVERE, "Using default local", err);
+				logger.log(Level.SEVERE, "Using default local", err);
 			}
 		}
 		return Locale.getDefault();

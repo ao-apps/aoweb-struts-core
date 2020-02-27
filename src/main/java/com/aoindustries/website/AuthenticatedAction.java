@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,7 @@ import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,6 +49,8 @@ import org.apache.struts.action.ActionMapping;
  * @author  AO Industries, Inc.
  */
 abstract public class AuthenticatedAction extends SkinAction {
+
+	private static final Logger logger = Logger.getLogger(AuthenticatedAction.class.getName());
 
 	@Override
 	final public ActionForward execute(
@@ -121,7 +124,7 @@ abstract public class AuthenticatedAction extends SkinAction {
 				session.setAttribute(Constants.AO_CONN, aoConn);
 				return aoConn;
 			} catch(IOException err) {
-				LogFactory.getLogger(session.getServletContext(), AuthenticatedAction.class).log(Level.SEVERE, null, err);
+				logger.log(Level.SEVERE, null, err);
 			}
 		}
 

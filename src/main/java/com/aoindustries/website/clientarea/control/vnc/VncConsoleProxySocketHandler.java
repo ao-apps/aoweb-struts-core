@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -34,7 +34,6 @@ import com.aoindustries.io.AOPool;
 import com.aoindustries.io.stream.StreamableInput;
 import com.aoindustries.io.stream.StreamableOutput;
 import com.aoindustries.net.InetAddress;
-import com.aoindustries.website.LogFactory;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +43,7 @@ import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.SSLHandshakeException;
 import javax.servlet.ServletContext;
 
@@ -53,6 +53,8 @@ import javax.servlet.ServletContext;
  * @author  AO Industries, Inc.
  */
 public class VncConsoleProxySocketHandler {
+
+	private static final Logger logger = Logger.getLogger(VncConsoleProxySocketHandler.class.getName());
 
 	private static final byte[] protocolVersion_3_3 = {
 		// "RFB 003.003\n"
@@ -166,7 +168,7 @@ public class VncConsoleProxySocketHandler {
 							AOPool.DEFAULT_MAX_CONNECTION_AGE,
 							AOServClientConfiguration.getSslTruststorePath(),
 							AOServClientConfiguration.getSslTruststorePassword(),
-							LogFactory.getLogger(servletContext, getClass())
+							logger
 						);
 						final AOServDaemonConnection daemonConn=daemonConnector.getConnection();
 						try {
@@ -252,7 +254,7 @@ public class VncConsoleProxySocketHandler {
 												daemonConn.close();
 											}
 										} catch(RuntimeException | IOException T) {
-											LogFactory.getLogger(servletContext, getClass()).log(Level.SEVERE, null, T);
+											logger.log(Level.SEVERE, null, T);
 										}
 									},
 									"VncConsoleProxySocketHandler socketIn->daemonOut"
@@ -287,15 +289,15 @@ public class VncConsoleProxySocketHandler {
 						!"Remote host closed connection during handshake".equals(message)
 						&& !"Remote host terminated the handshake".equals(message)
 					) {
-						LogFactory.getLogger(servletContext, getClass()).log(Level.INFO, null, err);
+						logger.log(Level.INFO, null, err);
 					}
 				} catch(RuntimeException | IOException | InterruptedException | SQLException T) {
-					LogFactory.getLogger(servletContext, getClass()).log(Level.SEVERE, null, T);
+					logger.log(Level.SEVERE, null, T);
 				} finally {
 					try {
 						socket.close();
 					} catch(IOException err) {
-						LogFactory.getLogger(servletContext, getClass()).log(Level.INFO, null, err);
+						logger.log(Level.INFO, null, err);
 					}
 				}
 			},
