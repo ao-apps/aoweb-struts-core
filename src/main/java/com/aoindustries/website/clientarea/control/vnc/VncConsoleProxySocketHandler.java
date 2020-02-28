@@ -158,7 +158,7 @@ public class VncConsoleProxySocketHandler {
 
 						// Connect through AOServ Platform
 						Server.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
-						AOServDaemonConnector daemonConnector=AOServDaemonConnector.getConnector(
+						AOServDaemonConnector daemonConnector = AOServDaemonConnector.getConnector(
 							daemonAccess.getHost(),
 							InetAddress.UNSPECIFIED_IPV4,
 							daemonAccess.getPort(),
@@ -167,8 +167,7 @@ public class VncConsoleProxySocketHandler {
 							100,
 							AOPool.DEFAULT_MAX_CONNECTION_AGE,
 							AOServClientConfiguration.getSslTruststorePath(),
-							AOServClientConfiguration.getSslTruststorePassword(),
-							logger
+							AOServClientConfiguration.getSslTruststorePassword()
 						);
 						final AOServDaemonConnection daemonConn=daemonConnector.getConnection();
 						try {

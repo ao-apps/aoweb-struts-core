@@ -70,7 +70,7 @@ public class LoginCompletedAction extends SkinAction {
 		ServletContext servletContext = getServlet().getServletContext();
 		try {
 			// Get connector
-			AOServConnector aoConn = AOServConnector.getConnector(username, password, logger);
+			AOServConnector aoConn = AOServConnector.getConnector(username, password);
 			aoConn.ping();
 
 			// Store in session

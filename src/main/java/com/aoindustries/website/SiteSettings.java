@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -51,12 +50,6 @@ import org.apache.struts.Globals;
  * @author  AO Industries, Inc.
  */
 public class SiteSettings {
-
-	/**
-	 * This logger doesn't use the ticket handler to avoid logging loops
-	 * due to RootAOServConnector being used as part of the logging process.
-	 */
-	private static final Logger logger = Logger.getLogger(SiteSettings.class.getName());
 
 	// <editor-fold desc="Instance Selection">
 	
@@ -157,8 +150,7 @@ public class SiteSettings {
 			if(rootAOServConnector==null) {
 				rootAOServConnector = AOServConnector.getConnector(
 					getRootAOServConnectorUsername(),
-					getRootAOServConnectorPassword(),
-					logger
+					getRootAOServConnectorPassword()
 				);
 			}
 			return rootAOServConnector;
