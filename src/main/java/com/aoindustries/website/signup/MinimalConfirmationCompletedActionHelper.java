@@ -152,7 +152,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 				content.write(charset);
 			}).__().nl();
 			// Embed the text-only style sheet
-			InputStream cssIn = servlet.getServletContext().getResourceAsStream("/textskin/global.css");
+			InputStream cssIn = servlet.getServletContext().getResourceAsStream("/textskin/textskin.css");
 			if(cssIn != null) {
 				try {
 					emailOut.print("    ");

@@ -287,7 +287,7 @@ public class TextSkin extends Skin {
 			html.link(Link.Rel.STYLESHEET).href(
 				resp.encodeURL( // TODO: Put URL encoding into HTML class via EncodingContext?
 					URIEncoder.encodeURI(
-						urlBase + "textskin/global.css"
+						urlBase + "textskin/textskin.css"
 					)
 				)
 			).__().nl();
@@ -296,7 +296,7 @@ public class TextSkin extends Skin {
 			html.link(Link.Rel.STYLESHEET).href(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
-						urlBase + "textskin/global-ie6.css"
+						urlBase + "textskin/textskin-ie6.css"
 					)
 				)
 			).__().nl();
