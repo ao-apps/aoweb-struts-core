@@ -30,7 +30,7 @@ import com.aoindustries.net.URIParametersUtils;
 import com.aoindustries.net.URIParser;
 import com.aoindustries.servlet.http.Canonical;
 import com.aoindustries.servlet.http.HttpServletUtil;
-import com.aoindustries.tempfiles.servlet.ServletTempFileContext;
+import com.aoindustries.tempfiles.servlet.TempFileContextEE;
 import com.aoindustries.util.WrappedException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -213,7 +213,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
 							&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
 							// Allow session-based temporary file context
-							&& !ServletTempFileContext.SESSION_ATTRIBUTE.equals(name)
+							&& !TempFileContextEE.SESSION_ATTRIBUTE.equals(name)
 						) {
 							// These will always trigger jsessionid
 							if(
