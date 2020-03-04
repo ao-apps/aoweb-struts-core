@@ -36,25 +36,37 @@ import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Meta;
 import com.aoindustries.html.Script;
-import com.aoindustries.html.Style;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.html.util.ImagePreload;
+import com.aoindustries.io.ContentType;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.servlet.filter.EncodeURIFilter;
+import com.aoindustries.style.AoStyle;
 import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
 import com.aoindustries.taglib.HtmlTag;
 import static com.aoindustries.util.StringUtility.trimNullIfEmpty;
 import com.aoindustries.util.i18n.EditableResourceBundle;
+import com.aoindustries.web.resources.registry.Group;
+import com.aoindustries.web.resources.registry.Registry;
+import com.aoindustries.web.resources.registry.Style;
+import com.aoindustries.web.resources.registry.Styles;
+import com.aoindustries.web.resources.renderer.Renderer;
+import com.aoindustries.web.resources.servlet.RegistryEE;
 import com.aoindustries.website.skintags.Child;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -68,6 +80,31 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class TextSkin extends Skin {
+
+	/**
+	 * The name of the {@link Group} of web resources for the text skin.
+	 */
+	public static final String STYLE_GROUP = TextSkin.class.getName();
+
+	public static final Style TEXTSKIN_CSS = new Style("/textskin/textskin.css");
+
+	@SuppressWarnings("deprecation")
+	public static final Style TEXTSKIN_IE6_CSS = Style.builder().uri("/textskin/textskin-ie6.css").ie("IE 6").build();
+
+	@WebListener
+	public static class Initializer implements ServletContextListener {
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			Styles styles = RegistryEE.get(event.getServletContext()).getGroup(STYLE_GROUP).styles;
+			styles.add(AoStyle.AO_STYLE); // TODO: Remove all imports of ao-style in *.css files
+			styles.add(TEXTSKIN_CSS);
+			styles.add(TEXTSKIN_IE6_CSS);
+		}
+		@Override
+		public void contextDestroyed(ServletContextEvent event) {
+			// Do nothing
+		}
+	}
 
 	/**
 	 * Reuse a single instance, not synchronized because if more than one is
@@ -111,12 +148,6 @@ public class TextSkin extends Skin {
 	 * Prints the common pages area, which is at the top of the site.
 	 */
 	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, JspWriter out) throws JspException {
-	}
-
-	/**
-	 * Prints the lines to include any CSS files.
-	 */
-	public void printCssIncludes(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String urlBase) throws JspException {
 	}
 
 	/**
@@ -184,7 +215,7 @@ public class TextSkin extends Skin {
 				html.meta(Meta.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().nl();
 				// Default style language
 				out.print("    ");
-				html.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(Style.Type.TEXT_CSS).__().nl();
+				html.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(com.aoindustries.html.Style.Type.TEXT_CSS).__().nl();
 				out.print("    ");
 				html.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
 			}
@@ -283,25 +314,28 @@ public class TextSkin extends Skin {
 			}
 			List<Language> languages = settings.getLanguages(req);
 			printAlternativeLinks(req, resp, out, fullPath, languages);
+
+			Registry registry = RegistryEE.get(servletContext, req);
+			// Add skin-specific styles
+			Styles skinStyles = registry.getGroup(STYLE_GROUP).styles;
+			// Add page styles
+			Styles pageStyles = registry.getGroup(PageAttributes.STYLE_GROUP).styles;
+			addPageStyles(req, resp, pageAttributes, registry.global.styles, skinStyles, pageStyles);
+			// Render links
 			out.print("    ");
-			html.link(Link.Rel.STYLESHEET).href(
-				resp.encodeURL( // TODO: Put URL encoding into HTML class via EncodingContext?
-					URIEncoder.encodeURI(
-						urlBase + "textskin/textskin.css"
+			Renderer.get(servletContext).renderStyles(req,
+				resp,
+				html,
+				new HashSet<>(
+					Arrays.asList(Group.GLOBAL,
+						STYLE_GROUP,
+						PageAttributes.STYLE_GROUP
 					)
-				)
-			).__().nl();
-			out.print("    <!--[if IE 6]>\n"
-					+ "      ");
-			html.link(Link.Rel.STYLESHEET).href(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/textskin-ie6.css"
-					)
-				)
-			).__().nl();
-			out.print("    <![endif]-->\n");
-			printCssIncludes(req, resp, out, urlBase);
+				),
+				"    "
+			);
+			html.nl();
+
 			defaultPrintLinks(req, resp, out, pageAttributes);
 			printJavaScriptSources(req, resp, out, urlBase);
 			out.print("    ");
@@ -593,31 +627,88 @@ public class TextSkin extends Skin {
 		}
 	}
 
+	/**
+	 * Adds the additional pages styles to the provided request-scoped page group.
+	 *
+	 * @see  PageAttributes#STYLE_GROUP
+	 */
+	// TODO: Move to Skin or SkinUtil?
+	public static void addPageStyles(HttpServletRequest req, HttpServletResponse resp, PageAttributes pageAttributes, Styles globalStyles, Styles skinStyles, Styles pageStyles) {
+		Style lastStyle = null;
+		for(PageAttributes.Link link : pageAttributes.getLinks()) {
+			String type = link.getType();
+			if(
+				Link.Rel.STYLESHEET.toString().equalsIgnoreCase(link.getRel())
+				&& (
+					type == null
+					|| ContentType.CSS.equalsIgnoreCase(type)
+				)
+			) {
+				Style newStyle = Style.builder()
+					.uri(link.getHref())
+					.ie(link.getConditionalCommentExpression())
+					.build();
+				if(lastStyle == null) {
+					// Set this to do after all global and skin styles
+					// TODO: Use Prelude/Main/Coda with this Coda, or allow ordering declared where needed
+					// TODO: Or  Prelude/Global/Theme/Page/View/.../Code
+					// TODO: Or just guarantee ordering within the page styles, and use <wr: /> taglib when need more
+					// TODO:     <wr: /> have a new "page" scope, which would depend on a handler being currently registered for Skin tags versus JSP page, versus ...
+					// TODO:     If doing this, remove support for these links this way?
+					for(Style style : globalStyles.getSnapshot()) {
+						pageStyles.addOrdering(style, newStyle);
+					}
+					for(Style style : skinStyles.getSnapshot()) {
+						pageStyles.addOrdering(style, newStyle);
+					}
+				} else {
+					pageStyles.addOrdering(newStyle, lastStyle);
+				}
+				lastStyle = newStyle;
+			}
+		}
+	}
+
+	/**
+	 * Prints links except those that are <code>rel="stylesheet" and text={null | "text/css"}</code>.
+	 *
+	 * @see  #addPageStyles(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.website.skintags.PageAttributes, com.aoindustries.web.resources.registry.Styles, com.aoindustries.web.resources.registry.Styles, com.aoindustries.web.resources.registry.Styles)
+	 */
+	// TODO: Move to Skin or SkinUtil?
 	public static void defaultPrintLinks(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
 			Html html = HtmlEE.get(req, out);
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
-				String conditionalCommentExpression = link.getConditionalCommentExpression();
-				if(conditionalCommentExpression!=null) {
-					out.print("    <!--[if ");
-					out.print(conditionalCommentExpression);
-					out.print("]>\n"
-							+ "  ");
-				}
-				out.print("    ");
-				html.link()
-					.rel(link.getRel())
-					.href(
-						EncodeURIFilter.getActiveFilter(req).encode(
-							link.getHref(),
-							html.doctype,
-							resp.getCharacterEncoding()
-						)
+				String type = link.getType();
+				if(
+					!Link.Rel.STYLESHEET.toString().equalsIgnoreCase(link.getRel())
+					|| (
+						type != null
+						&& !ContentType.CSS.equalsIgnoreCase(type)
 					)
-					.type(link.getType())
-					.__().nl();
+				) {
+					String conditionalCommentExpression = link.getConditionalCommentExpression();
+					if(conditionalCommentExpression!=null) {
+						out.print("    <!--[if ");
+						out.print(conditionalCommentExpression);
+						out.print("]>\n"
+								+ "  ");
+					}
+					out.print("    ");
+					html.link()
+						.rel(link.getRel())
+						.href(
+							EncodeURIFilter.getActiveFilter(req).encode(
+								link.getHref(),
+								html.doctype,
+								resp.getCharacterEncoding()
+							)
+						)
+						.type(link.getType())
+						.__().nl();
 
-				if(conditionalCommentExpression!=null) out.print("    <![endif]-->\n");
+					if(conditionalCommentExpression!=null) out.print("    <![endif]-->\n");
+				}
 			}
 		} catch(IOException err) {
 			throw new JspException(err);

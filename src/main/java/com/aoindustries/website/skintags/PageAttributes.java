@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * During the processing of the skin, page attributes are built and stored here, one instance per request.
@@ -43,7 +42,7 @@ public class PageAttributes {
 	 *
 	 * @see  Group
 	 */
-	public static final String STYLE_GROUP = "page";
+	public static final String STYLE_GROUP = PageAttributes.class.getName();
 
 	/**
 	 * The possible values for layout.
