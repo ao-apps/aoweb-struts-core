@@ -32,6 +32,7 @@ import com.aoindustries.servlet.http.Canonical;
 import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.tempfiles.servlet.TempFileContextEE;
 import com.aoindustries.util.WrappedException;
+import com.aoindustries.web.resources.servlet.RegistryEE;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Enumeration;
@@ -210,10 +211,12 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							&& !Constants.LAYOUT.equals(name)
 							&& !Constants.SU_REQUESTED.equals(name)
 							// JSTL 1.1
-							&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name)
-							&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)
+							&& !"javax.servlet.jsp.jstl.fmt.request.charset".equals(name) // TODO: Use constants from somewhere
+							&& !"javax.servlet.jsp.jstl.fmt.locale.session".equals(name)  // TODO: Use constants from somewhere
 							// Allow session-based temporary file context
 							&& !TempFileContextEE.SESSION_ATTRIBUTE.equals(name)
+							// Allow session-based web resource registry
+							&& !RegistryEE.ATTRIBUTE.equals(name)
 						) {
 							// These will always trigger jsessionid
 							if(
