@@ -96,7 +96,7 @@ public class TextSkin extends Skin {
 		@Override
 		public void contextInitialized(ServletContextEvent event) {
 			Styles styles = RegistryEE.get(event.getServletContext()).getGroup(STYLE_GROUP).styles;
-			styles.add(AoStyle.AO_STYLE); // TODO: Remove all imports of ao-style in *.css files
+			styles.add(AoStyle.AO_STYLE);
 			styles.add(TEXTSKIN_CSS);
 			styles.add(TEXTSKIN_IE6_CSS);
 		}
