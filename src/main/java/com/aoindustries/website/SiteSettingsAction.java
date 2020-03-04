@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionMapping;
  *
  * @author AO Industries, Inc.
  */
+// TODO: Convert to ServletRequestListener
 public class SiteSettingsAction extends Action {
 
 	/**

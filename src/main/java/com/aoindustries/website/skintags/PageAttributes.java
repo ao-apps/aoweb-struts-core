@@ -22,6 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.util.StringUtility;
+import com.aoindustries.web.resources.registry.Group;
 import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +39,13 @@ import javax.servlet.http.HttpServletRequest;
 public class PageAttributes {
 
 	/**
+	 * The name of the request-scope style group that will be used for page-specific styles.
+	 *
+	 * @see  Group
+	 */
+	public static final String STYLE_GROUP = "page";
+
+	/**
 	 * The possible values for layout.
 	 */
 	public static final String
@@ -49,6 +58,7 @@ public class PageAttributes {
 	 */
 	public static final String REQUEST_ATTRIBUTE = "pageAttributes";
 
+	// TODO: RegistryEE
 	public static class Link {
 
 		/**
@@ -68,9 +78,9 @@ public class PageAttributes {
 		private final String conditionalCommentExpression;
 
 		Link(String rel, String href, String type, String conditionalCommentExpression) {
-			this.rel = rel;
-			this.href = href;
-			this.type = type;
+			this.rel = StringUtility.trimNullIfEmpty(rel);
+			this.href = StringUtility.nullIfEmpty(href);
+			this.type = StringUtility.trimNullIfEmpty(type);
 			if(conditionalCommentExpression==null || isValidConditionalCommentExpression(conditionalCommentExpression)) {
 				this.conditionalCommentExpression = conditionalCommentExpression;
 			} else {
@@ -90,6 +100,7 @@ public class PageAttributes {
 
 		/**
 		 * Gets the already URL-encoded href.
+		 * TODO: Not URL encoded here.
 		 */
 		public String getHref() {
 			return href;
@@ -104,7 +115,6 @@ public class PageAttributes {
 		}
 	}
 
-	private final HttpServletRequest request;
 	private String path;
 	private String keywords;
 	private String description;
@@ -122,8 +132,7 @@ public class PageAttributes {
 	private String layout;
 	private String onload;
 
-	public PageAttributes(HttpServletRequest request) {
-		this.request = request;
+	public PageAttributes() {
 	}
 
 	public String getPath() {
@@ -185,12 +194,14 @@ public class PageAttributes {
 		metas.add(meta);
 	}
 
+	// TODO: RegistryEE
 	public List<Link> getLinks() {
 		if(links==null) return Collections.emptyList();
 		if(unmodifiableLinks==null) unmodifiableLinks = Collections.unmodifiableList(links);
 		return unmodifiableLinks;
 	}
 
+	// TODO: RegistryEE
 	public void addLink(String rel, String href, String type, String conditionalCommentExpression) {
 		if(links==null) links = new ArrayList<>();
 		links.add(new Link(rel, href, type, conditionalCommentExpression));

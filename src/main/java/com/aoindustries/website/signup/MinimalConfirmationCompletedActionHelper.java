@@ -37,6 +37,7 @@ import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.Mailer;
 import com.aoindustries.website.SiteSettings;
+import com.aoindustries.website.TextSkin;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -152,7 +153,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 				content.write(charset);
 			}).__().nl();
 			// Embed the text-only style sheet
-			InputStream cssIn = servlet.getServletContext().getResourceAsStream("/textskin/textskin.css");
+			InputStream cssIn = servlet.getServletContext().getResourceAsStream(TextSkin.TEXTSKIN_CSS.getUri());
 			if(cssIn != null) {
 				try {
 					emailOut.print("    ");
@@ -169,7 +170,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 					cssIn.close();
 				}
 			} else {
-				servlet.log("Warning: Unable to find resource: /global/textskin.css");
+				servlet.log("Warning: Unable to find resource: " + TextSkin.TEXTSKIN_CSS);
 			}
 			emailOut.print("</head>\n"
 						 + "<body>\n"

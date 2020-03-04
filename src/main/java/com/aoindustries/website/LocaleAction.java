@@ -44,6 +44,7 @@ import org.apache.struts.action.ActionMapping;
  *
  * @author AO Industries, Inc.
  */
+// TODO: Is it possible to convert to ServletRequestListener?
 public class LocaleAction extends SiteSettingsAction {
 
 	private static final Logger logger = Logger.getLogger(LocaleAction.class.getName());

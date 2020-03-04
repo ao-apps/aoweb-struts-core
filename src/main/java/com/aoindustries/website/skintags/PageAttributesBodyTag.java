@@ -42,7 +42,7 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 	static PageAttributes getPageAttributes(HttpServletRequest request) {
 		PageAttributes pageAttributes = (PageAttributes)request.getAttribute(PageAttributes.REQUEST_ATTRIBUTE);
 		if(pageAttributes == null) {
-			pageAttributes = new PageAttributes(request);
+			pageAttributes = new PageAttributes();
 			request.setAttribute(PageAttributes.REQUEST_ATTRIBUTE, pageAttributes);
 		}
 		return pageAttributes;

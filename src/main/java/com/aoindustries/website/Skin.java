@@ -31,6 +31,7 @@ import com.aoindustries.html.Link;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
+import com.aoindustries.web.resources.registry.Group;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
 import java.io.Writer;
@@ -49,6 +50,13 @@ import org.apache.struts.util.MessageResources;
  */
 // TODO: Throw IOException on most/all methods where is given a writer, then won't need so many exception conversions in implementations.
 abstract public class Skin {
+
+	/**
+	 * The name of the request-scope style group that will be used for skin-specific styles.
+	 *
+	 * @see  Group
+	 */
+	public static final String STYLE_GROUP = "skin";
 
 	/**
 	 * Directional references.
