@@ -649,6 +649,7 @@ public class TextSkin extends Skin {
 					.uri(link.getHref())
 					.ie(link.getConditionalCommentExpression())
 					.build();
+				pageStyles.add(newStyle);
 				if(lastStyle == null) {
 					// Set this to do after all global and skin styles
 					// TODO: Use Prelude/Main/Coda with this Coda, or allow ordering declared where needed
@@ -663,7 +664,7 @@ public class TextSkin extends Skin {
 						pageStyles.addOrdering(style, newStyle);
 					}
 				} else {
-					pageStyles.addOrdering(newStyle, lastStyle);
+					pageStyles.addOrdering(lastStyle, newStyle);
 				}
 				lastStyle = newStyle;
 			}
