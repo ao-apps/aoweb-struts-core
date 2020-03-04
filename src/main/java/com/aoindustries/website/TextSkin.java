@@ -644,6 +644,7 @@ public class TextSkin extends Skin {
 					|| ContentType.CSS.equalsIgnoreCase(type)
 				)
 			) {
+				@SuppressWarnings("deprecation")
 				Style newStyle = Style.builder()
 					.uri(link.getHref())
 					.ie(link.getConditionalCommentExpression())
