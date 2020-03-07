@@ -35,8 +35,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<properties>
 		<!-- These values are copied from the project being documented -->
 		<documented.artifactId>aoweb-struts-core</documented.artifactId>
-		<documented.javaVersion>1.8</documented.javaVersion>
-		<documented.javac.link.javaApi>${javac.link.javaApi.jdk8}</documented.javac.link.javaApi>
 		<documented.name>AOWeb Struts Core</documented.name>
 		<documented.shortTitle>Core</documented.shortTitle>
 		<documented.description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</documented.description>
