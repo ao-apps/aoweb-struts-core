@@ -216,7 +216,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							// Allow session-based temporary file context
 							&& !TempFileContextEE.SESSION_ATTRIBUTE.equals(name)
 							// Allow session-based web resource registry
-							&& !RegistryEE.ATTRIBUTE.equals(name)
+							&& !RegistryEE.Session.SESSION_ATTRIBUTE.equals(name)
 						) {
 							// These will always trigger jsessionid
 							if(
