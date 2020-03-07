@@ -24,10 +24,10 @@ package com.aoindustries.website;
 
 import com.aoindustries.servlet.http.Cookies;
 import com.aoindustries.util.i18n.EditableResourceBundle;
+import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.website.struts.ResourceBundleMessageResources;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,7 +38,7 @@ import org.apache.struts.action.ActionMapping;
  * @author AO Industries, Inc.
  */
 // TODO: Convert to ServletRequestListener
-public class SiteSettingsAction extends Action {
+public class SiteSettingsAction extends PageAction {
 
 	/**
 	 * Resolves the <code>SiteSettings</code>, sets the request attribute "siteSettings", then the subclass execute method is invoked.
@@ -50,7 +50,8 @@ public class SiteSettingsAction extends Action {
 		ActionMapping mapping,
 		ActionForm form,
 		HttpServletRequest request,
-		HttpServletResponse response
+		HttpServletResponse response,
+		Registry pageRegistry
 	) throws Exception {
 		// Resolve the settings
 		SiteSettings siteSettings = SiteSettings.getInstance(getServlet().getServletContext());

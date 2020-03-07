@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website;
 
+import com.aoindustries.web.resources.registry.Registry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -34,14 +34,15 @@ import org.apache.struts.action.ActionMapping;
  *
  * @author AO Industries, Inc.
  */
-public class PermissionDeniedAction extends Action {
+public class PermissionDeniedAction extends PageAction {
 
 	@Override
 	public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
 		HttpServletRequest request,
-		HttpServletResponse response
+		HttpServletResponse response,
+		Registry pageRegistry
 	) throws Exception {
 		response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		return null;
