@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-03-04T03:14:31-0600"
+		dateModified="2020-03-07T06:01:29-0600"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -49,12 +49,16 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<changelog:release
 				projectName="@{documented.name}"
 				version="#{version}"
-				groupId="@{documented.groupId}"
+				groupId="@{project.groupId}"
 				artifactId="@{documented.artifactId}"
-				scmUrl="@{documented.scm.url}"
+				scmUrl="@{project.scm.url}"
 			>
 				<ul>
 					<li>Minimum Java version changed from 1.7 to 1.8.</li>
+					<li>
+						Reduced use of property substitutions in <code>pom.xml</code>.
+						This is to help 3rd-party parsers that fail to perform full Maven-compatible substitutions.
+					</li>
 					<li>
 						Now outputting HTML or XHTML based on the current response content type.
 						This should eliminate validator warnings when used as HTML.
@@ -84,9 +88,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="2.0.0"
 			datePublished="2019-10-12T22:59:07-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Updated for compatibility with <core:link book="/ao-lang" page="/changelog.jspx" element="release-notes-3.0.0">ao-lang-3.0.0</core:link>.</li>
@@ -125,9 +129,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.2.0"
 			datePublished="2019-06-24T09:19:33-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Minimum Java version changed from 1.6 to 1.7.</li>
@@ -184,9 +188,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.1.2"
 			datePublished="2017-07-20T10:48:22-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Updated for new <core:link book="/ao-net-types" page="/index.jspx" /> project pulled out of <core:link book="/aoserv/client" page="/index.jspx" />.</li>
@@ -201,9 +205,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.1.1"
 			datePublished="2016-11-16T02:42:52-0600"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>New <core:link book="/ao-oss-parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
@@ -221,9 +225,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.1.0"
 			datePublished="2016-10-20T18:54:00-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Improved Javadoc formatting.</li>
@@ -236,9 +240,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.2"
 			datePublished="2016-10-11T14:35:00-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Using latest releases of dependencies.</li>
@@ -249,9 +253,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.1"
 			datePublished="2016-10-11T13:55:00-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Using standard filter set provided by SemanticCMS.</li>
@@ -265,9 +269,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.0"
 			datePublished="2016-10-08T01:20:00-0500"
-			groupId="@{documented.groupId}"
+			groupId="@{project.groupId}"
 			artifactId="@{documented.artifactId}"
-			scmUrl="@{documented.scm.url}"
+			scmUrl="@{project.scm.url}"
 		>
 			<ul>
 				<li>Project moved to GitHub and Maven.</li>

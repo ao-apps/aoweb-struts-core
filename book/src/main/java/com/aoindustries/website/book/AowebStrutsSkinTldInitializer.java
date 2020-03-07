@@ -36,7 +36,7 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 			"/aoweb-struts-skin.tld",
 			Maven.properties.getProperty("documented.javac.link.javaApi"),
 			Maven.properties.getProperty("javac.link.javaeeApi.6"),
-			Collections.singletonMap("com.aoindustries.website.skintags.", Maven.properties.getProperty("documented.url") + "apidocs/")
+			Collections.singletonMap("com.aoindustries.website.skintags.", Maven.properties.getProperty("project.url") + "apidocs/")
 		);
 	}
 }
