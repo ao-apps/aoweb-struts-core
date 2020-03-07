@@ -193,8 +193,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2016-11-10T22:36:09-0600" -->
-		<!-- TODO: RegistryEE -->
+		<!-- dateModified="2020-03-06T21:53:43-0600" -->
 		<description><![CDATA[
 			<p>
 				Adds a link tag to <a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageAttributes.html">this page</a>.
@@ -205,6 +204,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<li>href attribute</li>
 				<li>Body</li>
 			</ol>
+			<p>
+				Please note, that any links to stylesheets here are never optimized.  Please
+				prefer the <a href="https://aoindustries.com/ao-web-resources/taglib/">AO Web Resources Taglib</a>.
+			</p>
 		]]></description>
 		<name>link</name>
 		<tag-class>com.aoindustries.website.skintags.LinkTag</tag-class>

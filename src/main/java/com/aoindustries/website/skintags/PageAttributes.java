@@ -23,7 +23,6 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.util.StringUtility;
-import com.aoindustries.web.resources.registry.Group;
 import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,13 +37,6 @@ import java.util.Locale;
 public class PageAttributes {
 
 	/**
-	 * The name of the request-scope style group that will be used for page-specific styles.
-	 *
-	 * @see  Group
-	 */
-	public static final String STYLE_GROUP = PageAttributes.class.getName();
-
-	/**
 	 * The possible values for layout.
 	 */
 	public static final String
@@ -57,7 +49,6 @@ public class PageAttributes {
 	 */
 	public static final String REQUEST_ATTRIBUTE = "pageAttributes";
 
-	// TODO: RegistryEE
 	public static class Link {
 
 		/**
@@ -193,14 +184,28 @@ public class PageAttributes {
 		metas.add(meta);
 	}
 
-	// TODO: RegistryEE
+	/**
+	 * Gets an optional set of additional links to include for this page
+	 * in the order they should be added.
+	 * <p>
+	 * Please note, that any links to stylesheets here are never optimized.  Please
+	 * prefer the {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
+	 * </p>
+	 */
 	public List<Link> getLinks() {
 		if(links==null) return Collections.emptyList();
 		if(unmodifiableLinks==null) unmodifiableLinks = Collections.unmodifiableList(links);
 		return unmodifiableLinks;
 	}
 
-	// TODO: RegistryEE
+	/**
+	 * Adds an additional link to include for this page
+	 * in the order they should be added.
+	 * <p>
+	 * Please note, that any links to stylesheets here are never optimized.  Please
+	 * prefer the {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
+	 * </p>
+	 */
 	public void addLink(String rel, String href, String type, String conditionalCommentExpression) {
 		if(links==null) links = new ArrayList<>();
 		links.add(new Link(rel, href, type, conditionalCommentExpression));
