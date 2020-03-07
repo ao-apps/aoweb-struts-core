@@ -52,7 +52,6 @@ import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.web.resources.registry.Group;
 import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.web.resources.registry.Style;
-import com.aoindustries.web.resources.registry.Styles;
 import com.aoindustries.web.resources.renderer.Renderer;
 import com.aoindustries.web.resources.servlet.RegistryEE;
 import com.aoindustries.website.skintags.Child;
@@ -95,12 +94,14 @@ public class TextSkin extends Skin {
 	public static class Initializer implements ServletContextListener {
 		@Override
 		public void contextInitialized(ServletContextEvent event) {
-			Styles styles = RegistryEE.Application.get(event.getServletContext())
+			RegistryEE.Application.get(event.getServletContext())
 				.getGroup(RESOURCE_GROUP)
-				.styles;
-			styles.add(AoStyle.AO_STYLE);
-			styles.add(TEXTSKIN_CSS);
-			styles.add(TEXTSKIN_IE6_CSS);
+				.styles
+				.add(
+					AoStyle.AO_STYLE,
+					TEXTSKIN_CSS,
+					TEXTSKIN_IE6_CSS
+				);
 		}
 		@Override
 		public void contextDestroyed(ServletContextEvent event) {
