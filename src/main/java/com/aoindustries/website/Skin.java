@@ -31,11 +31,13 @@ import com.aoindustries.html.Link;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
+import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 import java.util.Locale;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -143,6 +145,16 @@ abstract public class Skin {
 	 */
 	public String getUrlBase(HttpServletRequest req) throws JspException {
 		return getDefaultUrlBase(req);
+	}
+
+	/**
+	 * Configures the {@linkplain com.aoindustries.web.resources.servlet.RegistryEE.Request request-scope web resources} that this skin uses.
+	 * <p>
+	 * Implementers should call <code>super.configureResources(…)</code> as a matter of convention, despite this default implementation doing nothing.
+	 * </p>
+	 */
+	public void configureResources(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Registry requestRegistry, PageAttributes page) {
+		// Do nothing
 	}
 
 	/**
