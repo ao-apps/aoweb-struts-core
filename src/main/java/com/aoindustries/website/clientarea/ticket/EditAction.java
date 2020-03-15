@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Ticket;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
@@ -84,7 +84,7 @@ public class EditAction extends PermissionAction {
 		Account account = ticket.getAccount();
 		ticketForm.setAccount(account==null ? "" : account.getName().toString());
 		ticketForm.setClientPriority(ticket.getClientPriority().getPriority());
-		ticketForm.setContactEmails(StringUtility.join(ticket.getContactEmails(), ", "));
+		ticketForm.setContactEmails(Strings.join(ticket.getContactEmails(), ", "));
 		ticketForm.setContactPhoneNumbers(ticket.getContactPhoneNumbers());
 		ticketForm.setDetails(ticket.getDetails());
 		ticketForm.setSummary(ticket.getSummary());

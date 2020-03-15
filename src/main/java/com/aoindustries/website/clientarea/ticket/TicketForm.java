@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,7 +23,7 @@
 package com.aoindustries.website.clientarea.ticket;
 
 import com.aoindustries.net.Email;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.validation.ValidationResult;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +41,8 @@ public class TicketForm extends ValidatorForm implements Serializable {
 
 	private static String makeLines(String commasOrLines) {
 		StringBuilder result = new StringBuilder();
-		for(String line : StringUtility.splitLines(commasOrLines)) {
-			for(String word : StringUtility.splitString(line, ',')) {
+		for(String line : Strings.splitLines(commasOrLines)) {
+			for(String word : Strings.splitString(line, ',')) {
 				word = word.trim();
 				if(word.length()>0) {
 					if(result.length()>0) result.append('\n');
@@ -182,7 +182,7 @@ public class TicketForm extends ValidatorForm implements Serializable {
 
 		// contactEmails must be valid email addresses
 		if(getContactEmails().length()>0) {
-			for(String email : StringUtility.splitLines(getContactEmails())) {
+			for(String email : Strings.splitLines(getContactEmails())) {
 				ValidationResult emailCheck = Email.validate(email);
 				if(!emailCheck.isValid()) {
 					errors.add("contactEmails", new ActionMessage(emailCheck.toString(), false));

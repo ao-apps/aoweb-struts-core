@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -29,7 +29,7 @@ import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.CreditCardProcessor;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
@@ -107,8 +107,8 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		// Get the values that are simply copied from account profile, instead of cluttering the credit card form with too many fields
 		Profile profile = rootCreditCard.getAccount().getProfile();
 		String profileEmail = MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile);
-		String profilePhone = profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone());
-		String profileFax = profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax());
+		String profilePhone = profile == null ? null : Strings.trimNullIfEmpty(profile.getPhone());
+		String profileFax = profile == null ? null : Strings.trimNullIfEmpty(profile.getFax());
 		if(
 			!nullOrBlankEquals(editCreditCardForm.getFirstName(), creditCard.getFirstName())
 			|| !nullOrBlankEquals(editCreditCardForm.getLastName(), creditCard.getLastName())

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -30,7 +30,7 @@ import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
 import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.creditcards.CreditCardProcessor;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
@@ -111,8 +111,8 @@ public class AddCreditCardCompletedAction extends AddCreditCardAction {
 				addCreditCardForm.getLastName(),
 				addCreditCardForm.getCompanyName(),
 				MakePaymentNewCardCompletedAction.getFirstBillingEmail(profile),
-				profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone()),
-				profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax()),
+				profile == null ? null : Strings.trimNullIfEmpty(profile.getPhone()),
+				profile == null ? null : Strings.trimNullIfEmpty(profile.getFax()),
 				null, // customerId: TODO: Set from account.Account once there is a constant identifier (not subject to set_business_accounting command/API)
 				null, // customerTaxId
 				addCreditCardForm.getStreetAddress1(),

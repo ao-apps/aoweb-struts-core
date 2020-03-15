@@ -47,7 +47,7 @@ import com.aoindustries.servlet.lastmodified.LastModifiedUtil;
 import com.aoindustries.style.AoStyle;
 import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
 import com.aoindustries.taglib.HtmlTag;
-import static com.aoindustries.util.StringUtility.trimNullIfEmpty;
+import static com.aoindustries.lang.Strings.trimNullIfEmpty;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.web.resources.registry.Group;
 import com.aoindustries.web.resources.registry.Registry;

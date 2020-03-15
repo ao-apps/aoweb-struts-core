@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -41,7 +41,7 @@ import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
 import com.aoindustries.net.Email;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
@@ -144,8 +144,8 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			makePaymentNewCardForm.getLastName(),
 			makePaymentNewCardForm.getCompanyName(),
 			getFirstBillingEmail(profile),
-			profile == null ? null : StringUtility.trimNullIfEmpty(profile.getPhone()),
-			profile == null ? null : StringUtility.trimNullIfEmpty(profile.getFax()),
+			profile == null ? null : Strings.trimNullIfEmpty(profile.getPhone()),
+			profile == null ? null : Strings.trimNullIfEmpty(profile.getFax()),
 			null, // customerId: TODO: Set from account.Account once there is a constant identifier
 			null, // customerTaxId
 			makePaymentNewCardForm.getStreetAddress1(),

@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,9 +68,9 @@ public class PageAttributes {
 		private final String conditionalCommentExpression;
 
 		Link(String rel, String href, String type, String conditionalCommentExpression) {
-			this.rel = StringUtility.trimNullIfEmpty(rel);
-			this.href = StringUtility.nullIfEmpty(href);
-			this.type = StringUtility.trimNullIfEmpty(type);
+			this.rel = Strings.trimNullIfEmpty(rel);
+			this.href = Strings.nullIfEmpty(href);
+			this.type = Strings.trimNullIfEmpty(type);
 			if(conditionalCommentExpression==null || isValidConditionalCommentExpression(conditionalCommentExpression)) {
 				this.conditionalCommentExpression = conditionalCommentExpression;
 			} else {

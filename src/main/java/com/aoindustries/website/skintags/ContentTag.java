@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.website.Skin;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class ContentTag extends PageAttributesBodyTag {
 	 * Parses a String of comma-separated integers into an <code>int[]</code>.
 	 */
 	static int[] parseColspans(String colspans) {
-		List<String> tokens = StringUtility.splitStringCommaSpace(colspans);
+		List<String> tokens = Strings.splitStringCommaSpace(colspans);
 		int[] array = new int[tokens.size()];
 		for(int c=0;c<tokens.size();c++) array[c]=Integer.parseInt(tokens.get(c));
 		return array;

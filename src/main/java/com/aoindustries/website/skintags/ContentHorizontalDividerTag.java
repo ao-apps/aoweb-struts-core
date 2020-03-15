@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.website.Skin;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +66,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			Skin skin = SkinTag.getSkin(pageContext);
 
-			List<String> list = StringUtility.splitStringCommaSpace(colspansAndDirections);
+			List<String> list = Strings.splitStringCommaSpace(colspansAndDirections);
 			if((list.size()&1)==0) {
 				HttpSession session = pageContext.getSession();
 				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);

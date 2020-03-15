@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.exception.ConfigurationException;
-import com.aoindustries.util.StringUtility;
+import com.aoindustries.lang.Strings;
 import com.aoindustries.util.WrappedException;
 import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
@@ -76,7 +76,7 @@ public class SiteSettings {
 	public static SiteSettings getInstance(ServletContext servletContext) {
 		SiteSettings settings = (SiteSettings)servletContext.getAttribute(APPLICATION_ATTRIBUTE);
 		if(settings == null) {
-			String classname = StringUtility.trimNullIfEmpty(servletContext.getInitParameter(INIT_PARAM_NAME));
+			String classname = Strings.trimNullIfEmpty(servletContext.getInitParameter(INIT_PARAM_NAME));
 			if(classname == null || classname.equals(SiteSettings.class.getName())) {
 				settings = new SiteSettings(servletContext);
 			} else {
