@@ -41,8 +41,8 @@ import org.apache.struts.action.ActionMapping;
  * request attribute "aoConn" and then calls
  * <code>execute(ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse,Locale,Skin,AOServConnector)</code>.
  * The default implementation of this new <code>execute</code> method simply returns the mapping
- * of "success".<br />
- * <br />
+ * of "success".<br>
+ * <br>
  * More simply put, without overriding the new execute method, this action returns either the mapping
  * for "login" or "success".
  *
