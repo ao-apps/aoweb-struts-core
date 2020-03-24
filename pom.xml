@@ -70,6 +70,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 								<link>${javadoc.link.javamail}</link><!-- Must be before javaeeApi -->
 								<link>${javadoc.link.javaee}</link>
 								<!-- Direct -->
+								<link>https://aoindustries.com/ao-collections/apidocs/</link>
 								<link>https://aoindustries.com/ao-credit-cards/api/apidocs/</link>
 								<link>https://aoindustries.com/ao-encoding/apidocs/</link>
 								<link>https://aoindustries.com/ao-encoding/servlet/apidocs/</link>
@@ -113,6 +114,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<scope>import</scope>
 			</dependency>
 			<!-- Direct -->
+			<dependency>
+				<groupId>com.aoindustries</groupId><artifactId>ao-collections</artifactId><version>1.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+			</dependency>
 			<dependency>
 				<groupId>com.aoindustries</groupId><artifactId>ao-credit-cards-api</artifactId><version>1.1.2-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
@@ -233,6 +237,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<groupId>javax.servlet</groupId><artifactId>jstl</artifactId>
 		</dependency>
 		<!-- Direct -->
+		<dependency>
+			<groupId>com.aoindustries</groupId><artifactId>ao-collections</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId><artifactId>ao-credit-cards-api</artifactId>
 		</dependency>

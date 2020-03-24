@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.collections.MinimalList;
 import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
-import com.aoindustries.util.MinimalList;
 import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.List;
 import java.util.Locale;
