@@ -42,7 +42,7 @@ public class TicketForm extends ValidatorForm implements Serializable {
 	private static String makeLines(String commasOrLines) {
 		StringBuilder result = new StringBuilder();
 		for(String line : Strings.splitLines(commasOrLines)) {
-			for(String word : Strings.splitString(line, ',')) {
+			for(String word : Strings.split(line, ',')) {
 				word = word.trim();
 				if(word.length()>0) {
 					if(result.length()>0) result.append('\n');

@@ -40,7 +40,7 @@ public class ContentTag extends PageAttributesBodyTag {
 	 * Parses a String of comma-separated integers into an <code>int[]</code>.
 	 */
 	static int[] parseColspans(String colspans) {
-		List<String> tokens = Strings.splitStringCommaSpace(colspans);
+		List<String> tokens = Strings.splitCommaSpace(colspans);
 		int[] array = new int[tokens.size()];
 		for(int c=0;c<tokens.size();c++) array[c]=Integer.parseInt(tokens.get(c));
 		return array;

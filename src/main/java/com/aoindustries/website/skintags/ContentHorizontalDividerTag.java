@@ -66,7 +66,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			Skin skin = SkinTag.getSkin(pageContext);
 
-			List<String> list = Strings.splitStringCommaSpace(colspansAndDirections);
+			List<String> list = Strings.splitCommaSpace(colspansAndDirections);
 			if((list.size()&1)==0) {
 				HttpSession session = pageContext.getSession();
 				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
