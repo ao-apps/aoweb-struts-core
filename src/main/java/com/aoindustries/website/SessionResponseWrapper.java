@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website;
 
+import com.aoindustries.exception.WrappedException;
 import com.aoindustries.net.IRI;
 import com.aoindustries.net.MutableURIParameters;
 import com.aoindustries.net.URIParameters;
@@ -31,7 +32,6 @@ import com.aoindustries.net.URIParser;
 import com.aoindustries.servlet.http.Canonical;
 import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.tempfiles.servlet.TempFileContextEE;
-import com.aoindustries.util.WrappedException;
 import com.aoindustries.web.resources.servlet.RegistryEE;
 import java.io.IOException;
 import java.sql.SQLException;

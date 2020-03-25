@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.collections.AutoGrowArrayList;
-import com.aoindustries.util.WrappedException;
+import com.aoindustries.exception.WrappedException;
 import com.aoindustries.website.SessionActionForm;
 import com.aoindustries.website.SiteSettings;
 import java.io.IOException;

@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.util.WrappedExceptions;
+import com.aoindustries.exception.WrappedExceptions;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Locale;

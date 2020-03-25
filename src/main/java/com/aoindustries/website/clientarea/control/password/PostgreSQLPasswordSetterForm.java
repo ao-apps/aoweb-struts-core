@@ -28,7 +28,7 @@ import com.aoindustries.aoserv.client.postgresql.User;
 import com.aoindustries.collections.AutoGrowArrayList;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.util.WrappedException;
+import com.aoindustries.exception.WrappedException;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.AuthenticatedAction;
 import java.io.IOException;
