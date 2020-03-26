@@ -26,8 +26,8 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.Doctype;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
+import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.javaScriptInXhtmlAttributeEncoder;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.encoding.NewEncodingUtils;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
@@ -39,6 +39,8 @@ import com.aoindustries.html.Script;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.html.util.ImagePreload;
+import com.aoindustries.io.NoCloseWriter;
+import static com.aoindustries.lang.Strings.trimNullIfEmpty;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.EmptyURIParameters;
 import com.aoindustries.net.URIEncoder;
@@ -47,7 +49,6 @@ import com.aoindustries.servlet.lastmodified.LastModifiedUtil;
 import com.aoindustries.style.AoStyle;
 import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
 import com.aoindustries.taglib.HtmlTag;
-import static com.aoindustries.lang.Strings.trimNullIfEmpty;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.web.resources.registry.Group;
 import com.aoindustries.web.resources.registry.Registry;
@@ -416,22 +417,17 @@ public class TextSkin extends Skin {
 			out.print("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size()>1) {
 				html.script().out(script -> {
-					script.write("function selectLayout(layout) {\n");
+					script.append("function selectLayout(layout) {\n");
 					for(Skin skin : skins) {
-						script.write("  if(layout==\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtml(skin.getName(), script);
-						script.write("\") window.top.location.href=\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtml(
+						script.append("  if(layout==").text(skin.getName()).append(") window.top.location.href=").text(
 							resp.encodeURL(
 								new AnyURI(fullPath)
 									.addEncodedParameter("layout", URIEncoder.encodeURIComponent(skin.getName()))
 									.toASCIIString()
-							),
-							script
-						);
-						script.write("\";\n");
+							)
+						).append(";\n");
 					}
-					script.write('}');
+					script.append('}');
 				}).__().nl();
 				out.print("            <form action=\"\" style=\"display:inline\"><div style=\"display:inline\">\n"
 						+ "              ");
@@ -501,31 +497,29 @@ public class TextSkin extends Skin {
 							language.getCode(),
 							out
 						);
-						out.print("\" onmouseover='document.images.flagSelector_");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(language.getCode(), out);
-						out.print(".src=\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									urlBase
-									+ language.getFlagOnSrc(req, locale)
+						out.print("\" onmouseover=\"");
+						try (MediaWriter onmouseover = new MediaWriter(html.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(html.out))) {
+							onmouseover.append("document.images[").text("flagSelector_" + language.getCode()).append("].src=").text(
+								resp.encodeURL(
+									URIEncoder.encodeURI(
+										urlBase
+										+ language.getFlagOnSrc(req, locale)
+									)
 								)
-							),
-							out
-						);
-						out.print("\";' onmouseout='document.images.flagSelector_");
-						out.print(language.getCode());
-						out.print(".src=\"");
-						NewEncodingUtils.encodeTextInJavaScriptInXhtmlAttribute(
-							resp.encodeURL(
-								URIEncoder.encodeURI(
-									urlBase
-									+ language.getFlagOffSrc(req, locale)
+							).append(';');
+						}
+						out.print("\" onmouseout=\"");
+						try (MediaWriter onmouseout = new MediaWriter(html.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(html.out))) {
+							onmouseout.append("document.images[").text("flagSelector_" + language.getCode()).append("].src=").text(
+								resp.encodeURL(
+									URIEncoder.encodeURI(
+										urlBase
+										+ language.getFlagOffSrc(req, locale)
+									)
 								)
-							),
-							out
-						);
-						out.print("\";'>");
+							).append(';');
+						}
+						out.print("\">");
 						html.img()
 							.src(
 								resp.encodeURL(
