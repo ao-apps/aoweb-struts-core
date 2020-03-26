@@ -34,6 +34,7 @@ import com.aoindustries.website.AuthenticatedAction;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -121,6 +122,8 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 			AOServConnector aoConn = AuthenticatedAction.getAoConn(request, null);
 			if(aoConn==null) throw new RuntimeException("aoConn is null");
 
+			ServletContext servletContext = getServlet().getServletContext();
+
 			for(int c=0;c<usernames.size();c++) {
 				String newPassword = newPasswords.get(c);
 				String confirmPassword = confirmPasswords.get(c);
@@ -133,7 +136,7 @@ public class PostgreSQLPasswordSetterForm extends ActionForm implements Serializ
 						// Check the password strength
 						List<PasswordChecker.Result> results = User.checkPassword(username, newPassword);
 						if(PasswordChecker.hasResults(results)) {
-							Serialization serialization = SerializationEE.get(request);
+							Serialization serialization = SerializationEE.get(servletContext, request);
 							errors.add(
 								"confirmPasswords[" + c + "].confirmPasswords",
 								new ActionMessage(
