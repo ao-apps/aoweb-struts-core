@@ -94,7 +94,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baName.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaName()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -103,7 +103,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baTitle.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaTitle()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaTitle()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -112,7 +112,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baWorkPhone.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaWorkPhone()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaWorkPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -121,7 +121,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baCellPhone.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaCellPhone()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaCellPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -130,7 +130,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baHomePhone.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaHomePhone()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaHomePhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -139,7 +139,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baFax.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaFax()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaFax()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -148,7 +148,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baEmail.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaEmail()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaEmail()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -157,7 +157,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baAddress1.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaAddress1()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaAddress1()).print("</td>\n"
 					 + "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupTechnicalForm.getBaAddress2())) {
 			emailOut.print("    <tr>\n"
@@ -167,7 +167,7 @@ final public class SignupTechnicalActionHelper {
 						 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baAddress2.prompt"));
 		emailOut.print("</td>\n"
-						 + "        <td>").encodeXhtml(signupTechnicalForm.getBaAddress2()).print("</td>\n"
+						 + "        <td>").textInXhtml(signupTechnicalForm.getBaAddress2()).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
@@ -177,7 +177,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baCity.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaCity()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -186,7 +186,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baState.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaState()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -195,7 +195,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baCountry.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(getBaCountry(rootConn, signupTechnicalForm)).print("</td>\n"
+					 + "        <td>").textInXhtml(getBaCountry(rootConn, signupTechnicalForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -204,7 +204,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baZip.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaZip()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaZip()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -213,7 +213,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baUsername.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaUsername()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaUsername()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -222,7 +222,7 @@ final public class SignupTechnicalActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupTechnicalForm.baPassword.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupTechnicalForm.getBaPassword()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupTechnicalForm.getBaPassword()).print("</td>\n"
 					 + "    </tr>\n");
 	}
 }

@@ -186,7 +186,7 @@ public class TextSkin extends Skin {
 			Brand brand = settings.getBrand();
 			String trackingId = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			// Write doctype
-			Html html = HtmlEE.get(servletContext, req, out);
+			Html html = HtmlEE.get(servletContext, req, resp, out);
 			html.xmlDeclaration(resp.getCharacterEncoding());
 			html.doctype();
 			// Write <html>
@@ -638,7 +638,7 @@ public class TextSkin extends Skin {
 
 	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
-			Html html = HtmlEE.get(servletContext, req, out);
+			Html html = HtmlEE.get(servletContext, req, resp, out);
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
 				String conditionalCommentExpression = link.getConditionalCommentExpression();
 				if(conditionalCommentExpression != null) {
@@ -682,7 +682,7 @@ public class TextSkin extends Skin {
 	public void startContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans, String width) throws JspException {
 		width = trimNullIfEmpty(width);
 		try {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			out.print("          <table class=\"ao-packed\"");
 			if(width != null) {
 				out.print(" style=\"");
@@ -805,7 +805,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int[] colspansAndDirections, boolean endsInternal) throws JspException {
 		try {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			out.print("            <tr>\n");
 			for(int c=0;c<colspansAndDirections.length;c+=2) {
 				if(c>0) {
@@ -844,7 +844,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void endContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans) throws JspException {
 		try {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			int totalColumns=0;
 			for(int c=0;c<colspans.length;c++) {
 				if(c>0) totalColumns+=1;
@@ -1044,7 +1044,7 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException {
 		try {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			try (MediaWriter script = html.script().out__()) {
 				String groupIdStr = Long.toString(groupId);
 				script.write("  var popupGroupTimer"); script.write(groupIdStr); script.write("=null;\n"
@@ -1122,7 +1122,7 @@ public class TextSkin extends Skin {
 		width = trimNullIfEmpty(width);
 		try {
 			ServletContext servletContext = req.getServletContext();
-			Html html = HtmlEE.get(servletContext, req, out);
+			Html html = HtmlEE.get(servletContext, req, resp, out);
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
@@ -1249,7 +1249,7 @@ public class TextSkin extends Skin {
 	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String urlBase) throws JspException {
 		try {
 			ServletContext servletContext = req.getServletContext();
-			Html html = HtmlEE.get(servletContext, req, out);
+			Html html = HtmlEE.get(servletContext, req, resp, out);
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
@@ -1286,7 +1286,7 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width, String urlBase) throws JspException {
 		try {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			out.print("</td>\n"
 				+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(

@@ -31,6 +31,7 @@ import com.aoindustries.util.UnsynchronizedSequence;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -73,7 +74,12 @@ public class DateTag extends BodyTagSupport {
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
 					ChainWriter.writeDateJavaScript(date, sequence, out, scriptOut);
-					Html html = HtmlEE.get(pageContext.getServletContext(), request, out);
+					Html html = HtmlEE.get(
+						pageContext.getServletContext(),
+						request,
+						(HttpServletResponse)pageContext.getResponse(),
+						out
+					);
 					// TODO: Can write to out(Object) directly due to underlying coercion?  Review other uses, too.
 					try (MediaWriter script = html.script().out__()) {
 						scriptOut.writeTo(script);

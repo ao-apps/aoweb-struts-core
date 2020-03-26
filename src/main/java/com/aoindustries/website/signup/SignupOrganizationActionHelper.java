@@ -131,7 +131,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationName.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationName()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -140,7 +140,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationPhone.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationPhone()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -149,7 +149,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationFax.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationFax()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationFax()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -158,7 +158,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationAddress1.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationAddress1()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationAddress1()).print("</td>\n"
 					 + "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupOrganizationForm.getOrganizationAddress2())) {
 			emailOut.print("    <tr>\n"
@@ -168,7 +168,7 @@ final public class SignupOrganizationActionHelper {
 						 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationAddress2.prompt"));
 		emailOut.print("</td>\n"
-						 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationAddress2()).print("</td>\n"
+						 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationAddress2()).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
@@ -178,7 +178,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationCity.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationCity()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -187,7 +187,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationState.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationState()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -196,7 +196,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationCountry.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(getOrganizationCountry(rootConn, signupOrganizationForm)).print("</td>\n"
+					 + "        <td>").textInXhtml(getOrganizationCountry(rootConn, signupOrganizationForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -205,7 +205,7 @@ final public class SignupOrganizationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupOrganizationForm.organizationZip.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupOrganizationForm.getOrganizationZip()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationZip()).print("</td>\n"
 					 + "    </tr>\n");
 	}
 }

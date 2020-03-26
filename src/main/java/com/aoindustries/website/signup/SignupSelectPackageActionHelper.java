@@ -108,7 +108,7 @@ final public class SignupSelectPackageActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupSelectPackageForm.packageDefinition.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(packageDefinition.getDisplay()).print("</td>\n"
+					 + "        <td>").textInXhtml(packageDefinition.getDisplay()).print("</td>\n"
 					 + "    </tr>\n");
 	}
 }

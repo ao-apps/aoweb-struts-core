@@ -27,6 +27,7 @@ import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.encoding.Doctype;
+import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.html.Html;
@@ -139,8 +140,18 @@ final public class MinimalConfirmationCompletedActionHelper {
 			// Generate the email contents
 			// TODO: Test emails
 			CharArrayWriter cout = new CharArrayWriter();
-			ChainWriter emailOut = new ChainWriter(cout);
-			Html html = new Html(Serialization.SGML, Doctype.STRICT, cout);
+			EncodingContext encodingContext = new EncodingContext() {
+				@Override
+				public Serialization getSerialization() {
+					return Serialization.SGML;
+				}
+				@Override
+				public Doctype getDoctype() {
+					return Doctype.STRICT;
+				}
+			};
+			ChainWriter emailOut = new ChainWriter(encodingContext, cout);
+			Html html = new Html(encodingContext, cout);
 			html.xmlDeclaration(charset);
 			html.doctype();
 			HtmlTag.beginHtmlTag(userLocale, cout, html.serialization, charset);

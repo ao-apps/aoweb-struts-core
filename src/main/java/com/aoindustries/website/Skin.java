@@ -69,7 +69,7 @@ abstract public class Skin {
 	 */
 	public static void printAlternativeLinks(HttpServletRequest req, HttpServletResponse resp, Writer out, String fullPath, List<Language> languages) throws IOException {
 		if(languages.size()>1) {
-			Html html = HtmlEE.get(req, out);
+			Html html = HtmlEE.get(req, resp, out);
 			// Default language
 			{
 				Language language = languages.get(0);

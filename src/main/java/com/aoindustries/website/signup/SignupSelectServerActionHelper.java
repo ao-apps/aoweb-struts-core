@@ -140,7 +140,7 @@ final public class SignupSelectServerActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupSelectServerForm.packageDefinition.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(packageDefinition.getDisplay()).print("</td>\n"
+					 + "        <td>").textInXhtml(packageDefinition.getDisplay()).print("</td>\n"
 					 + "    </tr>\n");
 	}
 }

@@ -92,7 +92,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingContact.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingContact()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingContact()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -101,7 +101,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingEmail.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingEmail()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingEmail()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -110,7 +110,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingCardholderName.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingCardholderName()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingCardholderName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -119,7 +119,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingCardNumber.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(getBillingCardNumber(signupBillingInformationForm)).print("</td>\n"
+					 + "        <td>").textInXhtml(getBillingCardNumber(signupBillingInformationForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -139,7 +139,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingStreetAddress.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingStreetAddress()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingStreetAddress()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -148,7 +148,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingCity.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingCity()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -157,7 +157,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingState.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingState()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
@@ -166,7 +166,7 @@ final public class SignupBillingInformationActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupBillingInformationForm.billingZip.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(signupBillingInformationForm.getBillingZip()).print("</td>\n"
+					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingZip()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");

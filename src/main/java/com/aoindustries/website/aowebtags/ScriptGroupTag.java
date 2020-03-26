@@ -31,6 +31,7 @@ import static com.aoindustries.website.ApplicationResources.accessor;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
@@ -81,7 +82,12 @@ public class ScriptGroupTag extends BodyTagSupport {
 		try {
 			if(scriptOut.size() > 0) {
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-				Html html = HtmlEE.get(pageContext.getServletContext(), request, pageContext.getOut());
+				Html html = HtmlEE.get(
+					pageContext.getServletContext(),
+					request,
+					(HttpServletResponse)pageContext.getResponse(),
+					pageContext.getOut()
+				);
 				try (MediaWriter script = html.script().out__()) {
 					if("none".equals(onloadMode)) {
 						scriptOut.writeTo(script);

@@ -480,7 +480,7 @@ final public class SignupCustomizeServerActionHelper {
 					 + "        <td>");
 		html.text(accessor.getMessage("signupCustomizeServerConfirmation.ram.prompt"));
 		emailOut.print("</td>\n"
-					 + "        <td>").encodeXhtml(getRamOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
+					 + "        <td>").textInXhtml(getRamOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
 					 + "    </tr>\n");
 		String sataControllerOption = getSataControllerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(sataControllerOption)) {
@@ -514,7 +514,7 @@ final public class SignupCustomizeServerActionHelper {
 						 + "        <td>");
 			html.text(accessor.getMessage("signupCustomizeServerConfirmation.disk.prompt"));
 			emailOut.print("</td>\n"
-						 + "        <td>").encodeXhtml(diskOption).print("</td>\n"
+						 + "        <td>").textInXhtml(diskOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
