@@ -23,7 +23,6 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.Doctype;
-import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
@@ -79,7 +78,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
 	private void init() {
 		serialization = null;
-		doctype = EncodingContext.DEFAULT_DOCTYPE;
+		doctype = Doctype.DEFAULT;
 		layout = "normal";
 		onload = null;
 	}
