@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -37,7 +37,7 @@ import javax.servlet.jsp.PageContext;
  */
 public class MetaTag extends AutoEncodingBufferedTag implements NameAttribute, ContentAttribute {
 
-	private Object name;
+	private String name;
 	private Object content;
 
 	@Override
@@ -51,7 +51,7 @@ public class MetaTag extends AutoEncodingBufferedTag implements NameAttribute, C
 	}
 
 	@Override
-	public void setName(Object name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -66,7 +66,7 @@ public class MetaTag extends AutoEncodingBufferedTag implements NameAttribute, C
 		Object myContent = content;
 		if(myContent==null) myContent = capturedBody.trim().toString();
 		Meta meta = new Meta(
-			Coercion.toString(name),
+			name,
 			Coercion.toString(myContent)
 		);
 		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());

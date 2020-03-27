@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,6 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.encoding.Coercion;
 import com.aoindustries.encoding.MediaType;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.taglib.AutoEncodingBufferedTag;
@@ -55,9 +54,9 @@ public class LinkTag
 		return MediaType.XHTML;
 	}
 
-	private Object rel;
+	private String rel;
 	private String href;
-	private Object type;
+	private String type;
 	private String conditionalCommentExpression;
 
 	public LinkTag() {
@@ -72,7 +71,7 @@ public class LinkTag
 	}
 
 	@Override
-	public void setRel(Object rel) {
+	public void setRel(String rel) {
 		this.rel = rel;
 	}
 
@@ -82,7 +81,7 @@ public class LinkTag
 	}
 
 	@Override
-	public void setType(Object type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -101,9 +100,9 @@ public class LinkTag
 		PageAttributesBodyTag.getPageAttributes(
 			(PageContext)getJspContext()
 		).addLink(
-			Coercion.toString(rel),
+			rel,
 			myHref,
-			Coercion.toString(type),
+			type,
 			conditionalCommentExpression
 		);
 	}
