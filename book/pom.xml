@@ -41,7 +41,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 
 		<javadoc.breadcrumbs><![CDATA[<a target="_top" href="https://aoindustries.com/aoweb-struts/">AOWeb Struts</a>
 / <a target="_top" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
-		<shortTitle>Core Book</shortTitle>
+		<shortTitle>${documented.shortTitle} Book</shortTitle>
 		<description.html><![CDATA[Documentation for <a target="_top" href="${project.url}">${documented.name}</a> in <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
 	</properties>
 
