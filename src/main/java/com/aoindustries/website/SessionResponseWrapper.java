@@ -196,6 +196,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				&& !iri.pathEndsWithIgnoreCase(".png")
 				&& !iri.pathEndsWithIgnoreCase(".svg")
 				&& !iri.pathEndsWithIgnoreCase(".txt")
+				&& !iri.pathEndsWithIgnoreCase(".webp")
 				&& !iri.pathEndsWithIgnoreCase(".zip")
 			) {
 				if(!canonical && session != null) {

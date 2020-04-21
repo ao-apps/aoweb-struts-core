@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-03-07T06:01:29-0600"
+		dateModified="2020-04-21T00:55:07-05:00"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -80,6 +80,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						<code>Logger.getLogger(…)</code> like normal.
 					</li>
 					<li>Integrated with <core:link book="/ao-web-resources" page="/index.jspx" />.</li>
+					<li>Added support for <ao:a href="https://developers.google.com/speed/webp">WebP images</ao:a>.</li>
 				</ul>
 			</changelog:release>
 		</c:if>
