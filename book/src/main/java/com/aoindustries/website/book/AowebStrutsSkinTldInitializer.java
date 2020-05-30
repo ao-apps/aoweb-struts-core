@@ -30,7 +30,7 @@ public class AowebStrutsSkinTldInitializer extends TagReferenceInitializer {
 
 	public AowebStrutsSkinTldInitializer() throws ValidationException {
 		super(
-			"AOWeb Struts Skin Taglib Reference",
+			Maven.properties.getProperty("project.name") + " Skin Taglib Reference",
 			"Skin Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-skin.tld",
