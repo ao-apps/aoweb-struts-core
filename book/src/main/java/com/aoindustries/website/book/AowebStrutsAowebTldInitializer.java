@@ -34,6 +34,7 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 			"AOWeb Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-aoweb.tld",
+			true,
 			Maven.properties.getProperty("documented.javadoc.link.javase"),
 			Maven.properties.getProperty("documented.javadoc.link.javaee"),
 			// Self
