@@ -157,6 +157,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<function>
 		<!-- datePublished="2019-05-20T20:26:39-0500" -->
+		<!-- dateModified="2020-06-09T03:12:48-05:00" -->
 		<description><![CDATA[
 			<p>
 				Formats a card number for display.  The card number may be a full or masked format.
@@ -167,7 +168,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				When <code>null</code>, <code>null</code> is returned.
 			</p>
 			<p>
-				When an empay string, after trimming, an empty string is returned.
+				When an empty string, after trimming, an empty string is returned.
 			</p>
 		]]></description>
 		<name>getCardNumberDisplay</name>
