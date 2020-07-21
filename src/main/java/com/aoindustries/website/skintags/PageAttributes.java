@@ -51,37 +51,14 @@ public class PageAttributes {
 
 	public static class Link {
 
-		/**
-		 * This matches the list documented in aoweb-struts-skin.tld
-		 */
-		public static boolean isValidConditionalCommentExpression(String conditionalCommentExpression) {
-			return
-				"IE 6".equals(conditionalCommentExpression)
-				|| "IE 7".equals(conditionalCommentExpression)
-				|| "IE 8".equals(conditionalCommentExpression)
-			;
-		}
-
 		private final String rel;
 		private final String href;
 		private final String type;
-		private final String conditionalCommentExpression;
 
-		Link(String rel, String href, String type, String conditionalCommentExpression) {
+		Link(String rel, String href, String type) {
 			this.rel = Strings.trimNullIfEmpty(rel);
 			this.href = Strings.nullIfEmpty(href);
 			this.type = Strings.trimNullIfEmpty(type);
-			if(conditionalCommentExpression==null || isValidConditionalCommentExpression(conditionalCommentExpression)) {
-				this.conditionalCommentExpression = conditionalCommentExpression;
-			} else {
-				throw new IllegalArgumentException(
-					accessor.getMessage(
-						"Invalid value for conditional comment expression.  Please refer to aoweb-struts-skin.tld for the valid values.",
-						Locale.getDefault(),
-						"skintags.PageAttributes.Link.conditionalCommentExpression.invalid"
-					)
-				);
-			}
 		}
 
 		public String getRel() {
@@ -98,10 +75,6 @@ public class PageAttributes {
 
 		public String getType() {
 			return type;
-		}
-
-		public String getConditionalCommentExpression() {
-			return conditionalCommentExpression;
 		}
 	}
 
@@ -206,9 +179,9 @@ public class PageAttributes {
 	 * prefer the {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
 	 * </p>
 	 */
-	public void addLink(String rel, String href, String type, String conditionalCommentExpression) {
+	public void addLink(String rel, String href, String type) {
 		if(links==null) links = new ArrayList<>();
-		links.add(new Link(rel, href, type, conditionalCommentExpression));
+		links.add(new Link(rel, href, type));
 	}
 
 	public String getTitle() {

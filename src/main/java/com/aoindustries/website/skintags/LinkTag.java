@@ -57,7 +57,6 @@ public class LinkTag
 	private String rel;
 	private String href;
 	private String type;
-	private String conditionalCommentExpression;
 
 	public LinkTag() {
 		init();
@@ -67,7 +66,6 @@ public class LinkTag
 		rel = null;
 		href = null;
 		type = null;
-		conditionalCommentExpression = null;
 	}
 
 	@Override
@@ -85,14 +83,6 @@ public class LinkTag
 		this.type = type;
 	}
 
-	public String getConditionalCommentExpression() {
-		return conditionalCommentExpression;
-	}
-
-	public void setConditionalCommentExpression(String conditionalCommentExpression) {
-		this.conditionalCommentExpression = conditionalCommentExpression;
-	}
-
 	@Override
 	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
 		String myHref = href;
@@ -102,8 +92,7 @@ public class LinkTag
 		).addLink(
 			rel,
 			myHref,
-			type,
-			conditionalCommentExpression
+			type
 		);
 	}
 }

@@ -88,9 +88,6 @@ public class TextSkin extends Skin {
 
 	public static final Style TEXTSKIN_CSS = new Style("/textskin/textskin.css");
 
-	@SuppressWarnings("deprecation")
-	public static final Style TEXTSKIN_IE6_CSS = Style.builder().uri("/textskin/textskin-ie6.css").ie("IE 6").build();
-
 	@WebListener
 	public static class Initializer implements ServletContextListener {
 		@Override
@@ -100,8 +97,7 @@ public class TextSkin extends Skin {
 				.styles
 				.add(
 					AoStyle.AO_STYLE,
-					TEXTSKIN_CSS,
-					TEXTSKIN_IE6_CSS
+					TEXTSKIN_CSS
 				);
 		}
 		@Override
@@ -634,15 +630,7 @@ public class TextSkin extends Skin {
 		try {
 			Html html = HtmlEE.get(servletContext, req, resp, out);
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
-				String conditionalCommentExpression = link.getConditionalCommentExpression();
-				if(conditionalCommentExpression != null) {
-					out.print("    <!--[if ");
-					out.print(conditionalCommentExpression);
-					out.print("]>\n"
-						+ "      ");
-				} else {
-					out.print("    ");
-				}
+				out.print("    ");
 				String href = link.getHref();
 				String rel = link.getRel();
 				html.link()
@@ -662,10 +650,6 @@ public class TextSkin extends Skin {
 					)
 					.type(link.getType())
 					.__().nl();
-
-				if(conditionalCommentExpression != null) {
-					out.print("    <![endif]-->\n");
-				}
 			}
 		} catch(IOException err) {
 			throw new JspException(err);

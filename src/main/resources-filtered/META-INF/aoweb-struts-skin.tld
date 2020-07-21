@@ -193,7 +193,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-0500" -->
-		<!-- dateModified="2020-03-27T00:33:46-05:00" -->
+		<!-- dateModified="2020-07-20T19:59:39-05:00" -->
 		<description><![CDATA[
 			<p>
 				Adds a link tag to <a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageAttributes.html">this page</a>.
@@ -211,7 +211,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		]]></description>
 		<name>link</name>
 		<tag-class>com.aoindustries.website.skintags.LinkTag</tag-class>
-		<tei-class>com.aoindustries.website.skintags.LinkTagTEI</tei-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -252,26 +251,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				</p>
 			]]></description>
 			<name>type</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.lang.String</type>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-				<p>
-					If provided, will enclose the link in an IE conditional comment.  This
-					is useful to include specific stylesheets for specific versions of IE.
-					The accepted values are:
-				</p>
-				<table>
-					<tbody>
-						<tr><th><code>IE 6</code></th><td>Uses the link for IE 6 only.</td></tr>
-						<tr><th><code>IE 7</code></th><td>Uses the link for IE 7 or IE 8 in compatibility mode.</td></tr>
-						<tr><th><code>IE 8</code></th><td>Uses the link for IE 8 only.</td></tr>
-					</tbody>
-				</table>
-			]]></description>
-			<name>conditionalCommentExpression</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
