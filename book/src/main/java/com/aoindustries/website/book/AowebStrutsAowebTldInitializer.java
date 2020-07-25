@@ -29,7 +29,7 @@ public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {
 
 	public AowebStrutsAowebTldInitializer() throws ValidationException {
 		super(
-			Maven.properties.getProperty("project.name") + " AOWeb Taglib Reference",
+			Maven.properties.getProperty("documented.name") + " AOWeb Taglib Reference",
 			"AOWeb Taglib Reference",
 			"/aoweb-struts/core",
 			"/aoweb-struts-aoweb.tld",
