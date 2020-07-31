@@ -48,6 +48,7 @@ import com.aoindustries.servlet.lastmodified.AddLastModified;
 import com.aoindustries.servlet.lastmodified.LastModifiedUtil;
 import com.aoindustries.style.AoStyle;
 import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
+import com.aoindustries.taglib.GlobalAttributes;
 import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.web.resources.registry.Group;
@@ -187,7 +188,7 @@ public class TextSkin extends Skin {
 			html.xmlDeclaration(resp.getCharacterEncoding());
 			html.doctype();
 			// Write <html>
-			HtmlTag.beginHtmlTag(resp, out, html.serialization, null);
+			HtmlTag.beginHtmlTag(resp, out, html.serialization, (GlobalAttributes)null);
 			out.write('\n');
 			
 			String layout = pageAttributes.getLayout();
