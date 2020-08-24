@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-07-20T20:58:54-05:00"
+		dateModified="2020-08-24T01:27:27-05:00"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -82,6 +82,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Integrated with <core:link book="/ao-web-resources" page="/index.jspx" />.</li>
 					<li>Added support for <ao:a href="https://developers.google.com/speed/webp">WebP images</ao:a>.</li>
 					<li>Removed support or IE 6, 7, 8, and 9 since all are end-of-life.</li>
+					<li>
+						Added support for Web development file types <code>*.less</code>, <code>*.sass</code>,
+						<code>*.scss</code>, <code>*.css.map</code>, and <code>*.js.map</code>.
+					</li>
 				</ul>
 			</changelog:release>
 		</c:if>

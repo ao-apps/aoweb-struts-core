@@ -181,9 +181,15 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 		if(canonical || session == null || session.isNew() || request.isRequestedSessionIdFromURL()) {
 			IRI iri = new IRI(url);
 			// Don't add for certains file types
+			// TODO: This list is getting long.  Use a map?
 			if(
-				// Matches LocaleFilter
-				// Matches NoSessionFilter
+				// Matches LocaleFilter.java
+				// Matches NoSessionFilter.java
+				// Is SessionResponseWrapper.java
+				// Related to LastModifiedServlet.java
+				// Related to ao-mime-types/…/web-fragment.xml
+				// Related to ContentType.java
+				// Related to MimeType.java
 				!iri.pathEndsWithIgnoreCase(".bmp")
 				&& !iri.pathEndsWithIgnoreCase(".css")
 				&& !iri.pathEndsWithIgnoreCase(".dia")
@@ -198,6 +204,12 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 				&& !iri.pathEndsWithIgnoreCase(".txt")
 				&& !iri.pathEndsWithIgnoreCase(".webp")
 				&& !iri.pathEndsWithIgnoreCase(".zip")
+				// Web development
+				&& !iri.pathEndsWithIgnoreCase(".less")
+				&& !iri.pathEndsWithIgnoreCase(".sass")
+				&& !iri.pathEndsWithIgnoreCase(".scss")
+				&& !iri.pathEndsWithIgnoreCase(".css.map")
+				&& !iri.pathEndsWithIgnoreCase(".js.map")
 			) {
 				if(!canonical && session != null) {
 					// Use the default servlet container jsessionid when any session object exists besides
