@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -43,10 +43,10 @@ final public class SignupHelper {
 	 * the session will create the form, set its servlet, and add it to the
 	 * session.
 	 */
-	public static <T extends ActionForm> T getSessionActionForm(ActionServlet servlet, HttpSession session, Class<T> clazz, String name) throws InstantiationException, IllegalAccessException {
+	public static <T extends ActionForm> T getSessionActionForm(ActionServlet servlet, HttpSession session, Class<T> clazz, String name) throws ReflectiveOperationException {
 		Object existing = session.getAttribute(name);
 		if(existing!=null) return clazz.cast(existing);
-		T form = clazz.newInstance();
+		T form = clazz.getConstructor().newInstance();
 		form.setServlet(servlet);
 		session.setAttribute(name, form);
 		return form;
