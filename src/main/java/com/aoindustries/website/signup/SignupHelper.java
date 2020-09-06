@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website.signup;
 
+import java.lang.reflect.InvocationTargetException;
 import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionServlet;
@@ -43,7 +44,7 @@ final public class SignupHelper {
 	 * the session will create the form, set its servlet, and add it to the
 	 * session.
 	 */
-	public static <T extends ActionForm> T getSessionActionForm(ActionServlet servlet, HttpSession session, Class<T> clazz, String name) throws ReflectiveOperationException {
+	public static <T extends ActionForm> T getSessionActionForm(ActionServlet servlet, HttpSession session, Class<T> clazz, String name) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		Object existing = session.getAttribute(name);
 		if(existing!=null) return clazz.cast(existing);
 		T form = clazz.getConstructor().newInstance();
