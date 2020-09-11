@@ -27,14 +27,9 @@ import com.aoindustries.aoserv.client.net.Bind;
 import com.aoindustries.aoserv.client.reseller.Brand;
 import com.aoindustries.website.SiteSettings;
 import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,6 +70,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 	}
 
 	@Override
+	@SuppressWarnings({"ResultOfObjectAllocationIgnored", "UseSpecificCatch", "TooBroadCatch", "SleepWhileInLoop"})
 	public void run() {
 		Thread currentThread = Thread.currentThread();
 		ServletContext myServletContext = this.servletContext;
@@ -109,8 +105,10 @@ public class VncConsoleProxySocketServer implements Runnable {
 						new VncConsoleProxySocketHandler(servletContext, rootConn, socket);
 					}
 				}
-			} catch(RuntimeException | IOException | InvalidAlgorithmParameterException | KeyManagementException | NoSuchAlgorithmException | SQLException T) {
-				logger.log(Level.SEVERE, null, T);
+			} catch(ThreadDeath td) {
+				throw td;
+			} catch(Throwable t) {
+				logger.log(Level.SEVERE, null, t);
 			}
 			if(currentThread==this.thread) {
 				try {

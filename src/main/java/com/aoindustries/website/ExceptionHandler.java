@@ -23,15 +23,12 @@
 package com.aoindustries.website;
 
 import com.aoindustries.exception.WrappedExceptions;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -46,6 +43,7 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 	private static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());
 
 	@Override
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	public ActionForward execute(Exception exception, ExceptionConfig config, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		ServletContext servletContext = request.getServletContext();
 
@@ -76,8 +74,10 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 		Locale locale;
 		try {
 			locale = LocaleAction.getEffectiveLocale(siteSettings, request, response);
-		} catch(RuntimeException | IOException | SQLException | JspException err) {
-			logger.log(Level.SEVERE, null, err);
+		} catch(ThreadDeath td) {
+			throw td;
+		} catch(Throwable t) {
+			logger.log(Level.SEVERE, null, t);
 			// Use default locale
 			locale = Locale.getDefault();
 		}
@@ -87,8 +87,10 @@ public class ExceptionHandler extends org.apache.struts.action.ExceptionHandler 
 		Skin skin;
 		try {
 			skin = SkinAction.getSkin(siteSettings, request, response);
-		} catch(RuntimeException | JspException err) {
-			logger.log(Level.SEVERE, null, err);
+		} catch(ThreadDeath td) {
+			throw td;
+		} catch(Throwable t) {
+			logger.log(Level.SEVERE, null, t);
 			// Use text skin
 			skin = TextSkin.getInstance();
 		}

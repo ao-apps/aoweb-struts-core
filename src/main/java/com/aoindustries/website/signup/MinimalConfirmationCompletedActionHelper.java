@@ -41,17 +41,14 @@ import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.TextSkin;
 import static com.aoindustries.website.signup.ApplicationResources.accessor;
 import java.io.CharArrayWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionServlet;
 
@@ -66,6 +63,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 	private MinimalConfirmationCompletedActionHelper() {}
 
 	// TODO: Have this generate a ticket instead, with full details.  Remove "all except bank card numbers" in other places once done.
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	public static void sendSupportSummaryEmail(
 		ActionServlet servlet,
 		HttpServletRequest request,
@@ -79,8 +77,10 @@ final public class MinimalConfirmationCompletedActionHelper {
 	) {
 		try {
 			sendSummaryEmail(servlet, request, pkey, statusKey, siteSettings.getBrand().getAowebStrutsSignupAdminAddress(), siteSettings, packageDefinition, signupOrganizationForm, signupTechnicalForm, signupBillingInformationForm);
-		} catch(RuntimeException | IOException | SQLException err) {
-			servlet.log("Unable to send sign up details to support admin address", err);
+		} catch(ThreadDeath td) {
+			throw td;
+		} catch(Throwable t) {
+			servlet.log("Unable to send sign up details to support admin address", t);
 		}
 	}
 
@@ -119,7 +119,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 	/**
 	 * Sends a summary email and returns <code>true</code> if successful.
 	 */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation", "UseSpecificCatch", "TooBroadCatch"})
 	private static boolean sendSummaryEmail(
 		ActionServlet servlet,
 		HttpServletRequest request,
@@ -236,8 +236,10 @@ final public class MinimalConfirmationCompletedActionHelper {
 			);
 
 			return true;
-		} catch(RuntimeException | IOException | SQLException | MessagingException err) {
-			servlet.log("Unable to send sign up details to "+recipient, err);
+		} catch(ThreadDeath td) {
+			throw td;
+		} catch(Throwable t) {
+			servlet.log("Unable to send sign up details to "+recipient, t);
 			return false;
 		}
 	}

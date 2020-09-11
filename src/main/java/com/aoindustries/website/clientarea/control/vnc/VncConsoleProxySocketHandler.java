@@ -101,6 +101,7 @@ public class VncConsoleProxySocketHandler {
 		(byte)'8',
 		(byte)'\n'
 	};
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch", "UtilityClassWithPublicConstructor", "CallToThreadStartDuringObjectConstruction"})
 	public VncConsoleProxySocketHandler(final ServletContext servletContext, final AOServConnector rootConn, final Socket socket) {
 		// This thread will read from socket
 		Thread thread = new Thread(
@@ -133,7 +134,9 @@ public class VncConsoleProxySocketHandler {
 					socketOut.write(challenge);
 					socketOut.flush();
 					byte[] response = new byte[16];
-					for(int c=0;c<16;c++) if((response[c] = (byte)socketIn.read())==-1) throw new EOFException("EOF from socketIn");
+					for(int c=0;c<16;c++) {
+						if((response[c] = (byte)socketIn.read())==-1) throw new EOFException("EOF from socketIn");
+					}
 					VirtualServer virtualServer = null;
 					for(VirtualServer vs : rootConn.getInfrastructure().getVirtualServer().getRows()) {
 						String vncPassword = vs.getVncPassword();
@@ -215,7 +218,9 @@ public class VncConsoleProxySocketHandler {
 									);
 								}
 								// VNC Authentication
-								for(int c=0;c<16;c++) if((challenge[c] = (byte)daemonIn.read())==-1) throw new EOFException("EOF from daemonIn");
+								for(int c=0;c<16;c++) {
+									if((challenge[c] = (byte)daemonIn.read())==-1) throw new EOFException("EOF from daemonIn");
+								}
 								response = desCipher(challenge, virtualServer.getVncPassword());
 								daemonOut.write(response);
 								daemonOut.flush();
@@ -252,8 +257,10 @@ public class VncConsoleProxySocketHandler {
 											} finally {
 												daemonConn.close();
 											}
-										} catch(RuntimeException | IOException T) {
-											logger.log(Level.SEVERE, null, T);
+										} catch(ThreadDeath td) {
+											throw td;
+										} catch(Throwable t) {
+											logger.log(Level.SEVERE, null, t);
 										}
 									},
 									"VncConsoleProxySocketHandler socketIn->daemonOut"
@@ -290,8 +297,10 @@ public class VncConsoleProxySocketHandler {
 					) {
 						logger.log(Level.INFO, null, err);
 					}
-				} catch(RuntimeException | IOException | InterruptedException | SQLException T) {
-					logger.log(Level.SEVERE, null, T);
+				} catch(ThreadDeath td) {
+					throw td;
+				} catch(Throwable t) {
+					logger.log(Level.SEVERE, null, t);
 				} finally {
 					try {
 						socket.close();

@@ -40,8 +40,8 @@ import com.aoindustries.creditcards.TokenizedCreditCard;
 import com.aoindustries.creditcards.Transaction;
 import com.aoindustries.creditcards.TransactionRequest;
 import com.aoindustries.creditcards.TransactionResult;
-import com.aoindustries.net.Email;
 import com.aoindustries.lang.Strings;
+import com.aoindustries.net.Email;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
@@ -83,6 +83,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	}
 
 	@Override
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	final public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
@@ -348,9 +349,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								storeCard(rootProcessor, principal, accountGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
-							} catch(IOException | SQLException | RuntimeException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
+							} catch(ThreadDeath td) {
+								throw td;
+							} catch(Throwable t) {
+								getServlet().log("Unable to store card", t);
+								request.setAttribute("storeError", t);
 								storeSuccess = false;
 							}
 							if(storeSuccess && "automatic".equals(storeCard)) {
@@ -358,9 +361,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								try {
 									setAutomatic(rootConn, newCreditCard, account);
 									request.setAttribute("cardSetAutomatic", "true");
-								} catch(SQLException | RuntimeException err) {
-									getServlet().log("Unable to set automatic", err);
-									request.setAttribute("setAutomaticError", err);
+								} catch(ThreadDeath td) {
+									throw td;
+								} catch(Throwable t) {
+									getServlet().log("Unable to set automatic", t);
+									request.setAttribute("setAutomaticError", t);
 								}
 							}
 						}
@@ -435,9 +440,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								storeCard(rootProcessor, principal, accountGroup, newCreditCard);
 								request.setAttribute("cardStored", "true");
 								storeSuccess = true;
-							} catch(IOException | SQLException | RuntimeException err) {
-								getServlet().log("Unable to store card", err);
-								request.setAttribute("storeError", err);
+							} catch(ThreadDeath td) {
+								throw td;
+							} catch(Throwable t) {
+								getServlet().log("Unable to store card", t);
+								request.setAttribute("storeError", t);
 								storeSuccess = false;
 							}
 							if(storeSuccess && "automatic".equals(storeCard)) {
@@ -445,9 +452,11 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 								try {
 									setAutomatic(rootConn, newCreditCard, account);
 									request.setAttribute("cardSetAutomatic", "true");
-								} catch(SQLException | RuntimeException err) {
-									getServlet().log("Unable to set automatic", err);
-									request.setAttribute("setAutomaticError", err);
+								} catch(ThreadDeath td) {
+									throw td;
+								} catch(Throwable t) {
+									getServlet().log("Unable to set automatic", t);
+									request.setAttribute("setAutomaticError", t);
 								}
 							}
 						}
