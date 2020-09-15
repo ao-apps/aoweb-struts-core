@@ -52,6 +52,7 @@ import javax.servlet.ServletContext;
  *
  * @author  AO Industries, Inc.
  */
+// Matches VncConsoleTunnel
 public class VncConsoleProxySocketHandler {
 
 	private static final Logger logger = Logger.getLogger(VncConsoleProxySocketHandler.class.getName());
@@ -172,119 +173,121 @@ public class VncConsoleProxySocketHandler {
 							AOServClientConfiguration.getSslTruststorePath(),
 							AOServClientConfiguration.getSslTruststorePassword()
 						);
-						final AOServDaemonConnection daemonConn=daemonConnector.getConnection();
-						try {
-							final StreamableOutput daemonOut = daemonConn.getRequestOut(AOServDaemonProtocol.VNC_CONSOLE);
-							daemonOut.writeLong(daemonAccess.getKey());
-							daemonOut.flush();
-
-							final StreamableInput daemonIn = daemonConn.getResponseIn();
-							int result=daemonIn.read();
-							if(result==AOServDaemonProtocol.NEXT) {
-								// Authenticate to actual VNC
-								// Protocol Version handshake
-								for(int c=0; c<protocolVersion_3_3.length; c++) {
-									int b = daemonIn.read();
-									if(b==-1) throw new EOFException("EOF from daemonIn");
-									if(
-										protocolVersion_3_3[c]!=b // Hardware virtualized
-										&& protocolVersion_3_8[c]!=b // Paravirtualized
-									) throw new IOException("Mismatched protocolVersion from VNC server through daemon: #"+c+": "+(char)b);
-								}
-								daemonOut.write(protocolVersion_3_3);
+						try (AOServDaemonConnection daemonConn = daemonConnector.getConnection()) {
+							try {
+								final StreamableOutput daemonOut = daemonConn.getRequestOut(AOServDaemonProtocol.VNC_CONSOLE);
+								daemonOut.writeLong(daemonAccess.getKey());
 								daemonOut.flush();
-								// Security Type
-								{
-									int securityType1 = daemonIn.read();
-									if(securityType1 == -1) throw new EOFException("EOF from daemonIn reading securityType1");
-									int securityType2 = daemonIn.read();
-									if(securityType2 == -1) throw new EOFException("EOF from daemonIn reading securityType2");
-									int securityType3 = daemonIn.read();
-									if(securityType3 == -1) throw new EOFException("EOF from daemonIn reading securityType3");
-									int securityType4 = daemonIn.read();
-									if(securityType4 == -1) throw new EOFException("EOF from daemonIn reading securityType4");
-									if(
-										securityType1 != 0
-										|| securityType2 != 0
-										|| securityType3 != 0
-										|| securityType4 != 2
-									) throw new IOException(
-										"Mismatched security type from VNC server through daemon: ("
-										+ securityType1
-										+ ", " + securityType2
-										+ ", " + securityType3
-										+ ", " + securityType4
-										+ ")"
-									);
-								}
-								// VNC Authentication
-								for(int c=0;c<16;c++) {
-									if((challenge[c] = (byte)daemonIn.read())==-1) throw new EOFException("EOF from daemonIn");
-								}
-								response = desCipher(challenge, virtualServer.getVncPassword());
-								daemonOut.write(response);
-								daemonOut.flush();
-								if(
-									daemonIn.read()!=0
-									|| daemonIn.read()!=0
-									|| daemonIn.read()!=0
-									|| daemonIn.read()!=0
-								) {
-									Thread.sleep(5000);
-									socketOut.write(0);
-									socketOut.write(0);
-									socketOut.write(0);
-									socketOut.write(1);
-									socketOut.flush();
-									throw new IOException("Authentication to real VNC server failed");
-								}
-								socketOut.write(0);
-								socketOut.write(0);
-								socketOut.write(0);
-								socketOut.write(0);
 
-								// socketIn -> daemonOut in another thread
-								Thread inThread = new Thread(
-									() -> {
-										try {
+								final StreamableInput daemonIn = daemonConn.getResponseIn();
+								int result=daemonIn.read();
+								if(result==AOServDaemonProtocol.NEXT) {
+									// Authenticate to actual VNC
+									// Protocol Version handshake
+									for(int c=0; c<protocolVersion_3_3.length; c++) {
+										int b = daemonIn.read();
+										if(b==-1) throw new EOFException("EOF from daemonIn");
+										if(
+											protocolVersion_3_3[c]!=b // Hardware virtualized
+											&& protocolVersion_3_8[c]!=b // Paravirtualized
+										) throw new IOException("Mismatched protocolVersion from VNC server through daemon: #"+c+": "+(char)b);
+									}
+									daemonOut.write(protocolVersion_3_3);
+									daemonOut.flush();
+									// Security Type
+									{
+										int securityType1 = daemonIn.read();
+										if(securityType1 == -1) throw new EOFException("EOF from daemonIn reading securityType1");
+										int securityType2 = daemonIn.read();
+										if(securityType2 == -1) throw new EOFException("EOF from daemonIn reading securityType2");
+										int securityType3 = daemonIn.read();
+										if(securityType3 == -1) throw new EOFException("EOF from daemonIn reading securityType3");
+										int securityType4 = daemonIn.read();
+										if(securityType4 == -1) throw new EOFException("EOF from daemonIn reading securityType4");
+										if(
+											securityType1 != 0
+											|| securityType2 != 0
+											|| securityType3 != 0
+											|| securityType4 != 2
+										) throw new IOException(
+											"Mismatched security type from VNC server through daemon: ("
+											+ securityType1
+											+ ", " + securityType2
+											+ ", " + securityType3
+											+ ", " + securityType4
+											+ ")"
+										);
+									}
+									// VNC Authentication
+									for(int c=0;c<16;c++) {
+										if((challenge[c] = (byte)daemonIn.read())==-1) throw new EOFException("EOF from daemonIn");
+									}
+									response = desCipher(challenge, virtualServer.getVncPassword());
+									daemonOut.write(response);
+									daemonOut.flush();
+									if(
+										daemonIn.read()!=0
+										|| daemonIn.read()!=0
+										|| daemonIn.read()!=0
+										|| daemonIn.read()!=0
+									) {
+										Thread.sleep(5000);
+										socketOut.write(0);
+										socketOut.write(0);
+										socketOut.write(0);
+										socketOut.write(1);
+										socketOut.flush();
+										throw new IOException("Authentication to real VNC server failed");
+									}
+									socketOut.write(0);
+									socketOut.write(0);
+									socketOut.write(0);
+									socketOut.write(0);
+
+									// socketIn -> daemonOut in another thread
+									Thread inThread = new Thread(
+										() -> {
 											try {
-												byte[] buff = new byte[4096];
-												int ret;
-												while((ret=socketIn.read(buff, 0, 4096))!=-1) {
-													daemonOut.write(buff, 0, ret);
-													daemonOut.flush();
+												try {
+													byte[] buff = new byte[4096];
+													int ret;
+													while((ret=socketIn.read(buff, 0, 4096))!=-1) {
+														daemonOut.write(buff, 0, ret);
+														daemonOut.flush();
+													}
+												} finally {
+													// Always close after VNC tunnel since this is a connection-terminal command
+													daemonConn.abort();
 												}
-											} finally {
-												daemonConn.close();
+											} catch(ThreadDeath td) {
+												throw td;
+											} catch(Throwable t) {
+												logger.log(Level.SEVERE, null, t);
 											}
-										} catch(ThreadDeath td) {
-											throw td;
-										} catch(Throwable t) {
-											logger.log(Level.SEVERE, null, t);
-										}
-									},
-									"VncConsoleProxySocketHandler socketIn->daemonOut"
-								);
-								inThread.setDaemon(true); // Don't prevent JVM shutdown
-								inThread.setPriority(Thread.NORM_PRIORITY+2); // Higher priority for higher performance
-								inThread.start();
+										},
+										"VncConsoleProxySocketHandler socketIn->daemonOut"
+									);
+									inThread.setDaemon(true); // Don't prevent JVM shutdown
+									inThread.setPriority(Thread.NORM_PRIORITY+2); // Higher priority for higher performance
+									inThread.start();
 
-								// daemonIn -> socketOut in this thread
-								byte[] buff = new byte[4096];
-								int ret;
-								while((ret=daemonIn.read(buff, 0, 4096))!=-1) {
-									socketOut.write(buff, 0, ret);
-									socketOut.flush();
+									// daemonIn -> socketOut in this thread
+									byte[] buff = new byte[4096];
+									int ret;
+									while((ret=daemonIn.read(buff, 0, 4096))!=-1) {
+										socketOut.write(buff, 0, ret);
+										socketOut.flush();
+									}
+								} else {
+									if (result == AOServDaemonProtocol.IO_EXCEPTION) throw new IOException(daemonIn.readUTF());
+									else if (result == AOServDaemonProtocol.SQL_EXCEPTION) throw new SQLException(daemonIn.readUTF());
+									else if (result==-1) throw new EOFException("EOF from daemonIn");
+									else throw new IOException("Unknown result: " + result);
 								}
-							} else {
-								if (result == AOServDaemonProtocol.IO_EXCEPTION) throw new IOException(daemonIn.readUTF());
-								else if (result == AOServDaemonProtocol.SQL_EXCEPTION) throw new SQLException(daemonIn.readUTF());
-								else if (result==-1) throw new EOFException("EOF from daemonIn");
-								else throw new IOException("Unknown result: " + result);
+							} finally {
+								// Always close after VNC tunnel since this is a connection-terminal command
+								daemonConn.abort();
 							}
-						} finally {
-							daemonConn.close(); // Always close after VNC tunnel
-							daemonConnector.releaseConnection(daemonConn);
 						}
 					}
 				} catch(SocketException err) {
