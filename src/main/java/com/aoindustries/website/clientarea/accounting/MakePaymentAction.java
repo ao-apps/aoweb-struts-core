@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,6 +25,7 @@ package com.aoindustries.website.clientarea.accounting;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.TransactionTable;
+import com.aoindustries.collections.AoCollections;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
@@ -32,7 +33,6 @@ import com.aoindustries.website.AuthenticatedAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.util.Currency;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class MakePaymentAction extends AuthenticatedAction {
 
 		// Get the list of accounts that are not canceled or have a non-zero balance, or are thisAccount
 		List<Account> allAccounts = aoConn.getAccount().getAccount().getRows();
-		Map<Account,Monies> accountsAndBalances = new LinkedHashMap<>(allAccounts.size() *4/3+1);
+		Map<Account,Monies> accountsAndBalances = AoCollections.newLinkedHashMap(allAccounts.size());
 		for(Account account : allAccounts) {
 			Monies accountBalance = transactionTable.getAccountBalance(account);
 			if(
