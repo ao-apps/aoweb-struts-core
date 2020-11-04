@@ -22,14 +22,17 @@
  */
 package com.aoindustries.website.aowebtags;
 
-import com.aoindustries.encoding.ChainWriter;
+import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
+import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -45,6 +48,102 @@ public class DateTimeTag extends BodyTagSupport {
 	 * The request attribute name used to store the sequence.
 	 */
 	private static final String SEQUENCE_REQUEST_ATTRIBUTE = DateTimeTag.class.getName() + ".sequence";
+
+	/**
+	 * Writes a JavaScript script tag that shows a date and time in the user's locale.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDateTime(long)
+	 */
+	public static void writeDateTimeJavaScript(long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		String dateTimeString = SQLUtility.formatDateTime(date);
+		long id = sequence.getNextSequenceValue();
+		String idString = Long.toString(id);
+		// Write the element
+		out.append("<span id=\"chainWriterDateTime");
+		out.append(idString);
+		out.append("\">");
+		encodeTextInXhtml(dateTimeString, out);
+		out.append("</span>");
+		// Write the shared script only on first sequence
+		if(id == 1) {
+			scriptOut.append("  function chainWriterUpdateDateTime(id, millis, serverValue) {\n"
+						   + "    if(document.getElementById) {\n"
+						   + "      var date=new Date(millis);\n"
+						   + "      var clientValue=date.getFullYear() + \"-\";\n"
+						   + "      var month=date.getMonth()+1;\n"
+						   + "      if(month<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=month+\"-\";\n"
+						   + "      var day=date.getDate();\n"
+						   + "      if(day<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=day+\" \";\n"
+						   + "      var hour=date.getHours();\n"
+						   + "      if(hour<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=hour+\":\";\n"
+						   + "      var minute=date.getMinutes();\n"
+						   + "      if(minute<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=minute+\":\";\n"
+						   + "      var second=date.getSeconds();\n"
+						   + "      if(second<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=second;\n"
+						   + "      if(clientValue!=serverValue) document.getElementById(\"chainWriterDateTime\"+id).firstChild.nodeValue=clientValue;\n"
+						   + "    }\n"
+						   + "  }\n");
+		}
+		scriptOut.append("  chainWriterUpdateDateTime(");
+		scriptOut.append(idString);
+		scriptOut.append(", ");
+		scriptOut.append(Long.toString(date));
+		scriptOut.append(", \"");
+		encodeJavaScriptInXhtml(dateTimeString, scriptOut);
+		scriptOut.append("\");\n");
+	}
+
+	/**
+	 * Writes a JavaScript script tag that shows a date and time in the user's locale.
+	 * Prints nothing when the date is {@code null}.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDateTime(java.lang.Long)
+	 */
+	public static void writeDateTimeJavaScript(Long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateTimeJavaScript(date.longValue(), sequence, out, scriptOut);
+	}
+
+	/**
+	 * Writes a JavaScript script tag that shows a date and time in the user's locale.
+	 * Prints nothing when the date is {@code null}.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDateTime(java.util.Date)
+	 */
+	public static void writeDateTimeJavaScript(Date date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateTimeJavaScript(date.getTime(), sequence, out, scriptOut);
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,10 +169,10 @@ public class DateTimeTag extends BodyTagSupport {
 				// Resolve the scriptOut
 				ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
 				if(scriptGroupTag != null) {
-					ChainWriter.writeDateTimeJavaScript(date, sequence, out, scriptGroupTag.getScriptOut());
+					writeDateTimeJavaScript(date, sequence, out, scriptGroupTag.getScriptOut());
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
-					ChainWriter.writeDateTimeJavaScript(date, sequence, out, scriptOut);
+					writeDateTimeJavaScript(date, sequence, out, scriptOut);
 					Html html = HtmlEE.get(
 						pageContext.getServletContext(),
 						request,

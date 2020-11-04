@@ -22,14 +22,17 @@
  */
 package com.aoindustries.website.aowebtags;
 
-import com.aoindustries.encoding.ChainWriter;
+import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
+import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -45,6 +48,93 @@ public class DateTag extends BodyTagSupport {
 	 * The request attribute name used to store the sequence.
 	 */
 	private static final String SEQUENCE_REQUEST_ATTRIBUTE = DateTag.class.getName() + ".sequence";
+
+	/**
+	 * Writes a JavaScript script tag that shows a date in the user's locale.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDate(long)
+	 */
+	public static void writeDateJavaScript(long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		String dateString = SQLUtility.formatDate(date);
+		long id = sequence.getNextSequenceValue();
+		String idString = Long.toString(id);
+		// Write the element
+		out.append("<span id=\"chainWriterDate");
+		out.append(idString);
+		out.append("\">");
+		encodeTextInXhtml(dateString, out);
+		out.append("</span>");
+		// Write the shared script only on first sequence
+		if(id == 1) {
+			scriptOut.append("  function chainWriterUpdateDate(id, millis, serverValue) {\n"
+						   + "    if(document.getElementById) {\n"
+						   + "      var date=new Date(millis);\n"
+						   + "      var clientValue=date.getFullYear() + \"-\";\n"
+						   + "      var month=date.getMonth()+1;\n"
+						   + "      if(month<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=month+\"-\";\n"
+						   + "      var day=date.getDate();\n"
+						   + "      if(day<10) clientValue+=\"0\";\n"
+						   + "      clientValue+=day;\n"
+						   + "      if(clientValue!=serverValue) document.getElementById(\"chainWriterDate\"+id).firstChild.nodeValue=clientValue;\n"
+						   + "    }\n"
+						   + "  }\n");
+		}
+		scriptOut.append("  chainWriterUpdateDate(");
+		scriptOut.append(idString);
+		scriptOut.append(", ");
+		scriptOut.append(Long.toString(date));
+		scriptOut.append(", \"");
+		encodeJavaScriptInXhtml(dateString, scriptOut);
+		scriptOut.append("\");\n");
+	}
+
+	/**
+	 * Writes a JavaScript script tag that shows a date in the user's locale.
+	 * Prints nothing when the date is {@code null}.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDate(java.lang.Long)
+	 */
+	public static void writeDateJavaScript(Long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateJavaScript(date.longValue(), sequence, out, scriptOut);
+	}
+
+	/**
+	 * Writes a JavaScript script tag that shows a date in the user's locale.
+	 * Prints nothing when the date is {@code null}.
+	 * <p>
+	 * Because this needs to modify the DOM it can lead to poor performance or large data sets.
+	 * To provide more performance options, the JavaScript is written to scriptOut.  This could
+	 * then be buffered into one long script to execute at once or using body.onload.
+	 * </p>
+	 * <p>
+	 * The provided sequence should start at one for any given HTML page because parts of the
+	 * script will only be written when the sequence is equal to one.
+	 * </p>
+	 *
+	 * @see  SQLUtility#formatDate(java.util.Date)
+	 */
+	public static void writeDateJavaScript(Date date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateJavaScript(date.getTime(), sequence, out, scriptOut);
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,10 +160,10 @@ public class DateTag extends BodyTagSupport {
 				// Resolve the scriptOut
 				ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
 				if(scriptGroupTag != null) {
-					ChainWriter.writeDateJavaScript(date, sequence, out, scriptGroupTag.getScriptOut());
+					writeDateJavaScript(date, sequence, out, scriptGroupTag.getScriptOut());
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
-					ChainWriter.writeDateJavaScript(date, sequence, out, scriptOut);
+					writeDateJavaScript(date, sequence, out, scriptOut);
 					Html html = HtmlEE.get(
 						pageContext.getServletContext(),
 						request,
