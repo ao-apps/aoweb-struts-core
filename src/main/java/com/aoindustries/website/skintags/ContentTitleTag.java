@@ -23,8 +23,8 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
+import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
 import com.aoindustries.io.buffer.BufferResult;
-import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.website.Skin;
 import java.io.IOException;
 import java.io.Writer;
@@ -34,14 +34,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
 
 /**
  * @author  AO Industries, Inc.
  */
-public class ContentTitleTag extends AutoEncodingBufferedTag {
+public class ContentTitleTag extends EncodingBufferedSimpleTag {
 
 	@Override
 	public MediaType getContentType() {

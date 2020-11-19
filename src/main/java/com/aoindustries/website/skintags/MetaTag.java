@@ -24,8 +24,8 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.Coercion;
 import com.aoindustries.encoding.MediaType;
+import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
 import com.aoindustries.io.buffer.BufferResult;
-import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.taglib.ContentAttribute;
 import com.aoindustries.taglib.NameAttribute;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * @author  AO Industries, Inc.
  */
-public class MetaTag extends AutoEncodingBufferedTag implements NameAttribute, ContentAttribute {
+public class MetaTag extends EncodingBufferedSimpleTag implements NameAttribute, ContentAttribute {
 
 	private String name;
 	private Object content;

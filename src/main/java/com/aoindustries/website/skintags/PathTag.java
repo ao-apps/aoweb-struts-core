@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -23,10 +23,10 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
+import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.net.URIParametersMap;
 import com.aoindustries.net.URIParametersUtils;
-import com.aoindustries.taglib.AutoEncodingBufferedTag;
 import com.aoindustries.taglib.ParamsAttribute;
 import java.io.IOException;
 import java.io.Writer;
@@ -37,7 +37,7 @@ import javax.servlet.jsp.PageContext;
  *
  * @author  AO Industries, Inc.
  */
-public class PathTag extends AutoEncodingBufferedTag implements ParamsAttribute {
+public class PathTag extends EncodingBufferedSimpleTag implements ParamsAttribute {
 
 	private static final long serialVersionUID = 1L;
 
