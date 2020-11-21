@@ -23,7 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
-import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
+import com.aoindustries.encoding.taglib.EncodingBufferedTag;
 import com.aoindustries.io.buffer.BufferResult;
 import java.io.IOException;
 import java.io.Writer;
@@ -32,7 +32,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * @author  AO Industries, Inc.
  */
-public class KeywordsTag extends EncodingBufferedSimpleTag {
+public class KeywordsTag extends EncodingBufferedTag {
 
 	@Override
 	public MediaType getContentType() {

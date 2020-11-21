@@ -27,7 +27,6 @@ import static com.aoindustries.website.ApplicationResources.accessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * During the processing of the skin, page attributes are built and stored here, one instance per request.

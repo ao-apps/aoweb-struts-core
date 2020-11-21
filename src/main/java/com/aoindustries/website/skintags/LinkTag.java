@@ -23,7 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
-import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
+import com.aoindustries.encoding.taglib.EncodingBufferedTag;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.taglib.HrefAttribute;
 import com.aoindustries.taglib.RelAttribute;
@@ -35,8 +35,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * @author  AO Industries, Inc.
  */
-public class LinkTag
-	extends EncodingBufferedSimpleTag
+public class LinkTag extends EncodingBufferedTag
 	implements
 		RelAttribute,
 		HrefAttribute,

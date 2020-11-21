@@ -23,7 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
-import com.aoindustries.encoding.taglib.EncodingBufferedSimpleTag;
+import com.aoindustries.encoding.taglib.EncodingBufferedTag;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.net.URIParametersMap;
 import com.aoindustries.net.URIParametersUtils;
@@ -37,9 +37,7 @@ import javax.servlet.jsp.PageContext;
  *
  * @author  AO Industries, Inc.
  */
-public class PathTag extends EncodingBufferedSimpleTag implements ParamsAttribute {
-
-	private static final long serialVersionUID = 1L;
+public class PathTag extends EncodingBufferedTag implements ParamsAttribute {
 
 	private URIParametersMap params;
 
