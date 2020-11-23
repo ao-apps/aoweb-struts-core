@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -37,8 +37,14 @@ abstract public class PageAttributesTag extends TagSupport {
 	public PageAttributesTag() {
 	}
 
+	/**
+	 * @deprecated  You should probably be implementing in {@link #doStartTag(com.aoindustries.website.skintags.PageAttributes)}
+	 *
+	 * @see  #doStartTag(com.aoindustries.website.skintags.PageAttributes)
+	 */
+	@Deprecated
 	@Override
-	final public int doStartTag() throws JspException {
+	public int doStartTag() throws JspException {
 		return doStartTag(PageAttributesBodyTag.getPageAttributes(pageContext));
 	}
 
@@ -46,8 +52,14 @@ abstract public class PageAttributesTag extends TagSupport {
 		return SKIP_BODY;
 	}
 
+	/**
+	 * @deprecated  You should probably be implementing in {@link #doEndTag(com.aoindustries.website.skintags.PageAttributes)}
+	 *
+	 * @see  #doEndTag(com.aoindustries.website.skintags.PageAttributes)
+	 */
+	@Deprecated
 	@Override
-	final public int doEndTag() throws JspException {
+	public int doEndTag() throws JspException {
 		return doEndTag(PageAttributesBodyTag.getPageAttributes(pageContext));
 	}
 

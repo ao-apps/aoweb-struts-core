@@ -52,8 +52,14 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 		return getPageAttributes((HttpServletRequest)pageContext.getRequest());
 	}
 
+	/**
+	 * @deprecated  You should probably be implementing in {@link #doStartTag(com.aoindustries.website.skintags.PageAttributes)}
+	 *
+	 * @see  #doStartTag(com.aoindustries.website.skintags.PageAttributes)
+	 */
+	@Deprecated
 	@Override
-	final public int doStartTag() throws JspException {
+	public int doStartTag() throws JspException {
 		return doStartTag(getPageAttributes(pageContext));
 	}
 
@@ -61,8 +67,13 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 		return EVAL_BODY_BUFFERED;
 	}
 
-	/*
-	final public int doAfterBody() throws JspException {
+	/* *
+	 * @deprecated  You should probably be implementing in {@link #doAfterBody(com.aoindustries.website.skintags.PageAttributes)}
+	 *
+	 * @see  #doAfterBody(com.aoindustries.website.skintags.PageAttributes)
+	 * /
+	@Deprecated
+	public int doAfterBody() throws JspException {
 		return doAfterBody(getPageAttributes());
 	}
 
@@ -70,8 +81,14 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 		return SKIP_BODY;
 	}*/
 
+	/**
+	 * @deprecated  You should probably be implementing in {@link #doEndTag(com.aoindustries.website.skintags.PageAttributes)}
+	 *
+	 * @see  #doEndTag(com.aoindustries.website.skintags.PageAttributes)
+	 */
+	@Deprecated
 	@Override
-	final public int doEndTag() throws JspException {
+	public int doEndTag() throws JspException {
 		return doEndTag(getPageAttributes(pageContext));
 	}
 
