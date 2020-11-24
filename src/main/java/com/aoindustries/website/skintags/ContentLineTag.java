@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,20 +22,19 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.website.Skin;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @author  AO Industries, Inc.
  */
 public class ContentLineTag extends BodyTagSupport {
+
+	public static final String TAG_NAME = "<skin:contentLine>";
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,13 +58,7 @@ public class ContentLineTag extends BodyTagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		ContentTag contentTag = (ContentTag)findAncestorWithClass(this, ContentTag.class);
-		if(contentTag==null) {
-			HttpSession session = pageContext.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.ContentLineTag.mustNestInContentTag"));
-		}
+		JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
 		Skin skin = SkinTag.getSkin(pageContext);
 

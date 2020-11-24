@@ -22,17 +22,14 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import com.aoindustries.website.Skin;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * Renders one popup, that may optionally be nested in a PopupGroupTag.
@@ -42,6 +39,8 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class PopupTag extends BodyTagSupport {
+
+	public static final String TAG_NAME = "<skin:popup>";
 
 	/**
 	 * The request attribute name used to store the sequence.
@@ -69,16 +68,9 @@ public class PopupTag extends BodyTagSupport {
 		sequenceId = sequence.getNextSequenceValue();
 		Skin skin = SkinTag.getSkin(pageContext);
 		// Look for containing popupGroup
-		PopupGroupTag popupGroupTag = (PopupGroupTag)findAncestorWithClass(this, PopupGroupTag.class);
-		if(popupGroupTag==null) {
-			HttpSession session = pageContext.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)req.getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.PopupTag.mustNestInPopupGroupTag"));
-		} else {
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.beginPopup(req, resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
-		}
+		PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		skin.beginPopup(req, resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
 		return EVAL_BODY_INCLUDE;
 	}
 
@@ -87,16 +79,9 @@ public class PopupTag extends BodyTagSupport {
 		try {
 			Skin skin = SkinTag.getSkin(pageContext);
 			// Look for containing popupGroup
-			PopupGroupTag popupGroupTag = (PopupGroupTag)findAncestorWithClass(this, PopupGroupTag.class);
-			if(popupGroupTag==null) {
-				HttpSession session = pageContext.getSession();
-				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-				MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-				throw new JspException(applicationResources.getMessage(locale, "skintags.PopupTag.mustNestInPopupGroupTag"));
-			} else {
-				HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-				skin.endPopup((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
-			}
+			PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			skin.endPopup((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
 			return EVAL_PAGE;
 		} finally {
 			init();

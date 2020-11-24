@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,20 +22,19 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.website.Skin;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @author  AO Industries, Inc.
  */
 public class ContentVerticalDividerTag extends TagSupport {
+
+	public static final String TAG_NAME = "<skin:contentVerticalDivider>";
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,13 +59,7 @@ public class ContentVerticalDividerTag extends TagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		try {
-			ContentLineTag contentLineTag = (ContentLineTag)findAncestorWithClass(this, ContentLineTag.class);
-			if(contentLineTag==null) {
-				HttpSession session = pageContext.getSession();
-				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-				MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-				throw new JspException(applicationResources.getMessage(locale, "skintags.ContentVerticalDividerTag.mustNestInContentLineTag"));
-			}
+			ContentLineTag contentLineTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentLineTag.TAG_NAME, ContentLineTag.class);
 
 			Skin skin = SkinTag.getSkin(pageContext);
 

@@ -27,12 +27,14 @@ import com.aoindustries.encoding.MediaWriter;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -160,9 +162,9 @@ public class TimeTag extends BodyTagSupport {
 				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
 				if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 				// Resolve the scriptOut
-				ScriptGroupTag scriptGroupTag = (ScriptGroupTag)findAncestorWithClass(this, ScriptGroupTag.class);
-				if(scriptGroupTag != null) {
-					writeTimeJavaScript(time, sequence, out, scriptGroupTag.getScriptOut());
+				Optional<ScriptGroupTag> scriptGroupTag = JspTagUtils.findAncestor(this, ScriptGroupTag.class);
+				if(scriptGroupTag.isPresent()) {
+					writeTimeJavaScript(time, sequence, out, scriptGroupTag.get().getScriptOut());
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
 					writeTimeJavaScript(time, sequence, out, scriptOut);

@@ -25,22 +25,21 @@ package com.aoindustries.website.skintags;
 import com.aoindustries.encoding.MediaType;
 import com.aoindustries.encoding.taglib.EncodingBufferedTag;
 import com.aoindustries.io.buffer.BufferResult;
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.website.Skin;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @author  AO Industries, Inc.
  */
 public class ContentTitleTag extends EncodingBufferedTag {
+
+	public static final String TAG_NAME = "<skin:contentTitle>";
 
 	@Override
 	public MediaType getContentType() {
@@ -59,19 +58,15 @@ public class ContentTitleTag extends EncodingBufferedTag {
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 		String title = capturedBody.trim().toString();
 
-		ContentTag contentTag = (ContentTag)findAncestorWithClass(this, ContentTag.class);
-		if(contentTag==null) {
-			HttpSession session = pageContext.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)req.getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.ContentTitleTag.mustNestInContentTag"));
-		}
+		ContentTag contentTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
 		Skin skin = SkinTag.getSkin(pageContext);
 
 		int[] colspans = contentTag.getColspansParsed();
 		int totalColspan = 0;
-		for(int c=0;c<colspans.length;c++) totalColspan += colspans[c];
+		for(int c = 0; c <colspans.length; c++) {
+			totalColspan += colspans[c];
+		}
 
 		skin.printContentTitle(req, resp, pageContext.getOut(), title, totalColspan);
 	}

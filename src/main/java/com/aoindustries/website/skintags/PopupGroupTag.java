@@ -39,6 +39,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  */
 public class PopupGroupTag extends BodyTagSupport {
 
+	public static final String TAG_NAME = "<skin:popupGroup>";
+
 	/**
 	 * The request attribute name used to store the sequence.
 	 */

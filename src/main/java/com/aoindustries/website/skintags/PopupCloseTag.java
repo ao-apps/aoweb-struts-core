@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,15 +22,12 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.website.Skin;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * Renders a popup close link/image/button.  Must be nested inside a PopupTag.
@@ -40,6 +37,8 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class PopupCloseTag extends TagSupport {
+
+	public static final String TAG_NAME = "<skin:popupClose>";
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,25 +50,13 @@ public class PopupCloseTag extends TagSupport {
 		Skin skin = SkinTag.getSkin(pageContext);
 
 		// Look for the containing popup tag
-		PopupTag popupTag = (PopupTag)findAncestorWithClass(this, PopupTag.class);
-		if(popupTag==null) {
-			HttpSession session = pageContext.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.PopupCloseTag.mustNestInPopupTag"));
-		}
+		PopupTag popupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupTag.TAG_NAME, PopupTag.class);
 
 		// Look for containing popupGroup tag
-		PopupGroupTag popupGroupTag = (PopupGroupTag)findAncestorWithClass(popupTag, PopupGroupTag.class);
-		if(popupGroupTag==null) {
-			HttpSession session = pageContext.getSession();
-			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-			MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.PopupTag.mustNestInPopupGroupTag"));
-		} else {
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.printPopupClose((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), popupGroupTag.sequenceId, popupTag.sequenceId);
-		}
+		PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(PopupTag.TAG_NAME, popupTag, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		skin.printPopupClose((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), popupGroupTag.sequenceId, popupTag.sequenceId);
 		return SKIP_BODY;
 	}
 }

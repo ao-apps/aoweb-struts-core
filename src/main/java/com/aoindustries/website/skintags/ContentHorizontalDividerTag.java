@@ -23,6 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.lang.Strings;
+import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.website.Skin;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +39,8 @@ import org.apache.struts.util.MessageResources;
  * @author  AO Industries, Inc.
  */
 public class ContentHorizontalDividerTag extends TagSupport {
+
+	public static final String TAG_NAME = "<skin:contentHorizontalDivider>";
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,13 +59,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		try {
-			ContentTag contentTag = (ContentTag)findAncestorWithClass(this, ContentTag.class);
-			if(contentTag==null) {
-				HttpSession session = pageContext.getSession();
-				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-				MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-				throw new JspException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDividerTag.mustNestInContentTag"));
-			}
+			JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
 			Skin skin = SkinTag.getSkin(pageContext);
 

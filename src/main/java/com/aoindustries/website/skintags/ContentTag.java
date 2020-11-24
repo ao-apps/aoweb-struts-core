@@ -34,6 +34,8 @@ import javax.servlet.jsp.JspException;
  */
 public class ContentTag extends PageAttributesBodyTag {
 
+	public static final String TAG_NAME = "<skin:content>";
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -42,7 +44,9 @@ public class ContentTag extends PageAttributesBodyTag {
 	static int[] parseColspans(String colspans) {
 		List<String> tokens = Strings.splitCommaSpace(colspans);
 		int[] array = new int[tokens.size()];
-		for(int c=0;c<tokens.size();c++) array[c]=Integer.parseInt(tokens.get(c));
+		for(int c = 0; c < tokens.size(); c++) {
+			array[c] = Integer.parseInt(tokens.get(c));
+		}
 		return array;
 	}
 
@@ -90,6 +94,7 @@ public class ContentTag extends PageAttributesBodyTag {
 		return colspans;
 	}
 
+	@SuppressWarnings("ReturnOfCollectionOrArrayField")
 	int[] getColspansParsed() {
 		return colspansParsed;
 	}
