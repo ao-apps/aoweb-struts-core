@@ -30,6 +30,7 @@ import com.aoindustries.taglib.ContentAttribute;
 import com.aoindustries.taglib.NameAttribute;
 import java.io.IOException;
 import java.io.Writer;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -61,7 +62,7 @@ public class MetaTag extends EncodingBufferedTag implements NameAttribute, Conte
 	}
 
 	@Override
-	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+	protected void doTag(BufferResult capturedBody, Writer out) throws JspException, IOException {
 		PageContext pageContext = (PageContext)getJspContext();
 		Object myContent = content;
 		if(myContent==null) myContent = capturedBody.trim().toString();

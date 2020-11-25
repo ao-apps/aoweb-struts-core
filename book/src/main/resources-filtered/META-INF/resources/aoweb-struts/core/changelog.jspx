@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-08-24T01:27:27-05:00"
+		dateModified="2020-11-24T12:46:17-06:00"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -85,6 +85,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>
 						Added support for Web development file types <code>*.less</code>, <code>*.sass</code>,
 						<code>*.scss</code>, <code>*.css.map</code>, and <code>*.js.map</code>.
+					</li>
+					<li>
+						Cleaned-up use of <code>JspTagException</code> versus <code>JspException</code>.  Generally,
+						methods declare <code>throws JspException</code> while actually throwing instances of
+						<code>JspTagException</code>.  The exceptions to this are attribute setters and private
+						implemententation methods that both declare and throw <code>JspTagException</code>.
 					</li>
 				</ul>
 			</changelog:release>

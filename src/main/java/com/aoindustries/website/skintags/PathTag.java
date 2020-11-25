@@ -30,6 +30,7 @@ import com.aoindustries.net.URIParametersUtils;
 import com.aoindustries.taglib.ParamsAttribute;
 import java.io.IOException;
 import java.io.Writer;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -59,7 +60,7 @@ public class PathTag extends EncodingBufferedTag implements ParamsAttribute {
 	}
 
 	@Override
-	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+	protected void doTag(BufferResult capturedBody, Writer out) throws JspException, IOException {
 		PageContext pageContext = (PageContext)getJspContext();
 		String path = capturedBody.trim().toString();
 		path = URIParametersUtils.addParams(path, params);

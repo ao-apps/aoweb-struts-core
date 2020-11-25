@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,7 @@ import java.util.Locale;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
@@ -65,7 +66,7 @@ abstract public class PageTag extends BodyTagSupport {
 	private Collection<Meta> metas;
 
 	public PageTag() {
-		init();
+		init(); // Switch to TryCatchFinally style
 	}
 
 	protected void init() {
@@ -83,7 +84,7 @@ abstract public class PageTag extends BodyTagSupport {
 	private Object oldPageTag;
 
 	@Override
-	public int doStartTag() {
+	public int doStartTag() throws JspException {
 		ServletRequest request = pageContext.getRequest();
 		oldPageTag = request.getAttribute(PAGE_TAG_ATTRIBUTE);
 		request.setAttribute(PAGE_TAG_ATTRIBUTE, this);
@@ -135,7 +136,7 @@ abstract public class PageTag extends BodyTagSupport {
 				HttpSession session = pageContext.getSession();
 				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
 				MessageResources applicationResources = (MessageResources)request.getAttribute("/ApplicationResources");
-				throw new JspException(applicationResources.getMessage(locale, "skintags.PageTag.needsTitleTag"));
+				throw new JspTagException(applicationResources.getMessage(locale, "skintags.PageTag.needsTitleTag"));
 			}
 			String myNavImageAlt = this.navImageAlt;
 			if(myNavImageAlt == null || myNavImageAlt.length()==0) myNavImageAlt=title;

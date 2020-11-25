@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,6 +24,7 @@ package com.aoindustries.website.skintags;
 
 import java.io.IOException;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -65,7 +66,7 @@ public class LightDarkTableRowTag extends BodyTagSupport {
 			out.write("\">");
 			return EVAL_BODY_INCLUDE;
 		} catch(IOException err) {
-			throw new JspException(err);
+			throw new JspTagException(err);
 		}
 	}
 
@@ -78,7 +79,7 @@ public class LightDarkTableRowTag extends BodyTagSupport {
 			pageContext.getOut().write("</tr>");
 			return EVAL_PAGE;
 		} catch(IOException err) {
-			throw new JspException(err);
+			throw new JspTagException(err);
 		} finally {
 			init();
 		}

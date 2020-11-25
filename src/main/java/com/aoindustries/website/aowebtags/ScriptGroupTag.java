@@ -25,6 +25,7 @@ package com.aoindustries.website.aowebtags;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import static com.aoindustries.website.ApplicationResources.accessor;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -73,7 +75,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 	}
 
 	@Override
-	public int doStartTag() {
+	public int doStartTag() throws JspException {
 		return EVAL_BODY_INCLUDE;
 	}
 
@@ -113,14 +115,14 @@ public class ScriptGroupTag extends BodyTagSupport {
 						script.write("  }\n"
 								+ "  window.onload = scriptOutOnload"); script.write(sequenceId); script.write(";\n");
 						if(!wroteScript) {
-							throw new JspException(accessor.getMessage("aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode));
+							throw new LocalizedJspTagException(accessor, "aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode);
 						}
 					}
 				}
 			}
 			return EVAL_PAGE;
 		} catch(IOException err) {
-			throw new JspException(err);
+			throw new JspTagException(err);
 		} finally {
 			init();
 		}

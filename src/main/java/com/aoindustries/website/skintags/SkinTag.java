@@ -62,7 +62,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			HttpSession session = pageContext.getSession();
 			Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
 			MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-			throw new JspException(applicationResources.getMessage(locale, "skintags.unableToFindSkinInRequest"));
+			throw new JspTagException(applicationResources.getMessage(locale, "skintags.unableToFindSkinInRequest"));
 		}
 		return skin;
 	}

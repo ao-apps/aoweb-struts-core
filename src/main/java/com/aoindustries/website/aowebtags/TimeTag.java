@@ -38,6 +38,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
@@ -146,7 +147,7 @@ public class TimeTag extends BodyTagSupport {
 	}
 
 	@Override
-	public int doStartTag() {
+	public int doStartTag() throws JspException {
 		return EVAL_BODY_BUFFERED;
 	}
 
@@ -181,7 +182,7 @@ public class TimeTag extends BodyTagSupport {
 			}
 			return EVAL_PAGE;
 		} catch(IOException err) {
-			throw new JspException(err);
+			throw new JspTagException(err);
 		}
 	}
 }

@@ -30,6 +30,7 @@ import com.aoindustries.taglib.RelAttribute;
 import com.aoindustries.taglib.TypeAttribute;
 import java.io.IOException;
 import java.io.Writer;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -83,7 +84,7 @@ public class LinkTag extends EncodingBufferedTag
 	}
 
 	@Override
-	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+	protected void doTag(BufferResult capturedBody, Writer out) throws JspException, IOException {
 		String myHref = href;
 		if(myHref==null) myHref = capturedBody.trim().toString();
 		PageAttributesBodyTag.getPageAttributes(

@@ -51,7 +51,7 @@ public class ParentTag extends PageTag {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public int doStartTag() {
+	public int doStartTag() throws JspException {
 		ServletRequest request = pageContext.getRequest();
 		Stack<ParentTag> stack = (Stack)request.getAttribute(STACK_REQUEST_ATTRIBUTE);
 		if(stack==null) request.setAttribute(STACK_REQUEST_ATTRIBUTE, stack = new Stack<>());

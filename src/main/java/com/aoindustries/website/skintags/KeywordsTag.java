@@ -27,6 +27,7 @@ import com.aoindustries.encoding.taglib.EncodingBufferedTag;
 import com.aoindustries.io.buffer.BufferResult;
 import java.io.IOException;
 import java.io.Writer;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -45,7 +46,7 @@ public class KeywordsTag extends EncodingBufferedTag {
 	}
 
 	@Override
-	protected void doTag(BufferResult capturedBody, Writer out) throws IOException {
+	protected void doTag(BufferResult capturedBody, Writer out) throws JspException, IOException {
 		PageContext pageContext = (PageContext)getJspContext();
 		String keywords = capturedBody.trim().toString();
 		PageTag pageTag = PageTag.getPageTag(pageContext.getRequest());

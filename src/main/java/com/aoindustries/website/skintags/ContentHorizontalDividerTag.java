@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.struts.Globals;
 import org.apache.struts.util.MessageResources;
@@ -68,7 +69,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 				HttpSession session = pageContext.getSession();
 				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
 				MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-				throw new JspException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements"));
+				throw new JspTagException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements"));
 			}
 			int[] array = new int[list.size()];
 			for(int c=0;c<list.size();c+=2) {
@@ -81,7 +82,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 						HttpSession session = pageContext.getSession();
 						Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
 						MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-						throw new JspException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction));
+						throw new JspTagException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction));
 					}
 				}
 				array[c]=Integer.parseInt(list.get(c));

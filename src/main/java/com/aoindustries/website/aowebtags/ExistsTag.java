@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -25,6 +25,7 @@ package com.aoindustries.website.aowebtags;
 import com.aoindustries.servlet.ServletContextCache;
 import java.net.MalformedURLException;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -51,12 +52,12 @@ public class ExistsTag extends BodyTagSupport {
 		try {
 			return ServletContextCache.getResource(pageContext.getServletContext(), path) != null ? EVAL_BODY_INCLUDE : SKIP_BODY;
 		} catch(MalformedURLException err) {
-			throw new JspException(err);
+			throw new JspTagException(err);
 		}
 	}
 
 	@Override
-	public int doEndTag() {
+	public int doEndTag() throws JspException {
 		init();
 		return EVAL_PAGE;
 	}
