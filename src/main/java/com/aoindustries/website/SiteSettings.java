@@ -234,14 +234,14 @@ public class SiteSettings {
 	 * Defaults to <code>false</code>.
 	 */
 	public boolean getExceptionShowError() {
-		return "true".equals(servletContext.getInitParameter("exception.showError"));
+		return Boolean.parseBoolean(servletContext.getInitParameter("exception.showError"));
 	}
 
 	/**
 	 * Determines if this site allows direct editing of resource bundles.
 	 */
 	public boolean getCanEditResources() {
-		return "true".equals(servletContext.getInitParameter("com.aoindustries.website.SiteSettings.canEditResources"));
+		return Boolean.parseBoolean(servletContext.getInitParameter("com.aoindustries.website.SiteSettings.canEditResources"));
 	}
 	// </editor-fold>
 }

@@ -56,7 +56,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 
 	public void init(ServletContext servletContext) {
 		this.servletContext = servletContext;
-		if(!"false".equals(servletContext.getInitParameter(VncConsoleProxySocketServer.class.getName() + ".enabled"))) {
+		if(!"false".equalsIgnoreCase(servletContext.getInitParameter(VncConsoleProxySocketServer.class.getName() + ".enabled"))) {
 			(thread = new Thread(this, "VNC Console Proxy Socket Host")).start();
 		}
 	}

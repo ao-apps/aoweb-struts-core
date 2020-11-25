@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2017, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -57,7 +57,7 @@ public class SignupCustomizeManagementForm extends ActionForm implements Seriali
 			&& "".equals(backupDvdOption)
 			&& distributionScanOption==-1
 			&& failoverOption==-1
-			&& "false".equals(formCompleted)
+			&& "false".equalsIgnoreCase(formCompleted)
 		;
 	}
 
