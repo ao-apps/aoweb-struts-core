@@ -20,41 +20,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.website.aowebtags;
-
-import static com.aoindustries.website.Resources.RESOURCES;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.ValidationMessage;
+package com.aoindustries.website;
 
 /**
- * @author  AO Industries, Inc.
+ * Provides a simplified interface for obtaining localized values from the SiteApplicationResources.properties files.
+ * <p>
+ * Each website is expected to provide its own version of these per-site resources.  Furthermore, each website defines
+ * its own <code>devel/</code> sub-project for in-context translations.
+ * </p>
  */
-public class ScriptGroupTagTEI extends TagExtraInfo {
+final public class SiteResources {
 
-	@Override
-	public ValidationMessage[] validate(TagData data) {
-		Object o = data.getAttribute("onloadMode");
-		if(
-			o != null
-			&& o != TagData.REQUEST_TIME_VALUE
-			&& !"none".equals(o)
-			&& !"before".equals(o)
-			&& !"after".equals(o)
-		) {
-			return new ValidationMessage[] {
-				new ValidationMessage(
-					data.getId(),
-					RESOURCES.getMessage(
-						//"Invalid value for onloadMode, should be one of \"none\", \"before\", or \"after\": {0}",
-						//Locale.getDefault(),
-						"aowebtags.ScriptGroupTag.onloadMode.invalid",
-						o
-					)
-				)
-			};
-		} else {
-			return null;
-		}
-	}
+	public static final com.aoindustries.i18n.Resources SITE_RESOURCES =
+		com.aoindustries.i18n.Resources.getResources(SiteResources.class.getPackage(), "SiteApplicationResources");
+
+	/**
+	 * Make no instances.
+	 */
+	private SiteResources() {}
 }

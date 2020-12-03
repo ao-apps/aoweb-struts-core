@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website;
 
-import static com.aoindustries.website.ApplicationResources.accessor;
+import static com.aoindustries.website.Resources.RESOURCES;
 import java.util.Enumeration;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -131,7 +131,7 @@ public class FilteredHttpSession implements HttpSession {
 				// Must be an SessionActionForm if none of the above
 				&& !(value instanceof SessionActionForm)
 			) {
-				throw new AssertionError(accessor.getMessage("FilteredHttpSession.unexpectedSessionAttribute", name, value.getClass().getName()));
+				throw new AssertionError(RESOURCES.getMessage("FilteredHttpSession.unexpectedSessionAttribute", name, value.getClass().getName()));
 			}
 		}
 	}

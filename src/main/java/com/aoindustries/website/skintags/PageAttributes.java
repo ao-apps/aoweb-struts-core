@@ -22,8 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.lang.LocalizedIllegalArgumentException;
 import com.aoindustries.lang.Strings;
-import static com.aoindustries.website.ApplicationResources.accessor;
+import static com.aoindustries.website.Resources.RESOURCES;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -236,7 +237,7 @@ public class PageAttributes {
 
 	public void setLayout(String layout) {
 		if(layout.equals(LAYOUT_NORMAL) || layout.equals(LAYOUT_MINIMAL)) this.layout = layout;
-		else throw new IllegalArgumentException(accessor.getMessage("skintags.PageAttributes.setLayout.invalid"));
+		else throw new LocalizedIllegalArgumentException(RESOURCES, "skintags.PageAttributes.setLayout.invalid");
 	}
 
 	public String getOnload() {

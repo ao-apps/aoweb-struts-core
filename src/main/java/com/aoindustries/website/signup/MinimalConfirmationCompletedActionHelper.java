@@ -39,7 +39,7 @@ import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.Mailer;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.TextSkin;
-import static com.aoindustries.website.signup.ApplicationResources.accessor;
+import static com.aoindustries.website.signup.Resources.RESOURCES;
 import java.io.CharArrayWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -187,33 +187,33 @@ final public class MinimalConfirmationCompletedActionHelper {
 						 + "<body>\n"
 						 + "<table style=\"border:0px\" cellpadding=\"0\" cellspacing=\"0\">\n"
 						 + "    <tr><td style=\"white-space:nowrap\" colspan=\"3\">\n"
-						 + "        ").print(accessor.getMessage(statusKey, pkey));
+						 + "        ").print(RESOURCES.getMessage(statusKey, pkey));
 			html.br__().nl();
 			emailOut.print("        ");
 			html.br__().nl();
-			emailOut.print("        ").print(accessor.getMessage("serverConfirmationCompleted.belowIsSummary"));
+			emailOut.print("        ").print(RESOURCES.getMessage("serverConfirmationCompleted.belowIsSummary"));
 			html.br__().nl();
 			emailOut.print("        ");
 			html.hr__();
 			emailOut.print("    </td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(accessor.getMessage("steps.selectPackage.label"));
+			html.text(RESOURCES.getMessage("steps.selectPackage.label"));
 			emailOut.print("</th></tr>\n");
 			SignupSelectPackageActionHelper.printConfirmation(emailOut, html, packageDefinition);
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(accessor.getMessage("steps.organizationInfo.label"));
+			html.text(RESOURCES.getMessage("steps.organizationInfo.label"));
 			emailOut.print("</th></tr>\n");
 			SignupOrganizationActionHelper.printConfirmation(emailOut, html, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(accessor.getMessage("steps.technicalInfo.label"));
+			html.text(RESOURCES.getMessage("steps.technicalInfo.label"));
 			emailOut.print("</th></tr>\n");
 			SignupTechnicalActionHelper.printConfirmation(emailOut, html, rootConn, signupTechnicalForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(accessor.getMessage("steps.billingInformation.label"));
+			html.text(RESOURCES.getMessage("steps.billingInformation.label"));
 			emailOut.print("</th></tr>\n");
 			SignupBillingInformationActionHelper.printConfirmation(emailOut, html, signupBillingInformationForm);
 			emailOut.print("</table>\n"
@@ -231,7 +231,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 				brand.getSignupEmailAddress().toString(),
 				brand.getSignupEmailDisplay(),
 				Collections.singletonList(recipient),
-				accessor.getMessage("serverConfirmationCompleted.email.subject", pkey),
+				RESOURCES.getMessage("serverConfirmationCompleted.email.subject", pkey),
 				cout.toString()
 			);
 

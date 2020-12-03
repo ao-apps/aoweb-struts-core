@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.clientarea.ticket;
 
-import com.aoindustries.net.Email;
 import com.aoindustries.lang.Strings;
+import com.aoindustries.net.Email;
 import com.aoindustries.validation.ValidationResult;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;

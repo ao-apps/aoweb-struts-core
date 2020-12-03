@@ -23,18 +23,15 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.lang.Strings;
+import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
+import static com.aoindustries.website.Resources.RESOURCES;
 import com.aoindustries.website.Skin;
 import java.util.List;
-import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @author  AO Industries, Inc.
@@ -66,10 +63,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			List<String> list = Strings.splitCommaSpace(colspansAndDirections);
 			if((list.size()&1)==0) {
-				HttpSession session = pageContext.getSession();
-				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-				MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-				throw new JspTagException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements"));
+				throw new LocalizedJspTagException(RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements");
 			}
 			int[] array = new int[list.size()];
 			for(int c=0;c<list.size();c+=2) {
@@ -79,10 +73,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 					else if("down".equalsIgnoreCase(direction)) array[c-1]=Skin.DOWN;
 					else if("upAndDown".equalsIgnoreCase(direction)) array[c-1]=Skin.UP_AND_DOWN;
 					else {
-						HttpSession session = pageContext.getSession();
-						Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-						MessageResources applicationResources = (MessageResources)pageContext.getRequest().getAttribute("/ApplicationResources");
-						throw new JspTagException(applicationResources.getMessage(locale, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction));
+						throw new LocalizedJspTagException(RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction);
 					}
 				}
 				array[c]=Integer.parseInt(list.get(c));

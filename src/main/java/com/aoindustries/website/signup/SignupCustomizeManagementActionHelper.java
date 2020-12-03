@@ -31,7 +31,7 @@ import com.aoindustries.html.Html;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
-import static com.aoindustries.website.signup.ApplicationResources.accessor;
+import static com.aoindustries.website.signup.Resources.RESOURCES;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -217,10 +217,10 @@ final public class SignupCustomizeManagementActionHelper {
 		if(!GenericValidator.isBlankOrNull(backupOnsiteOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signup.notRequired"));
+			html.text(RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt"));
+			html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(backupOnsiteOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -229,10 +229,10 @@ final public class SignupCustomizeManagementActionHelper {
 		if(!GenericValidator.isBlankOrNull(backupOffsiteOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signup.notRequired"));
+			html.text(RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt"));
+			html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(backupOffsiteOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -241,10 +241,10 @@ final public class SignupCustomizeManagementActionHelper {
 		if(!GenericValidator.isBlankOrNull(backupDvdOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signup.notRequired"));
+			html.text(RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt"));
+			html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(backupDvdOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -253,10 +253,10 @@ final public class SignupCustomizeManagementActionHelper {
 		if(!GenericValidator.isBlankOrNull(distributionScanOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signup.notRequired"));
+			html.text(RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt"));
+			html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(distributionScanOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -265,20 +265,20 @@ final public class SignupCustomizeManagementActionHelper {
 		if(!GenericValidator.isBlankOrNull(failoverOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signup.notRequired"));
+			html.text(RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(accessor.getMessage("signupCustomizeManagementConfirmation.failover.prompt"));
+			html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(failoverOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.notRequired"));
+		html.text(RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt"));
+		html.text(RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").print(request.getAttribute("totalMonthlyRate")).print("</td>\n"
 					 + "    </tr>\n");

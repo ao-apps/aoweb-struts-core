@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -20,28 +20,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.website.signup;
-
-import com.aoindustries.util.i18n.EditableResourceBundle;
-import java.io.File;
-import java.util.Locale;
+package com.aoindustries.website;
 
 /**
  * Provides a simplified interface for obtaining localized values from the ApplicationResources.properties files.
- * Is also an editable resource bundle.
  *
  * @author  AO Industries, Inc.
  */
-public final class ApplicationResources_ja extends EditableResourceBundle {
+final public class Resources {
+
+	public static final com.aoindustries.i18n.Resources RESOURCES =
+		com.aoindustries.i18n.Resources.getResources(Resources.class.getPackage());
 
 	/**
-	 * Do not use directly.
+	 * Make no instances.
 	 */
-	public ApplicationResources_ja() {
-		super(
-			Locale.JAPANESE,
-			ApplicationResources.bundleSet,
-			new File(System.getProperty("user.home")+"/maven2/ao/aoweb-struts/core/src/main/resources/com/aoindustries/website/signup/ApplicationResources_ja.properties")
-		);
-	}
+	private Resources() {}
 }

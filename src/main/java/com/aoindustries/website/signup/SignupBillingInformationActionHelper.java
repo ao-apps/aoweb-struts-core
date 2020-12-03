@@ -25,7 +25,7 @@ package com.aoindustries.website.signup;
 import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.html.Html;
-import static com.aoindustries.website.signup.ApplicationResources.accessor;
+import static com.aoindustries.website.signup.Resources.RESOURCES;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +55,9 @@ final public class SignupBillingInformationActionHelper {
 		// Build the list of years
 		List<String> billingExpirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = new GregorianCalendar().get(Calendar.YEAR);
-		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) billingExpirationYears.add(Integer.toString(startYear + c));
+		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) {
+			billingExpirationYears.add(Integer.toString(startYear + c));
+		}
 
 		// Store to request attributes
 		request.setAttribute("billingExpirationYears", billingExpirationYears);
@@ -87,107 +89,107 @@ final public class SignupBillingInformationActionHelper {
 	public static void printConfirmation(ChainWriter emailOut, Html html, SignupBillingInformationForm signupBillingInformationForm) throws IOException {
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingContact.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingContact.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingContact()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingEmail.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingEmail.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingEmail()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingCardholderName.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingCardholderName.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingCardholderName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingCardNumber.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingCardNumber.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(getBillingCardNumber(signupBillingInformationForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingExpirationDate.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingExpirationDate.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingExpirationDate.hidden"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingExpirationDate.hidden"));
 		emailOut.print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingStreetAddress.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingStreetAddress.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingStreetAddress()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingCity.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingCity.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingState.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingState.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.required"));
+		html.text(RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingZip.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingZip.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupBillingInformationForm.getBillingZip()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.notRequired"));
+		html.text(RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingUseMonthly.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingUseMonthly.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage(signupBillingInformationForm.getBillingUseMonthly() ? "signupBillingInformationForm.billingUseMonthly.yes" : "signupBillingInformationForm.billingUseMonthly.no"));
+		html.text(RESOURCES.getMessage(signupBillingInformationForm.getBillingUseMonthly() ? "signupBillingInformationForm.billingUseMonthly.yes" : "signupBillingInformationForm.billingUseMonthly.no"));
 		emailOut.print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signup.notRequired"));
+		html.text(RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage("signupBillingInformationForm.billingPayOneYear.prompt"));
+		html.text(RESOURCES.getMessage("signupBillingInformationForm.billingPayOneYear.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(accessor.getMessage(signupBillingInformationForm.getBillingPayOneYear() ? "signupBillingInformationForm.billingPayOneYear.yes" : "signupBillingInformationForm.billingPayOneYear.no"));
+		html.text(RESOURCES.getMessage(signupBillingInformationForm.getBillingPayOneYear() ? "signupBillingInformationForm.billingPayOneYear.yes" : "signupBillingInformationForm.billingPayOneYear.no"));
 		emailOut.print("</td>\n"
 					 + "    </tr>\n");
 	}

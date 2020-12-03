@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,36 +22,18 @@
  */
 package com.aoindustries.website.clientarea;
 
-import com.aoindustries.util.i18n.ApplicationResourcesAccessor;
-import com.aoindustries.util.i18n.EditableResourceBundle;
-import com.aoindustries.util.i18n.EditableResourceBundleSet;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Locale;
-
 /**
+ * Provides a simplified interface for obtaining localized values from the ApplicationResources.properties files.
+ *
  * @author  AO Industries, Inc.
  */
-public final class ApplicationResources extends EditableResourceBundle {
+final public class Resources {
 
-	static final EditableResourceBundleSet bundleSet = new EditableResourceBundleSet(
-		ApplicationResources.class.getName(),
-		Arrays.asList(
-			new Locale(""), // Locale.ROOT in Java 1.6
-			Locale.JAPANESE
-		)
-	);
+	public static final com.aoindustries.i18n.Resources RESOURCES =
+		com.aoindustries.i18n.Resources.getResources(Resources.class.getPackage());
 
 	/**
-	 * Do not use directly.
+	 * Make no instances.
 	 */
-	public ApplicationResources() {
-		super(
-			new Locale(""),
-			bundleSet,
-			new File(System.getProperty("user.home")+"/maven2/ao/aoweb-struts/core/src/main/resources/com/aoindustries/website/clientarea/ApplicationResources.properties")
-		);
-	}
-
-	public static final ApplicationResourcesAccessor accessor = ApplicationResourcesAccessor.getInstance(bundleSet.getBaseName());
+	private Resources() {}
 }

@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2020-11-25T07:09:05-06:00"
+		dateModified="2020-12-02T03:15:31-06:00"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:aoweb-struts-core:pom.version}" />
@@ -91,6 +91,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						methods declare <code>throws JspException</code> while actually throwing instances of
 						<code>JspTagException</code>.  The exception to this is private implementation methods that
 						both declare and throw <code>JspTagException</code>.
+					</li>
+					<li>
+						Split development-only classes into a new sub-project in <code>devel/</code>.  This
+						sub-project is used development only and is never deployed to artifact repositories.
 					</li>
 				</ul>
 			</changelog:release>

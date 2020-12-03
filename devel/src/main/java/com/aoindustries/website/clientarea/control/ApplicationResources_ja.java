@@ -20,41 +20,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.website.aowebtags;
+package com.aoindustries.website.clientarea.control;
 
-import static com.aoindustries.website.Resources.RESOURCES;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.ValidationMessage;
+import com.aoindustries.util.i18n.EditableResourceBundle;
+import java.util.Locale;
 
 /**
  * @author  AO Industries, Inc.
  */
-public class ScriptGroupTagTEI extends TagExtraInfo {
+public final class ApplicationResources_ja extends EditableResourceBundle {
 
-	@Override
-	public ValidationMessage[] validate(TagData data) {
-		Object o = data.getAttribute("onloadMode");
-		if(
-			o != null
-			&& o != TagData.REQUEST_TIME_VALUE
-			&& !"none".equals(o)
-			&& !"before".equals(o)
-			&& !"after".equals(o)
-		) {
-			return new ValidationMessage[] {
-				new ValidationMessage(
-					data.getId(),
-					RESOURCES.getMessage(
-						//"Invalid value for onloadMode, should be one of \"none\", \"before\", or \"after\": {0}",
-						//Locale.getDefault(),
-						"aowebtags.ScriptGroupTag.onloadMode.invalid",
-						o
-					)
-				)
-			};
-		} else {
-			return null;
-		}
+	public ApplicationResources_ja() {
+		super(
+			Locale.JAPANESE,
+			ApplicationResources.bundleSet,
+			ApplicationResources.getSourceFile("ApplicationResources_ja.properties")
+		);
 	}
 }

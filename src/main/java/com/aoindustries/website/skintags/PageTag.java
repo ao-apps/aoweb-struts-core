@@ -22,16 +22,13 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.servlet.jsp.LocalizedJspTagException;
+import static com.aoindustries.website.Resources.RESOURCES;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import org.apache.struts.Globals;
-import org.apache.struts.util.MessageResources;
 
 /**
  * Common parent to parent and child tags.
@@ -66,7 +63,7 @@ abstract public class PageTag extends BodyTagSupport {
 	private Collection<Meta> metas;
 
 	public PageTag() {
-		init(); // Switch to TryCatchFinally style
+		init(); // TODO: Switch to TryCatchFinally style, review all
 	}
 
 	protected void init() {
@@ -133,10 +130,7 @@ abstract public class PageTag extends BodyTagSupport {
 		ServletRequest request = pageContext.getRequest();
 		try {
 			if(title==null) {
-				HttpSession session = pageContext.getSession();
-				Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-				MessageResources applicationResources = (MessageResources)request.getAttribute("/ApplicationResources");
-				throw new JspTagException(applicationResources.getMessage(locale, "skintags.PageTag.needsTitleTag"));
+				throw new LocalizedJspTagException(RESOURCES, "skintags.PageTag.needsTitleTag");
 			}
 			String myNavImageAlt = this.navImageAlt;
 			if(myNavImageAlt == null || myNavImageAlt.length()==0) myNavImageAlt=title;
