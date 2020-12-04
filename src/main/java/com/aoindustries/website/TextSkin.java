@@ -30,7 +30,6 @@ import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.javaSc
 import com.aoindustries.encoding.MediaWriter;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
-import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
@@ -260,11 +259,11 @@ public class TextSkin extends Skin {
 			/*
 			List<Parent> parents = pageAttributes.getParents();
 			for(Parent parent : parents) {
-				encodeTextInXhtml(parent.getTitle(), out);
+				html.text(parent.getTitle());
 				out.print(" - ");
 			}
 			 */
-			encodeTextInXhtml(pageAttributes.getTitle(), out);
+			html.text(pageAttributes.getTitle());
 			out.print("</title>\n");
 			String description = pageAttributes.getDescription();
 			if(description != null && (description = description.trim()).length() > 0) {
@@ -570,7 +569,7 @@ public class TextSkin extends Skin {
 					out
 				);
 				out.print("\">");
-				encodeTextInXhtml(navAlt, out);
+				html.text(navAlt);
 				out.print("</a>");
 				html.br__().nl();
 			}
@@ -581,7 +580,7 @@ public class TextSkin extends Skin {
 				out
 			);
 			out.print("\">");
-			encodeTextInXhtml(pageAttributes.getNavImageAlt(), out);
+			html.text(pageAttributes.getNavImageAlt());
 			out.print("</a>");
 			html.br__().nl();
 			out.print("          </div>\n"
@@ -612,7 +611,7 @@ public class TextSkin extends Skin {
 					out
 				);
 				out.print("\">");
-				encodeTextInXhtml(navAlt, out);
+				html.text(navAlt);
 				out.print("</a>");
 				html.br__().nl();
 			}
@@ -693,9 +692,10 @@ public class TextSkin extends Skin {
 	@Override
 	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String title, int colspan) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, resp, out);
 			startContentLine(req, resp, out, colspan, "center", null);
 			out.print("<h1>");
-			encodeTextInXhtml(title, out);
+			html.text(title);
 			out.print("</h1>\n");
 			endContentLine(req, resp, out, 1, false);
 		} catch(IOException err) {
@@ -951,6 +951,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, resp, out);
 			String urlBase = getUrlBase(req);
 			//Locale locale = resp.getLocale();
 
@@ -977,17 +978,17 @@ public class TextSkin extends Skin {
 					out
 				);
 				out.print("\">");
-				encodeTextInXhtml(navAlt, out);
+				html.text(navAlt);
 				out.print("</a></td>\n"
 						+ "    <td style=\"width:12px; white-space:nowrap\">&#160;</td>\n"
 						+ "    <td style=\"white-space:nowrap\">");
 				String description = sibling.getDescription();
 				if(description!=null && (description=description.trim()).length()>0) {
-					encodeTextInXhtml(description, out);
+					html.text(description);
 				} else {
 					String title = sibling.getTitle();
 					if(title!=null && (title=title.trim()).length()>0) {
-						encodeTextInXhtml(title, out);
+						html.text(title);
 					} else {
 						out.print("&#160;");
 					}
