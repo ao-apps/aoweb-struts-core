@@ -31,6 +31,7 @@ import com.aoindustries.html.Link;
 import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
+import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
@@ -119,25 +120,13 @@ abstract public class Skin {
 
 	/**
 	 * Gets the prefix for URLs for the non-SSL server.  This should always end with a /.
+	 *
+	 * @deprecated  Please use {@link HttpServletUtil#getAbsoluteURL(javax.servlet.http.HttpServletRequest, java.lang.String)}
+	 *              as {@code HttpServletUtil.getAbsoluteURL(req, "/")}.
 	 */
+	@Deprecated
 	public static String getDefaultUrlBase(HttpServletRequest req) throws JspException {
-		int port = req.getServerPort();
-		String contextPath = req.getContextPath();
-		if(port!=80 && port!=443) {
-			if(req.isSecure()) {
-				// SSL development area
-				return "https://"+req.getServerName()+":11156"+contextPath+"/";
-			} else {
-				// Non-SSL development area
-				return "http://"+req.getServerName()+":8086"+contextPath+"/";
-			}
-		} else {
-			if(req.isSecure()) {
-				return "https://"+req.getServerName()+contextPath+"/";
-			} else {
-				return "http://"+req.getServerName()+contextPath+"/";
-			}
-		}
+		return HttpServletUtil.getAbsoluteURL(req, "/");
 	}
 
 	/**
