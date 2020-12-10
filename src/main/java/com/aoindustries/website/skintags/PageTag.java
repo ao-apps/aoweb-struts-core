@@ -23,7 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.ServletRequest;
@@ -130,7 +130,7 @@ abstract public class PageTag extends BodyTagSupport {
 		ServletRequest request = pageContext.getRequest();
 		try {
 			if(title==null) {
-				throw new LocalizedJspTagException(RESOURCES, "skintags.PageTag.needsTitleTag");
+				throw new LocalizedJspTagException(PACKAGE_RESOURCES, "skintags.PageTag.needsTitleTag");
 			}
 			String myNavImageAlt = this.navImageAlt;
 			if(myNavImageAlt == null || myNavImageAlt.length()==0) myNavImageAlt=title;

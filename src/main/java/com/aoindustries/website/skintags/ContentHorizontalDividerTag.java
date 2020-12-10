@@ -25,7 +25,7 @@ package com.aoindustries.website.skintags;
 import com.aoindustries.lang.Strings;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +63,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			List<String> list = Strings.splitCommaSpace(colspansAndDirections);
 			if((list.size()&1)==0) {
-				throw new LocalizedJspTagException(RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements");
+				throw new LocalizedJspTagException(PACKAGE_RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements");
 			}
 			int[] array = new int[list.size()];
 			for(int c=0;c<list.size();c+=2) {
@@ -73,7 +73,7 @@ public class ContentHorizontalDividerTag extends TagSupport {
 					else if("down".equalsIgnoreCase(direction)) array[c-1]=Skin.DOWN;
 					else if("upAndDown".equalsIgnoreCase(direction)) array[c-1]=Skin.UP_AND_DOWN;
 					else {
-						throw new LocalizedJspTagException(RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction);
+						throw new LocalizedJspTagException(PACKAGE_RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.invalidDirection", direction);
 					}
 				}
 				array[c]=Integer.parseInt(list.get(c));

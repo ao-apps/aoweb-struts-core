@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.aowebtags;
 
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.ValidationMessage;
@@ -45,7 +45,7 @@ public class ScriptGroupTagTEI extends TagExtraInfo {
 			return new ValidationMessage[] {
 				new ValidationMessage(
 					data.getId(),
-					RESOURCES.getMessage(
+					PACKAGE_RESOURCES.getMessage(
 						//"Invalid value for onloadMode, should be one of \"none\", \"before\", or \"after\": {0}",
 						//Locale.getDefault(),
 						"aowebtags.ScriptGroupTag.onloadMode.invalid",

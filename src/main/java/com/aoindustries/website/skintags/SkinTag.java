@@ -30,7 +30,7 @@ import com.aoindustries.html.Html;
 import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.website.Constants;
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -59,7 +59,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	public static Skin getSkin(PageContext pageContext) throws JspException {
 		Skin skin = (Skin)pageContext.getAttribute(Constants.SKIN, PageContext.REQUEST_SCOPE);
 		if(skin==null) {
-			throw new LocalizedJspTagException(RESOURCES, "skintags.unableToFindSkinInRequest");
+			throw new LocalizedJspTagException(PACKAGE_RESOURCES, "skintags.unableToFindSkinInRequest");
 		}
 		return skin;
 	}

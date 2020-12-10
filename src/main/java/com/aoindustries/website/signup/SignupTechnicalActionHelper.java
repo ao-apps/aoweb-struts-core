@@ -27,7 +27,7 @@ import com.aoindustries.aoserv.client.password.PasswordGenerator;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.html.Html;
 import com.aoindustries.website.SiteSettings;
-import static com.aoindustries.website.signup.Resources.RESOURCES;
+import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -89,138 +89,138 @@ final public class SignupTechnicalActionHelper {
 	public static void printConfirmation(ChainWriter emailOut, Html html, AOServConnector rootConn, SignupTechnicalForm signupTechnicalForm) throws IOException, SQLException {
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.required"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baName.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baName.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaName()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baTitle.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baTitle.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaTitle()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.required"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baWorkPhone.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baWorkPhone.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaWorkPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baCellPhone.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCellPhone.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaCellPhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baHomePhone.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baHomePhone.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaHomePhone()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baFax.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baFax.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaFax()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.required"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baEmail.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baEmail.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaEmail()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baAddress1.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress1.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaAddress1()).print("</td>\n"
 					 + "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupTechnicalForm.getBaAddress2())) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baAddress2.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress2.prompt"));
 		emailOut.print("</td>\n"
 						 + "        <td>").textInXhtml(signupTechnicalForm.getBaAddress2()).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baCity.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCity.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaCity()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baState.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baState.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaState()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baCountry.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCountry.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(getBaCountry(rootConn, signupTechnicalForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baZip.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baZip.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaZip()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.required"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baUsername.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baUsername.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaUsername()).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupTechnicalForm.baPassword.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baPassword.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(signupTechnicalForm.getBaPassword()).print("</td>\n"
 					 + "    </tr>\n");

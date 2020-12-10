@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website;
 
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.Enumeration;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -131,7 +131,7 @@ public class FilteredHttpSession implements HttpSession {
 				// Must be an SessionActionForm if none of the above
 				&& !(value instanceof SessionActionForm)
 			) {
-				throw new AssertionError(RESOURCES.getMessage("FilteredHttpSession.unexpectedSessionAttribute", name, value.getClass().getName()));
+				throw new AssertionError(PACKAGE_RESOURCES.getMessage("FilteredHttpSession.unexpectedSessionAttribute", name, value.getClass().getName()));
 			}
 		}
 	}

@@ -29,7 +29,7 @@ import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.html.Html;
 import com.aoindustries.website.SiteSettings;
-import static com.aoindustries.website.signup.Resources.RESOURCES;
+import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -103,10 +103,10 @@ final public class SignupSelectPackageActionHelper {
 	public static void printConfirmation(ChainWriter emailOut, Html html, PackageDefinition packageDefinition) throws IOException {
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupSelectPackageForm.packageDefinition.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupSelectPackageForm.packageDefinition.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(packageDefinition.getDisplay()).print("</td>\n"
 					 + "    </tr>\n");

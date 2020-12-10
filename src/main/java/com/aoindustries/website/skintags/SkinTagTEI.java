@@ -25,7 +25,7 @@ package com.aoindustries.website.skintags;
 import com.aoindustries.collections.MinimalList;
 import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.jsp.tagext.TagData;
@@ -52,7 +52,7 @@ public class SkinTagTEI extends TagExtraInfo {
 				} catch(IllegalArgumentException e) {
 					messages = MinimalList.add(
 						messages,
-						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.RESOURCES.getMessage("HtmlTag.serialization.invalid", serialization))
+						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.PACKAGE_RESOURCES.getMessage("HtmlTag.serialization.invalid", serialization))
 					);
 				}
 			}
@@ -69,7 +69,7 @@ public class SkinTagTEI extends TagExtraInfo {
 				} catch(IllegalArgumentException e) {
 					messages = MinimalList.add(
 						messages,
-						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.RESOURCES.getMessage("HtmlTag.doctype.invalid", doctype))
+						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.PACKAGE_RESOURCES.getMessage("HtmlTag.doctype.invalid", doctype))
 					);
 				}
 			}
@@ -81,11 +81,10 @@ public class SkinTagTEI extends TagExtraInfo {
 		) {
 			String layout = ((String)layoutAttr).trim();
 			if(!PageAttributes.LAYOUT_NORMAL.equals(layout) && !PageAttributes.LAYOUT_MINIMAL.equals(layout)) {
-				messages = MinimalList.add(
-					messages,
+				messages = MinimalList.add(messages,
 					new ValidationMessage(
 						data.getId(),
-						RESOURCES.getMessage(
+						PACKAGE_RESOURCES.getMessage(
 							//"Invalid value for layout, must be either \"normal\" or \"minimal\"",
 							//Locale.getDefault(),
 							"skintags.SkinTagTEI.validate.layout.invalid"

@@ -31,7 +31,7 @@ import com.aoindustries.html.Html;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
-import static com.aoindustries.website.signup.Resources.RESOURCES;
+import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -456,29 +456,29 @@ final public class SignupCustomizeServerActionHelper {
 		if(!GenericValidator.isBlankOrNull(powerOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.power.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.power.prompt"));
 		emailOut.print("</td>\n"
 						 + "        <td>").print(powerOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.cpu.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.cpu.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").print(getCpuOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.ram.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.ram.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").textInXhtml(getRamOption(rootConn, signupCustomizeServerForm)).print("</td>\n"
 					 + "    </tr>\n");
@@ -486,10 +486,10 @@ final public class SignupCustomizeServerActionHelper {
 		if(!GenericValidator.isBlankOrNull(sataControllerOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 						 + "        <td>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.sataController.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.sataController.prompt"));
 		emailOut.print("</td>\n"
 						 + "        <td>").print(sataControllerOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -498,10 +498,10 @@ final public class SignupCustomizeServerActionHelper {
 		if(!GenericValidator.isBlankOrNull(scsiControllerOption)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(RESOURCES.getMessage("signup.notRequired"));
+			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.scsiController.prompt"));
+			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.scsiController.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").print(scsiControllerOption).print("</td>\n"
 						 + "    </tr>\n");
@@ -509,25 +509,25 @@ final public class SignupCustomizeServerActionHelper {
 		for(String diskOption : getDiskOptions(rootConn, signupCustomizeServerForm)) {
 			emailOut.print("    <tr>\n"
 						 + "        <td>");
-			html.text(RESOURCES.getMessage("signup.notRequired"));
+			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 			emailOut.print("</td>\n"
 						 + "        <td>");
-			html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.disk.prompt"));
+			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.disk.prompt"));
 			emailOut.print("</td>\n"
 						 + "        <td>").textInXhtml(diskOption).print("</td>\n"
 						 + "    </tr>\n");
 		}
 		emailOut.print("    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>\n");
 		Money setup = packageDefinition.getSetupFee();
 		if(setup == null) {
-			emailOut.print("            ").print(RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none")).print("\n");
+			emailOut.print("            ").print(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none")).print("\n");
 		} else {
 			emailOut.print("            ").print(setup).print("\n");
 		}
@@ -535,10 +535,10 @@ final public class SignupCustomizeServerActionHelper {
 					 + "    </tr>\n"
 					 + "    <tr>\n"
 					 + "        <td>");
-		html.text(RESOURCES.getMessage("signup.notRequired"));
+		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
 		emailOut.print("</td>\n"
 					 + "        <td style='white-space:nowrap'>");
-		html.text(RESOURCES.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt"));
+		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt"));
 		emailOut.print("</td>\n"
 					 + "        <td>").print(request.getAttribute("monthlyRate")).print("</td>\n"
 					 + "    </tr>\n");

@@ -28,7 +28,7 @@ import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
-import static com.aoindustries.website.Resources.RESOURCES;
+import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
@@ -115,7 +115,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 						script.write("  }\n"
 								+ "  window.onload = scriptOutOnload"); script.write(sequenceId); script.write(";\n");
 						if(!wroteScript) {
-							throw new LocalizedJspTagException(RESOURCES, "aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode);
+							throw new LocalizedJspTagException(PACKAGE_RESOURCES, "aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode);
 						}
 					}
 				}

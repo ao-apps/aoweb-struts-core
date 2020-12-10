@@ -43,7 +43,7 @@ import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.Mailer;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.TextSkin;
-import static com.aoindustries.website.signup.Resources.RESOURCES;
+import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.CharArrayWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -310,29 +310,29 @@ final public class ServerConfirmationCompletedActionHelper {
 						 + "<body>\n"
 						 + "<table style=\"border:0px\" cellpadding=\"0\" cellspacing=\"0\">\n"
 						 + "    <tr><td style=\"white-space:nowrap\" colspan=\"3\">\n"
-						 + "        ").print(RESOURCES.getMessage(statusKey, pkey));
+						 + "        ").print(PACKAGE_RESOURCES.getMessage(statusKey, pkey));
 			html.br__().nl();
 			emailOut.print("        ");
 			html.br__().nl();
-			emailOut.print("        ").print(RESOURCES.getMessage("serverConfirmationCompleted.belowIsSummary"));
+			emailOut.print("        ").print(PACKAGE_RESOURCES.getMessage("serverConfirmationCompleted.belowIsSummary"));
 			html.br__().nl();
 			emailOut.print("        ");
 			html.hr__();
 			emailOut.print("    </td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(RESOURCES.getMessage("steps.selectServer.label"));
+			html.text(PACKAGE_RESOURCES.getMessage("steps.selectServer.label"));
 			emailOut.print("</th></tr>\n");
 			SignupSelectServerActionHelper.printConfirmation(emailOut, html, packageDefinition);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(RESOURCES.getMessage("steps.customizeServer.label"));
+			html.text(PACKAGE_RESOURCES.getMessage("steps.customizeServer.label"));
 			emailOut.print("</th></tr>\n");
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
 			SignupCustomizeServerActionHelper.printConfirmation(request, emailOut, html, rootConn, packageDefinition, signupCustomizeServerForm);
 			if(signupCustomizeManagementForm!=null) {
 				emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 							 + "    <tr><th colspan=\"3\">");
-				html.text(RESOURCES.getMessage("steps.customizeManagement.label"));
+				html.text(PACKAGE_RESOURCES.getMessage("steps.customizeManagement.label"));
 				emailOut.print("</th></tr>\n");
 				SignupCustomizeManagementActionHelper.printConfirmation(
 					request,
@@ -344,17 +344,17 @@ final public class ServerConfirmationCompletedActionHelper {
 			}
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(RESOURCES.getMessage("steps.organizationInfo.label"));
+			html.text(PACKAGE_RESOURCES.getMessage("steps.organizationInfo.label"));
 			emailOut.print("</th></tr>\n");
 			SignupOrganizationActionHelper.printConfirmation(emailOut, html, rootConn, signupOrganizationForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(RESOURCES.getMessage("steps.technicalInfo.label"));
+			html.text(PACKAGE_RESOURCES.getMessage("steps.technicalInfo.label"));
 			emailOut.print("</th></tr>\n");
 			SignupTechnicalActionHelper.printConfirmation(emailOut, html, rootConn, signupTechnicalForm);
 			emailOut.print("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
 						 + "    <tr><th colspan=\"3\">");
-			html.text(RESOURCES.getMessage("steps.billingInformation.label"));
+			html.text(PACKAGE_RESOURCES.getMessage("steps.billingInformation.label"));
 			emailOut.print("</th></tr>\n");
 			SignupBillingInformationActionHelper.printConfirmation(emailOut, html, signupBillingInformationForm);
 			emailOut.print("</table>\n"
@@ -365,14 +365,13 @@ final public class ServerConfirmationCompletedActionHelper {
 
 			// Send the email
 			Brand brand = siteSettings.getBrand();
-			Mailer.sendEmail(
-				HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getLinuxServer().getHostname()),
+			Mailer.sendEmail(HostAddress.valueOf(brand.getSignupEmailAddress().getDomain().getLinuxServer().getHostname()),
 				html.serialization.getContentType(),
 				charset,
 				brand.getSignupEmailAddress().toString(),
 				brand.getSignupEmailDisplay(),
 				Collections.singletonList(recipient),
-				RESOURCES.getMessage("serverConfirmationCompleted.email.subject", pkey),
+				PACKAGE_RESOURCES.getMessage("serverConfirmationCompleted.email.subject", pkey),
 				cout.toString()
 			);
 
