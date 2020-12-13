@@ -28,9 +28,11 @@ import com.aoindustries.encoding.Doctype;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
 import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.javaScriptInXhtmlAttributeEncoder;
 import com.aoindustries.encoding.MediaWriter;
+import com.aoindustries.encoding.Serialization;
 import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
+import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Meta;
@@ -867,6 +869,7 @@ public class TextSkin extends Skin {
 				textInJavaScriptEncoder,
 				textInXhtmlEncoder,
 				out,
+				SerializationEE.get(req.getServletContext(), req) == Serialization.XML,
 				4,
 				true
 			);

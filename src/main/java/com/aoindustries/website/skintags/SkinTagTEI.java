@@ -25,6 +25,7 @@ package com.aoindustries.website.skintags;
 import com.aoindustries.collections.MinimalList;
 import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
+import com.aoindustries.taglib.HtmlTag;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +53,7 @@ public class SkinTagTEI extends TagExtraInfo {
 				} catch(IllegalArgumentException e) {
 					messages = MinimalList.add(
 						messages,
-						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.PACKAGE_RESOURCES.getMessage("HtmlTag.serialization.invalid", serialization))
+						new ValidationMessage(data.getId(), HtmlTag.RESOURCES.getMessage("serialization.invalid", serialization))
 					);
 				}
 			}
@@ -69,7 +70,7 @@ public class SkinTagTEI extends TagExtraInfo {
 				} catch(IllegalArgumentException e) {
 					messages = MinimalList.add(
 						messages,
-						new ValidationMessage(data.getId(), com.aoindustries.taglib.Resources.PACKAGE_RESOURCES.getMessage("HtmlTag.doctype.invalid", doctype))
+						new ValidationMessage(data.getId(), HtmlTag.RESOURCES.getMessage("doctype.invalid", doctype))
 					);
 				}
 			}

@@ -23,6 +23,7 @@
 package com.aoindustries.website;
 
 import com.aoindustries.servlet.http.Cookies;
+import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.util.i18n.EditableResourceBundle;
 import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.website.struts.ResourceBundleMessageResources;
@@ -59,19 +60,20 @@ public class SiteSettingsAction extends PageAction {
 
 		// Start the request tracking
 		boolean canEditResources = siteSettings.getCanEditResources();
-		boolean modifyAllText = false;
+		EditableResourceBundle.ThreadSettings threadSettings;
 		if(canEditResources) {
 			// Check for cookie
-			if("visible".equals(Cookies.getCookie(request, "EditableResourceBundleEditorVisibility"))) {
-				modifyAllText = true;
-			}
+			boolean modifyAllText = "visible".equals(Cookies.getCookie(request, "EditableResourceBundleEditorVisibility")); // TODO: "EditableResourceBundleEditorVisibility" should be a constant?
+			threadSettings = new EditableResourceBundle.ThreadSettings(
+				HttpServletUtil.getAbsoluteURL(request, "/set-resource-bundle-value.do"),
+				EditableResourceBundle.ThreadSettings.Mode.MARKUP,
+				modifyAllText
+			);
+		} else {
+			threadSettings = new EditableResourceBundle.ThreadSettings();
 		}
 		ResourceBundleMessageResources.setCachedEnabled(!canEditResources);
-		EditableResourceBundle.resetRequest(
-			canEditResources,
-			canEditResources ? (Skin.getDefaultUrlBase(request)+"set-resource-bundle-value.do") : null,
-			modifyAllText
-		);
+		EditableResourceBundle.setThreadSettings(threadSettings);
 
 		return execute(mapping, form, request, response, siteSettings);
 	}
