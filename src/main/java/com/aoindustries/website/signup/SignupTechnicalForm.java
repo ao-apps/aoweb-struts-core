@@ -220,7 +220,7 @@ public class SignupTechnicalForm extends ActionForm implements Serializable, Ses
 	}
 
 	final public void setBaPassword(String baPassword) {
-		this.baPassword = baPassword.trim();
+		this.baPassword = baPassword;
 	}
 
 	@Override
