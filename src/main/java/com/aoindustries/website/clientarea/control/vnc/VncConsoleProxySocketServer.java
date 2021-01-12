@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -86,7 +86,7 @@ public class VncConsoleProxySocketServer implements Runnable {
 				KeyStore.Builder fsBuilder = KeyStore.Builder.newInstance(
 					brand.getAowebStrutsKeystoreType(),
 					null,
-					new File(myServletContext.getRealPath("/WEB-INF/keystore")),
+					new File("conf/keystore"),
 					new KeyStore.PasswordProtection(brand.getAowebStrutsKeystorePassword().toCharArray())
 				);
 				ManagerFactoryParameters ksParams = new KeyStoreBuilderParameters(Collections.singletonList(fsBuilder));

@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2021-01-02T14:19:55-06:00"
+		dateModified="2021-01-12T16:04:46-06:00"
 	>
 		<c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
 			<changelog:release
@@ -91,6 +91,19 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						sub-project is used only for development and is never deployed to artifact repositories.
 					</li>
 					<li>No longer trimming passwords.</li>
+					<li>
+						VNC keystore moved from web resource <code>/WEB-INF/keystore</code> to filesystem
+						resource <code>conf/keystore</code>.  This assumes that Tomcat is running with a working
+						directory containing the <code>conf/</code> folder, which is true on the
+						<ao:a href="https://aoindustries.com/aoserv/">AOServ Platform</ao:a>.  This has two advantages:
+						<ol>
+							<li>The webapp may be deployed as an unexploded WAR file.</li>
+							<li>
+								The keystore may be updated separately from the application.  This is used, for example,
+								by Let's Encrypt renewal hooks.
+							</li>
+						</ol>
+					</li>
 				</ul>
 			</changelog:release>
 		</c:if>
