@@ -149,8 +149,11 @@ public class VncConsoleProxyWebsocketServer {
 
 	@OnMessage
 	public void onMessage(byte[] message, Session session) throws IOException, SQLException, InterruptedException {
-		buffer.write(message);
 		if(phase == Phase.Protocol) {
+			if(message != null) {
+				buffer.write(message);
+				message = null;
+			}
 			if(buffer.size() >= protocolVersion_3_3.length) {
 				assert protocolFuture.isDone();
 				byte[] bytes = buffer.toByteArray();
@@ -182,6 +185,10 @@ public class VncConsoleProxyWebsocketServer {
 			}
 		}
 		if(phase == Phase.Auth) {
+			if(message != null) {
+				buffer.write(message);
+				message = null;
+			}
 			if(buffer.size() >= 16) {
 				assert authFuture.isDone();
 				byte[] bytes = buffer.toByteArray();
@@ -343,9 +350,17 @@ public class VncConsoleProxyWebsocketServer {
 		}
 		if(phase == Phase.Proxy) {
 			// socketIn -> daemonOut in this thread
+			boolean doFlush = false;
 			if(buffer.size() > 0) {
 				buffer.writeTo(daemonOut);
 				buffer.reset();
+				doFlush = true;
+			}
+			if(message != null) {
+				daemonOut.write(message);
+				doFlush = true;
+			}
+			if(doFlush) {
 				daemonOut.flush();
 			}
 		}
