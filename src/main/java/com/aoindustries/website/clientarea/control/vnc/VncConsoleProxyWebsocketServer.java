@@ -95,7 +95,8 @@ public class VncConsoleProxyWebsocketServer {
 	private enum Phase {
 		Protocol,
 		Auth,
-		Proxy
+		Proxy,
+		Error
 	}
 
 	private volatile Phase phase = Phase.Protocol;
@@ -169,7 +170,6 @@ public class VncConsoleProxyWebsocketServer {
 						&& protocolVersion_3_8[c]!=b // Accept 3.8 but treat as 3.3
 					) throw new IOException("Mismatched protocolVersion from VNC client through socket: #"+c+": "+(char)b);
 				}
-				phase = Phase.Auth;
 				byte[] auth = new byte[4 + 16];
 				// Security type
 				auth[0] = 0;
@@ -182,6 +182,7 @@ public class VncConsoleProxyWebsocketServer {
 				AOServConnector.getSecureRandom().nextBytes(challenge);
 				System.arraycopy(challenge, 0, auth, 4, 16);
 				authFuture = session.getAsyncRemote().sendBinary(ByteBuffer.wrap(auth));
+				phase = Phase.Auth;
 			}
 		}
 		if(phase == Phase.Auth) {
@@ -376,6 +377,7 @@ public class VncConsoleProxyWebsocketServer {
 
 	@OnError
 	public void onError(Session session, Throwable t) throws IOException {
+		phase = Phase.Error;
 		try {
 			logger.log(Level.SEVERE, null, t);
 		} finally {
