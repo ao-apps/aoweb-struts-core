@@ -367,10 +367,6 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 								</offlineLink>
 								<!-- Java EE: <groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId> -->
 								<!-- Java EE: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
-								<offlineLink>
-									<url>${javadoc.link.javamail}</url>
-									<location>${project.build.directory}/offlineLinks/com/aoindustries/javadoc/offline/com.sun.mail/javax.mail</location>
-								</offlineLink>
 								<!-- Java EE: <groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId> -->
 								<!-- Java EE: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 								<offlineLink>
