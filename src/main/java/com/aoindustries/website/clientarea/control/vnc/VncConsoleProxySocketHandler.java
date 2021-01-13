@@ -275,7 +275,7 @@ public class VncConsoleProxySocketHandler {
 												logger.log(Level.SEVERE, null, t);
 											}
 										},
-										"VncConsoleProxySocketHandler socketIn->daemonOut"
+										"VncConsoleProxySocketHandler socketIn->daemonOut: " + virtualServer.getHost().getName()
 									);
 									inThread.setDaemon(true); // Don't prevent JVM shutdown
 									inThread.setPriority(Thread.NORM_PRIORITY+2); // Higher priority for higher performance

@@ -33,6 +33,7 @@ import com.aoindustries.aoserv.daemon.client.AOServDaemonProtocol;
 import com.aoindustries.io.AOPool;
 import com.aoindustries.io.stream.StreamableInput;
 import com.aoindustries.io.stream.StreamableOutput;
+import com.aoindustries.lang.Throwables;
 import com.aoindustries.net.InetAddress;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.clientarea.control.vnc.VncConsoleProxySocketHandler.desCipher;
@@ -45,7 +46,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -306,6 +306,7 @@ public class VncConsoleProxyWebsocketServer {
 						proxyFuture = session.getAsyncRemote().sendBinary(ByteBuffer.wrap(new byte[] {0, 0, 0, 0}));
 						// daemonIn -> socketOut in another thread
 						assert outThread == null;
+						@SuppressWarnings({"BroadCatchBlock", "AssignmentToCatchBlockParameter"})
 						Thread _outThread = new Thread(
 							() -> {
 								try {
@@ -316,6 +317,8 @@ public class VncConsoleProxyWebsocketServer {
 											proxyFuture.get();
 											proxyFuture = session.getAsyncRemote().sendBinary(ByteBuffer.wrap(Arrays.copyOf(buff, ret)));
 										}
+										// Always close after VNC tunnel since this is a connection-terminal command
+										session.close(new CloseReason(CloseReason.CloseCodes.GOING_AWAY, "EOF at daemonIn"));
 									} finally {
 										logger.fine("EOF at daemonIn, closing daemonConn");
 										// Always close after VNC tunnel since this is a connection-terminal command
@@ -323,11 +326,16 @@ public class VncConsoleProxyWebsocketServer {
 									}
 								} catch(ThreadDeath td) {
 									throw td;
-								} catch(Error | RuntimeException | IOException | InterruptedException | ExecutionException t) {
+								} catch(Throwable t) {
+									try {
+										session.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, t.toString()));
+									} catch(Error | RuntimeException | IOException e) {
+										t = Throwables.addSuppressed(t, e);
+									}
 									logger.log(Level.SEVERE, null, t);
 								}
 							},
-							"VncConsoleProxyWebsocketServer daemonIn->socketOut"
+							"VncConsoleProxyWebsocketServer daemonIn->socketOut: " + virtualServer.getHost().getName()
 						);
 						_outThread.setDaemon(true); // Don't prevent JVM shutdown
 						_outThread.setPriority(Thread.NORM_PRIORITY+2); // Higher priority for higher performance
