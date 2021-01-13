@@ -41,6 +41,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<li><a target="${javadoc.target}" href="${project.url}aoweb-struts-aoweb.tld/">AOWeb Taglib Reference</a></li>
 			<li><a target="${javadoc.target}" href="${project.url}aoweb-struts-skin.tld/">Skin Taglib Reference</a></li>
 		]]></javadoc.taglibReference>
+		<!-- Java EE 7 required for websockets -->
+		<javaee.version>7</javaee.version>
+		<javadoc.link.javaee>${javadoc.link.javaee.7}</javadoc.link.javaee>
 
 		<!-- Dependencies -->
 		<struts-core.version>1.3.10</struts-core.version>
@@ -241,6 +244,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 										<!-- ao-javadoc-offline: <groupId>com.sun.mail</groupId><artifactId>javax.mail</artifactId> -->
 										<!-- ao-javadoc-offline: <groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId> -->
 										<!-- ao-javadoc-offline: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
+										<!-- ao-javadoc-offline: <groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId> -->
 										<!-- ao-javadoc-offline: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 										<artifactItem>
 											<groupId>org.apache.struts</groupId><artifactId>struts-core</artifactId><classifier>javadoc</classifier>
@@ -363,6 +367,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 								</offlineLink>
 								<!-- Java EE: <groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId> -->
 								<!-- Java EE: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
+								<offlineLink>
+									<url>${javadoc.link.javamail}</url>
+									<location>${project.build.directory}/offlineLinks/com/aoindustries/javadoc/offline/com.sun.mail/javax.mail</location>
+								</offlineLink>
+								<!-- Java EE: <groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId> -->
 								<!-- Java EE: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 								<offlineLink>
 									<url>https://tool.oschina.net/uploads/apidocs/struts-${struts-core.version}/</url>
@@ -469,6 +478,10 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</dependency>
 			<!-- javaee-web-api-bom: <groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId> -->
 			<!-- javaee-web-api-bom: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
+			<dependency>
+				<groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId><version>1.1</version>
+				<scope>provided</scope>
+			</dependency>
 			<!-- javaee-web-api-bom: <groupId>javax.servlet</groupId><artifactId>jstl</artifactId> -->
 			<dependency>
 				<groupId>org.apache.struts</groupId><artifactId>struts-core</artifactId><version>${struts-core.version}</version>
@@ -606,6 +619,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId><artifactId>jstl</artifactId>

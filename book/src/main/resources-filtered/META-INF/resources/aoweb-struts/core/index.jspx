@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
-Copyright (C) 2016, 2017, 2019, 2020  AO Industries, Inc.
+Copyright (C) 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -35,7 +35,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="@{documented.shortTitle}"
 		description="@{documented.description}"
 		datePublished="2016-10-17T00:09:00-0500"
-		dateModified="2020-03-24T14:01:33-05:00"
+		dateModified="2021-01-13T01:00:37-06:00"
 	>
 		<core:child page="changelog.jspx" />
 		<core:child page="aoweb-struts-aoweb.tld/" />

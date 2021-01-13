@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -57,7 +57,7 @@ public class VncConsoleProxySocketHandler {
 
 	private static final Logger logger = Logger.getLogger(VncConsoleProxySocketHandler.class.getName());
 
-	private static final byte[] protocolVersion_3_3 = {
+	static final byte[] protocolVersion_3_3 = {
 		// "RFB 003.003\n"
 		(byte)'R',
 		(byte)'F',
@@ -72,7 +72,7 @@ public class VncConsoleProxySocketHandler {
 		(byte)'3',
 		(byte)'\n'
 	};
-	private static final byte[] protocolVersion_3_5 = {
+	static final byte[] protocolVersion_3_5 = {
 		// "RFB 003.005\n"
 		(byte)'R',
 		(byte)'F',
@@ -87,7 +87,7 @@ public class VncConsoleProxySocketHandler {
 		(byte)'5',
 		(byte)'\n'
 	};
-	private static final byte[] protocolVersion_3_8 = {
+	static final byte[] protocolVersion_3_8 = {
 		// "RFB 003.008\n"
 		(byte)'R',
 		(byte)'F',
@@ -117,7 +117,7 @@ public class VncConsoleProxySocketHandler {
 					socketOut.flush();
 					for(int c=0; c<protocolVersion_3_3.length; c++) {
 						int b = socketIn.read();
-						if(b==-1) throw new EOFException("EOF from socketIn");
+						if(b == -1) throw new EOFException("EOF from socketIn");
 						if(
 							protocolVersion_3_3[c]!=b
 							&& protocolVersion_3_5[c]!=b // Accept 3.5 but treat as 3.3
@@ -136,7 +136,9 @@ public class VncConsoleProxySocketHandler {
 					socketOut.flush();
 					byte[] response = new byte[16];
 					for(int c=0;c<16;c++) {
-						if((response[c] = (byte)socketIn.read())==-1) throw new EOFException("EOF from socketIn");
+						int b = socketIn.read();
+						if(b == -1) throw new EOFException("EOF from socketIn");
+						response[c] = (byte)b;
 					}
 					VirtualServer virtualServer = null;
 					for(VirtualServer vs : rootConn.getInfrastructure().getVirtualServer().getRows()) {
@@ -151,6 +153,7 @@ public class VncConsoleProxySocketHandler {
 					}
 					if(virtualServer==null) {
 						// Virtual Host not found
+						logger.warning("Virtual Host not found");
 						Thread.sleep(5000);
 						socketOut.write(0);
 						socketOut.write(0);
@@ -162,6 +165,7 @@ public class VncConsoleProxySocketHandler {
 
 						// Connect through AOServ Platform
 						Server.DaemonAccess daemonAccess = virtualServer.requestVncConsoleAccess();
+						logger.fine("Got daemon access");
 						AOServDaemonConnector daemonConnector = AOServDaemonConnector.getConnector(
 							daemonAccess.getHost(),
 							InetAddress.UNSPECIFIED_IPV4,
@@ -173,20 +177,24 @@ public class VncConsoleProxySocketHandler {
 							AOServClientConfiguration.getSslTruststorePath(),
 							AOServClientConfiguration.getSslTruststorePassword()
 						);
+						logger.fine("Got daemon connector");
 						try (AOServDaemonConnection daemonConn = daemonConnector.getConnection()) {
+							logger.fine("Got daemon connection");
 							try {
 								final StreamableOutput daemonOut = daemonConn.getRequestOut(AOServDaemonProtocol.VNC_CONSOLE);
 								daemonOut.writeLong(daemonAccess.getKey());
 								daemonOut.flush();
+								logger.fine("Sent daemon request");
 
 								final StreamableInput daemonIn = daemonConn.getResponseIn();
 								int result=daemonIn.read();
+								logger.fine("Got daemon result");
 								if(result==AOServDaemonProtocol.NEXT) {
 									// Authenticate to actual VNC
 									// Protocol Version handshake
 									for(int c=0; c<protocolVersion_3_3.length; c++) {
 										int b = daemonIn.read();
-										if(b==-1) throw new EOFException("EOF from daemonIn");
+										if(b == -1) throw new EOFException("EOF from daemonIn");
 										if(
 											protocolVersion_3_3[c]!=b // Hardware virtualized
 											&& protocolVersion_3_8[c]!=b // Paravirtualized
@@ -220,7 +228,9 @@ public class VncConsoleProxySocketHandler {
 									}
 									// VNC Authentication
 									for(int c=0;c<16;c++) {
-										if((challenge[c] = (byte)daemonIn.read())==-1) throw new EOFException("EOF from daemonIn");
+										int b = daemonIn.read();
+										if(b == -1) throw new EOFException("EOF from daemonIn");
+										challenge[c] = (byte)b;
 									}
 									response = desCipher(challenge, virtualServer.getVncPassword());
 									daemonOut.write(response);
@@ -251,7 +261,7 @@ public class VncConsoleProxySocketHandler {
 												try {
 													byte[] buff = new byte[4096];
 													int ret;
-													while((ret=socketIn.read(buff, 0, 4096))!=-1) {
+													while((ret = socketIn.read(buff, 0, 4096)) != -1) {
 														daemonOut.write(buff, 0, ret);
 														daemonOut.flush();
 													}
@@ -274,14 +284,14 @@ public class VncConsoleProxySocketHandler {
 									// daemonIn -> socketOut in this thread
 									byte[] buff = new byte[4096];
 									int ret;
-									while((ret=daemonIn.read(buff, 0, 4096))!=-1) {
+									while((ret = daemonIn.read(buff, 0, 4096)) != -1) {
 										socketOut.write(buff, 0, ret);
 										socketOut.flush();
 									}
 								} else {
 									if (result == AOServDaemonProtocol.IO_EXCEPTION) throw new IOException(daemonIn.readUTF());
 									else if (result == AOServDaemonProtocol.SQL_EXCEPTION) throw new SQLException(daemonIn.readUTF());
-									else if (result==-1) throw new EOFException("EOF from daemonIn");
+									else if (result == -1) throw new EOFException("EOF from daemonIn");
 									else throw new IOException("Unknown result: " + result);
 								}
 							} finally {

@@ -38,6 +38,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<documented.name>AOWeb Struts Core</documented.name>
 		<documented.shortTitle>Core</documented.shortTitle>
 		<documented.description>Core API for legacy Struts-based site framework with AOServ Platform control panels.</documented.description>
+		<!-- Java EE 7 required for websockets -->
+		<documented.javaee.version>7</documented.javaee.version>
+		<documented.javadoc.link.javaee>${javadoc.link.javaee.7}</documented.javadoc.link.javaee>
 
 		<javadoc.breadcrumbs><![CDATA[<a target="${javadoc.target}" href="https://aoindustries.com/aoweb-struts/">AOWeb Struts</a>
 / <a target="${javadoc.target}" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
