@@ -364,7 +364,7 @@ public class VncConsoleProxyWebsocketServer {
 				buffer.reset();
 				doFlush = true;
 			}
-			if(message != null) {
+			if(message != null && message.length > 0) {
 				daemonOut.write(message);
 				doFlush = true;
 			}
