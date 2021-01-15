@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -80,7 +80,11 @@ public class LoginCompletedAction extends SkinAction {
 
 			// Try redirect
 			String target = (String)session.getAttribute(Constants.AUTHENTICATION_TARGET);   // Get from session
-			if(target==null) target = request.getParameter(Constants.AUTHENTICATION_TARGET); // With no cookies will be encoded in URL
+			if(target != null) {
+				session.removeAttribute(Constants.AUTHENTICATION_TARGET);
+			} else {
+				target = request.getParameter(Constants.AUTHENTICATION_TARGET); // With no cookies will be encoded in URL
+			}
 			if(target!=null && target.length()>0) {
 				response.sendRedirect(
 					response.encodeRedirectURL(

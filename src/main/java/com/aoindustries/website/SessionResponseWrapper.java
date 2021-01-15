@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -54,6 +54,9 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 
 	private static final Logger logger = Logger.getLogger(SessionResponseWrapper.class.getName());
 
+	private static final String ROBOTS_HEADER_NAME = "X-Robots-Tag";
+	private static final String ROBOTS_HEADER_VALUE = "noindex, nofollow";
+
 	final private HttpServletRequest request;
 	final private HttpServletResponse response;
 
@@ -61,6 +64,12 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 		super(response);
 		this.request = request;
 		this.response = response;
+		// When the request has any "authenticationTarget" parameter, set noindex headers
+		if(request.getParameter(Constants.AUTHENTICATION_TARGET) != null) {
+			if(!response.containsHeader(ROBOTS_HEADER_NAME)) {
+				response.setHeader(ROBOTS_HEADER_NAME, ROBOTS_HEADER_VALUE);
+			}
+		}
 	}
 
 	private String encode(String url, boolean isRedirect) {
