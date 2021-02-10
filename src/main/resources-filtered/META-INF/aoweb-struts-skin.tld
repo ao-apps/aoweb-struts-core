@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
-Copyright (C) 2007-2009, 2016, 2017, 2019, 2020  AO Industries, Inc.
+Copyright (C) 2007-2009, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -26,7 +26,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
 	<!-- datePublished="2016-10-07T16:24:47-0500" -->
-	<!-- dateModified="2020-12-13T08:01:13-06:00" -->
+	<!-- dateModified="2021-02-07T23:29:56-06:00" -->
 	<description><![CDATA[
 		<p>@{description.html}</p>
 		<hr />
@@ -49,7 +49,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<li><a href="https://aoindustries.com/ao-taglib/ao.tld/">AO Taglib</a></li>
 			<li><a href="@{project.url}aoweb-struts-skin.tld/">AOWeb Struts Core Skin Taglib</a> (this taglib)</li>
 			<li><a href="https://oss.newmediaworks.com/email-taglib/nmw-email.tld/">NMW Email Taglib</a></li>
-			<!-- TODO: nmw-payment-taglib -->
+			<li><a href="https://oss.newmediaworks.com/payment-taglib/nmw-payment.tld/">NMW Payment Taglib</a></li>
 			<!-- TODO: nmw-persistence-taglib once open-source, and many others -->
 		</ul>
 	]]></description>
