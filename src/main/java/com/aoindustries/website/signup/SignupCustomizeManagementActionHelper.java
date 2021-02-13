@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,7 +26,6 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
-import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.html.Html;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
@@ -206,82 +205,57 @@ final public class SignupCustomizeManagementActionHelper {
 		request.setAttribute("failoverOption", getFailoverOption(rootConn, signupCustomizeManagementForm));
 	}
 
-	public static void printConfirmation(
+	public static void writeEmailConfirmation(
 		HttpServletRequest request,
-		ChainWriter emailOut,
 		Html html,
 		AOServConnector rootConn,
 		SignupCustomizeManagementForm signupCustomizeManagementForm
 	) throws IOException, SQLException {
 		String backupOnsiteOption = getBackupOnsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOnsiteOption)) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-			emailOut.print("</td>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt"));
-			emailOut.print("</td>\n"
-						 + "        <td>").print(backupOnsiteOption).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(backupOnsiteOption).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
 		String backupOffsiteOption = getBackupOffsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOffsiteOption)) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-			emailOut.print("</td>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt"));
-			emailOut.print("</td>\n"
-						 + "        <td>").print(backupOffsiteOption).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(backupOffsiteOption).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
 		String backupDvdOption = getBackupDvdOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupDvdOption)) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-			emailOut.print("</td>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt"));
-			emailOut.print("</td>\n"
-						 + "        <td>").print(backupDvdOption).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(backupDvdOption).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
 		String distributionScanOption = getDistributionScanOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(distributionScanOption)) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-			emailOut.print("</td>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt"));
-			emailOut.print("</td>\n"
-						 + "        <td>").print(distributionScanOption).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(distributionScanOption).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
 		String failoverOption = getFailoverOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(failoverOption)) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-			emailOut.print("</td>\n"
-						 + "        <td>");
-			html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt"));
-			emailOut.print("</td>\n"
-						 + "        <td>").print(failoverOption).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(failoverOption).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
-		emailOut.print("    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").print(request.getAttribute("totalMonthlyRate")).print("</td>\n"
-					 + "    </tr>\n");
+		html.out.write("    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(request.getAttribute("totalMonthlyRate")).out.write("</td>\n"
+		+ "    </tr>\n");
 	}
 
 	/**

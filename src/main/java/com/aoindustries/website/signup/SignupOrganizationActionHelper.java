@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,7 +24,6 @@ package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.payment.CountryCode;
-import com.aoindustries.encoding.ChainWriter;
 import com.aoindustries.html.Html;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
@@ -123,89 +122,57 @@ final public class SignupOrganizationActionHelper {
 		request.setAttribute("organizationCountry", getOrganizationCountry(rootConn, signupOrganizationForm));
 	}
 
-	public static void printConfirmation(ChainWriter emailOut, Html html, AOServConnector rootConn, SignupOrganizationForm signupOrganizationForm) throws IOException, SQLException {
-		emailOut.print("    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationName.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationName()).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationPhone.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationPhone()).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationFax.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationFax()).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress1.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationAddress1()).print("</td>\n"
-					 + "    </tr>\n");
+	public static void writeEmailConfirmation(
+		Html html,
+		AOServConnector rootConn,
+		SignupOrganizationForm signupOrganizationForm
+	) throws IOException, SQLException {
+		html.out.write("    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationName.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationName()).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationPhone.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationPhone()).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationFax.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationFax()).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress1.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationAddress1()).out.write("</td>\n"
+		+ "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupOrganizationForm.getOrganizationAddress2())) {
-			emailOut.print("    <tr>\n"
-						 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-		emailOut.print("</td>\n"
-						 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress2.prompt"));
-		emailOut.print("</td>\n"
-						 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationAddress2()).print("</td>\n"
-						 + "    </tr>\n");
+			html.out.write("    <tr>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress2.prompt")); html.out.write("</td>\n"
+			+ "        <td>"); html.text(signupOrganizationForm.getOrganizationAddress2()).out.write("</td>\n"
+			+ "    </tr>\n");
 		}
-		emailOut.print("    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCity.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationCity()).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationState.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationState()).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.required"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCountry.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(getOrganizationCountry(rootConn, signupOrganizationForm)).print("</td>\n"
-					 + "    </tr>\n"
-					 + "    <tr>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired"));
-		emailOut.print("</td>\n"
-					 + "        <td>");
-		html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationZip.prompt"));
-		emailOut.print("</td>\n"
-					 + "        <td>").textInXhtml(signupOrganizationForm.getOrganizationZip()).print("</td>\n"
-					 + "    </tr>\n");
+		html.out.write("    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCity.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationCity()).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationState.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationState()).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCountry.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(getOrganizationCountry(rootConn, signupOrganizationForm)).out.write("</td>\n"
+		+ "    </tr>\n"
+		+ "    <tr>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationZip.prompt")); html.out.write("</td>\n"
+		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationZip()).out.write("</td>\n"
+		+ "    </tr>\n");
 	}
 }

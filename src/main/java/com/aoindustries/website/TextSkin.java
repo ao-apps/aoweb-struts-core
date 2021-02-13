@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -189,8 +189,8 @@ public class TextSkin extends Skin {
 			html.xmlDeclaration(resp.getCharacterEncoding());
 			html.doctype();
 			// Write <html>
-			HtmlTag.beginHtmlTag(resp, out, html.serialization, (GlobalAttributes)null);
-			out.write('\n');
+			HtmlTag.beginHtmlTag(resp, html.out, html.serialization, (GlobalAttributes)null);
+			html.nl();
 			
 			String layout = pageAttributes.getLayout();
 			if(!layout.equals(PageAttributes.LAYOUT_NORMAL)) throw new JspException("TODO: Implement layout: "+layout);
@@ -861,6 +861,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void endSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException {
 		try {
+			Html html = HtmlEE.get(req, resp, out);
 			out.print("        </td>\n"
 					+ "      </tr>\n"
 					+ "    </table>\n");
@@ -874,8 +875,8 @@ public class TextSkin extends Skin {
 				true
 			);
 			out.print("  </body>\n");
-			HtmlTag.endHtmlTag(out);
-			out.write('\n');
+			HtmlTag.endHtmlTag(html.out);
+			html.nl();
 		} catch(IOException  err) {
 			throw new JspException(err);
 		}

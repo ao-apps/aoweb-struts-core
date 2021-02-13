@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2021-01-15T13:46:00-06:00"
+		dateModified="2021-02-13T01:22:19-06:00"
 	>
 		<c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
 			<changelog:release
@@ -59,6 +59,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					</li>
 					<li>Now supports skin attributes for <code>serialization</code> (default "auto") and <code>doctype</code> (default "HTML5").</li>
 					<li>Skins are now responsible for writing the DOCTYPE and html tag, too.</li>
+					<li>HTML email generators use the new <core:link book="/ao-fluent-html" page="/index.jspx" /> project.</li>
 					<li>Removed setContentType tag.</li>
 					<li>Removed <code>Skin.getCharacterSet(Locale)</code>, since the default encoding is always <code>UTF-8</code>.</li>
 					<li>
