@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,9 +24,9 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
 import com.aoindustries.encoding.taglib.EncodingBufferedTag;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
-import com.aoindustries.website.Skin;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.http.HttpServletRequest;
@@ -60,14 +60,18 @@ public class ContentTitleTag extends EncodingBufferedTag {
 
 		ContentTag contentTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
-		Skin skin = SkinTag.getSkin(pageContext);
-
 		int[] colspans = contentTag.getColspansParsed();
 		int totalColspan = 0;
 		for(int c = 0; c <colspans.length; c++) {
 			totalColspan += colspans[c];
 		}
 
-		skin.printContentTitle(req, resp, pageContext.getOut(), title, totalColspan);
+		SkinTag.getSkin(pageContext).printContentTitle(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			title,
+			totalColspan
+		);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,21 +28,18 @@ import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Html;
 import com.aoindustries.html.Link;
-import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.servlet.http.HttpServletUtil;
 import com.aoindustries.web.resources.registry.Registry;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import org.apache.struts.util.MessageResources;
 
 /**
@@ -68,16 +65,14 @@ abstract public class Skin {
 	 *
 	 * <a href="https://support.google.com/webmasters/answer/189077?hl=en">https://support.google.com/webmasters/answer/189077?hl=en</a>
 	 */
-	public static void printAlternativeLinks(HttpServletRequest req, HttpServletResponse resp, Writer out, String fullPath, List<Language> languages) throws IOException {
+	public static void printAlternativeLinks(HttpServletRequest req, HttpServletResponse resp, Html html, String fullPath, List<Language> languages) throws IOException {
 		if(languages.size()>1) {
-			Html html = HtmlEE.get(req, resp, out);
 			// Default language
 			{
 				Language language = languages.get(0);
 				AnyURI uri = language.getUri();
-				out.append("    ");
 				// TODO: hreflang attribute
-				html.link(Link.Rel.ALTERNATE).hreflang("x-default").href(
+				html.out.write("    "); html.link(Link.Rel.ALTERNATE).hreflang("x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -92,8 +87,7 @@ abstract public class Skin {
 			// All languages
 			for(Language language : languages) {
 				AnyURI uri = language.getUri();
-				out.append("    ");
-				html.link(Link.Rel.ALTERNATE).hreflang(language.getCode()).href(
+				html.out.write("    "); html.link(Link.Rel.ALTERNATE).hreflang(language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -157,42 +151,42 @@ abstract public class Skin {
 	 * @see SerializationEE#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
 	 * @see DoctypeEE#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
-	abstract public void startSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException;
+	abstract public void startSkin(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException;
 
 	/**
 	 * Starts the content area of a page.  The content area provides additional features such as a nice border, and vertical and horizontal dividers.
 	 */
-	abstract public void startContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans, String width) throws JspException;
+	abstract public void startContent(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes, int[] colspans, String width) throws JspException;
 
 	/**
 	 * Prints an entire content line including the provided title.  The colspan should match the total colspan in startContent for proper appearance
 	 */
-	abstract public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String title, int colspan) throws JspException;
+	abstract public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Html html, String title, int colspan) throws JspException;
 
 	/**
 	 * Starts one line of content with the initial colspan set to the provided colspan.
 	 */
-	abstract public void startContentLine(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int colspan, String align, String width) throws JspException;
+	abstract public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Html html, int colspan, String align, String width) throws JspException;
 
 	/**
 	 * Starts one line of content with the initial colspan set to the provided colspan.
 	 */
-	abstract public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, JspWriter out, boolean visible, int colspan, int rowspan, String align, String width) throws JspException;
+	abstract public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Html html, boolean visible, int colspan, int rowspan, String align, String width) throws JspException;
 
 	/**
 	 * Ends one line of content.
 	 */
-	abstract public void endContentLine(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int rowspan, boolean endsInternal) throws JspException;
+	abstract public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Html html, int rowspan, boolean endsInternal) throws JspException;
 
 	/**
 	 * Prints a horizontal divider of the provided colspans.
 	 */
-	abstract public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, JspWriter out, int[] colspansAndDirections, boolean endsInternal) throws JspException;
+	abstract public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Html html, int[] colspansAndDirections, boolean endsInternal) throws JspException;
 
 	/**
 	 * Ends the content area of a page.
 	 */
-	abstract public void endContent(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes, int[] colspans) throws JspException;
+	abstract public void endContent(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes, int[] colspans) throws JspException;
 
 	/**
 	 * Writes all of the HTML following the content of the page,
@@ -204,27 +198,27 @@ abstract public class Skin {
 	 * @see SerializationEE#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
 	 * @see DoctypeEE#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
-	abstract public void endSkin(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException;
+	abstract public void endSkin(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException;
 
 	/**
 	 * Begins a light area.
 	 */
-	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException;
+	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Html html, String align, String width, boolean nowrap) throws JspException;
 
 	/**
 	 * Ends a light area.
 	 */
-	abstract public void endLightArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out) throws JspException;
+	abstract public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException;
 
 	/**
 	 * Begins a white area.
 	 */
-	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out, String align, String width, boolean nowrap) throws JspException;
+	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Html html, String align, String width, boolean nowrap) throws JspException;
 
 	/**
 	 * Ends a white area.
 	 */
-	abstract public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, JspWriter out) throws JspException;
+	abstract public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException;
 
 	public static class Language {
 		private final String code;
@@ -317,30 +311,30 @@ abstract public class Skin {
 	/**
 	 * Prints the auto index of all the page siblings.
 	 */
-	abstract public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, JspWriter out, PageAttributes pageAttributes) throws JspException;
+	abstract public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException;
 
 	/**
 	 * Begins a popup group.
 	 */
-	abstract public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException;
+	abstract public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException;
 
 	/**
 	 * Ends a popup group.
 	 */
-	abstract public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId) throws JspException;
+	abstract public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException;
 
 	/**
 	 * Begins a popup that is in a popup group.
 	 */
-	abstract public void beginPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width) throws JspException;
+	abstract public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width) throws JspException;
 
 	/**
 	 * Prints a popup close link/image/button for a popup that is part of a popup group.
 	 */
-	abstract public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId) throws JspException;
+	abstract public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId) throws JspException;
 
 	/**
 	 * Ends a popup that is in a popup group.
 	 */
-	abstract public void endPopup(HttpServletRequest req, HttpServletResponse resp, JspWriter out, long groupId, long popupId, String width) throws JspException;
+	abstract public void endPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width) throws JspException;
 }

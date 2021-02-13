@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.website.Skin;
+import com.aoindustries.html.servlet.HtmlEE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -32,6 +32,7 @@ import javax.servlet.jsp.JspException;
  *
  * @author  AO Industries, Inc.
  */
+// TODO: Convert these to TryCatchFinally when have init()
 public class LightAreaTag extends PageAttributesBodyTag {
 
 	private static final long serialVersionUID = 1L;
@@ -52,22 +53,29 @@ public class LightAreaTag extends PageAttributesBodyTag {
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		skin.beginLightArea((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), align, width, nowrap);
-
+		SkinTag.getSkin(pageContext).beginLightArea(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			align,
+			width,
+			nowrap
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
 		try {
-			Skin skin = SkinTag.getSkin(pageContext);
-
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.endLightArea((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut());
-
+			SkinTag.getSkin(pageContext).endLightArea(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut())
+			);
 			return EVAL_PAGE;
 		} finally {
 			init();

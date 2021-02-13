@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.lang.Strings;
-import com.aoindustries.website.Skin;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,24 +66,31 @@ public class ContentTag extends PageAttributesBodyTag {
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		skin.startContent(req, resp, pageContext.getOut(), pageAttributes, colspansParsed, width);
-
+		SkinTag.getSkin(pageContext).startContent(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			pageAttributes,
+			colspansParsed,
+			width
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
 		try {
-			Skin skin = SkinTag.getSkin(pageContext);
-
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.endContent(req, resp, pageContext.getOut(), pageAttributes, colspansParsed);
-
+			SkinTag.getSkin(pageContext).endContent(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				pageAttributes,
+				colspansParsed
+			);
 			return EVAL_PAGE;
 		} finally {
 			init();

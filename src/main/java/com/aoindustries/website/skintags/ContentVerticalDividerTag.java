@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
-import com.aoindustries.website.Skin;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -60,15 +60,19 @@ public class ContentVerticalDividerTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		try {
 			ContentLineTag contentLineTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentLineTag.TAG_NAME, ContentLineTag.class);
-
-			Skin skin = SkinTag.getSkin(pageContext);
-
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.printContentVerticalDivider(req, resp, pageContext.getOut(), visible, colspan, rowspan, align, width);
-
+			SkinTag.getSkin(pageContext).printContentVerticalDivider(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				visible,
+				colspan,
+				rowspan,
+				align,
+				width
+			);
 			contentLineTag.setLastRowSpan(rowspan);
-
 			return SKIP_BODY;
 		} finally {
 			init();

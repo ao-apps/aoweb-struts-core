@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,10 +22,10 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
-import com.aoindustries.website.Skin;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -49,8 +49,9 @@ public class PopupTag extends BodyTagSupport {
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("PackageVisibleField")
 	long sequenceId;
-	String width;
+	private String width;
 
 	public PopupTag() {
 		init();
@@ -66,22 +67,35 @@ public class PopupTag extends BodyTagSupport {
 		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
 		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 		sequenceId = sequence.getNextSequenceValue();
-		Skin skin = SkinTag.getSkin(pageContext);
 		// Look for containing popupGroup
 		PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		skin.beginPopup(req, resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
+		SkinTag.getSkin(pageContext).beginPopup(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			popupGroupTag.sequenceId,
+			sequenceId,
+			width
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag() throws JspException  {
 		try {
-			Skin skin = SkinTag.getSkin(pageContext);
 			// Look for containing popupGroup
 			PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.endPopup((HttpServletRequest)pageContext.getRequest(), resp, pageContext.getOut(), popupGroupTag.sequenceId, sequenceId, width);
+			SkinTag.getSkin(pageContext).endPopup(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				popupGroupTag.sequenceId,
+				sequenceId,
+				width
+			);
 			return EVAL_PAGE;
 		} finally {
 			init();

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
-import com.aoindustries.website.Skin;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -48,6 +48,7 @@ public class PopupGroupTag extends BodyTagSupport {
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("PackageVisibleField")
 	long sequenceId;
 
 	public PopupGroupTag() {
@@ -60,18 +61,23 @@ public class PopupGroupTag extends BodyTagSupport {
 		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
 		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 		sequenceId = sequence.getNextSequenceValue();
-		Skin skin = SkinTag.getSkin(pageContext);
-		skin.beginPopupGroup(req, resp, pageContext.getOut(), sequenceId);
+		SkinTag.getSkin(pageContext).beginPopupGroup(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			sequenceId
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag() throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-		skin.endPopupGroup(
-			(HttpServletRequest)pageContext.getRequest(),
-			(HttpServletResponse)pageContext.getResponse(),
-			pageContext.getOut(),
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		SkinTag.getSkin(pageContext).endPopupGroup(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			sequenceId
 		);
 		return EVAL_PAGE;

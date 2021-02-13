@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.lang.Strings;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
@@ -59,8 +60,6 @@ public class ContentHorizontalDividerTag extends TagSupport {
 		try {
 			JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
-			Skin skin = SkinTag.getSkin(pageContext);
-
 			List<String> list = Strings.splitCommaSpace(colspansAndDirections);
 			if((list.size()&1)==0) {
 				throw new LocalizedJspTagException(PACKAGE_RESOURCES, "skintags.ContentHorizontalDivider.colspansAndDirections.mustBeOddNumberElements");
@@ -81,8 +80,13 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			skin.printContentHorizontalDivider(req, resp, pageContext.getOut(), array, endsInternal);
-
+			SkinTag.getSkin(pageContext).printContentHorizontalDivider(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				array,
+				endsInternal
+			);
 			return SKIP_BODY;
 		} finally {
 			init();

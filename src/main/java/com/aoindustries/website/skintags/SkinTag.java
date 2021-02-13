@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -27,6 +27,7 @@ import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Html;
+import com.aoindustries.html.servlet.HtmlEE;
 import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.website.Constants;
@@ -91,8 +92,6 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			pageAttributes.setLayout(layout);
 			pageAttributes.setOnload(onload);
 
-			Skin skin = SkinTag.getSkin(pageContext);
-
 			ServletContext servletContext = pageContext.getServletContext();
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
@@ -127,12 +126,17 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			// Set the Struts XHTML mode by Serialization
 			pageContext.setAttribute(
 				Globals.XHTML_KEY,
-				(serialization == Serialization.XML) ? "true" : "false",
+				(serialization == Serialization.XML) ? "true" : "false", // TODO: Boolean.toString
 	            PageContext.PAGE_SCOPE
 			);
 
 			// Start the skin
-			skin.startSkin(req, resp, pageContext.getOut(), pageAttributes);
+			SkinTag.getSkin(pageContext).startSkin(
+				req,
+				resp,
+				HtmlEE.get(servletContext, req, resp, pageContext.getOut()),
+				pageAttributes
+			);
 
 			return EVAL_BODY_INCLUDE;
 		} catch(ServletException e) {
@@ -142,12 +146,14 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		skin.endSkin(req, resp, pageContext.getOut(), pageAttributes);
-
+		SkinTag.getSkin(pageContext).endSkin(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			pageAttributes
+		);
 		return EVAL_PAGE;
 	}
 

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.website.Skin;
+import com.aoindustries.html.servlet.HtmlEE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -40,9 +40,14 @@ public class AutoIndexTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-		PageAttributes pageAttributes = PageAttributesBodyTag.getPageAttributes(pageContext);
-		skin.printAutoIndex((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse(), pageContext.getOut(), pageAttributes);
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		SkinTag.getSkin(pageContext).printAutoIndex(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			PageAttributesBodyTag.getPageAttributes(pageContext)
+		);
 		return SKIP_BODY;
 	}
 }

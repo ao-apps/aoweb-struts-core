@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.website.Skin;
+import com.aoindustries.html.servlet.HtmlEE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -52,20 +52,29 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
-		Skin skin = SkinTag.getSkin(pageContext);
-
-		skin.beginWhiteArea((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse(), pageContext.getOut(), align, width, nowrap);
-
+		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+		SkinTag.getSkin(pageContext).beginWhiteArea(
+			req,
+			resp,
+			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			align,
+			width,
+			nowrap
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
 		try {
-			Skin skin = SkinTag.getSkin(pageContext);
-
-			skin.endWhiteArea((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse(), pageContext.getOut());
-
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			SkinTag.getSkin(pageContext).endWhiteArea(
+				req,
+				resp,
+				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut())
+			);
 			return EVAL_PAGE;
 		} finally {
 			init();
