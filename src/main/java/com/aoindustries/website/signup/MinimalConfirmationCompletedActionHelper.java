@@ -33,7 +33,9 @@ import com.aoindustries.html.Html;
 import com.aoindustries.html.Meta;
 import com.aoindustries.html.Script;
 import com.aoindustries.html.Style;
+import com.aoindustries.io.FindReplaceWriter;
 import com.aoindustries.io.IoUtils;
+import com.aoindustries.io.NativeToUnixWriter;
 import com.aoindustries.net.HostAddress;
 import com.aoindustries.taglib.GlobalAttributes;
 import com.aoindustries.taglib.HtmlTag;
@@ -154,8 +156,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 						return Doctype.STRICT;
 					}
 				},
-				// TODO: \r\n newlines
-				buffer
+				NativeToUnixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
 			);
 			html.xmlDeclaration(charset);
 			html.doctype();
