@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -54,9 +54,9 @@ public class PathTag extends EncodingBufferedTag implements ParamsAttribute {
 	}
 
 	@Override
-	public void addParam(String name, String value) {
-		if(params==null) params = new URIParametersMap();
-		params.addParameter(name, value);
+	public void addParam(String name, Object value) {
+		if(params == null) params = new URIParametersMap();
+		params.add(name, value);
 	}
 
 	@Override
