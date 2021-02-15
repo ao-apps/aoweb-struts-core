@@ -290,7 +290,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 						if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 						if(!splitURIParameters.getParameterMap().containsKey(Constants.AUTHENTICATION_TARGET)) {
 							if(cookieParams == null) cookieParams = new URIParametersMap();
-							cookieParams.addParameter(Constants.AUTHENTICATION_TARGET, authenticationTarget);
+							cookieParams.add(Constants.AUTHENTICATION_TARGET, authenticationTarget);
 						}
 					}
 				}
@@ -309,7 +309,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 										if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 										if(!splitURIParameters.getParameterMap().containsKey("language")) {
 											if(cookieParams == null) cookieParams = new URIParametersMap();
-											cookieParams.addParameter("language", code);
+											cookieParams.add("language", code);
 										}
 										break;
 									}
@@ -332,7 +332,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 											if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 											if(!splitURIParameters.getParameterMap().containsKey("layout")) {
 												if(cookieParams == null) cookieParams = new URIParametersMap();
-												cookieParams.addParameter("layout", layout);
+												cookieParams.add("layout", layout);
 											}
 											break;
 										}
@@ -346,7 +346,7 @@ public class SessionResponseWrapper extends HttpServletResponseWrapper {
 							if(splitURIParameters == null) splitURIParameters = URIParametersUtils.of(iri.getQueryString());
 							if(!splitURIParameters.getParameterMap().containsKey("su")) {
 								if(cookieParams == null) cookieParams = new URIParametersMap();
-								cookieParams.addParameter("su", su);
+								cookieParams.add("su", su);
 							}
 						}
 					}
