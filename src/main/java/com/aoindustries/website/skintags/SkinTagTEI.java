@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,6 +26,7 @@ import com.aoindustries.collections.MinimalList;
 import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.taglib.HtmlTag;
+import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.List;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public class SkinTagTEI extends TagExtraInfo {
 				}
 			}
 		}
-		Object layoutAttr = data.getAttribute("layout");
+		Object layoutAttr = data.getAttribute(Constants.LAYOUT);
 		if(
 			layoutAttr != null
 			&& layoutAttr != TagData.REQUEST_TIME_VALUE

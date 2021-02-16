@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -38,7 +38,7 @@ import org.apache.struts.action.ActionMapping;
 
 /**
  * Ensures the user is logged in.  Forwards to "login" if not logged in.  Otherwise, it sets the
- * request attribute "aoConn" and then calls
+ * request attribute {@link Constants#AO_CONN} and then calls
  * <code>execute(ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse,Locale,Skin,AOServConnector)</code>.
  * The default implementation of this new <code>execute</code> method simply returns the mapping
  * of "success".<br>
@@ -80,14 +80,14 @@ abstract public class AuthenticatedAction extends SkinAction {
 		}
 
 		// Set request values
-		request.setAttribute("aoConn", aoConn);
+		request.setAttribute(Constants.AO_CONN, aoConn);
 
 		return execute(mapping, form, request, response, siteSettings, locale, skin, aoConn);
 	}
 
 	/**
 	 * Gets the AOServConnector that represents the actual login id.  This will not change when
-	 * the user performs a switch user ("su")..
+	 * the user performs a switch user ({@link Constants#SU})..
 	 */
 	public static AOServConnector getAuthenticatedAoConn(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession(false);
@@ -95,8 +95,8 @@ abstract public class AuthenticatedAction extends SkinAction {
 	}
 
 	/**
-	 * Gets the AOServConnector for the user or <code>null</code> if not logged in.  This also handles the "su" behavior that was
-	 * stored in the session by <code>SkinAction</code>.
+	 * Gets the AOServConnector for the user or <code>null</code> if not logged in.
+	 * This also handles the {@link Constants#SU} behavior that was stored in the session by <code>SkinAction</code>.
 	 */
 	public static AOServConnector getAoConn(HttpServletRequest request, HttpServletResponse response) {
 		AOServConnector authenticatedAoConn = getAuthenticatedAoConn(request, response);
@@ -104,7 +104,7 @@ abstract public class AuthenticatedAction extends SkinAction {
 		if(authenticatedAoConn==null) return null;
 
 		HttpSession session = request.getSession();
-		// Is a "su" requested?
+		// Is a switch-user requested?
 		String su = (String)session.getAttribute(Constants.SU_REQUESTED);
 		if(su != null) {
 			session.removeAttribute(Constants.SU_REQUESTED);

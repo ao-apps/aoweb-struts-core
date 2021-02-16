@@ -80,6 +80,9 @@ import org.apache.struts.util.MessageResources;
  */
 public class TextSkin extends Skin {
 
+	// Matches TextOnlyLayout.NAME
+	public static final String NAME = "Text";
+
 	/**
 	 * The name of the {@linkplain com.aoindustries.web.resources.servlet.RegistryEE.Application application-scope}
 	 * group that will be used for text skin web resources.
@@ -120,7 +123,7 @@ public class TextSkin extends Skin {
 
 	@Override
 	public String getName() {
-		return "Text";
+		return NAME;
 	}
 
 	@Override
@@ -389,7 +392,7 @@ public class TextSkin extends Skin {
 						script.append("  if(layout==").text(skin.getName()).append(") window.top.location.href=").text(
 							resp.encodeURL(
 								new AnyURI(fullPath)
-									.addEncodedParameter("layout", URIEncoder.encodeURIComponent(skin.getName()))
+									.addEncodedParameter(Constants.LAYOUT, URIEncoder.encodeURIComponent(skin.getName()))
 									.toASCIIString()
 							)
 						).append(";\n");
@@ -416,7 +419,7 @@ public class TextSkin extends Skin {
 								URIEncoder.encodeURI(
 									(
 										uri == null
-										? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+										? new AnyURI(fullPath).addEncodedParameter(Constants.LANGUAGE, URIEncoder.encodeURIComponent(language.getCode()))
 										: uri
 									).toASCIIString()
 								)
@@ -444,7 +447,7 @@ public class TextSkin extends Skin {
 								URIEncoder.encodeURI(
 									(
 										uri == null
-										? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+										? new AnyURI(fullPath).addEncodedParameter(Constants.LANGUAGE, URIEncoder.encodeURIComponent(language.getCode()))
 										: uri
 									).toASCIIString()
 								)

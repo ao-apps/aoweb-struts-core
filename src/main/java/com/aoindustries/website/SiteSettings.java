@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2009-2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -108,7 +108,7 @@ public class SiteSettings {
 	 * Gets the unmodifiable list of skins supported by this site.
 	 * 
 	 * The first one in the list will be used as the default skin, except
-	 * if Text mode is determined as the default, then any skin named "Text"
+	 * if Text mode is determined as the default, then any skin named {@link TextSkin#NAME}
 	 * will be the default if available.
 	 */
 	public List<Skin> getSkins() {

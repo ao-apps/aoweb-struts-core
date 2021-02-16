@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -33,24 +33,36 @@ public class Constants {
 	}
 
 	/**
-	 * The session key that stores when a "su" has been requested.
+	 * The session key that stores when a {@link #SU} has been requested.
 	 */
 	public static final String SU_REQUESTED = "suRequested";
 
 	/**
-	 * The session key used to store the effective <code>AOServConnector</code> when the user has successfully authenticated.  Any "su" can change this.
+	 * The session key used to store the effective <code>AOServConnector</code> when the user has successfully authenticated.
+	 * Any {@link #SU} can change this.
 	 */
 	public static final String AO_CONN = "aoConn";
 
 	/**
-	 * The session key used to store the <code>AOServConnector</code> that the user has authenticated as.  "su" will not changes this.
+	 * The session key used to store the <code>AOServConnector</code> that the user has authenticated as.
+	 * {@link #SU} will not changes this.
 	 */
-	public static final String AUTHENTICATED_AO_CONN="authenticatedAoConn";
+	public static final String AUTHENTICATED_AO_CONN = "authenticatedAoConn";
 
 	/**
 	 * The session key that stores the authentication target.
 	 */
-	public static final String AUTHENTICATION_TARGET="authenticationTarget";
+	public static final String AUTHENTICATION_TARGET = "authenticationTarget";
+
+	/**
+	 * The request key used for switch-user.
+	 */
+	public static final String SU = "su";
+
+	/**
+	 * The request key used for current language.
+	 */
+	public static final String LANGUAGE = "language";
 
 	/**
 	 * The request key used to store authentication messages.
@@ -61,6 +73,7 @@ public class Constants {
 	 * The session key used to store the current <code>layout</code>.  The layout setting
 	 * affects the per-request skin selection.
 	 */
+	// Matches aoweb-framework/WebSiteRequest.LAYOUT
 	public static final String LAYOUT = "layout";
 
 	/**

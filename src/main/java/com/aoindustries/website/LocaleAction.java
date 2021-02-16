@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -94,14 +94,14 @@ public class LocaleAction extends SiteSettingsAction {
 	 * one of the enabled languages for this site, will set to the default language
 	 * (the first in the language list).
 	 * </p>
-	 * <p>Also allows the parameter "language" to override the current settings.</p>
+	 * <p>Also allows the parameter {@link Constants#LANGUAGE} to override the current settings.</p>
 	 * <p>This also sets the struts, JSTL, and response locales to the same value.</p>
 	 */
 	public static Locale getEffectiveLocale(SiteSettings siteSettings, HttpServletRequest request, HttpServletResponse response) throws JspException, IOException, SQLException {
 		HttpSession session = request.getSession();
 		List<Skin.Language> languages = siteSettings.getLanguages(request);
 		Locale locale = (Locale)session.getAttribute(Globals.LOCALE_KEY);
-		String language = request.getParameter("language");
+		String language = request.getParameter(Constants.LANGUAGE);
 		if(language!=null && (language=language.trim()).length()>0) {
 			// Make sure is a supported language
 			for(Skin.Language possLanguage : languages) {

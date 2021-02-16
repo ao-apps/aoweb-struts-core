@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -47,8 +47,8 @@ abstract public class AuthenticatedServlet extends HttpServlet {
 	) throws IOException {
 		// Must be logged in
 		HttpSession session = request.getSession(false);
-		AOServConnector aoConn = (session == null) ? null : (AOServConnector)session.getAttribute("aoConn");
-		if(aoConn==null) {
+		AOServConnector aoConn = (session == null) ? null : (AOServConnector)session.getAttribute(Constants.AO_CONN);
+		if(aoConn == null) {
 			// Save target for later
 			String target = request.getRequestURL().toString();
 			if(!target.endsWith("/login.do")) {

@@ -77,7 +77,7 @@ abstract public class Skin {
 						URIEncoder.encodeURI(
 							(
 								uri == null
-								? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+								? new AnyURI(fullPath).addEncodedParameter(Constants.LANGUAGE, URIEncoder.encodeURIComponent(language.getCode()))
 								: uri
 							).toASCIIString()
 						)
@@ -92,7 +92,7 @@ abstract public class Skin {
 						URIEncoder.encodeURI(
 							(
 								uri == null
-								? new AnyURI(fullPath).addEncodedParameter("language", URIEncoder.encodeURIComponent(language.getCode()))
+								? new AnyURI(fullPath).addEncodedParameter(Constants.LANGUAGE, URIEncoder.encodeURIComponent(language.getCode()))
 								: uri
 							).toASCIIString()
 						)
