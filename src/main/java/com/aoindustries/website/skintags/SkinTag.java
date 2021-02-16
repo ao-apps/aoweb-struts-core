@@ -126,7 +126,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			// Set the Struts XHTML mode by Serialization
 			pageContext.setAttribute(
 				Globals.XHTML_KEY,
-				(serialization == Serialization.XML) ? "true" : "false", // TODO: Boolean.toString
+				Boolean.toString(serialization == Serialization.XML),
 	            PageContext.PAGE_SCOPE
 			);
 

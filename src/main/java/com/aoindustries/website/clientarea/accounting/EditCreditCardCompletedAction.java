@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -193,10 +193,10 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 		request.setAttribute("cardNumber", cardNumber);
 
 		// Store which steps were done
-		request.setAttribute("updatedCardDetails", updatedCardDetails ? "true" : "false");
-		request.setAttribute("updatedCardNumber", updatedCardNumber ? "true" : "false");
-		request.setAttribute("updatedExpirationDate", updatedExpirationDate ? "true" : "false");
-		request.setAttribute("reactivatedCard", reactivatedCard ? "true" : "false");
+		request.setAttribute("updatedCardDetails", Boolean.toString(updatedCardDetails));
+		request.setAttribute("updatedCardNumber", Boolean.toString(updatedCardNumber));
+		request.setAttribute("updatedExpirationDate", Boolean.toString(updatedExpirationDate));
+		request.setAttribute("reactivatedCard", Boolean.toString(reactivatedCard));
 
 		return mapping.findForward("success");
 	}

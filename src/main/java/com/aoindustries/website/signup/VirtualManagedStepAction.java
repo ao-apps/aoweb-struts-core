@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -96,12 +96,12 @@ abstract public class VirtualManagedStepAction extends SkinAction {
 		boolean signupTechnicalFormComplete = !doAddErrors(request, signupTechnicalFormErrors);
 		boolean signupBillingInformationFormComplete = !doAddErrors(request, signupBillingInformationFormErrors);
 
-		request.setAttribute("signupSelectPackageFormComplete", signupSelectPackageFormComplete ? "true" : "false");
-		request.setAttribute("signupCustomizeServerFormComplete", signupCustomizeServerFormComplete ? "true" : "false");
-		request.setAttribute("signupCustomizeManagementFormComplete", signupCustomizeManagementFormComplete ? "true" : "false");
-		request.setAttribute("signupOrganizationFormComplete", signupOrganizationFormComplete ? "true" : "false");
-		request.setAttribute("signupTechnicalFormComplete", signupTechnicalFormComplete ? "true" : "false");
-		request.setAttribute("signupBillingInformationFormComplete", signupBillingInformationFormComplete ? "true" : "false");
+		request.setAttribute("signupSelectPackageFormComplete", Boolean.toString(signupSelectPackageFormComplete));
+		request.setAttribute("signupCustomizeServerFormComplete", Boolean.toString(signupCustomizeServerFormComplete));
+		request.setAttribute("signupCustomizeManagementFormComplete", Boolean.toString(signupCustomizeManagementFormComplete));
+		request.setAttribute("signupOrganizationFormComplete", Boolean.toString(signupOrganizationFormComplete));
+		request.setAttribute("signupTechnicalFormComplete", Boolean.toString(signupTechnicalFormComplete));
+		request.setAttribute("signupBillingInformationFormComplete", Boolean.toString(signupBillingInformationFormComplete));
 
 		return executeVirtualManagedStep(
 			mapping,
@@ -128,6 +128,7 @@ abstract public class VirtualManagedStepAction extends SkinAction {
 	/**
 	 * Clears checkboxes when not in form.
 	 */
+	@SuppressWarnings("NoopMethodInAbstractClass")
 	protected void clearCheckboxes(HttpServletRequest request, ActionForm form) {
 		// Do nothing by default
 	}

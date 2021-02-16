@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -88,7 +88,7 @@ public class EditCreditCardAction extends PermissionAction {
 		}
 
 		// Populate the initial details from selected card
-		editCreditCardForm.setIsActive(creditCard.getIsActive() ? "true" : "false");
+		editCreditCardForm.setIsActive(Boolean.toString(creditCard.getIsActive()));
 		editCreditCardForm.setAccount(creditCard.getAccount_name().toString());
 		editCreditCardForm.setFirstName(creditCard.getFirstName());
 		editCreditCardForm.setLastName(creditCard.getLastName());
@@ -112,7 +112,9 @@ public class EditCreditCardAction extends PermissionAction {
 		// Build the list of years
 		List<String> expirationYears = new ArrayList<>(1 + com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = new GregorianCalendar().get(Calendar.YEAR);
-		for(int c = 0; c <= com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
+		for(int c = 0; c <= com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE; c++) {
+			expirationYears.add(Integer.toString(startYear + c));
+		}
 
 		// Build the list of countries
 		List<SignupOrganizationActionHelper.CountryOption> countryOptions = SignupOrganizationActionHelper.getCountryOptions(SiteSettings.getInstance(context).getRootAOServConnector());
