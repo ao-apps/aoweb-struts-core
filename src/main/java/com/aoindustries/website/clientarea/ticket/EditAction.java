@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -61,7 +61,6 @@ public class EditAction extends PermissionAction {
 		// Look for the existing ticket
 		String pkeyS = request.getParameter("pkey");
 		if(pkeyS==null) {
-			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_BAD_REQUEST);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "pkey required");
 			return null;
 		}
@@ -69,13 +68,11 @@ public class EditAction extends PermissionAction {
 		try {
 			id = Integer.parseInt(pkeyS);
 		} catch(NumberFormatException err) {
-			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_BAD_REQUEST);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid pkey");
 			return null;
 		}
 		Ticket ticket = aoConn.getTicket().getTicket().get(id);
 		if(ticket==null) {
-			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");
 			return null;
 		}

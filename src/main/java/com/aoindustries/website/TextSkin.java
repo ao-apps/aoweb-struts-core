@@ -202,11 +202,7 @@ public class TextSkin extends Skin {
 			final String fullPath = urlBase + path;
 			final String encodedFullPath = resp.encodeURL(URIEncoder.encodeURI(fullPath));
 			List<Skin> skins = settings.getSkins();
-			boolean isOkResponseStatus;
-			{
-				Integer responseStatus = (Integer)req.getAttribute(Constants.HTTP_SERVLET_RESPONSE_STATUS);
-				isOkResponseStatus = (responseStatus == null || responseStatus == HttpServletResponse.SC_OK);
-			}
+			boolean isOkResponseStatus = (resp.getStatus() == HttpServletResponse.SC_OK);
 
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;

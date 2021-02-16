@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2000-2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2000-2009, 2016, 2018, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -75,7 +75,6 @@ public class EditCompletedAction extends PermissionAction {
 		}
 		Ticket ticket = aoConn.getTicket().getTicket().get(id);
 		if(ticket == null) {
-			request.setAttribute(com.aoindustries.website.Constants.HTTP_SERVLET_RESPONSE_STATUS, HttpServletResponse.SC_NOT_FOUND);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket not found");
 			return null;
 		}
