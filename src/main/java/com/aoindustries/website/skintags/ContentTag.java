@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.lang.Strings;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -68,10 +68,9 @@ public class ContentTag extends PageAttributesBodyTag {
 	public int doStartTag(PageAttributes pageAttributes) throws JspException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).startContent(
-			req,
+		SkinTag.getSkin(pageContext).startContent(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			pageAttributes,
 			colspansParsed,
 			width
@@ -84,10 +83,9 @@ public class ContentTag extends PageAttributesBodyTag {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).endContent(
-				req,
+			SkinTag.getSkin(pageContext).endContent(req,
 				resp,
-				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				pageAttributes,
 				colspansParsed
 			);

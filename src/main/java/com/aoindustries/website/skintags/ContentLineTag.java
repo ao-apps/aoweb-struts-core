@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,10 +62,9 @@ public class ContentLineTag extends BodyTagSupport {
 
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).startContentLine(
-			req,
+		SkinTag.getSkin(pageContext).startContentLine(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			colspan,
 			align,
 			width
@@ -78,10 +77,9 @@ public class ContentLineTag extends BodyTagSupport {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).endContentLine(
-				req,
+			SkinTag.getSkin(pageContext).endContentLine(req,
 				resp,
-				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				lastRowSpan,
 				endsInternal
 			);

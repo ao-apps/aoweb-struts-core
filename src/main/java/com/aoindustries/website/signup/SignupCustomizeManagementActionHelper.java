@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
@@ -207,54 +207,54 @@ final public class SignupCustomizeManagementActionHelper {
 
 	public static void writeEmailConfirmation(
 		HttpServletRequest request,
-		Html html,
+		Document document,
 		AOServConnector rootConn,
 		SignupCustomizeManagementForm signupCustomizeManagementForm
 	) throws IOException, SQLException {
 		String backupOnsiteOption = getBackupOnsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOnsiteOption)) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(backupOnsiteOption).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(backupOnsiteOption).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
 		String backupOffsiteOption = getBackupOffsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOffsiteOption)) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(backupOffsiteOption).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(backupOffsiteOption).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
 		String backupDvdOption = getBackupDvdOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupDvdOption)) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(backupDvdOption).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(backupDvdOption).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
 		String distributionScanOption = getDistributionScanOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(distributionScanOption)) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(distributionScanOption).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(distributionScanOption).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
 		String failoverOption = getFailoverOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(failoverOption)) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(failoverOption).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(failoverOption).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
-		html.out.write("    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(request.getAttribute("totalMonthlyRate")).out.write("</td>\n"
+		document.out.write("    <tr>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(request.getAttribute("totalMonthlyRate")).out.write("</td>\n"
 		+ "    </tr>\n");
 	}
 

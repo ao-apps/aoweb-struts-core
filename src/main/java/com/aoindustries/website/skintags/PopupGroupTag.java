@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +61,9 @@ public class PopupGroupTag extends BodyTagSupport {
 		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
 		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 		sequenceId = sequence.getNextSequenceValue();
-		SkinTag.getSkin(pageContext).beginPopupGroup(
-			req,
+		SkinTag.getSkin(pageContext).beginPopupGroup(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			sequenceId
 		);
 		return EVAL_BODY_INCLUDE;
@@ -74,10 +73,9 @@ public class PopupGroupTag extends BodyTagSupport {
 	public int doEndTag() throws JspException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).endPopupGroup(
-			req,
+		SkinTag.getSkin(pageContext).endPopupGroup(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			sequenceId
 		);
 		return EVAL_PAGE;

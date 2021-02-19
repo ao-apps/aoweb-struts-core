@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -42,10 +42,9 @@ public class AutoIndexTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).printAutoIndex(
-			req,
+		SkinTag.getSkin(pageContext).printAutoIndex(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			PageAttributesBodyTag.getPageAttributes(pageContext)
 		);
 		return SKIP_BODY;

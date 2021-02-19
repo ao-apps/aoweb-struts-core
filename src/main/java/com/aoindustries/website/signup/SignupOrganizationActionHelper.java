@@ -24,7 +24,7 @@ package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.payment.CountryCode;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
@@ -123,56 +123,56 @@ final public class SignupOrganizationActionHelper {
 	}
 
 	public static void writeEmailConfirmation(
-		Html html,
+		Document document,
 		AOServConnector rootConn,
 		SignupOrganizationForm signupOrganizationForm
 	) throws IOException, SQLException {
-		html.out.write("    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationName.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationName()).out.write("</td>\n"
+		document.out.write("    <tr>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationName.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationName()).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationPhone.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationPhone()).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationPhone.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationPhone()).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationFax.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationFax()).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationFax.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationFax()).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress1.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationAddress1()).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress1.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationAddress1()).out.write("</td>\n"
 		+ "    </tr>\n");
 		if(!GenericValidator.isBlankOrNull(signupOrganizationForm.getOrganizationAddress2())) {
-			html.out.write("    <tr>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress2.prompt")); html.out.write("</td>\n"
-			+ "        <td>"); html.text(signupOrganizationForm.getOrganizationAddress2()).out.write("</td>\n"
+			document.out.write("    <tr>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationAddress2.prompt")); document.out.write("</td>\n"
+			+ "        <td>"); document.text(signupOrganizationForm.getOrganizationAddress2()).out.write("</td>\n"
 			+ "    </tr>\n");
 		}
-		html.out.write("    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCity.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationCity()).out.write("</td>\n"
+		document.out.write("    <tr>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCity.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationCity()).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationState.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationState()).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationState.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationState()).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.required")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCountry.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(getOrganizationCountry(rootConn, signupOrganizationForm)).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationCountry.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(getOrganizationCountry(rootConn, signupOrganizationForm)).out.write("</td>\n"
 		+ "    </tr>\n"
 		+ "    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationZip.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(signupOrganizationForm.getOrganizationZip()).out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupOrganizationForm.organizationZip.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(signupOrganizationForm.getOrganizationZip()).out.write("</td>\n"
 		+ "    </tr>\n");
 	}
 }

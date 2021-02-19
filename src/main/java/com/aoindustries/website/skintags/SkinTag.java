@@ -26,8 +26,8 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.Html;
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.Document;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.website.Constants;
@@ -117,7 +117,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			resp.resetBuffer();
 
 			// Set the content type
-			ServletUtil.setContentType(resp, serialization.getContentType(), Html.ENCODING.name());
+			ServletUtil.setContentType(resp, serialization.getContentType(), Document.ENCODING.name());
 
 			// Set the response locale from the Struts locale
 			Locale locale = (Locale)pageContext.getSession().getAttribute(Globals.LOCALE_KEY);
@@ -131,10 +131,9 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			);
 
 			// Start the skin
-			SkinTag.getSkin(pageContext).startSkin(
-				req,
+			SkinTag.getSkin(pageContext).startSkin(req,
 				resp,
-				HtmlEE.get(servletContext, req, resp, pageContext.getOut()),
+				DocumentEE.get(servletContext, req, resp, pageContext.getOut()),
 				pageAttributes
 			);
 
@@ -148,10 +147,9 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	public int doEndTag(PageAttributes pageAttributes) throws JspException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).endSkin(
-			req,
+		SkinTag.getSkin(pageContext).endSkin(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			pageAttributes
 		);
 		return EVAL_PAGE;

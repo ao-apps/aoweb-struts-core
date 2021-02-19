@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.lang.Strings;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
@@ -80,10 +80,9 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).printContentHorizontalDivider(
-				req,
+			SkinTag.getSkin(pageContext).printContentHorizontalDivider(req,
 				resp,
-				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				array,
 				endsInternal
 			);

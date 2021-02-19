@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,10 +62,9 @@ public class ContentVerticalDividerTag extends TagSupport {
 			ContentLineTag contentLineTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentLineTag.TAG_NAME, ContentLineTag.class);
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).printContentVerticalDivider(
-				req,
+			SkinTag.getSkin(pageContext).printContentVerticalDivider(req,
 				resp,
-				HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				visible,
 				colspan,
 				rowspan,

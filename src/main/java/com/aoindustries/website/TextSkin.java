@@ -33,7 +33,7 @@ import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScript
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.html.Link;
 import com.aoindustries.html.Meta;
 import com.aoindustries.html.Script;
@@ -137,32 +137,32 @@ public class TextSkin extends Skin {
 	/**
 	 * Print the logo for the top left part of the page.
 	 */
-	public void printLogo(HttpServletRequest req, HttpServletResponse resp, Html html, String urlBase) throws JspException {
+	public void printLogo(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
 		// Print no logo by default
 	}
 
 	/**
 	 * Prints the search form, if any exists.
 	 */
-	public void printSearch(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException {
+	public void printSearch(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
 	}
 
 	/**
 	 * Prints the common pages area, which is at the top of the site.
 	 */
-	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException {
+	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
 	}
 
 	/**
 	 * Prints the lines for any JavaScript sources.
 	 */
-	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, Html html, String urlBase) throws JspException {
+	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
 	}
 
 	/**
 	 * Prints the line for the favicon.
 	 */
-	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, Html html, String urlBase) throws JspException {
+	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
 	}
 
 	public static MessageResources getMessageResources(HttpServletRequest req) throws JspException {
@@ -179,17 +179,17 @@ public class TextSkin extends Skin {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void startSkin(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException {
+	public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
 		try {
 			ServletContext servletContext = req.getServletContext();
 			SiteSettings settings = SiteSettings.getInstance(servletContext);
 			Brand brand = settings.getBrand();
 			String trackingId = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			// Write doctype
-			html.xmlDeclaration(resp.getCharacterEncoding());
-			html.doctype();
+			document.xmlDeclaration(resp.getCharacterEncoding());
+			document.doctype();
 			// Write <html>
-			HtmlTag.beginHtmlTag(resp, html.out, html.serialization, (GlobalAttributes)null); html.out.write("\n"
+			HtmlTag.beginHtmlTag(resp, document.out, document.serialization, (GlobalAttributes)null); document.out.write("\n"
 			+ "  <head>\n");
 
 			String layout = pageAttributes.getLayout();
@@ -207,41 +207,41 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				html.out.write("    "); html.meta(Meta.Name.ROBOTS).content("noindex, nofollow").__().nl();
+				document.out.write("    "); document.meta(Meta.Name.ROBOTS).content("noindex, nofollow").__().nl();
 			}
-			if(html.doctype == Doctype.HTML5) {
-				html.out.write("    "); html.meta().charset(resp.getCharacterEncoding()).__().nl();
+			if(document.doctype == Doctype.HTML5) {
+				document.out.write("    "); document.meta().charset(resp.getCharacterEncoding()).__().nl();
 			} else {
-				html.out.write("    "); html.meta(Meta.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().out.write("\n"
+				document.out.write("    "); document.meta(Meta.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().out.write("\n"
 				// Default style language
-				+ "    "); html.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(com.aoindustries.html.Style.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); html.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
+				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(com.aoindustries.html.Style.Type.TEXT_CSS).__().out.write("\n"
+				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
 			}
-			if(html.doctype == Doctype.HTML5) {
-				GoogleAnalytics.writeGlobalSiteTag(html, trackingId);
+			if(document.doctype == Doctype.HTML5) {
+				GoogleAnalytics.writeGlobalSiteTag(document, trackingId);
 			} else {
-				GoogleAnalytics.writeAnalyticsJs(html, trackingId);
+				GoogleAnalytics.writeAnalyticsJs(document, trackingId);
 			}
 			// Mobile support
-			html.out.write("    "); html.meta(Meta.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().out.write("\n"
-			+ "    "); html.meta(Meta.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().out.write("\n"
-			+ "    "); html.meta(Meta.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
+			document.out.write("    "); document.meta(Meta.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().out.write("\n"
+			+ "    "); document.meta(Meta.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().out.write("\n"
+			+ "    "); document.meta(Meta.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
 			// Authors
 			// TODO: dcterms copyright
 			String author = pageAttributes.getAuthor();
 			if(author != null && !(author = author.trim()).isEmpty()) {
-				html.out.write("    "); html.meta(Meta.Name.AUTHOR).content(author).__().nl();
+				document.out.write("    "); document.meta(Meta.Name.AUTHOR).content(author).__().nl();
 			}
 			String authorHref = pageAttributes.getAuthorHref();
 			if(authorHref != null && !(authorHref = authorHref.trim()).isEmpty()) {
-				html.out.write("    "); html.link(Link.Rel.AUTHOR).href(
+				document.out.write("    "); document.link(Link.Rel.AUTHOR).href(
 					// TODO: RFC 3986-only always?
 					resp.encodeURL(
 						URIEncoder.encodeURI(authorHref)
 					)
 				).__().nl();
 			}
-			html.out.write("    <title>");
+			document.out.write("    <title>");
 			// No more page stack, just show current page only
 			/*
 			List<Parent> parents = pageAttributes.getParents();
@@ -250,14 +250,14 @@ public class TextSkin extends Skin {
 				out.print(" - ");
 			}
 			 */
-			html.text(pageAttributes.getTitle()); html.out.write("</title>\n");
+			document.text(pageAttributes.getTitle()); document.out.write("</title>\n");
 			String description = pageAttributes.getDescription();
 			if(description != null && !(description = description.trim()).isEmpty()) {
-				html.out.write("    "); html.meta(Meta.Name.DESCRIPTION).content(description).__().nl();
+				document.out.write("    "); document.meta(Meta.Name.DESCRIPTION).content(description).__().nl();
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords != null && !(keywords = keywords.trim()).isEmpty()) {
-				html.out.write("    "); html.meta(Meta.Name.KEYWORDS).content(keywords).__().nl();
+				document.out.write("    "); document.meta(Meta.Name.KEYWORDS).content(keywords).__().nl();
 			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
@@ -265,7 +265,7 @@ public class TextSkin extends Skin {
 			HttpSession session = req.getSession(false);
 			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
 			if(isOkResponseStatus && aoConn != null && session != null) {
-				html.out.write("    "); html.meta(Meta.HttpEquiv.REFRESH).content(content -> {
+				document.out.write("    "); document.meta(Meta.HttpEquiv.REFRESH).content(content -> {
 					content.write(Integer.toString(Math.max(60, session.getMaxInactiveInterval() - 60)));
 					content.write(";URL=");
 					content.write(
@@ -283,23 +283,23 @@ public class TextSkin extends Skin {
 				// Skip robots if not on default skin
 				boolean isRobots = meta.getName().equalsIgnoreCase("robots");
 				if(!robotsMetaUsed || !isRobots) {
-					html.out.write("    "); html.meta().name(meta.getName()).content(meta.getContent()).__().nl();
+					document.out.write("    "); document.meta().name(meta.getName()).content(meta.getContent()).__().nl();
 					if(isRobots) robotsMetaUsed = true;
 				}
 			}
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify != null) {
-					html.out.write("    "); html.meta().name("verify-v1").content(googleVerify).__().nl();
+					document.out.write("    "); document.meta().name("verify-v1").content(googleVerify).__().nl();
 				}
 			}
 			String copyright = pageAttributes.getCopyright();
 			if(copyright != null && !(copyright = copyright.trim()).isEmpty()) {
 				// TODO: Dublin Core: https://stackoverflow.com/questions/6665312/is-the-copyright-meta-tag-valid-in-html5
-				html.out.write("    "); html.meta().name("copyright").content(copyright).__().nl();
+				document.out.write("    "); document.meta().name("copyright").content(copyright).__().nl();
 			}
 			List<Language> languages = settings.getLanguages(req);
-			printAlternativeLinks(req, resp, html, fullPath, languages);
+			printAlternativeLinks(req, resp, document, fullPath, languages);
 
 			// Configure skin resources
 			Registry requestRegistry = RegistryEE.Request.get(servletContext, req);
@@ -308,43 +308,43 @@ public class TextSkin extends Skin {
 			Registry pageRegistry = RegistryEE.Page.get(req);
 			if(pageRegistry == null) throw new JspException("page-scope registry not found.  PageAction.execute(…) invoked?");
 			// Render links
-			html.out.write("    "); Renderer.get(servletContext).renderStyles(
+			document.out.write("    "); Renderer.get(servletContext).renderStyles(
 				req,
 				resp,
-				html,
+				document,
 				"    ",
 				true, // registeredActivations
 				null, // No additional activations
 				requestRegistry, // request-scope
 				RegistryEE.Session.get(req.getSession(false)), // session-scope
 				pageRegistry
-			); html.nl();
+			); document.nl();
 
-			defaultPrintLinks(servletContext, req, resp, html, pageAttributes);
-			printJavaScriptSources(req, resp, html, urlBase);
-			html.out.write("    "); html.script().src(
+			defaultPrintLinks(servletContext, req, resp, document, pageAttributes);
+			printJavaScriptSources(req, resp, document, urlBase);
+			document.out.write("    "); document.script().src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
 						urlBase + "commons-validator-1.3.1-compress.js"
 					)
 				)
 			).__().nl();
-			printFavIcon(req, resp, html, urlBase);
+			printFavIcon(req, resp, document, urlBase);
 			// TODO: Canonical?
-			html.out.write("  </head>\n"
+			document.out.write("  </head>\n"
 			+ "  <body");
 			String onload = pageAttributes.getOnload();
 			if(onload != null && !(onload = onload.trim()).isEmpty()) {
-				html.out.write(" onload=\""); encodeJavaScriptInXhtmlAttribute(onload, html.out); html.out.write('"');
+				document.out.write(" onload=\""); encodeJavaScriptInXhtmlAttribute(onload, document.out); document.out.write('"');
 			}
-			html.out.write(">\n"
+			document.out.write(">\n"
 			+ "    <table cellspacing=\"10\" cellpadding=\"0\">\n"
 			+ "      <tr>\n"
 			+ "        <td valign=\"top\">\n");
-			printLogo(req, resp, html, urlBase);
+			printLogo(req, resp, document, urlBase);
 			if(aoConn != null) {
-				html.out.write("          "); html.hr__().out.write("\n"
-				+ "          "); html.text(applicationResources.getMessage(locale, "TextSkin.logoutPrompt"))
+				document.out.write("          "); document.hr__().out.write("\n"
+				+ "          "); document.text(applicationResources.getMessage(locale, "TextSkin.logoutPrompt"))
 				.out.write("<form style=\"display:inline\" id=\"logout_form\" method=\"post\" action=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
@@ -352,16 +352,16 @@ public class TextSkin extends Skin {
 							urlBase + "logout.do"
 						)
 					),
-					html.out
+					document.out
 				);
-				html.out.write("\"><div style=\"display:inline;\">");
-				html.input.hidden().name("target").value(fullPath).__()
+				document.out.write("\"><div style=\"display:inline;\">");
+				document.input.hidden().name("target").value(fullPath).__()
 				// Variant that takes ResourceBundle?
 				.input.submit__(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel"))
 				.out.write("</div></form>\n");
 			} else {
-				html.out.write("          "); html.hr__().out.write("\n"
-				+ "          "); html.text(applicationResources.getMessage(locale, "TextSkin.loginPrompt"))
+				document.out.write("          "); document.hr__().out.write("\n"
+				+ "          "); document.text(applicationResources.getMessage(locale, "TextSkin.loginPrompt"))
 				.out.write("<form style=\"display:inline\" id=\"login_form\" method=\"post\" action=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
@@ -369,20 +369,20 @@ public class TextSkin extends Skin {
 							urlBase + "login.do"
 						)
 					),
-					html.out
+					document.out
 				);
-				html.out.write("\"><div style=\"display:inline\">");
+				document.out.write("\"><div style=\"display:inline\">");
 				// Only include the target when they are not in the /clientarea/ part of the site
 				if(path.startsWith("clientarea/")) {
-					html.input.hidden().name("target").value(fullPath).__();
+					document.input.hidden().name("target").value(fullPath).__();
 				}
-				html.input.submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"))
+				document.input.submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"))
 				.out.write("</div></form>\n");
 			}
-			html.out.write("          "); html.hr__().nl()
+			document.out.write("          "); document.hr__().nl()
 			.out.write("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size() > 1) {
-				html.script().out(script -> {
+				document.script().out(script -> {
 					script.append("function selectLayout(layout) {\n");
 					for(Skin skin : skins) {
 						script.append("  if(layout==").text(skin.getName()).append(") window.top.location.href=").text(
@@ -396,20 +396,20 @@ public class TextSkin extends Skin {
 					script.append('}');
 				}).__().nl()
 				.out.write("            <form action=\"\" style=\"display:inline\"><div style=\"display:inline\">\n"
-				+ "              "); html.text(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"))
+				+ "              "); document.text(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"))
 				.out.write("<select name=\"layout_selector\" onchange=\"selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);\">\n");
 				for(Skin skin : skins) {
-					html.out.write("                "); html.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req)).nl();
+					document.out.write("                "); document.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req)).nl();
 				}
-				html.out.write("              </select>\n"
-				+ "            </div></form>"); html.br__().nl();
+				document.out.write("              </select>\n"
+				+ "            </div></form>"); document.br__().nl();
 			}
 			if(languages.size()>1) {
-				html.out.write("            ");
+				document.out.write("            ");
 				for(Language language : languages) {
 					AnyURI uri = language.getUri();
 					if(language.getCode().equalsIgnoreCase(locale.getLanguage())) {
-						html.out.write("&#160;<a href=\"");
+						document.out.write("&#160;<a href=\"");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -420,10 +420,10 @@ public class TextSkin extends Skin {
 									).toASCIIString()
 								)
 							),
-							html.out
+							document.out
 						);
-						html.out.write("\" hreflang=\""); encodeTextInXhtmlAttribute(language.getCode(), html.out); html.out.write("\">");
-						html.img()
+						document.out.write("\" hreflang=\""); encodeTextInXhtmlAttribute(language.getCode(), document.out); document.out.write("\">");
+						document.img()
 							.src(
 								resp.encodeURL(
 									URIEncoder.encodeURI(
@@ -437,7 +437,7 @@ public class TextSkin extends Skin {
 							.__()
 						.out.write("</a>");
 					} else {
-						html.out.write("&#160;<a href=\"");
+						document.out.write("&#160;<a href=\"");
 						encodeTextInXhtmlAttribute(
 							resp.encodeURL(
 								URIEncoder.encodeURI(
@@ -448,10 +448,10 @@ public class TextSkin extends Skin {
 									).toASCIIString()
 								)
 							),
-							html.out
+							document.out
 						);
-						html.out.write("\" hreflang=\""); encodeTextInXhtmlAttribute(language.getCode(), html.out); html.out.write("\" onmouseover=\"");
-						try (MediaWriter onmouseover = new MediaWriter(html.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(html.out))) {
+						document.out.write("\" hreflang=\""); encodeTextInXhtmlAttribute(language.getCode(), document.out); document.out.write("\" onmouseover=\"");
+						try (MediaWriter onmouseover = new MediaWriter(document.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(document.out))) {
 							onmouseover.append("document.images[").text("flagSelector_" + language.getCode()).append("].src=").text(
 								resp.encodeURL(
 									URIEncoder.encodeURI(
@@ -460,7 +460,7 @@ public class TextSkin extends Skin {
 									)
 								)
 							).append(';');
-						} html.out.write("\" onmouseout=\""); try (MediaWriter onmouseout = new MediaWriter(html.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(html.out))) {
+						} document.out.write("\" onmouseout=\""); try (MediaWriter onmouseout = new MediaWriter(document.encodingContext, javaScriptInXhtmlAttributeEncoder, new NoCloseWriter(document.out))) {
 							onmouseout.append("document.images[").text("flagSelector_" + language.getCode()).append("].src=").text(
 								resp.encodeURL(
 									URIEncoder.encodeURI(
@@ -469,7 +469,7 @@ public class TextSkin extends Skin {
 									)
 								)
 							).append(';');
-						} html.out.write("\">"); html.img()
+						} document.out.write("\">"); document.img()
 							.src(
 								resp.encodeURL(
 									URIEncoder.encodeURI(
@@ -490,24 +490,24 @@ public class TextSkin extends Skin {
 									urlBase + language.getFlagOnSrc(req, locale)
 								)
 							),
-							html
+							document
 						);
 					}
 				}
-				html.br__().nl();
+				document.br__().nl();
 			}
-			printSearch(req, resp, html);
-			html.out.write("          </div>\n"
-			+ "          "); html.hr__().out.write("\n"
+			printSearch(req, resp, document);
+			document.out.write("          </div>\n"
+			+ "          "); document.hr__().out.write("\n"
 			// Display the parents
-			+ "          <b>"); html.text(applicationResources.getMessage(locale, "TextSkin.currentLocation")).out.write("</b>"); html.br__().out.write("\n"
+			+ "          <b>"); document.text(applicationResources.getMessage(locale, "TextSkin.currentLocation")).out.write("</b>"); document.br__().out.write("\n"
 			+ "          <div style=\"white-space:nowrap\">\n");
 			List<Parent> parents = pageAttributes.getParents();
 			for(Parent parent : parents) {
 				String navAlt = parent.getNavImageAlt();
 				String parentPath = parent.getPath();
 				if(parentPath.startsWith("/")) parentPath=parentPath.substring(1);
-				html.out.write("            <a href=\"");
+				document.out.write("            <a href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -515,17 +515,17 @@ public class TextSkin extends Skin {
 							+ URIEncoder.encodeURI(parentPath)
 						)
 					),
-					html.out
+					document.out
 				);
-				html.out.write("\">"); html.text(navAlt).out.write("</a>"); html.br__().nl();
+				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__().nl();
 			}
 			// Always include the current page in the current location area
-			html.out.write("            <a href=\""); encodeTextInXhtmlAttribute(encodedFullPath, html.out); html.out.write("\">");
-			html.text(pageAttributes.getNavImageAlt())
-			.out.write("</a>"); html.br__().out.write("\n"
+			document.out.write("            <a href=\""); encodeTextInXhtmlAttribute(encodedFullPath, document.out); document.out.write("\">");
+			document.text(pageAttributes.getNavImageAlt())
+			.out.write("</a>"); document.br__().out.write("\n"
 			+ "          </div>\n"
-			+ "          "); html.hr__().out.write("\n"
-			+ "          <b>"); html.text(applicationResources.getMessage(locale, "TextSkin.relatedPages")).out.write("</b>"); html.br__().out.write("\n"
+			+ "          "); document.hr__().out.write("\n"
+			+ "          <b>"); document.text(applicationResources.getMessage(locale, "TextSkin.relatedPages")).out.write("</b>"); document.br__().out.write("\n"
 			// Display the siblings
 			+ "          <div style=\"white-space:nowrap\">\n");
 			List<Child> siblings = pageAttributes.getChildren();
@@ -536,7 +536,7 @@ public class TextSkin extends Skin {
 				String navAlt = sibling.getNavImageAlt();
 				String siblingPath = sibling.getPath();
 				if(siblingPath.startsWith("/")) siblingPath = siblingPath.substring(1);
-				html.out.write("          <a href=\"");
+				document.out.write("          <a href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -544,27 +544,27 @@ public class TextSkin extends Skin {
 							+ URIEncoder.encodeURI(siblingPath)
 						)
 					),
-					html.out
+					document.out
 				);
-				html.out.write("\">"); html.text(navAlt).out.write("</a>"); html.br__().nl();
+				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__().nl();
 			}
-			html.out.write("          </div>\n");
-			html.hr__().nl();
-			printBelowRelatedPages(req, html);
-			html.out.write("        </td>\n"
+			document.out.write("          </div>\n");
+			document.hr__().nl();
+			printBelowRelatedPages(req, document);
+			document.out.write("        </td>\n"
 			+ "        <td valign=\"top\">\n");
-			printCommonPages(req, resp, html);
+			printCommonPages(req, resp, document);
 		} catch(IOException | SQLException err) {
 			throw new JspException(err);
 		}
 	}
 
-	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException {
+	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
 		try {
 			for(PageAttributes.Link link : pageAttributes.getLinks()) {
 				String href = link.getHref();
 				String rel = link.getRel();
-				html.out.write("    "); html.link()
+				document.out.write("    "); document.link()
 					.rel(rel)
 					.href(href == null ? null :
 						LastModifiedUtil.buildURL(
@@ -588,23 +588,23 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void startContent(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes, int[] colspans, String width) throws JspException {
+	public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException {
 		width = trimNullIfEmpty(width);
 		try {
-			html.out.write("          <table class=\"ao-packed\"");
+			document.out.write("          <table class=\"ao-packed\"");
 			if(width != null) {
-				html.out.write(" style=\""); appendWidthStyle(width, html.out); html.out.write('"');
+				document.out.write(" style=\""); appendWidthStyle(width, document.out); document.out.write('"');
 			}
-			html.out.write(">\n"
+			document.out.write(">\n"
 			+ "            <tr>\n");
 			int totalColumns = 0;
 			for(int c = 0; c < colspans.length; c++) {
 				if(c > 0) totalColumns++;
 				totalColumns += colspans[c];
 			}
-			html.out.write("              <td");
-			if(totalColumns != 1) html.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-			html.out.write('>'); html.hr__().out.write("</td>\n"
+			document.out.write("              <td");
+			if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
+			document.out.write('>'); document.hr__().out.write("</td>\n"
 			+ "            </tr>\n");
 		} catch(IOException err) {
 			throw new JspException(err); // TODO: Allow throws IOException, too, like the change we made in ao-encoding-taglib
@@ -612,76 +612,76 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Html html, String title, int colspan) throws JspException {
+	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException {
 		try {
-			startContentLine(req, resp, html, colspan, "center", null);
-			html.out.write("<h1>"); html.text(title).out.write("</h1>\n");
-			endContentLine(req, resp, html, 1, false);
+			startContentLine(req, resp, document, colspan, "center", null);
+			document.out.write("<h1>"); document.text(title).out.write("</h1>\n");
+			endContentLine(req, resp, document, 1, false);
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Html html, int colspan, String align, String width) throws JspException {
+	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			html.out.write("            <tr>\n"
+			document.out.write("            <tr>\n"
 			+ "              <td");
 			if(align != null || width != null) {
-				html.out.write(" style=\"");
+				document.out.write(" style=\"");
 				if(align != null) {
-					html.out.write("text-align:");
-					encodeTextInXhtmlAttribute(align, html.out);
+					document.out.write("text-align:");
+					encodeTextInXhtmlAttribute(align, document.out);
 				}
 				if(width != null) {
-					if(align != null) html.out.write(';');
-					appendWidthStyle(width, html.out);
+					if(align != null) document.out.write(';');
+					appendWidthStyle(width, document.out);
 				}
-				html.out.write('"');
+				document.out.write('"');
 			}
-			html.out.write(" valign=\"top\"");
-			if(colspan != 1) html.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-			html.out.write('>');
+			document.out.write(" valign=\"top\"");
+			if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
+			document.out.write('>');
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Html html, boolean visible, int colspan, int rowspan, String align, String width) throws JspException {
+	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			html.out.write("              </td>\n");
-			if(visible) html.out.write("              <td>&#160;</td>\n");
-			html.out.write("              <td");
+			document.out.write("              </td>\n");
+			if(visible) document.out.write("              <td>&#160;</td>\n");
+			document.out.write("              <td");
 			if(align != null || width != null) {
-				html.out.write(" style=\"");
+				document.out.write(" style=\"");
 				if(align != null) {
-					html.out.write("text-align:");
-					encodeTextInXhtmlAttribute(align, html.out);
+					document.out.write("text-align:");
+					encodeTextInXhtmlAttribute(align, document.out);
 				}
 				if(width != null) {
-					if(align != null) html.out.write(';');
-					appendWidthStyle(width, html.out);
+					if(align != null) document.out.write(';');
+					appendWidthStyle(width, document.out);
 				}
-				html.out.write('"');
+				document.out.write('"');
 			}
-			html.out.write(" valign=\"top\"");
-			if(colspan != 1) html.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-			if(rowspan != 1) html.out.append(" rowspan=\"").append(Integer.toString(rowspan)).append('"');
-			html.out.write('>');
+			document.out.write(" valign=\"top\"");
+			if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
+			if(rowspan != 1) document.out.append(" rowspan=\"").append(Integer.toString(rowspan)).append('"');
+			document.out.write('>');
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Html html, int rowspan, boolean endsInternal) throws JspException {
+	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException {
 		try {
-			html.out.write("              </td>\n"
+			document.out.write("              </td>\n"
 			+ "            </tr>\n");
 		} catch(IOException err) {
 			throw new JspException(err);
@@ -689,111 +689,111 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Html html, int[] colspansAndDirections, boolean endsInternal) throws JspException {
+	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException {
 		try {
-			html.out.write("            <tr>\n");
+			document.out.write("            <tr>\n");
 			for(int c = 0; c < colspansAndDirections.length; c += 2) {
 				if(c > 0) {
 					int direction = colspansAndDirections[c - 1];
 					switch(direction) {
 						case UP:
-							html.out.write("              <td>&#160;</td>\n");
+							document.out.write("              <td>&#160;</td>\n");
 							break;
 						case DOWN:
-							html.out.write("              <td>&#160;</td>\n");
+							document.out.write("              <td>&#160;</td>\n");
 							break;
 						case UP_AND_DOWN:
-							html.out.write("              <td>&#160;</td>\n");
+							document.out.write("              <td>&#160;</td>\n");
 							break;
 						default: throw new IllegalArgumentException("Unknown direction: " + direction);
 					}
 				}
 
 				int colspan = colspansAndDirections[c];
-				html.out.write("              <td");
-				if(colspan != 1) html.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-				html.out.write('>'); html.hr__().out.write("</td>\n");
+				document.out.write("              <td");
+				if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
+				document.out.write('>'); document.hr__().out.write("</td>\n");
 			}
-			html.out.write("            </tr>\n");
+			document.out.write("            </tr>\n");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void endContent(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes, int[] colspans) throws JspException {
+	public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException {
 		try {
 			int totalColumns = 0;
 			for(int c = 0; c < colspans.length; c++) {
 				if(c > 0) totalColumns += 1;
 				totalColumns += colspans[c];
 			}
-			html.out.write("            <tr><td");
-			if(totalColumns != 1) html.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-			html.out.write('>'); html.hr__().out.write("</td></tr>\n");
+			document.out.write("            <tr><td");
+			if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
+			document.out.write('>'); document.hr__().out.write("</td></tr>\n");
 			String copyright = pageAttributes.getCopyright();
 			if(copyright != null && !(copyright = copyright.trim()).isEmpty()) {
-				html.out.write("            <tr><td");
-				if(totalColumns != 1) html.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-				html.out.write(" style=\"text-align:center\"><span style=\"font-size: x-small\">");
-				html.text(copyright).out.write("</span></td></tr>\n");
+				document.out.write("            <tr><td");
+				if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
+				document.out.write(" style=\"text-align:center\"><span style=\"font-size: x-small\">");
+				document.text(copyright).out.write("</span></td></tr>\n");
 			}
-			html.out.write("          </table>\n");
+			document.out.write("          </table>\n");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void endSkin(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException {
+	public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
 		try {
-			html.out.write("        </td>\n"
+			document.out.write("        </td>\n"
 			+ "      </tr>\n"
 			+ "    </table>\n");
 			// TODO: SemanticCMS component for this, also make sure in other layouts and skins
 			EditableResourceBundle.printEditableResourceBundleLookups(
 				textInJavaScriptEncoder,
 				textInXhtmlEncoder,
-				html.out,
+				document.out,
 				SerializationEE.get(req.getServletContext(), req) == Serialization.XML,
 				4,
 				true
 			);
-			html.out.write("  </body>\n");
-			HtmlTag.endHtmlTag(html.out); html.nl();
+			document.out.write("  </body>\n");
+			HtmlTag.endHtmlTag(document.out); document.nl();
 		} catch(IOException  err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Html html, String align, String width, boolean nowrap) throws JspException {
+	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			html.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
+			document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
-				html.out.write(';');
-				appendWidthStyle(width, html.out);
+				document.out.write(';');
+				appendWidthStyle(width, document.out);
 			}
-			html.out.write("\">\n"
+			document.out.write("\">\n"
 			+ "  <tr>\n"
 			+ "    <td class=\"aoLightRow\" style=\"padding:4px");
 			if(align != null) {
-				html.out.write(";text-align:");
-				encodeTextInXhtmlAttribute(align, html.out);
+				document.out.write(";text-align:");
+				encodeTextInXhtmlAttribute(align, document.out);
 			}
-			if(nowrap) html.out.write(";white-space:nowrap;");
-			html.out.write("\">");
+			if(nowrap) document.out.write(";white-space:nowrap;");
+			document.out.write("\">");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException {
+	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
 		try {
-			html.out.write("</td>\n"
+			document.out.write("</td>\n"
 			+ "  </tr>\n"
 			+ "</table>\n");
 		} catch(IOException err) {
@@ -802,33 +802,33 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Html html, String align, String width, boolean nowrap) throws JspException {
+	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		try {
-			html.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
+			document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
 			if(width != null) {
-				html.out.write(';');
-				appendWidthStyle(width, html.out);
+				document.out.write(';');
+				appendWidthStyle(width, document.out);
 			}
-			html.out.write("\">\n"
+			document.out.write("\">\n"
 			+ "  <tr>\n"
 			+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
 			if(align != null) {
-				html.out.write(";text-align:");
-				encodeTextInXhtmlAttribute(align, html.out);
+				document.out.write(";text-align:");
+				encodeTextInXhtmlAttribute(align, document.out);
 			}
-			if(nowrap) html.out.write(" white-space:nowrap;");
-			html.out.write("\">");
+			if(nowrap) document.out.write(" white-space:nowrap;");
+			document.out.write("\">");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
 	}
 
 	@Override
-	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Html html) throws JspException {
+	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
 		try {
-			html.out.write("</td>\n"
+			document.out.write("</td>\n"
 			+ "  </tr>\n"
 			+ "</table>\n");
 		} catch(IOException err) {
@@ -837,12 +837,12 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Html html, PageAttributes pageAttributes) throws JspException {
+	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
 		try {
 			String urlBase = getUrlBase(req);
 			//Locale locale = resp.getLocale();
 
-			html.out.write("<table cellpadding=\"0\" cellspacing=\"10\">\n");
+			document.out.write("<table cellpadding=\"0\" cellspacing=\"10\">\n");
 			List<Child> siblings = pageAttributes.getChildren();
 			if(siblings.isEmpty()) {
 				List<Parent> parents = pageAttributes.getParents();
@@ -853,7 +853,7 @@ public class TextSkin extends Skin {
 				String siblingPath = sibling.getPath();
 				if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
 
-				html.out.write("  <tr>\n"
+				document.out.write("  <tr>\n"
 				+ "    <td style=\"white-space:nowrap\"><a class=\"aoLightLink\" href=\"");
 				encodeTextInXhtmlAttribute(
 					resp.encodeURL(
@@ -862,26 +862,26 @@ public class TextSkin extends Skin {
 							+ URIEncoder.encodeURI(siblingPath)
 						)
 					),
-					html.out
+					document.out
 				);
-				html.out.write("\">"); html.text(navAlt).out.write("</a></td>\n"
+				document.out.write("\">"); document.text(navAlt).out.write("</a></td>\n"
 				+ "    <td style=\"width:12px; white-space:nowrap\">&#160;</td>\n"
 				+ "    <td style=\"white-space:nowrap\">");
 				String description = sibling.getDescription();
 				if(description != null && !(description = description.trim()).isEmpty()) {
-					html.text(description);
+					document.text(description);
 				} else {
 					String title = sibling.getTitle();
 					if(title != null && !(title = title.trim()).isEmpty()) {
-						html.text(title);
+						document.text(title);
 					} else {
-						html.out.write("&#160;");
+						document.out.write("&#160;");
 					}
 				}
-				html.out.write("</td>\n"
+				document.out.write("</td>\n"
 				+ "  </tr>\n");
 			}
-			html.out.write("</table>\n");
+			document.out.write("</table>\n");
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -890,25 +890,25 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints content below the related pages area on the left.
 	 */
-	public void printBelowRelatedPages(HttpServletRequest req, Html html) throws JspException {
+	public void printBelowRelatedPages(HttpServletRequest req, Document document) throws JspException {
 	}
 
 	/**
 	 * Begins a popup group.
 	 *
-	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Html, long)
+	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
 	 */
 	@Override
-	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException {
-		defaultBeginPopupGroup(req, resp, html, groupId);
+	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
+		defaultBeginPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of beginPopupGroup.
 	 */
-	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException {
+	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
 		try {
-			try (MediaWriter script = html.script().out__()) {
+			try (MediaWriter script = document.script().out__()) {
 				String groupIdStr = Long.toString(groupId);
 				script.write("  var popupGroupTimer"); script.write(groupIdStr); script.write("=null;\n"
 				+ "  var popupGroupAuto"); script.write(groupIdStr); script.write("=null;\n"
@@ -938,7 +938,7 @@ public class TextSkin extends Skin {
 				+ "      elemStyle.visibility=\"visible\";\n"
 				+ "    }\n"
 				+ "  }\n");
-			} html.nl();
+			} document.nl();
 		} catch(IOException err) {
 			throw new JspException(err);
 		}
@@ -947,34 +947,34 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup group.
 	 *
-	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Html, long)
+	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
 	 */
 	@Override
-	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException {
-		defaultEndPopupGroup(req, resp, html, groupId);
+	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
+		defaultEndPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of endPopupGroup.
 	 */
-	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId) throws JspException {
+	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
 		// Nothing at the popup group end
 	}
 
 	/**
 	 * Begins a popup that is in a popup group.
 	 *
-	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Html, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width) throws JspException {
-		defaultBeginPopup(req, resp, html, groupId, popupId, width, getUrlBase(req));
+	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException {
+		defaultBeginPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of beginPopup.
 	 */
-	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width, String urlBase) throws JspException {
+	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException {
 		if(groupId < 0) throw new IllegalArgumentException("groupId < 0: " + groupId);
 		final String groupIdStr = Long.toString(groupId);
 
@@ -987,8 +987,8 @@ public class TextSkin extends Skin {
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
-			html.out.append("<div id=\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupAnchor\">");
-			html.img()
+			document.out.append("<div id=\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupAnchor\">");
+			document.img()
 				.clazz("aoPopupAnchorImg")
 				.src(
 					resp.encodeURL(
@@ -1032,15 +1032,15 @@ public class TextSkin extends Skin {
 			// Used to be span width=\"100%\"
 			.out.append("    <div id=\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupMain\"");
 			if(width != null) {
-				html.out.write(" style=\"");
-				appendWidthStyle(width, html.out);
-				html.out.write('"');
+				document.out.write(" style=\"");
+				appendWidthStyle(width, document.out);
+				document.out.write('"');
 			}
-			html.out.write(">\n"
+			document.out.write(">\n"
 			+ "        <table class=\"aoPopupTable ao-packed\">\n"
 			+ "            <tr>\n"
 			+ "                <td class=\"aoPopupTL\">");
-			html.img()
+			document.img()
 				.src(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -1056,11 +1056,11 @@ public class TextSkin extends Skin {
 						urlBase + "textskin/popup_top.gif"
 					)
 				),
-				html.out
+				document.out
 			);
-			html.out.write(");\"></td>\n"
+			document.out.write(");\"></td>\n"
 			+ "                <td class=\"aoPopupTR\">");
-			html.img()
+			document.img()
 				.src(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -1078,9 +1078,9 @@ public class TextSkin extends Skin {
 						urlBase + "textskin/popup_left.gif"
 					)
 				),
-				html.out
+				document.out
 			);
-			html.out.write(");\"></td>\n"
+			document.out.write(");\"></td>\n"
 			+ "                <td class=\"aoPopupLightRow\">");
 		} catch(IOException err) {
 			throw new JspException(err);
@@ -1090,23 +1090,23 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints a popup close link/image/button for a popup that is part of a popup group.
 	 *
-	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Html, long, long, java.lang.String)
+	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String)
 	 */
 	@Override
-	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId) throws JspException {
-		defaultPrintPopupClose(req, resp, html, groupId, popupId, getUrlBase(req));
+	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException {
+		defaultPrintPopupClose(req, resp, document, groupId, popupId, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of printPopupClose.
 	 */
-	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String urlBase) throws JspException {
+	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String urlBase) throws JspException {
 		try {
 			ServletContext servletContext = req.getServletContext();
 			Locale locale = LocaleAction.getLocale(servletContext, req);
 			MessageResources applicationResources = getMessageResources(req);
 
-			html.img()
+			document.img()
 				.clazz("aoPopupClose")
 				.src(
 					resp.encodeURL(
@@ -1127,19 +1127,19 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup that is in a popup group.
 	 *
-	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Html, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void endPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width) throws JspException {
-		TextSkin.defaultEndPopup(req, resp, html, groupId, popupId, width, getUrlBase(req));
+	public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException {
+		TextSkin.defaultEndPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of endPopup.
 	 */
-	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, Html html, long groupId, long popupId, String width, String urlBase) throws JspException {
+	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException {
 		try {
-			html.out.write("</td>\n"
+			document.out.write("</td>\n"
 			+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
 			encodeTextInXhtmlAttribute(
 				resp.encodeURL(
@@ -1147,13 +1147,13 @@ public class TextSkin extends Skin {
 						urlBase + "textskin/popup_right.gif"
 					)
 				),
-				html.out
+				document.out
 			);
-			html.out.write(");\"></td>\n"
+			document.out.write(");\"></td>\n"
 			+ "            </tr>\n"
 			+ "            <tr>\n" 
 			+ "                <td class=\"aoPopupBL\">");
-			html.img()
+			document.img()
 				.src(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -1169,11 +1169,11 @@ public class TextSkin extends Skin {
 						urlBase + "textskin/popup_bottom.gif"
 					)
 				),
-				html.out
+				document.out
 			);
-			html.out.write(");\"></td>\n"
+			document.out.write(");\"></td>\n"
 			+ "                <td class=\"aoPopupBR\">");
-			html.img()
+			document.img()
 				.src(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
@@ -1188,7 +1188,7 @@ public class TextSkin extends Skin {
 			+ "</div>\n");
 			String groupIdStr = Long.toString(groupId);
 			String popupIdStr = Long.toString(popupId);
-			html.script().out(script -> script.append(
+			document.script().out(script -> script.append(
 				  "\t// Override onload\n"
 				+ "\tvar aoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(" = window.onload;\n"
 				+ "\tfunction adjustPositionOnload_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"

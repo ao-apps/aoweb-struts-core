@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
@@ -99,11 +99,11 @@ final public class SignupSelectPackageActionHelper {
 		request.setAttribute("setup", packageDefinition.getSetupFee());
 	}
 
-	public static void writeEmailConfirmation(Html html, PackageDefinition packageDefinition) throws IOException {
-		html.out.write("    <tr>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(PACKAGE_RESOURCES.getMessage("signupSelectPackageForm.packageDefinition.prompt")); html.out.write("</td>\n"
-		+ "        <td>"); html.text(packageDefinition.getDisplay()).out.write("</td>\n"
+	public static void writeEmailConfirmation(Document document, PackageDefinition packageDefinition) throws IOException {
+		document.out.write("    <tr>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupSelectPackageForm.packageDefinition.prompt")); document.out.write("</td>\n"
+		+ "        <td>"); document.text(packageDefinition.getDisplay()).out.write("</td>\n"
 		+ "    </tr>\n");
 	}
 }

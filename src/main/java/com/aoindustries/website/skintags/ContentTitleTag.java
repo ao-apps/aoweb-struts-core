@@ -24,7 +24,7 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.encoding.MediaType;
 import com.aoindustries.encoding.taglib.EncodingBufferedTag;
-import com.aoindustries.html.servlet.HtmlEE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.io.buffer.BufferResult;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import java.io.IOException;
@@ -66,10 +66,9 @@ public class ContentTitleTag extends EncodingBufferedTag {
 			totalColspan += colspans[c];
 		}
 
-		SkinTag.getSkin(pageContext).printContentTitle(
-			req,
+		SkinTag.getSkin(pageContext).printContentTitle(req,
 			resp,
-			HtmlEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			title,
 			totalColspan
 		);

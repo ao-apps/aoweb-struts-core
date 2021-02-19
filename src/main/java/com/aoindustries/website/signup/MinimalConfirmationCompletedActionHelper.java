@@ -29,7 +29,7 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
-import com.aoindustries.html.Html;
+import com.aoindustries.html.Document;
 import com.aoindustries.html.Meta;
 import com.aoindustries.html.Script;
 import com.aoindustries.html.Style;
@@ -140,12 +140,12 @@ final public class MinimalConfirmationCompletedActionHelper {
 	
 			// Find the locale and related resource bundles
 			Locale userLocale = ThreadLocale.get();
-			String charset = Html.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
+			String charset = Document.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
 
 			// Generate the email contents
 			// TODO: Test emails
 			StringWriter buffer = new StringWriter();
-			Html html = new Html(
+			Document document = new Document(
 				new EncodingContext() {
 					@Override
 					public Serialization getSerialization() {
@@ -158,62 +158,62 @@ final public class MinimalConfirmationCompletedActionHelper {
 				},
 				NativeToUnixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
 			);
-			html.xmlDeclaration(charset);
-			html.doctype();
-			HtmlTag.beginHtmlTag(userLocale, html.out, html.serialization, (GlobalAttributes)null); html.out.write("\n"
+			document.xmlDeclaration(charset);
+			document.doctype();
+			HtmlTag.beginHtmlTag(userLocale, document.out, document.serialization, (GlobalAttributes)null); document.out.write("\n"
 			+ "<head>\n");
-			String contentType = html.serialization.getContentType() + "; charset=" + charset;
-			if(html.doctype == Doctype.HTML5) {
-				html.out.write("    "); html.meta().charset(charset).__().nl();
+			String contentType = document.serialization.getContentType() + "; charset=" + charset;
+			if(document.doctype == Doctype.HTML5) {
+				document.out.write("    "); document.meta().charset(charset).__().nl();
 			} else {
-				html.out.write("    "); html.meta(Meta.HttpEquiv.CONTENT_TYPE).content(contentType).__().out.write("\n"
+				document.out.write("    "); document.meta(Meta.HttpEquiv.CONTENT_TYPE).content(contentType).__().out.write("\n"
 				// Default style language
-				+ "    "); html.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(Style.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); html.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
+				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(Style.Type.TEXT_CSS).__().out.write("\n"
+				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
 			}
-			html.out.write("    <title>"); html.text(subject).out.write("</title>\n");
+			document.out.write("    <title>"); document.text(subject).out.write("</title>\n");
 			// Embed the text-only style sheet
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream(TextSkin.TEXTSKIN_CSS.getUri());
 			if(cssIn != null) {
 				try {
-					html.out.write("    "); try (MediaWriter style = html.style().out__()) {
+					document.out.write("    "); try (MediaWriter style = document.style().out__()) {
 						Reader cssReader = new InputStreamReader(cssIn);
 						try {
 							IoUtils.copy(cssReader, style);
 						} finally {
 							cssIn.close();
 						}
-					} html.nl();
+					} document.nl();
 				} finally {
 					cssIn.close();
 				}
 			} else {
 				servlet.log("Warning: Unable to find resource: " + TextSkin.TEXTSKIN_CSS);
 			}
-			html.out.append("</head>\n"
+			document.out.append("</head>\n"
 			+ "<body>\n"
 			+ "<table style=\"border:0px\" cellpadding=\"0\" cellspacing=\"0\">\n"
 			+ "    <tr><td style=\"white-space:nowrap\" colspan=\"3\">\n"
-			+ "        ").append(PACKAGE_RESOURCES.getMessage(statusKey, pkey)); html.br__().out.write("\n"
-			+ "        "); html.br__().out.append("\n"
-			+ "        ").append(PACKAGE_RESOURCES.getMessage("serverConfirmationCompleted.belowIsSummary")); html.br__().out.write("\n"
-			+ "        "); html.hr__(); html.out.write("\n"
+			+ "        ").append(PACKAGE_RESOURCES.getMessage(statusKey, pkey)); document.br__().out.write("\n"
+			+ "        "); document.br__().out.append("\n"
+			+ "        ").append(PACKAGE_RESOURCES.getMessage("serverConfirmationCompleted.belowIsSummary")); document.br__().out.write("\n"
+			+ "        "); document.hr__(); document.out.write("\n"
 			+ "    </td></tr>\n"
-			+ "    <tr><th colspan=\"3\">"); html.text(PACKAGE_RESOURCES.getMessage("steps.selectPackage.label")); html.out.write("</th></tr>\n");
-			SignupSelectPackageActionHelper.writeEmailConfirmation(html, packageDefinition);
+			+ "    <tr><th colspan=\"3\">"); document.text(PACKAGE_RESOURCES.getMessage("steps.selectPackage.label")); document.out.write("</th></tr>\n");
+			SignupSelectPackageActionHelper.writeEmailConfirmation(document, packageDefinition);
 			AOServConnector rootConn = siteSettings.getRootAOServConnector();
-			html.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-			+ "    <tr><th colspan=\"3\">"); html.text(PACKAGE_RESOURCES.getMessage("steps.organizationInfo.label")); html.out.write("</th></tr>\n");
-			SignupOrganizationActionHelper.writeEmailConfirmation(html, rootConn, signupOrganizationForm);
-			html.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-			+ "    <tr><th colspan=\"3\">"); html.text(PACKAGE_RESOURCES.getMessage("steps.technicalInfo.label")); html.out.write("</th></tr>\n");
-			SignupTechnicalActionHelper.writeEmailConfirmation(html, rootConn, signupTechnicalForm);
-			html.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
-			+ "    <tr><th colspan=\"3\">"); html.text(PACKAGE_RESOURCES.getMessage("steps.billingInformation.label")); html.out.write("</th></tr>\n");
-			SignupBillingInformationActionHelper.writeEmailConfirmation(html, signupBillingInformationForm);
-			html.out.write("</table>\n"
+			document.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
+			+ "    <tr><th colspan=\"3\">"); document.text(PACKAGE_RESOURCES.getMessage("steps.organizationInfo.label")); document.out.write("</th></tr>\n");
+			SignupOrganizationActionHelper.writeEmailConfirmation(document, rootConn, signupOrganizationForm);
+			document.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
+			+ "    <tr><th colspan=\"3\">"); document.text(PACKAGE_RESOURCES.getMessage("steps.technicalInfo.label")); document.out.write("</th></tr>\n");
+			SignupTechnicalActionHelper.writeEmailConfirmation(document, rootConn, signupTechnicalForm);
+			document.out.write("    <tr><td colspan=\"3\">&#160;</td></tr>\n"
+			+ "    <tr><th colspan=\"3\">"); document.text(PACKAGE_RESOURCES.getMessage("steps.billingInformation.label")); document.out.write("</th></tr>\n");
+			SignupBillingInformationActionHelper.writeEmailConfirmation(document, signupBillingInformationForm);
+			document.out.write("</table>\n"
 			+ "</body>\n");
-			HtmlTag.endHtmlTag(html.out); html.nl();
+			HtmlTag.endHtmlTag(document.out); document.nl();
 
 			// Send the email
 			Brand brand = siteSettings.getBrand();
