@@ -355,9 +355,9 @@ public class TextSkin extends Skin {
 					document.out
 				);
 				document.out.write("\"><div style=\"display:inline;\">");
-				document.input.hidden().name("target").value(fullPath).__()
+				document.input().hidden().name("target").value(fullPath).__()
 				// Variant that takes ResourceBundle?
-				.input.submit__(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel"))
+				.input().submit__(applicationResources.getMessage(locale, "TextSkin.logoutButtonLabel"))
 				.out.write("</div></form>\n");
 			} else {
 				document.out.write("          "); document.hr__().out.write("\n"
@@ -374,9 +374,9 @@ public class TextSkin extends Skin {
 				document.out.write("\"><div style=\"display:inline\">");
 				// Only include the target when they are not in the /clientarea/ part of the site
 				if(path.startsWith("clientarea/")) {
-					document.input.hidden().name("target").value(fullPath).__();
+					document.input().hidden().name("target").value(fullPath).__();
 				}
-				document.input.submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"))
+				document.input().submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"))
 				.out.write("</div></form>\n");
 			}
 			document.out.write("          "); document.hr__().nl()
