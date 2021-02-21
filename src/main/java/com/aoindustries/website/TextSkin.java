@@ -615,7 +615,7 @@ public class TextSkin extends Skin {
 	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException {
 		try {
 			startContentLine(req, resp, document, colspan, "center", null);
-			document.out.write("<h1>"); document.text(title).out.write("</h1>\n");
+			document.h1__(title).nl();
 			endContentLine(req, resp, document, 1, false);
 		} catch(IOException err) {
 			throw new JspException(err);
