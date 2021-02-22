@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2013, 2015, 2016, 2018, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -128,7 +128,9 @@ public class MakePaymentNewCardAction extends AuthenticatedAction {
 		// Build the list of years
 		List<String> expirationYears = new ArrayList<>(1 + CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = new GregorianCalendar().get(Calendar.YEAR);
-		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) expirationYears.add(Integer.toString(startYear + c));
+		for(int c = 0; c <= CreditCard.EXPIRATION_YEARS_FUTURE; c++) {
+			expirationYears.add(Integer.toString(startYear + c));
+		}
 
 		// Build the list of countries
 		// We use the root connector to provide a better set of country values

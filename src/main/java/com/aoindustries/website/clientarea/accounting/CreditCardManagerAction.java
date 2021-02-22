@@ -118,6 +118,7 @@ public class CreditCardManagerAction extends PermissionAction {
 			return account;
 		}
 
+		@SuppressWarnings("ReturnOfCollectionOrArrayField") // Returning unmodifiable
 		public List<CreditCard> getCreditCards() {
 			return creditCards;
 		}
