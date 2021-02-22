@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -24,10 +24,12 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -137,6 +139,8 @@ abstract public class PageTag extends BodyTagSupport {
 			String myDescription = this.description;
 			if(myDescription == null || myDescription.length()==0) myDescription=title;
 			return doEndTag(title, myNavImageAlt, myDescription, author, authorHref, copyright, path, keywords, metas);
+		} catch(IOException e) {
+			throw new JspTagException(e);
 		} finally {
 			request.setAttribute(PAGE_TAG_ATTRIBUTE, oldPageTag);
 			init();
@@ -153,5 +157,5 @@ abstract public class PageTag extends BodyTagSupport {
 		String path,
 		String keywords,
 		Collection<Meta> metas
-	) throws JspException;
+	) throws JspException, IOException;
 }

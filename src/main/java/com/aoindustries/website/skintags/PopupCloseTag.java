@@ -24,9 +24,11 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -47,20 +49,25 @@ public class PopupCloseTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		// Look for the containing popup tag
-		PopupTag popupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupTag.TAG_NAME, PopupTag.class);
+		try {
+			// Look for the containing popup tag
+			PopupTag popupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupTag.TAG_NAME, PopupTag.class);
 
-		// Look for containing popupGroup tag
-		PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(PopupTag.TAG_NAME, popupTag, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+			// Look for containing popupGroup tag
+			PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(PopupTag.TAG_NAME, popupTag, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
 
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).printPopupClose(req,
-			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
-			popupGroupTag.sequenceId,
-			popupTag.sequenceId
-		);
-		return SKIP_BODY;
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			SkinTag.getSkin(pageContext).printPopupClose(
+				req,
+				resp,
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				popupGroupTag.sequenceId,
+				popupTag.sequenceId
+			);
+			return SKIP_BODY;
+		} catch(IOException e) {
+			throw new JspTagException(e);
+		}
 	}
 }

@@ -24,9 +24,11 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -58,18 +60,23 @@ public class ContentLineTag extends BodyTagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
+		try {
+			JspTagUtils.requireAncestor(TAG_NAME, this, ContentTag.TAG_NAME, ContentTag.class);
 
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).startContentLine(req,
-			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
-			colspan,
-			align,
-			width
-		);
-		return EVAL_BODY_INCLUDE;
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			SkinTag.getSkin(pageContext).startContentLine(
+				req,
+				resp,
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				colspan,
+				align,
+				width
+			);
+			return EVAL_BODY_INCLUDE;
+		} catch(IOException err) {
+			throw new JspTagException(err);
+		}
 	}
 
 	@Override
@@ -84,6 +91,8 @@ public class ContentLineTag extends BodyTagSupport {
 				endsInternal
 			);
 			return EVAL_PAGE;
+		} catch(IOException err) {
+			throw new JspTagException(err);
 		} finally {
 			init();
 		}

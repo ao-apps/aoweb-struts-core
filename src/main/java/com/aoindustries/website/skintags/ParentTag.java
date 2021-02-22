@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,15 +64,15 @@ public class ParentTag extends PageTag {
 	 * Gets the children of this parent page.
 	 */
 	public List<Child> getChildren() {
-		if(children==null) {
-			List<Child> emptyList = Collections.emptyList();
-			return emptyList;
+		if(children == null) {
+			return Collections.emptyList();
+		} else {
+			return Collections.unmodifiableList(children);
 		}
-		return children;
 	}
 
 	public void addChild(Child child) {
-		if(children==null) children = new ArrayList<>();
+		if(children == null) children = new ArrayList<>();
 		children.add(child);
 	}
 
@@ -87,7 +88,7 @@ public class ParentTag extends PageTag {
 		String path,
 		String keywords,
 		Collection<Meta> metas
-	) throws JspException {
+	) throws JspException, IOException {
 		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(STACK_REQUEST_ATTRIBUTE);
 		if(stack!=null && !stack.isEmpty() && stack.peek()==this) stack.pop();
 

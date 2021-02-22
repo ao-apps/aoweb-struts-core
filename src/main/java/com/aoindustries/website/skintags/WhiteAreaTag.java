@@ -23,6 +23,7 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -51,10 +52,11 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	}
 
 	@Override
-	public int doStartTag(PageAttributes pageAttributes) throws JspException {
+	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).beginWhiteArea(req,
+		SkinTag.getSkin(pageContext).beginWhiteArea(
+			req,
 			resp,
 			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 			align,
@@ -65,7 +67,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	}
 
 	@Override
-	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();

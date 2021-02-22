@@ -24,6 +24,7 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.lang.Strings;
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +66,7 @@ public class ContentTag extends PageAttributesBodyTag {
 	}
 
 	@Override
-	public int doStartTag(PageAttributes pageAttributes) throws JspException {
+	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 		SkinTag.getSkin(pageContext).startContent(req,
@@ -79,7 +80,7 @@ public class ContentTag extends PageAttributesBodyTag {
 	}
 
 	@Override
-	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();

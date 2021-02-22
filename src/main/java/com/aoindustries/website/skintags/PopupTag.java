@@ -26,9 +26,11 @@ import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.util.Sequence;
 import com.aoindustries.util.UnsynchronizedSequence;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -63,21 +65,26 @@ public class PopupTag extends BodyTagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
-		if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
-		sequenceId = sequence.getNextSequenceValue();
-		// Look for containing popupGroup
-		PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).beginPopup(req,
-			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
-			popupGroupTag.sequenceId,
-			sequenceId,
-			width
-		);
-		return EVAL_BODY_INCLUDE;
+		try {
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			Sequence sequence = (Sequence)req.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
+			if(sequence==null) req.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
+			sequenceId = sequence.getNextSequenceValue();
+			// Look for containing popupGroup
+			PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			SkinTag.getSkin(pageContext).beginPopup(
+				req,
+				resp,
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				popupGroupTag.sequenceId,
+				sequenceId,
+				width
+			);
+			return EVAL_BODY_INCLUDE;
+		} catch(IOException e) {
+			throw new JspTagException(e);
+		}
 	}
 
 	@Override
@@ -87,7 +94,8 @@ public class PopupTag extends BodyTagSupport {
 			PopupGroupTag popupGroupTag = JspTagUtils.requireAncestor(TAG_NAME, this, PopupGroupTag.TAG_NAME, PopupGroupTag.class);
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).endPopup(req,
+			SkinTag.getSkin(pageContext).endPopup(
+				req,
 				resp,
 				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				popupGroupTag.sequenceId,
@@ -95,6 +103,8 @@ public class PopupTag extends BodyTagSupport {
 				width
 			);
 			return EVAL_PAGE;
+		} catch(IOException e) {
+			throw new JspTagException(e);
 		} finally {
 			init();
 		}

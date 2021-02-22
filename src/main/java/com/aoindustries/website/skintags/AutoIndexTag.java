@@ -23,9 +23,11 @@
 package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -40,13 +42,18 @@ public class AutoIndexTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).printAutoIndex(req,
-			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
-			PageAttributesBodyTag.getPageAttributes(pageContext)
-		);
-		return SKIP_BODY;
+		try {
+			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			SkinTag.getSkin(pageContext).printAutoIndex(
+				req,
+				resp,
+				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				PageAttributesBodyTag.getPageAttributes(pageContext)
+			);
+			return SKIP_BODY;
+		} catch(IOException e) {
+			throw new JspTagException(e);
+		}
 	}
 }

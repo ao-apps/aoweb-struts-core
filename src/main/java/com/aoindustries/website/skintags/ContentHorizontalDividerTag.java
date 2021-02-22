@@ -28,10 +28,12 @@ import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -87,6 +89,8 @@ public class ContentHorizontalDividerTag extends TagSupport {
 				endsInternal
 			);
 			return SKIP_BODY;
+		} catch(IOException err) {
+			throw new JspTagException(err);
 		} finally {
 			init();
 		}

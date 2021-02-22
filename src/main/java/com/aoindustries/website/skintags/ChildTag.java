@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,6 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 import javax.servlet.jsp.JspException;
@@ -47,7 +48,7 @@ public class ChildTag extends PageTag {
 		String path,
 		String keywords,
 		Collection<Meta> metas
-	) throws JspException {
+	) throws JspException, IOException {
 		Child child = new Child(title, navImageAlt, description, author, authorHref, copyright, path, keywords, metas);
 		Stack<ParentTag> stack = (Stack)pageContext.getRequest().getAttribute(ParentTag.STACK_REQUEST_ATTRIBUTE);
 		if(stack==null || stack.isEmpty()) {

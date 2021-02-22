@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
+import java.io.IOException;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -45,10 +47,14 @@ abstract public class PageAttributesTag extends TagSupport {
 	@Deprecated
 	@Override
 	public int doStartTag() throws JspException {
-		return doStartTag(PageAttributesBodyTag.getPageAttributes(pageContext));
+		try {
+			return doStartTag(PageAttributesBodyTag.getPageAttributes(pageContext));
+		} catch(IOException err) {
+			throw new JspTagException(err);
+		}
 	}
 
-	public int doStartTag(PageAttributes pageAttributes) throws JspException {
+	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		return SKIP_BODY;
 	}
 
@@ -60,10 +66,14 @@ abstract public class PageAttributesTag extends TagSupport {
 	@Deprecated
 	@Override
 	public int doEndTag() throws JspException {
-		return doEndTag(PageAttributesBodyTag.getPageAttributes(pageContext));
+		try {
+			return doEndTag(PageAttributesBodyTag.getPageAttributes(pageContext));
+		} catch(IOException err) {
+			throw new JspTagException(err);
+		}
 	}
 
-	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		return EVAL_PAGE;
 	}
 }

@@ -24,9 +24,11 @@ package com.aoindustries.website.skintags;
 
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -62,7 +64,8 @@ public class ContentVerticalDividerTag extends TagSupport {
 			ContentLineTag contentLineTag = JspTagUtils.requireAncestor(TAG_NAME, this, ContentLineTag.TAG_NAME, ContentLineTag.class);
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).printContentVerticalDivider(req,
+			SkinTag.getSkin(pageContext).printContentVerticalDivider(
+				req,
 				resp,
 				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
 				visible,
@@ -73,8 +76,10 @@ public class ContentVerticalDividerTag extends TagSupport {
 			);
 			contentLineTag.setLastRowSpan(rowspan);
 			return SKIP_BODY;
+		} catch(IOException err) {
+			throw new JspTagException(err);
 		} finally {
-			init();
+			init(); // TODO: TryCatchFinally
 		}
 	}
 

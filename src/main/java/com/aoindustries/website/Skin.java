@@ -119,7 +119,7 @@ abstract public class Skin {
 	 *              as {@code HttpServletUtil.getAbsoluteURL(req, "/")}.
 	 */
 	@Deprecated
-	public static String getDefaultUrlBase(HttpServletRequest req) throws JspException {
+	public static String getDefaultUrlBase(HttpServletRequest req) {
 		return HttpServletUtil.getAbsoluteURL(req, "/");
 	}
 
@@ -151,42 +151,42 @@ abstract public class Skin {
 	 * @see SerializationEE#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
 	 * @see DoctypeEE#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
-	abstract public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException;
+	abstract public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException;
 
 	/**
 	 * Starts the content area of a page.  The content area provides additional features such as a nice border, and vertical and horizontal dividers.
 	 */
-	abstract public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException;
+	abstract public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException, IOException;
 
 	/**
 	 * Prints an entire content line including the provided title.  The colspan should match the total colspan in startContent for proper appearance
 	 */
-	abstract public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException;
+	abstract public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException, IOException;
 
 	/**
 	 * Starts one line of content with the initial colspan set to the provided colspan.
 	 */
-	abstract public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException;
+	abstract public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException, IOException;
 
 	/**
 	 * Starts one line of content with the initial colspan set to the provided colspan.
 	 */
-	abstract public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException;
+	abstract public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException, IOException;
 
 	/**
 	 * Ends one line of content.
 	 */
-	abstract public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException;
+	abstract public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException, IOException;
 
 	/**
 	 * Prints a horizontal divider of the provided colspans.
 	 */
-	abstract public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException;
+	abstract public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException, IOException;
 
 	/**
 	 * Ends the content area of a page.
 	 */
-	abstract public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException;
+	abstract public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException, IOException;
 
 	/**
 	 * Writes all of the HTML following the content of the page,
@@ -198,27 +198,27 @@ abstract public class Skin {
 	 * @see SerializationEE#get(javax.servlet.ServletContext, javax.servlet.http.HttpServletRequest)
 	 * @see DoctypeEE#get(javax.servlet.ServletContext, javax.servlet.ServletRequest)
 	 */
-	abstract public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException;
+	abstract public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException;
 
 	/**
 	 * Begins a light area.
 	 */
-	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException;
+	abstract public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException;
 
 	/**
 	 * Ends a light area.
 	 */
-	abstract public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException;
+	abstract public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException;
 
 	/**
 	 * Begins a white area.
 	 */
-	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException;
+	abstract public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException;
 
 	/**
 	 * Ends a white area.
 	 */
-	abstract public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException;
+	abstract public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException;
 
 	public static class Language {
 		private final String code;
@@ -311,30 +311,30 @@ abstract public class Skin {
 	/**
 	 * Prints the auto index of all the page siblings.
 	 */
-	abstract public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException;
+	abstract public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException;
 
 	/**
 	 * Begins a popup group.
 	 */
-	abstract public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException;
+	abstract public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException;
 
 	/**
 	 * Ends a popup group.
 	 */
-	abstract public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException;
+	abstract public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException;
 
 	/**
 	 * Begins a popup that is in a popup group.
 	 */
-	abstract public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException;
+	abstract public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException;
 
 	/**
 	 * Prints a popup close link/image/button for a popup that is part of a popup group.
 	 */
-	abstract public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException;
+	abstract public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException, IOException;
 
 	/**
 	 * Ends a popup that is in a popup group.
 	 */
-	abstract public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException;
+	abstract public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException;
 }

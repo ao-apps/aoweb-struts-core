@@ -137,32 +137,32 @@ public class TextSkin extends Skin {
 	/**
 	 * Print the logo for the top left part of the page.
 	 */
-	public void printLogo(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
+	public void printLogo(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
 		// Print no logo by default
 	}
 
 	/**
 	 * Prints the search form, if any exists.
 	 */
-	public void printSearch(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
+	public void printSearch(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the common pages area, which is at the top of the site.
 	 */
-	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
+	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the lines for any JavaScript sources.
 	 */
-	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
+	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the line for the favicon.
 	 */
-	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException {
+	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
 	}
 
 	public static MessageResources getMessageResources(HttpServletRequest req) throws JspException {
@@ -179,7 +179,7 @@ public class TextSkin extends Skin {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
+	public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			ServletContext servletContext = req.getServletContext();
 			SiteSettings settings = SiteSettings.getInstance(servletContext);
@@ -554,343 +554,287 @@ public class TextSkin extends Skin {
 			document.out.write("        </td>\n"
 			+ "        <td valign=\"top\">\n");
 			printCommonPages(req, resp, document);
-		} catch(IOException | SQLException err) {
+		} catch(SQLException err) {
 			throw new JspException(err);
 		}
 	}
 
-	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
-		try {
-			for(PageAttributes.Link link : pageAttributes.getLinks()) {
-				String href = link.getHref();
-				String rel = link.getRel();
-				document.out.write("    "); document.link()
-					.rel(rel)
-					.href(href == null ? null :
-						LastModifiedUtil.buildURL(
-							servletContext,
-							req,
-							resp,
-							href,
-							EmptyURIParameters.getInstance(),
-							AddLastModified.AUTO,
-							false,
-							// TODO: Support canonical flag on link
-							Link.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
-						)
+	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+		for(PageAttributes.Link link : pageAttributes.getLinks()) {
+			String href = link.getHref();
+			String rel = link.getRel();
+			document.out.write("    "); document.link()
+				.rel(rel)
+				.href(href == null ? null :
+					LastModifiedUtil.buildURL(
+						servletContext,
+						req,
+						resp,
+						href,
+						EmptyURIParameters.getInstance(),
+						AddLastModified.AUTO,
+						false,
+						// TODO: Support canonical flag on link
+						Link.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
 					)
-					.type(link.getType())
-					.__().nl();
-			}
-		} catch(IOException err) {
-			throw new JspException(err);
+				)
+				.type(link.getType())
+				.__().nl();
 		}
 	}
 
 	@Override
-	public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException {
+	public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException, IOException {
 		width = trimNullIfEmpty(width);
-		try {
-			document.out.write("          <table class=\"ao-packed\"");
+		document.out.write("          <table class=\"ao-packed\"");
+		if(width != null) {
+			document.out.write(" style=\""); appendWidthStyle(width, document.out); document.out.write('"');
+		}
+		document.out.write(">\n"
+		+ "            <tr>\n");
+		int totalColumns = 0;
+		for(int c = 0; c < colspans.length; c++) {
+			if(c > 0) totalColumns++;
+			totalColumns += colspans[c];
+		}
+		document.out.write("              <td");
+		if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
+		document.out.write('>'); document.hr__().out.write("</td>\n"
+		+ "            </tr>\n");
+	}
+
+	@Override
+	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException, IOException {
+		startContentLine(req, resp, document, colspan, "center", null);
+		document.h1__(title).nl();
+		endContentLine(req, resp, document, 1, false);
+	}
+
+	@Override
+	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException, IOException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
+		document.out.write("            <tr>\n"
+		+ "              <td");
+		if(align != null || width != null) {
+			document.out.write(" style=\"");
+			if(align != null) {
+				document.out.write("text-align:");
+				encodeTextInXhtmlAttribute(align, document.out);
+			}
 			if(width != null) {
-				document.out.write(" style=\""); appendWidthStyle(width, document.out); document.out.write('"');
+				if(align != null) document.out.write(';');
+				appendWidthStyle(width, document.out);
 			}
-			document.out.write(">\n"
-			+ "            <tr>\n");
-			int totalColumns = 0;
-			for(int c = 0; c < colspans.length; c++) {
-				if(c > 0) totalColumns++;
-				totalColumns += colspans[c];
-			}
-			document.out.write("              <td");
-			if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-			document.out.write('>'); document.hr__().out.write("</td>\n"
-			+ "            </tr>\n");
-		} catch(IOException err) {
-			throw new JspException(err); // TODO: Allow throws IOException, too, like the change we made in ao-encoding-taglib
+			document.out.write('"');
 		}
+		document.out.write(" valign=\"top\"");
+		if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
+		document.out.write('>');
 	}
 
 	@Override
-	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException {
-		try {
-			startContentLine(req, resp, document, colspan, "center", null);
-			document.h1__(title).nl();
-			endContentLine(req, resp, document, 1, false);
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException {
+	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
-		try {
-			document.out.write("            <tr>\n"
-			+ "              <td");
-			if(align != null || width != null) {
-				document.out.write(" style=\"");
-				if(align != null) {
-					document.out.write("text-align:");
-					encodeTextInXhtmlAttribute(align, document.out);
-				}
-				if(width != null) {
-					if(align != null) document.out.write(';');
-					appendWidthStyle(width, document.out);
-				}
-				document.out.write('"');
+		document.out.write("              </td>\n");
+		if(visible) document.out.write("              <td>&#160;</td>\n");
+		document.out.write("              <td");
+		if(align != null || width != null) {
+			document.out.write(" style=\"");
+			if(align != null) {
+				document.out.write("text-align:");
+				encodeTextInXhtmlAttribute(align, document.out);
 			}
-			document.out.write(" valign=\"top\"");
-			if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-			document.out.write('>');
-		} catch(IOException err) {
-			throw new JspException(err);
+			if(width != null) {
+				if(align != null) document.out.write(';');
+				appendWidthStyle(width, document.out);
+			}
+			document.out.write('"');
 		}
+		document.out.write(" valign=\"top\"");
+		if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
+		if(rowspan != 1) document.out.append(" rowspan=\"").append(Integer.toString(rowspan)).append('"');
+		document.out.write('>');
 	}
 
 	@Override
-	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException {
-		align = trimNullIfEmpty(align);
-		width = trimNullIfEmpty(width);
-		try {
-			document.out.write("              </td>\n");
-			if(visible) document.out.write("              <td>&#160;</td>\n");
+	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException, IOException {
+		document.out.write("              </td>\n"
+		+ "            </tr>\n");
+	}
+
+	@Override
+	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException, IOException {
+		document.out.write("            <tr>\n");
+		for(int c = 0; c < colspansAndDirections.length; c += 2) {
+			if(c > 0) {
+				int direction = colspansAndDirections[c - 1];
+				switch(direction) {
+					case UP:
+						document.out.write("              <td>&#160;</td>\n");
+						break;
+					case DOWN:
+						document.out.write("              <td>&#160;</td>\n");
+						break;
+					case UP_AND_DOWN:
+						document.out.write("              <td>&#160;</td>\n");
+						break;
+					default: throw new IllegalArgumentException("Unknown direction: " + direction);
+				}
+			}
+
+			int colspan = colspansAndDirections[c];
 			document.out.write("              <td");
-			if(align != null || width != null) {
-				document.out.write(" style=\"");
-				if(align != null) {
-					document.out.write("text-align:");
-					encodeTextInXhtmlAttribute(align, document.out);
-				}
-				if(width != null) {
-					if(align != null) document.out.write(';');
-					appendWidthStyle(width, document.out);
-				}
-				document.out.write('"');
-			}
-			document.out.write(" valign=\"top\"");
 			if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-			if(rowspan != 1) document.out.append(" rowspan=\"").append(Integer.toString(rowspan)).append('"');
-			document.out.write('>');
-		} catch(IOException err) {
-			throw new JspException(err);
+			document.out.write('>'); document.hr__().out.write("</td>\n");
 		}
+		document.out.write("            </tr>\n");
 	}
 
 	@Override
-	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException {
-		try {
-			document.out.write("              </td>\n"
-			+ "            </tr>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
+	public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException, IOException {
+		int totalColumns = 0;
+		for(int c = 0; c < colspans.length; c++) {
+			if(c > 0) totalColumns += 1;
+			totalColumns += colspans[c];
 		}
-	}
-
-	@Override
-	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException {
-		try {
-			document.out.write("            <tr>\n");
-			for(int c = 0; c < colspansAndDirections.length; c += 2) {
-				if(c > 0) {
-					int direction = colspansAndDirections[c - 1];
-					switch(direction) {
-						case UP:
-							document.out.write("              <td>&#160;</td>\n");
-							break;
-						case DOWN:
-							document.out.write("              <td>&#160;</td>\n");
-							break;
-						case UP_AND_DOWN:
-							document.out.write("              <td>&#160;</td>\n");
-							break;
-						default: throw new IllegalArgumentException("Unknown direction: " + direction);
-					}
-				}
-
-				int colspan = colspansAndDirections[c];
-				document.out.write("              <td");
-				if(colspan != 1) document.out.append(" colspan=\"").append(Integer.toString(colspan)).append('"');
-				document.out.write('>'); document.hr__().out.write("</td>\n");
-			}
-			document.out.write("            </tr>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException {
-		try {
-			int totalColumns = 0;
-			for(int c = 0; c < colspans.length; c++) {
-				if(c > 0) totalColumns += 1;
-				totalColumns += colspans[c];
-			}
+		document.out.write("            <tr><td");
+		if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
+		document.out.write('>'); document.hr__().out.write("</td></tr>\n");
+		String copyright = pageAttributes.getCopyright();
+		if(copyright != null && !(copyright = copyright.trim()).isEmpty()) {
 			document.out.write("            <tr><td");
 			if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-			document.out.write('>'); document.hr__().out.write("</td></tr>\n");
-			String copyright = pageAttributes.getCopyright();
-			if(copyright != null && !(copyright = copyright.trim()).isEmpty()) {
-				document.out.write("            <tr><td");
-				if(totalColumns != 1) document.out.append(" colspan=\"").append(Integer.toString(totalColumns)).append('"');
-				document.out.write(" style=\"text-align:center\"><span style=\"font-size: x-small\">");
-				document.text(copyright).out.write("</span></td></tr>\n");
-			}
-			document.out.write("          </table>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
+			document.out.write(" style=\"text-align:center\"><span style=\"font-size: x-small\">");
+			document.text(copyright).out.write("</span></td></tr>\n");
 		}
+		document.out.write("          </table>\n");
 	}
 
 	@Override
-	public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
-		try {
-			document.out.write("        </td>\n"
-			+ "      </tr>\n"
-			+ "    </table>\n");
-			// TODO: SemanticCMS component for this, also make sure in other layouts and skins
-			EditableResourceBundle.printEditableResourceBundleLookups(
-				textInJavaScriptEncoder,
-				textInXhtmlEncoder,
-				document.out,
-				SerializationEE.get(req.getServletContext(), req) == Serialization.XML,
-				4,
-				true
+	public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+		document.out.write("        </td>\n"
+		+ "      </tr>\n"
+		+ "    </table>\n");
+		// TODO: SemanticCMS component for this, also make sure in other layouts and skins
+		EditableResourceBundle.printEditableResourceBundleLookups(
+			textInJavaScriptEncoder,
+			textInXhtmlEncoder,
+			document.out,
+			SerializationEE.get(req.getServletContext(), req) == Serialization.XML,
+			4,
+			true
+		);
+		document.out.write("  </body>\n");
+		HtmlTag.endHtmlTag(document.out); document.nl();
+	}
+
+	@Override
+	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
+		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
+		if(width != null) {
+			document.out.write(';');
+			appendWidthStyle(width, document.out);
+		}
+		document.out.write("\">\n"
+		+ "  <tr>\n"
+		+ "    <td class=\"aoLightRow\" style=\"padding:4px");
+		if(align != null) {
+			document.out.write(";text-align:");
+			encodeTextInXhtmlAttribute(align, document.out);
+		}
+		if(nowrap) document.out.write(";white-space:nowrap;");
+		document.out.write("\">");
+	}
+
+	@Override
+	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+		document.out.write("</td>\n"
+		+ "  </tr>\n"
+		+ "</table>\n");
+	}
+
+	@Override
+	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException {
+		align = trimNullIfEmpty(align);
+		width = trimNullIfEmpty(width);
+		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
+		if(width != null) {
+			document.out.write(';');
+			appendWidthStyle(width, document.out);
+		}
+		document.out.write("\">\n"
+		+ "  <tr>\n"
+		+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
+		if(align != null) {
+			document.out.write(";text-align:");
+			encodeTextInXhtmlAttribute(align, document.out);
+		}
+		if(nowrap) document.out.write(" white-space:nowrap;");
+		document.out.write("\">");
+	}
+
+	@Override
+	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+		document.out.write("</td>\n"
+		+ "  </tr>\n"
+		+ "</table>\n");
+	}
+
+	@Override
+	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+		String urlBase = getUrlBase(req);
+		//Locale locale = resp.getLocale();
+
+		document.out.write("<table cellpadding=\"0\" cellspacing=\"10\">\n");
+		List<Child> siblings = pageAttributes.getChildren();
+		if(siblings.isEmpty()) {
+			List<Parent> parents = pageAttributes.getParents();
+			if(!parents.isEmpty()) siblings = parents.get(parents.size()-1).getChildren();
+		}
+		for(Child sibling : siblings) {
+			String navAlt=sibling.getNavImageAlt();
+			String siblingPath = sibling.getPath();
+			if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
+
+			document.out.write("  <tr>\n"
+			+ "    <td style=\"white-space:nowrap\"><a class=\"aoLightLink\" href=\"");
+			encodeTextInXhtmlAttribute(
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase
+						+ URIEncoder.encodeURI(siblingPath)
+					)
+				),
+				document.out
 			);
-			document.out.write("  </body>\n");
-			HtmlTag.endHtmlTag(document.out); document.nl();
-		} catch(IOException  err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException {
-		align = trimNullIfEmpty(align);
-		width = trimNullIfEmpty(width);
-		try {
-			document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
-			if(width != null) {
-				document.out.write(';');
-				appendWidthStyle(width, document.out);
-			}
-			document.out.write("\">\n"
-			+ "  <tr>\n"
-			+ "    <td class=\"aoLightRow\" style=\"padding:4px");
-			if(align != null) {
-				document.out.write(";text-align:");
-				encodeTextInXhtmlAttribute(align, document.out);
-			}
-			if(nowrap) document.out.write(";white-space:nowrap;");
-			document.out.write("\">");
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
-		try {
-			document.out.write("</td>\n"
-			+ "  </tr>\n"
-			+ "</table>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException {
-		align = trimNullIfEmpty(align);
-		width = trimNullIfEmpty(width);
-		try {
-			document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
-			if(width != null) {
-				document.out.write(';');
-				appendWidthStyle(width, document.out);
-			}
-			document.out.write("\">\n"
-			+ "  <tr>\n"
-			+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
-			if(align != null) {
-				document.out.write(";text-align:");
-				encodeTextInXhtmlAttribute(align, document.out);
-			}
-			if(nowrap) document.out.write(" white-space:nowrap;");
-			document.out.write("\">");
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException {
-		try {
-			document.out.write("</td>\n"
-			+ "  </tr>\n"
-			+ "</table>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
-	}
-
-	@Override
-	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException {
-		try {
-			String urlBase = getUrlBase(req);
-			//Locale locale = resp.getLocale();
-
-			document.out.write("<table cellpadding=\"0\" cellspacing=\"10\">\n");
-			List<Child> siblings = pageAttributes.getChildren();
-			if(siblings.isEmpty()) {
-				List<Parent> parents = pageAttributes.getParents();
-				if(!parents.isEmpty()) siblings = parents.get(parents.size()-1).getChildren();
-			}
-			for(Child sibling : siblings) {
-				String navAlt=sibling.getNavImageAlt();
-				String siblingPath = sibling.getPath();
-				if(siblingPath.startsWith("/")) siblingPath=siblingPath.substring(1);
-
-				document.out.write("  <tr>\n"
-				+ "    <td style=\"white-space:nowrap\"><a class=\"aoLightLink\" href=\"");
-				encodeTextInXhtmlAttribute(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase
-							+ URIEncoder.encodeURI(siblingPath)
-						)
-					),
-					document.out
-				);
-				document.out.write("\">"); document.text(navAlt).out.write("</a></td>\n"
-				+ "    <td style=\"width:12px; white-space:nowrap\">&#160;</td>\n"
-				+ "    <td style=\"white-space:nowrap\">");
-				String description = sibling.getDescription();
-				if(description != null && !(description = description.trim()).isEmpty()) {
-					document.text(description);
+			document.out.write("\">"); document.text(navAlt).out.write("</a></td>\n"
+			+ "    <td style=\"width:12px; white-space:nowrap\">&#160;</td>\n"
+			+ "    <td style=\"white-space:nowrap\">");
+			String description = sibling.getDescription();
+			if(description != null && !(description = description.trim()).isEmpty()) {
+				document.text(description);
+			} else {
+				String title = sibling.getTitle();
+				if(title != null && !(title = title.trim()).isEmpty()) {
+					document.text(title);
 				} else {
-					String title = sibling.getTitle();
-					if(title != null && !(title = title.trim()).isEmpty()) {
-						document.text(title);
-					} else {
-						document.out.write("&#160;");
-					}
+					document.out.write("&#160;");
 				}
-				document.out.write("</td>\n"
-				+ "  </tr>\n");
 			}
-			document.out.write("</table>\n");
-		} catch(IOException err) {
-			throw new JspException(err);
+			document.out.write("</td>\n"
+			+ "  </tr>\n");
 		}
+		document.out.write("</table>\n");
 	}
 
 	/**
 	 * Prints content below the related pages area on the left.
 	 */
-	public void printBelowRelatedPages(HttpServletRequest req, Document document) throws JspException {
+	public void printBelowRelatedPages(HttpServletRequest req, Document document) throws JspException, IOException {
 	}
 
 	/**
@@ -899,49 +843,45 @@ public class TextSkin extends Skin {
 	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
 	 */
 	@Override
-	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
+	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
 		defaultBeginPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of beginPopupGroup.
 	 */
-	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
-		try {
-			try (MediaWriter script = document.script().out__()) {
-				String groupIdStr = Long.toString(groupId);
-				script.write("  var popupGroupTimer"); script.write(groupIdStr); script.write("=null;\n"
-				+ "  var popupGroupAuto"); script.write(groupIdStr); script.write("=null;\n"
-				+ "  function popupGroupHideAllDetails"); script.write(groupIdStr); script.write("() {\n"
-				+ "    var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");\n"
-				+ "    for (var c=0; c < spanElements.length; c++) {\n"
-				+ "      if(spanElements[c].id.indexOf(\"aoPopup_"); script.write(groupIdStr); script.write("_\")==0) {\n"
-				+ "        spanElements[c].style.visibility=\"hidden\";\n"
-				+ "      }\n"
-				+ "    }\n"
-				+ "  }\n"
-				+ "  function popupGroupToggleDetails"); script.write(groupIdStr); script.write("(popupId) {\n"
-				+ "    if(popupGroupTimer"); script.write(groupIdStr); script.write("!=null) clearTimeout(popupGroupTimer"); script.write(groupIdStr); script.write(");\n"
-				+ "    var elemStyle = document.getElementById(\"aoPopup_"); script.write(groupIdStr); script.write("_\"+popupId).style;\n"
-				+ "    if(elemStyle.visibility==\"visible\") {\n"
-				+ "      elemStyle.visibility=\"hidden\";\n"
-				+ "    } else {\n"
-				+ "      popupGroupHideAllDetails"); script.write(groupIdStr); script.write("();\n"
-				+ "      elemStyle.visibility=\"visible\";\n"
-				+ "    }\n"
-				+ "  }\n"
-				+ "  function popupGroupShowDetails"); script.write(groupIdStr); script.write("(popupId) {\n"
-				+ "    if(popupGroupTimer"); script.write(groupIdStr); script.write("!=null) clearTimeout(popupGroupTimer"); script.write(groupIdStr); script.write(");\n"
-				+ "    var elemStyle = document.getElementById(\"aoPopup_"); script.write(groupIdStr); script.write("_\"+popupId).style;\n"
-				+ "    if(elemStyle.visibility!=\"visible\") {\n"
-				+ "      popupGroupHideAllDetails"); script.write(groupIdStr); script.write("();\n"
-				+ "      elemStyle.visibility=\"visible\";\n"
-				+ "    }\n"
-				+ "  }\n");
-			} document.nl();
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
+	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
+		String groupIdStr = Long.toString(groupId);
+		document.script().out(script -> script
+			.append("  var popupGroupTimer").append(groupIdStr).append("=null;\n"
+			+ "  var popupGroupAuto").append(groupIdStr).append("=null;\n"
+			+ "  function popupGroupHideAllDetails").append(groupIdStr).append("() {\n"
+			+ "    var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");\n"
+			+ "    for (var c=0; c < spanElements.length; c++) {\n"
+			+ "      if(spanElements[c].id.indexOf(\"aoPopup_").append(groupIdStr).append("_\")==0) {\n"
+			+ "        spanElements[c].style.visibility=\"hidden\";\n"
+			+ "      }\n"
+			+ "    }\n"
+			+ "  }\n"
+			+ "  function popupGroupToggleDetails").append(groupIdStr).append("(popupId) {\n"
+			+ "    if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");\n"
+			+ "    var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;\n"
+			+ "    if(elemStyle.visibility==\"visible\") {\n"
+			+ "      elemStyle.visibility=\"hidden\";\n"
+			+ "    } else {\n"
+			+ "      popupGroupHideAllDetails").append(groupIdStr).append("();\n"
+			+ "      elemStyle.visibility=\"visible\";\n"
+			+ "    }\n"
+			+ "  }\n"
+			+ "  function popupGroupShowDetails").append(groupIdStr).append("(popupId) {\n"
+			+ "    if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");\n"
+			+ "    var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;\n"
+			+ "    if(elemStyle.visibility!=\"visible\") {\n"
+			+ "      popupGroupHideAllDetails").append(groupIdStr).append("();\n"
+			+ "      elemStyle.visibility=\"visible\";\n"
+			+ "    }\n"
+			+ "  }\n")
+		).__().nl();
 	}
 
 	/**
@@ -950,14 +890,14 @@ public class TextSkin extends Skin {
 	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
 	 */
 	@Override
-	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
+	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
 		defaultEndPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of endPopupGroup.
 	 */
-	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException {
+	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
 		// Nothing at the popup group end
 	}
 
@@ -967,14 +907,14 @@ public class TextSkin extends Skin {
 	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException {
+	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException {
 		defaultBeginPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of beginPopup.
 	 */
-	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException {
+	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
 		if(groupId < 0) throw new IllegalArgumentException("groupId < 0: " + groupId);
 		final String groupIdStr = Long.toString(groupId);
 
@@ -982,109 +922,105 @@ public class TextSkin extends Skin {
 		final String popupIdStr = Long.toString(popupId);
 
 		width = trimNullIfEmpty(width);
-		try {
-			ServletContext servletContext = req.getServletContext();
-			Locale locale = LocaleAction.getLocale(servletContext, req);
-			MessageResources applicationResources = getMessageResources(req);
+		ServletContext servletContext = req.getServletContext();
+		Locale locale = LocaleAction.getLocale(servletContext, req);
+		MessageResources applicationResources = getMessageResources(req);
 
-			document.out.append("<div id=\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupAnchor\">");
-			document.img()
-				.clazz("aoPopupAnchorImg")
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase
-							+ applicationResources.getMessage(locale, "TextSkin.popup.src")
-						)
-					)
-				).alt(applicationResources.getMessage(locale, "TextSkin.popup.alt"))
-				.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.width")))
-				.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.height")))
-				.onmouseover(onmouseover -> onmouseover
-					.append("popupGroupTimer")
-					.append(groupIdStr)
-					.append("=setTimeout(\"popupGroupAuto")
-					.append(groupIdStr)
-					.append("=true; popupGroupShowDetails")
-					.append(groupIdStr)
-					.append('(')
-					.append(popupIdStr)
-					.append(")\", 1000);")
-				).onmouseout(onmouseout -> onmouseout
-					.append("if(popupGroupAuto")
-					.append(groupIdStr)
-					.append(") popupGroupHideAllDetails")
-					.append(groupIdStr)
-					.append("(); if(popupGroupTimer")
-					.append(groupIdStr)
-					.append("!=null) clearTimeout(popupGroupTimer")
-					.append(groupIdStr)
-					.append(");")
-				).onclick(onclick -> onclick
-					.append("popupGroupAuto")
-					.append(groupIdStr)
-					.append("=false; popupGroupToggleDetails")
-					.append(groupIdStr)
-					.append('(')
-					.append(popupIdStr)
-					.append(");")
-				).__().nl()
-			// Used to be span width=\"100%\"
-			.out.append("    <div id=\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupMain\"");
-			if(width != null) {
-				document.out.write(" style=\"");
-				appendWidthStyle(width, document.out);
-				document.out.write('"');
-			}
-			document.out.write(">\n"
-			+ "        <table class=\"aoPopupTable ao-packed\">\n"
-			+ "            <tr>\n"
-			+ "                <td class=\"aoPopupTL\">");
-			document.img()
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase + "textskin/popup_topleft.gif"
-						)
-					)
-				).width(12).height(12).alt("").__()
-			.out.write("</td>\n"
-			+ "                <td class=\"aoPopupTop\" style=\"background-image:url(");
-			encodeTextInXhtmlAttribute(
+		document.out.append("<div id=\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupAnchor\">");
+		document.img()
+			.clazz("aoPopupAnchorImg")
+			.src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_top.gif"
+						urlBase
+						+ applicationResources.getMessage(locale, "TextSkin.popup.src")
 					)
-				),
-				document.out
-			);
-			document.out.write(");\"></td>\n"
-			+ "                <td class=\"aoPopupTR\">");
-			document.img()
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase + "textskin/popup_topright.gif"
-						)
-					)
-				).width(12).height(12).alt("").__()
-			.out.write("</td>\n"
-			+ "            </tr>\n"
-			+ "            <tr>\n"
-			+ "                <td class=\"aoPopupLeft\" style=\"background-image:url(");
-			encodeTextInXhtmlAttribute(
-				resp.encodeURL(
-					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_left.gif"
-					)
-				),
-				document.out
-			);
-			document.out.write(");\"></td>\n"
-			+ "                <td class=\"aoPopupLightRow\">");
-		} catch(IOException err) {
-			throw new JspException(err);
+				)
+			).alt(applicationResources.getMessage(locale, "TextSkin.popup.alt"))
+			.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.width")))
+			.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popup.height")))
+			.onmouseover(onmouseover -> onmouseover
+				.append("popupGroupTimer")
+				.append(groupIdStr)
+				.append("=setTimeout(\"popupGroupAuto")
+				.append(groupIdStr)
+				.append("=true; popupGroupShowDetails")
+				.append(groupIdStr)
+				.append('(')
+				.append(popupIdStr)
+				.append(")\", 1000);")
+			).onmouseout(onmouseout -> onmouseout
+				.append("if(popupGroupAuto")
+				.append(groupIdStr)
+				.append(") popupGroupHideAllDetails")
+				.append(groupIdStr)
+				.append("(); if(popupGroupTimer")
+				.append(groupIdStr)
+				.append("!=null) clearTimeout(popupGroupTimer")
+				.append(groupIdStr)
+				.append(");")
+			).onclick(onclick -> onclick
+				.append("popupGroupAuto")
+				.append(groupIdStr)
+				.append("=false; popupGroupToggleDetails")
+				.append(groupIdStr)
+				.append('(')
+				.append(popupIdStr)
+				.append(");")
+			).__().nl()
+		// Used to be span width=\"100%\"
+		.out.append("    <div id=\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupMain\"");
+		if(width != null) {
+			document.out.write(" style=\"");
+			appendWidthStyle(width, document.out);
+			document.out.write('"');
 		}
+		document.out.write(">\n"
+		+ "        <table class=\"aoPopupTable ao-packed\">\n"
+		+ "            <tr>\n"
+		+ "                <td class=\"aoPopupTL\">");
+		document.img()
+			.src(
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_topleft.gif"
+					)
+				)
+			).width(12).height(12).alt("").__()
+		.out.write("</td>\n"
+		+ "                <td class=\"aoPopupTop\" style=\"background-image:url(");
+		encodeTextInXhtmlAttribute(
+			resp.encodeURL(
+				URIEncoder.encodeURI(
+					urlBase + "textskin/popup_top.gif"
+				)
+			),
+			document.out
+		);
+		document.out.write(");\"></td>\n"
+		+ "                <td class=\"aoPopupTR\">");
+		document.img()
+			.src(
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + "textskin/popup_topright.gif"
+					)
+				)
+			).width(12).height(12).alt("").__()
+		.out.write("</td>\n"
+		+ "            </tr>\n"
+		+ "            <tr>\n"
+		+ "                <td class=\"aoPopupLeft\" style=\"background-image:url(");
+		encodeTextInXhtmlAttribute(
+			resp.encodeURL(
+				URIEncoder.encodeURI(
+					urlBase + "textskin/popup_left.gif"
+				)
+			),
+			document.out
+		);
+		document.out.write(");\"></td>\n"
+		+ "                <td class=\"aoPopupLightRow\">");
 	}
 
 	/**
@@ -1093,35 +1029,31 @@ public class TextSkin extends Skin {
 	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String)
 	 */
 	@Override
-	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException {
+	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException, IOException {
 		defaultPrintPopupClose(req, resp, document, groupId, popupId, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of printPopupClose.
 	 */
-	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String urlBase) throws JspException {
-		try {
-			ServletContext servletContext = req.getServletContext();
-			Locale locale = LocaleAction.getLocale(servletContext, req);
-			MessageResources applicationResources = getMessageResources(req);
+	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String urlBase) throws JspException, IOException {
+		ServletContext servletContext = req.getServletContext();
+		Locale locale = LocaleAction.getLocale(servletContext, req);
+		MessageResources applicationResources = getMessageResources(req);
 
-			document.img()
-				.clazz("aoPopupClose")
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")
-						)
+		document.img()
+			.clazz("aoPopupClose")
+			.src(
+				resp.encodeURL(
+					URIEncoder.encodeURI(
+						urlBase + applicationResources.getMessage(locale, "TextSkin.popupClose.src")
 					)
-				).alt(applicationResources.getMessage(locale, "TextSkin.popupClose.alt"))
-				.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.width")))
-				.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.height")))
-				.onclick("popupGroupHideAllDetails" + groupId + "();")
-			.__();
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
+				)
+			).alt(applicationResources.getMessage(locale, "TextSkin.popupClose.alt"))
+			.width(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.width")))
+			.height(Integer.parseInt(applicationResources.getMessage(locale, "TextSkin.popupClose.height")))
+			.onclick("popupGroupHideAllDetails" + groupId + "();")
+		.__();
 	}
 
 	/**
@@ -1130,116 +1062,112 @@ public class TextSkin extends Skin {
 	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException {
+	public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException {
 		TextSkin.defaultEndPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of endPopup.
 	 */
-	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException {
-		try {
-			document.out.write("</td>\n"
-			+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
-			encodeTextInXhtmlAttribute(
+	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
+		document.out.write("</td>\n"
+		+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
+		encodeTextInXhtmlAttribute(
+			resp.encodeURL(
+				URIEncoder.encodeURI(
+					urlBase + "textskin/popup_right.gif"
+				)
+			),
+			document.out
+		);
+		document.out.write(");\"></td>\n"
+		+ "            </tr>\n"
+		+ "            <tr>\n" 
+		+ "                <td class=\"aoPopupBL\">");
+		document.img()
+			.src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_right.gif"
+						urlBase + "textskin/popup_bottomleft.gif"
 					)
-				),
-				document.out
-			);
-			document.out.write(");\"></td>\n"
-			+ "            </tr>\n"
-			+ "            <tr>\n" 
-			+ "                <td class=\"aoPopupBL\">");
-			document.img()
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase + "textskin/popup_bottomleft.gif"
-						)
-					)
-				).width(12).height(12).alt("").__()
-			.out.write("</td>\n"
-			+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
-			encodeTextInXhtmlAttribute(
+				)
+			).width(12).height(12).alt("").__()
+		.out.write("</td>\n"
+		+ "                <td class=\"aoPopupBottom\" style=\"background-image:url(");
+		encodeTextInXhtmlAttribute(
+			resp.encodeURL(
+				URIEncoder.encodeURI(
+					urlBase + "textskin/popup_bottom.gif"
+				)
+			),
+			document.out
+		);
+		document.out.write(");\"></td>\n"
+		+ "                <td class=\"aoPopupBR\">");
+		document.img()
+			.src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
-						urlBase + "textskin/popup_bottom.gif"
+						urlBase + "textskin/popup_bottomright.gif"
 					)
-				),
-				document.out
-			);
-			document.out.write(");\"></td>\n"
-			+ "                <td class=\"aoPopupBR\">");
-			document.img()
-				.src(
-					resp.encodeURL(
-						URIEncoder.encodeURI(
-							urlBase + "textskin/popup_bottomright.gif"
-						)
-					)
-				).width(12).height(12).alt("").__()
-			.out.write("</td>\n"
-			+ "            </tr>\n"
-			+ "        </table>\n"
-			+ "    </div>\n"
-			+ "</div>\n");
-			String groupIdStr = Long.toString(groupId);
-			String popupIdStr = Long.toString(popupId);
-			document.script().out(script -> script.append(
-				  "\t// Override onload\n"
-				+ "\tvar aoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(" = window.onload;\n"
-				+ "\tfunction adjustPositionOnload_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
-				+ "\t\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
-				+ "\t\tif(aoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(") {\n"
-				+ "\t\t\taoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
-				+ "\t\t\taoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(" = null;\n"
-				+ "\t\t}\n"
-				+ "\t}\n"
-				+ "\twindow.onload = adjustPositionOnload_").append(groupIdStr).append('_').append(popupIdStr).append(";\n"
-				+ "\t// Override onresize\n"
-				+ "\tvar aoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(" = window.onresize;\n"
-				+ "\tfunction adjustPositionOnresize_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
-				+ "\t\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
-				+ "\t\tif(aoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(") {\n"
-				+ "\t\t\taoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
-				+ "\t\t}\n"
-				+ "\t}\n"
-				+ "\twindow.onresize = adjustPositionOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(";\n"
-				+ "\tfunction adjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
-				+ "\t\tvar popupAnchor = document.getElementById(\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\");\n"
-				+ "\t\tvar popup = document.getElementById(\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\");\n"
-				+ "\t\t// Find the screen position of the anchor\n"
-				+ "\t\tvar popupAnchorLeft = 0;\n"
-				+ "\t\tvar obj = popupAnchor;\n"
-				+ "\t\tif(obj.offsetParent) {\n"
-				+ "\t\t\tpopupAnchorLeft = obj.offsetLeft\n"
-				+ "\t\t\twhile (obj = obj.offsetParent) {\n"
-				+ "\t\t\t\tpopupAnchorLeft += obj.offsetLeft\n"
-				+ "\t\t\t}\n"
-				+ "\t\t}\n"
-				+ "\t\tvar popupAnchorRight = popupAnchorLeft + popupAnchor.offsetWidth;\n"
-				+ "\t\t// Find the width of the popup\n"
-				+ "\t\tvar popupWidth = popup.offsetWidth;\n"
-				+ "\t\t// Find the width of the screen\n"
-				+ "\t\tvar screenWidth = (document.compatMode && document.compatMode == \"CSS1Compat\") ? document.documentElement.clientWidth : document.body.clientWidth;\n"
-				+ "\t\t// Find the desired screen position of the popup\n"
-				+ "\t\tvar popupScreenPosition = 0;\n"
-				+ "\t\tif(screenWidth<=(popupWidth+12)) {\n"
-				+ "\t\t\tpopupScreenPosition = 0;\n"
-				+ "\t\t} else {\n"
-				+ "\t\t\tpopupScreenPosition = screenWidth - popupWidth - 12;\n"
-				+ "\t\t\tif(popupAnchorRight < popupScreenPosition) popupScreenPosition = popupAnchorRight;\n"
-				+ "\t\t}\n"
-				+ "\t\tpopup.style.left=(popupScreenPosition-popupAnchorLeft)+\"px\";\n"
-				+ "\t}\n"
-				+ "\t// Call once at parse time for when the popup is activated while page loading (before onload called)\n"
-				+ "\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
-			)).__();
-		} catch(IOException err) {
-			throw new JspException(err);
-		}
+				)
+			).width(12).height(12).alt("").__()
+		.out.write("</td>\n"
+		+ "            </tr>\n"
+		+ "        </table>\n"
+		+ "    </div>\n"
+		+ "</div>\n");
+		String groupIdStr = Long.toString(groupId);
+		String popupIdStr = Long.toString(popupId);
+		document.script().out(script -> script.append(
+			  "\t// Override onload\n"
+			+ "\tvar aoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(" = window.onload;\n"
+			+ "\tfunction adjustPositionOnload_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
+			+ "\t\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+			+ "\t\tif(aoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(") {\n"
+			+ "\t\t\taoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+			+ "\t\t\taoPopupOldOnload_").append(groupIdStr).append('_').append(popupIdStr).append(" = null;\n"
+			+ "\t\t}\n"
+			+ "\t}\n"
+			+ "\twindow.onload = adjustPositionOnload_").append(groupIdStr).append('_').append(popupIdStr).append(";\n"
+			+ "\t// Override onresize\n"
+			+ "\tvar aoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(" = window.onresize;\n"
+			+ "\tfunction adjustPositionOnresize_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
+			+ "\t\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+			+ "\t\tif(aoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(") {\n"
+			+ "\t\t\taoPopupOldOnresize_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+			+ "\t\t}\n"
+			+ "\t}\n"
+			+ "\twindow.onresize = adjustPositionOnresize_").append(groupIdStr).append('_').append(popupIdStr).append(";\n"
+			+ "\tfunction adjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("() {\n"
+			+ "\t\tvar popupAnchor = document.getElementById(\"aoPopupAnchor_").append(groupIdStr).append('_').append(popupIdStr).append("\");\n"
+			+ "\t\tvar popup = document.getElementById(\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\");\n"
+			+ "\t\t// Find the screen position of the anchor\n"
+			+ "\t\tvar popupAnchorLeft = 0;\n"
+			+ "\t\tvar obj = popupAnchor;\n"
+			+ "\t\tif(obj.offsetParent) {\n"
+			+ "\t\t\tpopupAnchorLeft = obj.offsetLeft\n"
+			+ "\t\t\twhile (obj = obj.offsetParent) {\n"
+			+ "\t\t\t\tpopupAnchorLeft += obj.offsetLeft\n"
+			+ "\t\t\t}\n"
+			+ "\t\t}\n"
+			+ "\t\tvar popupAnchorRight = popupAnchorLeft + popupAnchor.offsetWidth;\n"
+			+ "\t\t// Find the width of the popup\n"
+			+ "\t\tvar popupWidth = popup.offsetWidth;\n"
+			+ "\t\t// Find the width of the screen\n"
+			+ "\t\tvar screenWidth = (document.compatMode && document.compatMode == \"CSS1Compat\") ? document.documentElement.clientWidth : document.body.clientWidth;\n"
+			+ "\t\t// Find the desired screen position of the popup\n"
+			+ "\t\tvar popupScreenPosition = 0;\n"
+			+ "\t\tif(screenWidth<=(popupWidth+12)) {\n"
+			+ "\t\t\tpopupScreenPosition = 0;\n"
+			+ "\t\t} else {\n"
+			+ "\t\t\tpopupScreenPosition = screenWidth - popupWidth - 12;\n"
+			+ "\t\t\tif(popupAnchorRight < popupScreenPosition) popupScreenPosition = popupAnchorRight;\n"
+			+ "\t\t}\n"
+			+ "\t\tpopup.style.left=(popupScreenPosition-popupAnchorLeft)+\"px\";\n"
+			+ "\t}\n"
+			+ "\t// Call once at parse time for when the popup is activated while page loading (before onload called)\n"
+			+ "\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+		)).__();
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,8 +22,10 @@
  */
 package com.aoindustries.website.skintags;
 
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
@@ -60,10 +62,14 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 	@Deprecated
 	@Override
 	public int doStartTag() throws JspException {
-		return doStartTag(getPageAttributes(pageContext));
+		try {
+			return doStartTag(getPageAttributes(pageContext));
+		} catch(IOException err) {
+			throw new JspTagException(err);
+		}
 	}
 
-	public int doStartTag(PageAttributes pageAttributes) throws JspException {
+	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		return EVAL_BODY_BUFFERED;
 	}
 
@@ -77,7 +83,7 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 		return doAfterBody(getPageAttributes());
 	}
 
-	public int doAfterBody(PageAttributes pageAttributes) throws JspException {
+	public int doAfterBody(PageAttributes pageAttributes) throws JspException, IOException {
 		return SKIP_BODY;
 	}*/
 
@@ -89,10 +95,14 @@ abstract public class PageAttributesBodyTag extends BodyTagSupport {
 	@Deprecated
 	@Override
 	public int doEndTag() throws JspException {
-		return doEndTag(getPageAttributes(pageContext));
+		try {
+			return doEndTag(getPageAttributes(pageContext));
+		} catch(IOException err) {
+			throw new JspTagException(err);
+		}
 	}
 
-	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		return EVAL_PAGE;
 	}
 }

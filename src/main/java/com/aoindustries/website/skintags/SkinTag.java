@@ -33,6 +33,7 @@ import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
+import java.io.IOException;
 import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -87,7 +88,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	private boolean setDoctype;
 
 	@Override
-	public int doStartTag(PageAttributes pageAttributes) throws JspException {
+	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			pageAttributes.setLayout(layout);
 			pageAttributes.setOnload(onload);
@@ -144,7 +145,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	}
 
 	@Override
-	public int doEndTag(PageAttributes pageAttributes) throws JspException {
+	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 		SkinTag.getSkin(pageContext).endSkin(req,
