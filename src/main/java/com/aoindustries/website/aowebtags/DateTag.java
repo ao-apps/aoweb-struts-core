@@ -171,7 +171,8 @@ public class DateTag extends BodyTagSupport {
 						pageContext.getServletContext(),
 						request,
 						(HttpServletResponse)pageContext.getResponse(),
-						out
+						out,
+						false // Do not add extra indentation to JSP
 					);
 					// TODO: Can write to out(Object) directly due to underlying coercion?  Review other uses, too.
 					try (MediaWriter script = document.script().out__()) {

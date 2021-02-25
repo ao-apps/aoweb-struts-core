@@ -58,7 +58,13 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 		SkinTag.getSkin(pageContext).beginWhiteArea(
 			req,
 			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(
+				pageContext.getServletContext(),
+				req,
+				resp,
+				pageContext.getOut(),
+				false // Do not add extra indentation to JSP
+			),
 			align,
 			width,
 			nowrap
@@ -71,9 +77,16 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).endWhiteArea(req,
+			SkinTag.getSkin(pageContext).endWhiteArea(
+				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut())
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				)
 			);
 			return EVAL_PAGE;
 		} finally {

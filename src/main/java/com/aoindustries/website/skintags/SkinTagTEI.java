@@ -22,12 +22,12 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.collections.MinimalList;
 import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.jsp.tagext.TagData;
@@ -41,20 +41,22 @@ public class SkinTagTEI extends TagExtraInfo {
 
 	@Override
 	public ValidationMessage[] validate(TagData data) {
-		List<ValidationMessage> messages = MinimalList.emptyList();
+		List<ValidationMessage> messages = new ArrayList<>();
 		Object serializationAttr = data.getAttribute("serialization");
 		if(
 			serializationAttr != null
 			&& serializationAttr != TagData.REQUEST_TIME_VALUE
 		) {
-			String serialization = ((String)serializationAttr).trim();
+			String serialization = ((String)serializationAttr).trim(); // TODO: normalizeSerialization
 			if(!serialization.isEmpty() && !"auto".equalsIgnoreCase(serialization)) {
 				try {
 					Serialization.valueOf(serialization.toUpperCase(Locale.ROOT));
 				} catch(IllegalArgumentException e) {
-					messages = MinimalList.add(
-						messages,
-						new ValidationMessage(data.getId(), HtmlTag.RESOURCES.getMessage("serialization.invalid", serialization))
+					messages.add(
+						new ValidationMessage(
+							data.getId(),
+							HtmlTag.RESOURCES.getMessage("serialization.invalid", serialization)
+						)
 					);
 				}
 			}
@@ -64,16 +66,38 @@ public class SkinTagTEI extends TagExtraInfo {
 			doctypeAttr != null
 			&& doctypeAttr != TagData.REQUEST_TIME_VALUE
 		) {
-			String doctype = ((String)doctypeAttr).trim();
+			String doctype = ((String)doctypeAttr).trim(); // TODO: normalizeDoctype
 			if(!doctype.isEmpty() && !"default".equalsIgnoreCase(doctype)) {
 				try {
 					Doctype.valueOf(doctype.toUpperCase(Locale.ROOT));
 				} catch(IllegalArgumentException e) {
-					messages = MinimalList.add(
-						messages,
-						new ValidationMessage(data.getId(), HtmlTag.RESOURCES.getMessage("doctype.invalid", doctype))
+					messages.add(
+						new ValidationMessage(
+							data.getId(),
+							HtmlTag.RESOURCES.getMessage("doctype.invalid", doctype)
+						)
 					);
 				}
+			}
+		}
+		Object indentAttr = data.getAttribute("indent");
+		if(
+			indentAttr != null
+			&& indentAttr != TagData.REQUEST_TIME_VALUE
+		) {
+			String indent = ((String)indentAttr).trim(); // TODO: normalizeIndent
+			if(
+				!indent.isEmpty()
+				&& !"auto".equalsIgnoreCase(indent)
+				&& !"true".equalsIgnoreCase(indent)
+				&& !"false".equalsIgnoreCase(indent)
+			) {
+				messages.add(
+					new ValidationMessage(
+						data.getId(),
+						HtmlTag.RESOURCES.getMessage("indent.invalid", indent)
+					)
+				);
 			}
 		}
 		Object layoutAttr = data.getAttribute(Constants.LAYOUT);
@@ -83,7 +107,7 @@ public class SkinTagTEI extends TagExtraInfo {
 		) {
 			String layout = ((String)layoutAttr).trim();
 			if(!PageAttributes.LAYOUT_NORMAL.equals(layout) && !PageAttributes.LAYOUT_MINIMAL.equals(layout)) {
-				messages = MinimalList.add(messages,
+				messages.add(
 					new ValidationMessage(
 						data.getId(),
 						PACKAGE_RESOURCES.getMessage(

@@ -88,7 +88,8 @@ public class ScriptGroupTag extends BodyTagSupport {
 					pageContext.getServletContext(),
 					request,
 					(HttpServletResponse)pageContext.getResponse(),
-					pageContext.getOut()
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
 				);
 				try (MediaWriter script = document.script().out__()) {
 					if("none".equals(onloadMode)) {

@@ -62,13 +62,20 @@ public class ContentTitleTag extends EncodingBufferedTag {
 
 		int[] colspans = contentTag.getColspansParsed();
 		int totalColspan = 0;
-		for(int c = 0; c <colspans.length; c++) {
+		for(int c = 0; c < colspans.length; c++) {
 			totalColspan += colspans[c];
 		}
 
-		SkinTag.getSkin(pageContext).printContentTitle(req,
+		SkinTag.getSkin(pageContext).printContentTitle(
+			req,
 			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(
+				pageContext.getServletContext(),
+				req,
+				resp,
+				pageContext.getOut(),
+				false // Do not add extra indentation to JSP
+			),
 			title,
 			totalColspan
 		);

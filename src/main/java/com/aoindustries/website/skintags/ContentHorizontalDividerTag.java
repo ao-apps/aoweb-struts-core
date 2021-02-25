@@ -82,9 +82,16 @@ public class ContentHorizontalDividerTag extends TagSupport {
 
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).printContentHorizontalDivider(req,
+			SkinTag.getSkin(pageContext).printContentHorizontalDivider(
+				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				array,
 				endsInternal
 			);

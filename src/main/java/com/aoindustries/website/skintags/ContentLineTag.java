@@ -68,7 +68,13 @@ public class ContentLineTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).startContentLine(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				colspan,
 				align,
 				width
@@ -84,9 +90,16 @@ public class ContentLineTag extends BodyTagSupport {
 		try {
 			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-			SkinTag.getSkin(pageContext).endContentLine(req,
+			SkinTag.getSkin(pageContext).endContentLine(
+				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				lastRowSpan,
 				endsInternal
 			);

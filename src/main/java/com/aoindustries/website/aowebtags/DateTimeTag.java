@@ -180,7 +180,8 @@ public class DateTimeTag extends BodyTagSupport {
 						pageContext.getServletContext(),
 						request,
 						(HttpServletResponse)pageContext.getResponse(),
-						out
+						out,
+						false // Do not add extra indentation to JSP
 					);
 					try (MediaWriter script = document.script().out__()) {
 						scriptOut.writeTo(script);

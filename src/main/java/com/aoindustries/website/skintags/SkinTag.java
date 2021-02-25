@@ -28,8 +28,10 @@ import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Document;
 import com.aoindustries.html.servlet.DocumentEE;
+import com.aoindustries.lang.LocalizedIllegalArgumentException;
 import com.aoindustries.servlet.ServletUtil;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
+import com.aoindustries.taglib.HtmlTag;
 import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
@@ -53,8 +55,6 @@ import org.apache.struts.Globals;
  */
 public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Gets the current skin from the session.  It is assumed the skin is already set.  Will throw an exception if not available.
 	 */
@@ -66,26 +66,81 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		return skin;
 	}
 
-	private Serialization serialization;
-	private Doctype doctype;
-	private String layout;
-	private String onload;
-
 	public SkinTag() {
 		init();
 	}
 
+	private static final long serialVersionUID = 2L;
+
+	private Serialization serialization;
+	public void setSerialization(String serialization) {
+		if(serialization == null) {
+			this.serialization = null;
+		} else {
+			serialization = serialization.trim();
+			this.serialization = (serialization.isEmpty() || "auto".equalsIgnoreCase(serialization)) ? null : Serialization.valueOf(serialization.toUpperCase(Locale.ROOT));
+		}
+	}
+
+	private Doctype doctype;
+	public void setDoctype(String doctype) {
+		if(doctype == null) {
+			this.doctype = null;
+		} else {
+			doctype = doctype.trim();
+			this.doctype = (doctype.isEmpty() || "default".equalsIgnoreCase(doctype)) ? null : Doctype.valueOf(doctype.toUpperCase(Locale.ROOT));
+		}
+	}
+
+	private Boolean indent;
+	public void setIndent(String indent) {
+		if(indent == null) {
+			this.indent = null;
+		} else {
+			indent = indent.trim();
+			if(indent.isEmpty() || "auto".equalsIgnoreCase(indent)) {
+				this.indent = null;
+			} else if("true".equalsIgnoreCase(indent)) {
+				this.indent = true;
+			} else if("false".equalsIgnoreCase(indent)) {
+				this.indent = false;
+			} else {
+				throw new LocalizedIllegalArgumentException(HtmlTag.RESOURCES, "indent.invalid", indent);
+			}
+		}
+	}
+
+	private String layout;
+	public void setLayout(String layout) {
+		this.layout = layout.trim();
+	}
+
+	private String onload;
+	public void setOnload(String onload) {
+		this.onload = onload;
+	}
+
+	// Values that are used in doFinally
+	private transient Serialization oldSerialization;
+	private transient boolean setSerialization;
+	private transient Doctype oldDoctype;
+	private transient boolean setDoctype;
+	private transient Boolean oldIndent;
+	private transient boolean setIndent;
+
 	private void init() {
 		serialization = null;
 		doctype = Doctype.DEFAULT;
+		indent = null;
 		layout = "normal";
 		onload = null;
+		oldSerialization = null;
+		setSerialization = false;
+		oldDoctype = null;
+		setDoctype = false;
+		oldIndent = null;
+		setIndent = false;
 	}
-
-	private Serialization oldSerialization;
-	private boolean setSerialization;
-	private Doctype oldDoctype;
-	private boolean setDoctype;
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
@@ -94,35 +149,44 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			pageAttributes.setOnload(onload);
 
 			ServletContext servletContext = pageContext.getServletContext();
-			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+			HttpServletResponse response = (HttpServletResponse)pageContext.getResponse();
 
 			if(serialization == null) {
-				serialization = SerializationEE.get(servletContext, req);
+				serialization = SerializationEE.get(servletContext, request);
 				oldSerialization = null;
 				setSerialization = false;
 			} else {
-				oldSerialization = SerializationEE.replace(req, serialization);
+				oldSerialization = SerializationEE.replace(request, serialization);
 				setSerialization = true;
 			}
 			if(doctype == null) {
-				doctype = DoctypeEE.get(servletContext, req);
+				doctype = DoctypeEE.get(servletContext, request);
 				oldDoctype = null;
 				setDoctype = false;
 			} else {
-				oldDoctype = DoctypeEE.replace(req, doctype);
+				oldDoctype = DoctypeEE.replace(request, doctype);
 				setDoctype = true;
 			}
+			if(indent == null) {
+				indent = DocumentEE.getIndent(servletContext, request);
+				oldIndent = null;
+				setIndent = false;
+			} else {
+				oldIndent = DocumentEE.replaceIndent(request, indent);
+				setIndent = true;
+			}
+			assert indent != null;
 
 			// Clear the output buffer
-			resp.resetBuffer();
+			response.resetBuffer();
 
 			// Set the content type
-			ServletUtil.setContentType(resp, serialization.getContentType(), Document.ENCODING.name());
+			ServletUtil.setContentType(response, serialization.getContentType(), Document.ENCODING.name());
 
 			// Set the response locale from the Struts locale
 			Locale locale = (Locale)pageContext.getSession().getAttribute(Globals.LOCALE_KEY);
-			resp.setLocale(locale);
+			response.setLocale(locale);
 
 			// Set the Struts XHTML mode by Serialization
 			pageContext.setAttribute(
@@ -132,9 +196,10 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			);
 
 			// Start the skin
-			SkinTag.getSkin(pageContext).startSkin(req,
-				resp,
-				DocumentEE.get(servletContext, req, resp, pageContext.getOut()),
+			SkinTag.getSkin(pageContext).startSkin(
+				request,
+				response,
+				DocumentEE.get(servletContext, request, response, pageContext.getOut(), indent),
 				pageAttributes
 			);
 
@@ -146,11 +211,12 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
-		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).endSkin(req,
-			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+		HttpServletResponse response = (HttpServletResponse)pageContext.getResponse();
+		SkinTag.getSkin(pageContext).endSkin(
+			request,
+			response,
+			DocumentEE.get(pageContext.getServletContext(), request, response, pageContext.getOut(), indent),
 			pageAttributes
 		);
 		return EVAL_PAGE;
@@ -164,53 +230,12 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	@Override
 	public void doFinally() {
 		try {
-			ServletRequest req = pageContext.getRequest();
-			if(setDoctype) DoctypeEE.set(req, oldDoctype);
-			if(setSerialization) SerializationEE.set(req, oldSerialization);
+			ServletRequest request = pageContext.getRequest();
+			if(setIndent) DocumentEE.setIndent(request, oldIndent);
+			if(setDoctype) DoctypeEE.set(request, oldDoctype);
+			if(setSerialization) SerializationEE.set(request, oldSerialization);
 		} finally {
 			init();
 		}
-	}
-
-	public String getSerialization() {
-		return (serialization == null) ? null : serialization.name();
-	}
-
-	public void setSerialization(String serialization) {
-		if(serialization == null) {
-			this.serialization = null;
-		} else {
-			serialization = serialization.trim();
-			this.serialization = (serialization.isEmpty() || "auto".equalsIgnoreCase(serialization)) ? null : Serialization.valueOf(serialization.toUpperCase(Locale.ROOT));
-		}
-	}
-
-	public String getDoctype() {
-		return (doctype == null) ? null : doctype.name();
-	}
-
-	public void setDoctype(String doctype) {
-		if(doctype == null) {
-			this.doctype = null;
-		} else {
-			doctype = doctype.trim();
-			this.doctype = (doctype.isEmpty() || "default".equalsIgnoreCase(doctype)) ? null : Doctype.valueOf(doctype.toUpperCase(Locale.ROOT));
-		}
-	}
-
-	public String getLayout() {
-		return layout;
-	}
-
-	public void setLayout(String layout) {
-		this.layout = layout.trim();
-	}
-
-	public String getOnload() {
-		return onload;
-	}
-
-	public void setOnload(String onload) {
-		this.onload = onload;
 	}
 }

@@ -48,7 +48,13 @@ public class AutoIndexTag extends TagSupport {
 			SkinTag.getSkin(pageContext).printAutoIndex(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				PageAttributesBodyTag.getPageAttributes(pageContext)
 			);
 			return SKIP_BODY;

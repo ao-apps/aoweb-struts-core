@@ -69,9 +69,16 @@ public class ContentTag extends PageAttributesBodyTag {
 	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).startContent(req,
+		SkinTag.getSkin(pageContext).startContent(
+			req,
 			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(
+				pageContext.getServletContext(),
+				req,
+				resp,
+				pageContext.getOut(),
+				false // Do not add extra indentation to JSP
+			),
 			pageAttributes,
 			colspansParsed,
 			width
@@ -86,7 +93,13 @@ public class ContentTag extends PageAttributesBodyTag {
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 			SkinTag.getSkin(pageContext).endContent(req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				pageAttributes,
 				colspansParsed
 			);

@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-0500"
-		dateModified="2021-02-13T03:56:39-06:00"
+		dateModified="2021-02-24T23:45:06-06:00"
 	>
 		<c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
 			<changelog:release
@@ -114,6 +114,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						<code>X-Robots-Tag: noindex, nofollow</code> for any request that contains any
 						"authenticationTarget" parameter.
 					</li>
+					<li>Implemented tab indentation.</li>
 				</ul>
 			</changelog:release>
 		</c:if>

@@ -282,6 +282,7 @@ final public class ServerConfirmationCompletedActionHelper {
 				},
 				NativeToUnixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
 			);
+			document.setIndent(true);
 			document.xmlDeclaration(charset);
 			document.doctype();
 			HtmlTag.beginHtmlTag(userLocale, document.out, document.serialization, (GlobalAttributes)null); document.out.write("\n"

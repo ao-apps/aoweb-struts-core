@@ -59,7 +59,13 @@ public class LightAreaTag extends PageAttributesBodyTag {
 		SkinTag.getSkin(pageContext).beginLightArea(
 			req,
 			resp,
-			DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+			DocumentEE.get(
+				pageContext.getServletContext(),
+				req,
+				resp,
+				pageContext.getOut(),
+				false // Do not add extra indentation to JSP
+			),
 			align,
 			width,
 			nowrap
@@ -75,7 +81,13 @@ public class LightAreaTag extends PageAttributesBodyTag {
 			SkinTag.getSkin(pageContext).endLightArea(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut())
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				)
 			);
 			return EVAL_PAGE;
 		} finally {

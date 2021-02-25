@@ -67,7 +67,13 @@ public class PopupGroupTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).beginPopupGroup(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				sequenceId
 			);
 			return EVAL_BODY_INCLUDE;
@@ -84,7 +90,13 @@ public class PopupGroupTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).endPopupGroup(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				sequenceId
 			);
 			return EVAL_PAGE;

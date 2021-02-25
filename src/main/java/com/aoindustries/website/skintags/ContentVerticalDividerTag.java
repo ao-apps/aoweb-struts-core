@@ -67,7 +67,13 @@ public class ContentVerticalDividerTag extends TagSupport {
 			SkinTag.getSkin(pageContext).printContentVerticalDivider(
 				req,
 				resp,
-				DocumentEE.get(pageContext.getServletContext(), req, resp, pageContext.getOut()),
+				DocumentEE.get(
+					pageContext.getServletContext(),
+					req,
+					resp,
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				),
 				visible,
 				colspan,
 				rowspan,
