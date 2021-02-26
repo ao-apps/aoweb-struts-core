@@ -34,9 +34,10 @@ import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextIn
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Document;
-import com.aoindustries.html.Link;
-import com.aoindustries.html.Meta;
-import com.aoindustries.html.Script;
+import com.aoindustries.html.LINK;
+import com.aoindustries.html.META;
+import com.aoindustries.html.SCRIPT;
+import com.aoindustries.html.STYLE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.html.util.ImagePreload;
 import com.aoindustries.io.NoCloseWriter;
@@ -207,15 +208,15 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				document.out.write("    "); document.meta(Meta.Name.ROBOTS).content("noindex, nofollow").__().nl();
+				document.out.write("    "); document.meta(META.Name.ROBOTS).content("noindex, nofollow").__().nl();
 			}
 			if(document.doctype == Doctype.HTML5) {
 				document.out.write("    "); document.meta().charset(resp.getCharacterEncoding()).__().nl();
 			} else {
-				document.out.write("    "); document.meta(Meta.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().out.write("\n"
+				document.out.write("    "); document.meta(META.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().out.write("\n"
 				// Default style language
-				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(com.aoindustries.html.Style.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
+				+ "    "); document.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__().out.write("\n"
+				+ "    "); document.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__().nl();
 			}
 			if(document.doctype == Doctype.HTML5) {
 				GoogleAnalytics.writeGlobalSiteTag(document, trackingId);
@@ -223,18 +224,18 @@ public class TextSkin extends Skin {
 				GoogleAnalytics.writeAnalyticsJs(document, trackingId);
 			}
 			// Mobile support
-			document.out.write("    "); document.meta(Meta.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().out.write("\n"
-			+ "    "); document.meta(Meta.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().out.write("\n"
-			+ "    "); document.meta(Meta.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
+			document.out.write("    "); document.meta(META.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().out.write("\n"
+			+ "    "); document.meta(META.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().out.write("\n"
+			+ "    "); document.meta(META.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
 			// Authors
 			// TODO: dcterms copyright
 			String author = pageAttributes.getAuthor();
 			if(author != null && !(author = author.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(Meta.Name.AUTHOR).content(author).__().nl();
+				document.out.write("    "); document.meta(META.Name.AUTHOR).content(author).__().nl();
 			}
 			String authorHref = pageAttributes.getAuthorHref();
 			if(authorHref != null && !(authorHref = authorHref.trim()).isEmpty()) {
-				document.out.write("    "); document.link(Link.Rel.AUTHOR).href(
+				document.out.write("    "); document.link(LINK.Rel.AUTHOR).href(
 					// TODO: RFC 3986-only always?
 					resp.encodeURL(
 						URIEncoder.encodeURI(authorHref)
@@ -253,11 +254,11 @@ public class TextSkin extends Skin {
 			document.text(pageAttributes.getTitle()); document.out.write("</title>\n");
 			String description = pageAttributes.getDescription();
 			if(description != null && !(description = description.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(Meta.Name.DESCRIPTION).content(description).__().nl();
+				document.out.write("    "); document.meta(META.Name.DESCRIPTION).content(description).__().nl();
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords != null && !(keywords = keywords.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(Meta.Name.KEYWORDS).content(keywords).__().nl();
+				document.out.write("    "); document.meta(META.Name.KEYWORDS).content(keywords).__().nl();
 			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
@@ -265,7 +266,7 @@ public class TextSkin extends Skin {
 			HttpSession session = req.getSession(false);
 			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
 			if(isOkResponseStatus && aoConn != null && session != null) {
-				document.out.write("    "); document.meta(Meta.HttpEquiv.REFRESH).content(content -> {
+				document.out.write("    "); document.meta(META.HttpEquiv.REFRESH).content(content -> {
 					content.write(Integer.toString(Math.max(60, session.getMaxInactiveInterval() - 60)));
 					content.write(";URL=");
 					content.write(
@@ -575,7 +576,7 @@ public class TextSkin extends Skin {
 						AddLastModified.AUTO,
 						false,
 						// TODO: Support canonical flag on link
-						Link.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
+						LINK.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
 					)
 				)
 				.type(link.getType())

@@ -27,7 +27,7 @@ import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
 import com.aoindustries.html.Document;
-import com.aoindustries.html.Link;
+import com.aoindustries.html.LINK;
 import com.aoindustries.net.AnyURI;
 import com.aoindustries.net.URIEncoder;
 import com.aoindustries.servlet.http.HttpServletUtil;
@@ -72,7 +72,7 @@ abstract public class Skin {
 				Language language = languages.get(0);
 				AnyURI uri = language.getUri();
 				// TODO: hreflang attribute
-				document.out.write("    "); document.link(Link.Rel.ALTERNATE).hreflang("x-default").href(
+				document.out.write("    "); document.link(LINK.Rel.ALTERNATE).hreflang("x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -87,7 +87,7 @@ abstract public class Skin {
 			// All languages
 			for(Language language : languages) {
 				AnyURI uri = language.getUri();
-				document.out.write("    "); document.link(Link.Rel.ALTERNATE).hreflang(language.getCode()).href(
+				document.out.write("    "); document.link(LINK.Rel.ALTERNATE).hreflang(language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(

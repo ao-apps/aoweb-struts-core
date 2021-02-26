@@ -30,9 +30,9 @@ import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.html.Document;
-import com.aoindustries.html.Meta;
-import com.aoindustries.html.Script;
-import com.aoindustries.html.Style;
+import com.aoindustries.html.META;
+import com.aoindustries.html.SCRIPT;
+import com.aoindustries.html.STYLE;
 import com.aoindustries.io.FindReplaceWriter;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.io.NativeToUnixWriter;
@@ -167,10 +167,10 @@ final public class MinimalConfirmationCompletedActionHelper {
 			if(document.doctype == Doctype.HTML5) {
 				document.out.write("    "); document.meta().charset(charset).__().nl();
 			} else {
-				document.out.write("    "); document.meta(Meta.HttpEquiv.CONTENT_TYPE).content(contentType).__().out.write("\n"
+				document.out.write("    "); document.meta(META.HttpEquiv.CONTENT_TYPE).content(contentType).__().out.write("\n"
 				// Default style language
-				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_STYLE_TYPE).content(Style.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); document.meta(Meta.HttpEquiv.CONTENT_SCRIPT_TYPE).content(Script.Type.TEXT_JAVASCRIPT).__().nl();
+				+ "    "); document.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__().out.write("\n"
+				+ "    "); document.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__().nl();
 			}
 			document.out.write("    <title>"); document.text(subject).out.write("</title>\n");
 			// Embed the text-only style sheet
