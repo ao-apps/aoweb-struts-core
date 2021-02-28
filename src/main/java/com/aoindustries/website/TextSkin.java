@@ -854,34 +854,34 @@ public class TextSkin extends Skin {
 	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
 		String groupIdStr = Long.toString(groupId);
 		document.script().out(script -> script
-			.append("  var popupGroupTimer").append(groupIdStr).append("=null;\n"
-			+ "  var popupGroupAuto").append(groupIdStr).append("=null;\n"
-			+ "  function popupGroupHideAllDetails").append(groupIdStr).append("() {\n"
-			+ "    var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");\n"
-			+ "    for (var c=0; c < spanElements.length; c++) {\n"
-			+ "      if(spanElements[c].id.indexOf(\"aoPopup_").append(groupIdStr).append("_\")==0) {\n"
-			+ "        spanElements[c].style.visibility=\"hidden\";\n"
-			+ "      }\n"
-			+ "    }\n"
-			+ "  }\n"
-			+ "  function popupGroupToggleDetails").append(groupIdStr).append("(popupId) {\n"
-			+ "    if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");\n"
-			+ "    var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;\n"
-			+ "    if(elemStyle.visibility==\"visible\") {\n"
-			+ "      elemStyle.visibility=\"hidden\";\n"
-			+ "    } else {\n"
-			+ "      popupGroupHideAllDetails").append(groupIdStr).append("();\n"
-			+ "      elemStyle.visibility=\"visible\";\n"
-			+ "    }\n"
-			+ "  }\n"
-			+ "  function popupGroupShowDetails").append(groupIdStr).append("(popupId) {\n"
-			+ "    if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");\n"
-			+ "    var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;\n"
-			+ "    if(elemStyle.visibility!=\"visible\") {\n"
-			+ "      popupGroupHideAllDetails").append(groupIdStr).append("();\n"
-			+ "      elemStyle.visibility=\"visible\";\n"
-			+ "    }\n"
-			+ "  }\n")
+			.append("var popupGroupTimer").append(groupIdStr).append("=null;").nli()
+			.append("var popupGroupAuto").append(groupIdStr).append("=null;").nli()
+			.append("function popupGroupHideAllDetails").append(groupIdStr).append("() {").incDepth().nli()
+				.append("var spanElements = document.getElementsByTagName ? document.getElementsByTagName(\"div\") : document.all.tags(\"div\");").nli()
+				.append("for (var c=0; c < spanElements.length; c++) {").incDepth().nli()
+					.append("if(spanElements[c].id.indexOf(\"aoPopup_").append(groupIdStr).append("_\")==0) {").incDepth().nli()
+						.append("spanElements[c].style.visibility=\"hidden\";")
+					.decDepth().nli().append('}')
+				.decDepth().nli().append('}')
+			.decDepth().nli().append('}').nli()
+			.append("function popupGroupToggleDetails").append(groupIdStr).append("(popupId) {").incDepth().nli()
+				.append("if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");").nli()
+				.append("var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;").nli()
+				.append("if(elemStyle.visibility==\"visible\") {").incDepth().nli()
+					.append("elemStyle.visibility=\"hidden\";")
+				.decDepth().nli().append("} else {").incDepth().nli()
+					.append("popupGroupHideAllDetails").append(groupIdStr).append("();").nli()
+					.append("elemStyle.visibility=\"visible\";")
+				.decDepth().nli().append('}')
+			.decDepth().nli().append('}').nli()
+			.append("function popupGroupShowDetails").append(groupIdStr).append("(popupId) {").incDepth().nli()
+				.append("if(popupGroupTimer").append(groupIdStr).append("!=null) clearTimeout(popupGroupTimer").append(groupIdStr).append(");").nli()
+				.append("var elemStyle = document.getElementById(\"aoPopup_").append(groupIdStr).append("_\"+popupId).style;").nli()
+				.append("if(elemStyle.visibility!=\"visible\") {").incDepth().nli()
+					.append("popupGroupHideAllDetails").append(groupIdStr).append("();").nli()
+					.append("elemStyle.visibility=\"visible\";")
+				.decDepth().nli().append('}')
+			.decDepth().nli().append('}')
 		).__().nl();
 	}
 
