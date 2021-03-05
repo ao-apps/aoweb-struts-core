@@ -24,8 +24,8 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import static com.aoindustries.encoding.TextInXhtmlEncoder.encodeTextInXhtml;
 import com.aoindustries.html.Document;
+import com.aoindustries.html.SPAN_factory;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.sql.SQLUtility;
@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
@@ -66,16 +65,12 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(long)
 	 */
-	public static void writeDateJavaScript(long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
+	public static void writeDateJavaScript(long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
 		String dateString = SQLUtility.formatDate(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
 		// Write the element
-		out.append("<span id=\"chainWriterDate");
-		out.append(idString);
-		out.append("\">");
-		encodeTextInXhtml(dateString, out);
-		out.append("</span>");
+		factory.span().id(idAttr -> idAttr.append("chainWriterDate").append(idString)).__(dateString);
 		// Write the shared script only on first sequence
 		if(id == 1) {
 			scriptOut.append("  function chainWriterUpdateDate(id, millis, serverValue) {\n"
@@ -116,8 +111,8 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(java.lang.Long)
 	 */
-	public static void writeDateJavaScript(Long date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
-		if(date != null) writeDateJavaScript(date.longValue(), sequence, out, scriptOut);
+	public static void writeDateJavaScript(Long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateJavaScript(date.longValue(), sequence, factory, scriptOut);
 	}
 
 	/**
@@ -135,8 +130,8 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(java.util.Date)
 	 */
-	public static void writeDateJavaScript(Date date, Sequence sequence, Appendable out, Appendable scriptOut) throws IOException {
-		if(date != null) writeDateJavaScript(date.getTime(), sequence, out, scriptOut);
+	public static void writeDateJavaScript(Date date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateJavaScript(date.getTime(), sequence, factory, scriptOut);
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -156,25 +151,23 @@ public class DateTag extends BodyTagSupport {
 			if(!millisString.isEmpty()) {
 				Long date = Long.parseLong(millisString);
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-				JspWriter out = pageContext.getOut();
+				Document document = DocumentEE.get(
+					pageContext.getServletContext(),
+					request,
+					(HttpServletResponse)pageContext.getResponse(),
+					pageContext.getOut(),
+					false // Do not add extra indentation to JSP
+				);
 				// Resolve the sequence
 				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);
 				if(sequence == null) request.setAttribute(SEQUENCE_REQUEST_ATTRIBUTE, sequence = new UnsynchronizedSequence());
 				// Resolve the scriptOut
 				Optional<ScriptGroupTag> scriptGroupTag = JspTagUtils.findAncestor(this, ScriptGroupTag.class);
 				if(scriptGroupTag.isPresent()) {
-					writeDateJavaScript(date, sequence, out, scriptGroupTag.get().getScriptOut());
+					writeDateJavaScript(date, sequence, document, scriptGroupTag.get().getScriptOut());
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
-					writeDateJavaScript(date, sequence, out, scriptOut);
-					Document document = DocumentEE.get(
-						pageContext.getServletContext(),
-						request,
-						(HttpServletResponse)pageContext.getResponse(),
-						out,
-						false // Do not add extra indentation to JSP
-					);
-					// TODO: Can write to out(Object) directly due to underlying coercion?  Review other uses, too.
+					writeDateJavaScript(date, sequence, document, scriptOut);
 					try (MediaWriter script = document.script().out__()) {
 						scriptOut.writeTo(script);
 					}
