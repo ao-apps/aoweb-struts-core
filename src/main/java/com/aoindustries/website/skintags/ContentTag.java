@@ -77,7 +77,8 @@ public class ContentTag extends PageAttributesBodyTag {
 				req,
 				resp,
 				pageContext.getOut(),
-				false // Do not add extra indentation to JSP
+				false, // Do not add extra newlines to JSP
+				false  // Do not add extra indentation to JSP
 			),
 			pageAttributes,
 			colspansParsed,
@@ -98,7 +99,8 @@ public class ContentTag extends PageAttributesBodyTag {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				pageAttributes,
 				colspansParsed

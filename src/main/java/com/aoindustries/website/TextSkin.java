@@ -208,15 +208,16 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				document.out.write("    "); document.meta(META.Name.ROBOTS).content("noindex, nofollow").__().nl();
+				document.meta(META.Name.ROBOTS).content("noindex, nofollow").__();
 			}
 			if(document.doctype == Doctype.HTML5) {
-				document.out.write("    "); document.meta().charset(resp.getCharacterEncoding()).__().nl();
+				document.meta().charset(resp.getCharacterEncoding()).__();
 			} else {
-				document.out.write("    "); document.meta(META.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__().out.write("\n"
-				// Default style language
-				+ "    "); document.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); document.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__().nl();
+				document
+					.meta(META.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__()
+					// Default style language
+					.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__()
+					.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__();
 			}
 			if(document.doctype == Doctype.HTML5) {
 				GoogleAnalytics.writeGlobalSiteTag(document, trackingId);
@@ -224,23 +225,24 @@ public class TextSkin extends Skin {
 				GoogleAnalytics.writeAnalyticsJs(document, trackingId);
 			}
 			// Mobile support
-			document.out.write("    "); document.meta(META.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__().out.write("\n"
-			+ "    "); document.meta(META.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__().out.write("\n"
-			+ "    "); document.meta(META.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__().nl();
+			document
+				.meta(META.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__()
+				.meta(META.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__()
+				.meta(META.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__();
 			// Authors
 			// TODO: dcterms copyright
 			String author = pageAttributes.getAuthor();
 			if(author != null && !(author = author.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(META.Name.AUTHOR).content(author).__().nl();
+				document.meta(META.Name.AUTHOR).content(author).__();
 			}
 			String authorHref = pageAttributes.getAuthorHref();
 			if(authorHref != null && !(authorHref = authorHref.trim()).isEmpty()) {
-				document.out.write("    "); document.link(LINK.Rel.AUTHOR).href(
+				document.link(LINK.Rel.AUTHOR).href(
 					// TODO: RFC 3986-only always?
 					resp.encodeURL(
 						URIEncoder.encodeURI(authorHref)
 					)
-				).__().nl();
+				).__();
 			}
 			document.out.write("    <title>");
 			// No more page stack, just show current page only
@@ -254,11 +256,11 @@ public class TextSkin extends Skin {
 			document.text(pageAttributes.getTitle()); document.out.write("</title>\n");
 			String description = pageAttributes.getDescription();
 			if(description != null && !(description = description.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(META.Name.DESCRIPTION).content(description).__().nl();
+				document.meta(META.Name.DESCRIPTION).content(description).__();
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords != null && !(keywords = keywords.trim()).isEmpty()) {
-				document.out.write("    "); document.meta(META.Name.KEYWORDS).content(keywords).__().nl();
+				document.meta(META.Name.KEYWORDS).content(keywords).__();
 			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
@@ -266,7 +268,7 @@ public class TextSkin extends Skin {
 			HttpSession session = req.getSession(false);
 			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
 			if(isOkResponseStatus && aoConn != null && session != null) {
-				document.out.write("    "); document.meta(META.HttpEquiv.REFRESH).content(content -> {
+				document.meta(META.HttpEquiv.REFRESH).content(content -> {
 					content.write(Integer.toString(Math.max(60, session.getMaxInactiveInterval() - 60)));
 					content.write(";URL=");
 					content.write(
@@ -278,26 +280,26 @@ public class TextSkin extends Skin {
 							)
 						)
 					);
-				}).__().nl();
+				}).__();
 			}
 			for(com.aoindustries.website.skintags.Meta meta : pageAttributes.getMetas()) {
 				// Skip robots if not on default skin
 				boolean isRobots = meta.getName().equalsIgnoreCase("robots");
 				if(!robotsMetaUsed || !isRobots) {
-					document.out.write("    "); document.meta().name(meta.getName()).content(meta.getContent()).__().nl();
+					document.meta().name(meta.getName()).content(meta.getContent()).__();
 					if(isRobots) robotsMetaUsed = true;
 				}
 			}
 			if(isOkResponseStatus) {
 				String googleVerify = brand.getAowebStrutsGoogleVerifyContent();
 				if(googleVerify != null) {
-					document.out.write("    "); document.meta().name("verify-v1").content(googleVerify).__().nl();
+					document.meta().name("verify-v1").content(googleVerify).__();
 				}
 			}
 			String copyright = pageAttributes.getCopyright();
 			if(copyright != null && !(copyright = copyright.trim()).isEmpty()) {
 				// TODO: Dublin Core: https://stackoverflow.com/questions/6665312/is-the-copyright-meta-tag-valid-in-html5
-				document.out.write("    "); document.meta().name("copyright").content(copyright).__().nl();
+				document.meta().name("copyright").content(copyright).__();
 			}
 			List<Language> languages = settings.getLanguages(req);
 			printAlternativeLinks(req, resp, document, fullPath, languages);
@@ -309,27 +311,27 @@ public class TextSkin extends Skin {
 			Registry pageRegistry = RegistryEE.Page.get(req);
 			if(pageRegistry == null) throw new JspException("page-scope registry not found.  PageAction.execute(…) invoked?");
 			// Render links
-			document.out.write("    "); Renderer.get(servletContext).renderStyles(
+			Renderer.get(servletContext).renderStyles(
 				req,
 				resp,
 				document,
-				"    ",
+				null, // unused
 				true, // registeredActivations
 				null, // No additional activations
 				requestRegistry, // request-scope
 				RegistryEE.Session.get(req.getSession(false)), // session-scope
 				pageRegistry
-			); document.nl();
+			);
 
 			defaultPrintLinks(servletContext, req, resp, document, pageAttributes);
 			printJavaScriptSources(req, resp, document, urlBase);
-			document.out.write("    "); document.script().src(
+			document.script().src(
 				resp.encodeURL(
 					URIEncoder.encodeURI(
 						urlBase + "commons-validator-1.3.1-compress.js"
 					)
 				)
-			).__().nl();
+			).__();
 			printFavIcon(req, resp, document, urlBase);
 			// TODO: Canonical?
 			document.out.write("  </head>\n"
@@ -380,7 +382,7 @@ public class TextSkin extends Skin {
 				document.input().submit__(applicationResources.getMessage(locale, "TextSkin.loginButtonLabel"))
 				.out.write("</div></form>\n");
 			}
-			document.out.write("          "); document.hr__().nl()
+			document.hr__()
 			.out.write("          <div style=\"white-space: nowrap\">\n");
 			if(skins.size() > 1) {
 				document.script().out(script -> {
@@ -395,15 +397,15 @@ public class TextSkin extends Skin {
 						).append(";\n");
 					}
 					script.append('}');
-				}).__().nl()
+				}).__()
 				.out.write("            <form action=\"\" style=\"display:inline\"><div style=\"display:inline\">\n"
 				+ "              "); document.text(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"))
 				.out.write("<select name=\"layout_selector\" onchange=\"selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);\">\n");
 				for(Skin skin : skins) {
-					document.out.write("                "); document.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req)).nl();
+					document.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req));
 				}
 				document.out.write("              </select>\n"
-				+ "            </div></form>"); document.br__().nl();
+				+ "            </div></form>"); document.br__();
 			}
 			if(languages.size()>1) {
 				document.out.write("            ");
@@ -495,7 +497,7 @@ public class TextSkin extends Skin {
 						);
 					}
 				}
-				document.br__().nl();
+				document.br__();
 			}
 			printSearch(req, resp, document);
 			document.out.write("          </div>\n"
@@ -518,7 +520,7 @@ public class TextSkin extends Skin {
 					),
 					document.out
 				);
-				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__().nl();
+				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__();
 			}
 			// Always include the current page in the current location area
 			document.out.write("            <a href=\""); encodeTextInXhtmlAttribute(encodedFullPath, document.out); document.out.write("\">");
@@ -547,10 +549,10 @@ public class TextSkin extends Skin {
 					),
 					document.out
 				);
-				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__().nl();
+				document.out.write("\">"); document.text(navAlt).out.write("</a>"); document.br__();
 			}
 			document.out.write("          </div>\n");
-			document.hr__().nl();
+			document.hr__();
 			printBelowRelatedPages(req, document);
 			document.out.write("        </td>\n"
 			+ "        <td valign=\"top\">\n");
@@ -564,7 +566,7 @@ public class TextSkin extends Skin {
 		for(PageAttributes.Link link : pageAttributes.getLinks()) {
 			String href = link.getHref();
 			String rel = link.getRel();
-			document.out.write("    "); document.link()
+			document.link()
 				.rel(rel)
 				.href(href == null ? null :
 					LastModifiedUtil.buildURL(
@@ -580,7 +582,7 @@ public class TextSkin extends Skin {
 					)
 				)
 				.type(link.getType())
-				.__().nl();
+			.__();
 		}
 	}
 
@@ -607,7 +609,7 @@ public class TextSkin extends Skin {
 	@Override
 	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException, IOException {
 		startContentLine(req, resp, document, colspan, "center", null);
-		document.h1__(title).nl();
+		document.h1__(title);
 		endContentLine(req, resp, document, 1, false);
 	}
 
@@ -728,7 +730,7 @@ public class TextSkin extends Skin {
 			true
 		);
 		document.out.write("  </body>\n");
-		HtmlTag.endHtmlTag(document.out); document.nl();
+		HtmlTag.endHtmlTag(document.out); document.autoNl();
 	}
 
 	@Override
@@ -853,7 +855,7 @@ public class TextSkin extends Skin {
 	 */
 	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
 		String groupIdStr = Long.toString(groupId);
-		document.script().out(script -> script
+		document.script().out(script -> script.indent()
 			.append("var popupGroupTimer").append(groupIdStr).append("=null;").nli()
 			.append("var popupGroupAuto").append(groupIdStr).append("=null;").nli()
 			.append("function popupGroupHideAllDetails").append(groupIdStr).append("() {").incDepth().nli()
@@ -882,7 +884,7 @@ public class TextSkin extends Skin {
 					.append("elemStyle.visibility=\"visible\";")
 				.decDepth().nli().append('}')
 			.decDepth().nli().append('}')
-		).__().nl();
+		).__();
 	}
 
 	/**
@@ -968,7 +970,7 @@ public class TextSkin extends Skin {
 				.append('(')
 				.append(popupIdStr)
 				.append(");")
-			).__().nl()
+		).__()
 		// Used to be span width=\"100%\"
 		.out.append("    <div id=\"aoPopup_").append(groupIdStr).append('_').append(popupIdStr).append("\" class=\"aoPopupMain\"");
 		if(width != null) {
@@ -1168,7 +1170,7 @@ public class TextSkin extends Skin {
 			+ "\t\tpopup.style.left=(popupScreenPosition-popupAnchorLeft)+\"px\";\n"
 			+ "\t}\n"
 			+ "\t// Call once at parse time for when the popup is activated while page loading (before onload called)\n"
-			+ "\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();\n"
+			+ "\tadjustPosition_").append(groupIdStr).append('_').append(popupIdStr).append("();"
 		)).__();
 	}
 }

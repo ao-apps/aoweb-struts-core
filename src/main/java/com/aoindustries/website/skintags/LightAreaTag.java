@@ -64,7 +64,8 @@ public class LightAreaTag extends PageAttributesBodyTag {
 				req,
 				resp,
 				pageContext.getOut(),
-				false // Do not add extra indentation to JSP
+				false, // Do not add extra newlines to JSP
+				false  // Do not add extra indentation to JSP
 			),
 			align,
 			width,
@@ -86,7 +87,8 @@ public class LightAreaTag extends PageAttributesBodyTag {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				)
 			);
 			return EVAL_PAGE;

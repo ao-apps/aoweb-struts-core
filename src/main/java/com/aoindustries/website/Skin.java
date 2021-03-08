@@ -72,7 +72,7 @@ abstract public class Skin {
 				Language language = languages.get(0);
 				AnyURI uri = language.getUri();
 				// TODO: hreflang attribute
-				document.out.write("    "); document.link(LINK.Rel.ALTERNATE).hreflang("x-default").href(
+				document.link(LINK.Rel.ALTERNATE).hreflang("x-default").href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -82,12 +82,12 @@ abstract public class Skin {
 							).toASCIIString()
 						)
 					)
-				).__().nl();
+				).__();
 			}
 			// All languages
 			for(Language language : languages) {
 				AnyURI uri = language.getUri();
-				document.out.write("    "); document.link(LINK.Rel.ALTERNATE).hreflang(language.getCode()).href(
+				document.link(LINK.Rel.ALTERNATE).hreflang(language.getCode()).href(
 					resp.encodeURL(
 						URIEncoder.encodeURI(
 							(
@@ -97,7 +97,7 @@ abstract public class Skin {
 							).toASCIIString()
 						)
 					)
-				).__().nl();
+				).__();
 			}
 		}
 	}

@@ -72,7 +72,8 @@ public class PopupGroupTag extends BodyTagSupport {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				sequenceId
 			);
@@ -95,7 +96,8 @@ public class PopupGroupTag extends BodyTagSupport {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				sequenceId
 			);

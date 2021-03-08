@@ -89,7 +89,8 @@ public class ScriptGroupTag extends BodyTagSupport {
 					request,
 					(HttpServletResponse)pageContext.getResponse(),
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				);
 				try (MediaWriter script = document.script().out__()) {
 					if("none".equals(onloadMode)) {
@@ -114,7 +115,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 							wroteScript = true;
 						}
 						script.write("  }\n"
-								+ "  window.onload = scriptOutOnload"); script.write(sequenceId); script.write(";\n");
+								+ "  window.onload = scriptOutOnload"); script.write(sequenceId); script.write(';');
 						if(!wroteScript) {
 							throw new LocalizedJspTagException(PACKAGE_RESOURCES, "aowebtags.ScriptGroupTag.onloadMode.invalid", onloadMode);
 						}

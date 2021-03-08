@@ -66,7 +66,8 @@ public class PopupCloseTag extends TagSupport {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				popupGroupTag.sequenceId,
 				popupTag.sequenceId

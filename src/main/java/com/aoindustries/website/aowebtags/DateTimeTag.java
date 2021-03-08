@@ -165,7 +165,8 @@ public class DateTimeTag extends BodyTagSupport {
 					request,
 					(HttpServletResponse)pageContext.getResponse(),
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				);
 				// Resolve the sequence
 				Sequence sequence = (Sequence)request.getAttribute(SEQUENCE_REQUEST_ATTRIBUTE);

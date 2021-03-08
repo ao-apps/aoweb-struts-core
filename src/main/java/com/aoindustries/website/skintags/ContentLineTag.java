@@ -73,7 +73,8 @@ public class ContentLineTag extends BodyTagSupport {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				colspan,
 				align,
@@ -98,7 +99,8 @@ public class ContentLineTag extends BodyTagSupport {
 					req,
 					resp,
 					pageContext.getOut(),
-					false // Do not add extra indentation to JSP
+					false, // Do not add extra newlines to JSP
+					false  // Do not add extra indentation to JSP
 				),
 				lastRowSpan,
 				endsInternal

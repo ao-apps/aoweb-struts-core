@@ -158,6 +158,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 				},
 				NativeToUnixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
 			);
+			document.setAutonli(true);
 			document.setIndent(true);
 			document.xmlDeclaration(charset);
 			document.doctype();
@@ -165,26 +166,27 @@ final public class MinimalConfirmationCompletedActionHelper {
 			+ "<head>\n");
 			String contentType = document.serialization.getContentType() + "; charset=" + charset;
 			if(document.doctype == Doctype.HTML5) {
-				document.out.write("    "); document.meta().charset(charset).__().nl();
+				document.meta().charset(charset).__();
 			} else {
-				document.out.write("    "); document.meta(META.HttpEquiv.CONTENT_TYPE).content(contentType).__().out.write("\n"
-				// Default style language
-				+ "    "); document.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__().out.write("\n"
-				+ "    "); document.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__().nl();
+				document
+					.meta(META.HttpEquiv.CONTENT_TYPE).content(contentType).__()
+					// Default style language
+					.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__()
+					.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__();
 			}
 			document.out.write("    <title>"); document.text(subject).out.write("</title>\n");
 			// Embed the text-only style sheet
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream(TextSkin.TEXTSKIN_CSS.getUri());
 			if(cssIn != null) {
 				try {
-					document.out.write("    "); try (MediaWriter style = document.style().out__()) {
+					try (MediaWriter style = document.style().out__()) {
 						Reader cssReader = new InputStreamReader(cssIn);
 						try {
 							IoUtils.copy(cssReader, style);
 						} finally {
 							cssIn.close();
 						}
-					} document.nl();
+					}
 				} finally {
 					cssIn.close();
 				}
@@ -214,7 +216,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 			SignupBillingInformationActionHelper.writeEmailConfirmation(document, signupBillingInformationForm);
 			document.out.write("</table>\n"
 			+ "</body>\n");
-			HtmlTag.endHtmlTag(document.out); document.nl();
+			HtmlTag.endHtmlTag(document.out); document.autoNl();
 
 			// Send the email
 			Brand brand = siteSettings.getBrand();

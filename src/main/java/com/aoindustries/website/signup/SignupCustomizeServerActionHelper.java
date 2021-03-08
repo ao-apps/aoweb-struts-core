@@ -503,9 +503,9 @@ final public class SignupCustomizeServerActionHelper {
 		+ "        <td>\n");
 		Money setup = packageDefinition.getSetupFee();
 		if(setup == null) {
-			document.out.write("            "); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none")).nl();
+			document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none"));
 		} else {
-			document.out.write("            "); document.text(setup).nl();
+			document.text(setup);
 		}
 		document.out.write("        </td>\n"
 		+ "    </tr>\n"

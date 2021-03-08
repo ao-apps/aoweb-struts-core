@@ -92,6 +92,24 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		}
 	}
 
+	private Boolean autonli;
+	public void setAutonli(String autonli) {
+		if(autonli == null) {
+			this.autonli = null;
+		} else {
+			autonli = autonli.trim();
+			if(autonli.isEmpty() || "auto".equalsIgnoreCase(autonli)) {
+				this.autonli = null;
+			} else if("true".equalsIgnoreCase(autonli)) {
+				this.autonli = true;
+			} else if("false".equalsIgnoreCase(autonli)) {
+				this.autonli = false;
+			} else {
+				throw new LocalizedIllegalArgumentException(HtmlTag.RESOURCES, "autonli.invalid", autonli);
+			}
+		}
+	}
+
 	private Boolean indent;
 	public void setIndent(String indent) {
 		if(indent == null) {
@@ -125,12 +143,15 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 	private transient boolean setSerialization;
 	private transient Doctype oldDoctype;
 	private transient boolean setDoctype;
+	private transient Boolean oldAutonli;
+	private transient boolean setAutonli;
 	private transient Boolean oldIndent;
 	private transient boolean setIndent;
 
 	private void init() {
 		serialization = null;
 		doctype = Doctype.DEFAULT;
+		autonli = null;
 		indent = null;
 		layout = "normal";
 		onload = null;
@@ -138,6 +159,8 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		setSerialization = false;
 		oldDoctype = null;
 		setDoctype = false;
+		oldAutonli = null;
+		setAutonli = false;
 		oldIndent = null;
 		setIndent = false;
 	}
@@ -168,6 +191,15 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 				oldDoctype = DoctypeEE.replace(request, doctype);
 				setDoctype = true;
 			}
+			if(autonli == null) {
+				autonli = DocumentEE.getAutonli(servletContext, request);
+				oldAutonli = null;
+				setAutonli = false;
+			} else {
+				oldAutonli = DocumentEE.replaceAutonli(request, autonli);
+				setAutonli = true;
+			}
+			assert autonli != null;
 			if(indent == null) {
 				indent = DocumentEE.getIndent(servletContext, request);
 				oldIndent = null;
@@ -199,7 +231,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			SkinTag.getSkin(pageContext).startSkin(
 				request,
 				response,
-				DocumentEE.get(servletContext, request, response, pageContext.getOut(), indent),
+				DocumentEE.get(servletContext, request, response, pageContext.getOut(), autonli, indent),
 				pageAttributes
 			);
 
@@ -216,7 +248,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		SkinTag.getSkin(pageContext).endSkin(
 			request,
 			response,
-			DocumentEE.get(pageContext.getServletContext(), request, response, pageContext.getOut(), indent),
+			DocumentEE.get(pageContext.getServletContext(), request, response, pageContext.getOut(), autonli, indent),
 			pageAttributes
 		);
 		return EVAL_PAGE;
@@ -232,6 +264,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		try {
 			ServletRequest request = pageContext.getRequest();
 			if(setIndent) DocumentEE.setIndent(request, oldIndent);
+			if(setAutonli) DocumentEE.setIndent(request, oldAutonli);
 			if(setDoctype) DoctypeEE.set(request, oldDoctype);
 			if(setSerialization) SerializationEE.set(request, oldSerialization);
 		} finally {
