@@ -23,7 +23,6 @@
 package com.aoindustries.website.aowebtags;
 
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Document;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.LocalizedJspTagException;
 import com.aoindustries.util.Sequence;
@@ -84,7 +83,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 		try {
 			if(scriptOut.size() > 0) {
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-				Document document = DocumentEE.get(
+				DocumentEE document = new DocumentEE(
 					pageContext.getServletContext(),
 					request,
 					(HttpServletResponse)pageContext.getResponse(),

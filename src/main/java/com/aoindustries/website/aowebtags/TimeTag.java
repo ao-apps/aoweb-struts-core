@@ -24,7 +24,6 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Document;
 import com.aoindustries.html.SPAN_factory;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
@@ -65,7 +64,7 @@ public class TimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatTime(long)
 	 */
-	public static void writeTimeJavaScript(long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeTimeJavaScript(long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		String timeString = SQLUtility.formatTime(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
@@ -113,7 +112,7 @@ public class TimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatTime(java.lang.Long)
 	 */
-	public static void writeTimeJavaScript(Long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeTimeJavaScript(Long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		if(date != null) writeTimeJavaScript(date.longValue(), sequence, factory, scriptOut);
 	}
 
@@ -132,7 +131,7 @@ public class TimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatTime(java.util.Date)
 	 */
-	public static void writeTimeJavaScript(Date date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeTimeJavaScript(Date date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		if(date != null) writeTimeJavaScript(date.getTime(), sequence, factory, scriptOut);
 	}
 
@@ -153,7 +152,7 @@ public class TimeTag extends BodyTagSupport {
 			if(!millisString.isEmpty()) {
 				Long time = Long.parseLong(millisString);
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-				Document document = DocumentEE.get(
+				DocumentEE document = new DocumentEE(
 					pageContext.getServletContext(),
 					request,
 					(HttpServletResponse)pageContext.getResponse(),

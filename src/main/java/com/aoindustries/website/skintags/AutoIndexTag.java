@@ -48,7 +48,7 @@ public class AutoIndexTag extends TagSupport {
 			SkinTag.getSkin(pageContext).printAutoIndex(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

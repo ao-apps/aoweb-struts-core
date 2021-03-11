@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2016, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2016, 2018, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -88,7 +88,7 @@ public class VirtualManaged7CompletedAction extends VirtualManaged7Action {
 		PackageDefinition packageDefinition = rootConn.getBilling().getPackageDefinition().get(signupSelectPackageForm.getPackageDefinition());
 
 		// Build the options map
-		Map<String,String> options = new HashMap<>();
+		Map<String, String> options = new HashMap<>();
 		ServerConfirmationCompletedActionHelper.addOptions(options, signupCustomizeServerForm);
 		ServerConfirmationCompletedActionHelper.addOptions(options, signupCustomizeManagementForm);
 

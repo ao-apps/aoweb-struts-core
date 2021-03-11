@@ -31,6 +31,7 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
+import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.Document;
 import com.aoindustries.html.META;
 import com.aoindustries.html.SCRIPT;
@@ -75,7 +76,7 @@ final public class ServerConfirmationCompletedActionHelper {
 	 */
 	private ServerConfirmationCompletedActionHelper() {}
 
-	public static void addOptions(Map<String,String> options, SignupCustomizeServerForm signupCustomizeServerForm) {
+	public static void addOptions(Map<String, String> options, SignupCustomizeServerForm signupCustomizeServerForm) {
 		// Power option
 		options.put("powerOption", Integer.toString(signupCustomizeServerForm.getPowerOption()));
 
@@ -100,7 +101,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		}
 	}
 
-	public static void addOptions(Map<String,String> options, SignupCustomizeManagementForm signupCustomizeManagementForm) {
+	public static void addOptions(Map<String, String> options, SignupCustomizeManagementForm signupCustomizeManagementForm) {
 		options.put("backupOnsiteOption", Integer.toString(signupCustomizeManagementForm.getBackupOnsiteOption()));
 		options.put("backupOffsiteOption", Integer.toString(signupCustomizeManagementForm.getBackupOffsiteOption()));
 		options.put("backupDvdOption", signupCustomizeManagementForm.getBackupDvdOption());
@@ -120,7 +121,7 @@ final public class ServerConfirmationCompletedActionHelper {
 		SignupOrganizationForm signupOrganizationForm,
 		SignupTechnicalForm signupTechnicalForm,
 		SignupBillingInformationForm signupBillingInformationForm,
-		Map<String,String> options
+		Map<String, String> options
 	) {
 		// Store to the database
 		int pkey;
@@ -264,7 +265,7 @@ final public class ServerConfirmationCompletedActionHelper {
 
 			// Find the locale and related resource bundles
 			Locale userLocale = ThreadLocale.get();
-			String charset = Document.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
+			String charset = AnyDocument.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
 
 			// Generate the email contents
 			// TODO: Test emails

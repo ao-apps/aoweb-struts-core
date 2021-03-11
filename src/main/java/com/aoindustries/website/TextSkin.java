@@ -33,11 +33,11 @@ import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScript
 import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
 import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.Document;
 import com.aoindustries.html.LINK;
 import com.aoindustries.html.META;
 import com.aoindustries.html.SCRIPT;
 import com.aoindustries.html.STYLE;
+import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.html.util.GoogleAnalytics;
 import com.aoindustries.html.util.ImagePreload;
 import com.aoindustries.io.NoCloseWriter;
@@ -138,32 +138,32 @@ public class TextSkin extends Skin {
 	/**
 	 * Print the logo for the top left part of the page.
 	 */
-	public void printLogo(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
+	public void printLogo(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String urlBase) throws JspException, IOException {
 		// Print no logo by default
 	}
 
 	/**
 	 * Prints the search form, if any exists.
 	 */
-	public void printSearch(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+	public void printSearch(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the common pages area, which is at the top of the site.
 	 */
-	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+	public void printCommonPages(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the lines for any JavaScript sources.
 	 */
-	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
+	public void printJavaScriptSources(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String urlBase) throws JspException, IOException {
 	}
 
 	/**
 	 * Prints the line for the favicon.
 	 */
-	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, Document document, String urlBase) throws JspException, IOException {
+	public void printFavIcon(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String urlBase) throws JspException, IOException {
 	}
 
 	public static MessageResources getMessageResources(HttpServletRequest req) throws JspException {
@@ -180,7 +180,7 @@ public class TextSkin extends Skin {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void startSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+	public void startSkin(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			ServletContext servletContext = req.getServletContext();
 			SiteSettings settings = SiteSettings.getInstance(servletContext);
@@ -562,7 +562,7 @@ public class TextSkin extends Skin {
 		}
 	}
 
-	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+	public static void defaultPrintLinks(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes) throws JspException, IOException {
 		for(PageAttributes.Link link : pageAttributes.getLinks()) {
 			String href = link.getHref();
 			String rel = link.getRel();
@@ -587,7 +587,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void startContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException, IOException {
+	public void startContent(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes, int[] colspans, String width) throws JspException, IOException {
 		width = trimNullIfEmpty(width);
 		document.out.write("          <table class=\"ao-packed\"");
 		if(width != null) {
@@ -607,14 +607,14 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, Document document, String title, int colspan) throws JspException, IOException {
+	public void printContentTitle(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String title, int colspan) throws JspException, IOException {
 		startContentLine(req, resp, document, colspan, "center", null);
 		document.h1__(title);
 		endContentLine(req, resp, document, 1, false);
 	}
 
 	@Override
-	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int colspan, String align, String width) throws JspException, IOException {
+	public void startContentLine(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, int colspan, String align, String width) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		document.out.write("            <tr>\n"
@@ -637,7 +637,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException, IOException {
+	public void printContentVerticalDivider(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, boolean visible, int colspan, int rowspan, String align, String width) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		document.out.write("              </td>\n");
@@ -662,13 +662,13 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, Document document, int rowspan, boolean endsInternal) throws JspException, IOException {
+	public void endContentLine(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, int rowspan, boolean endsInternal) throws JspException, IOException {
 		document.out.write("              </td>\n"
 		+ "            </tr>\n");
 	}
 
 	@Override
-	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, Document document, int[] colspansAndDirections, boolean endsInternal) throws JspException, IOException {
+	public void printContentHorizontalDivider(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, int[] colspansAndDirections, boolean endsInternal) throws JspException, IOException {
 		document.out.write("            <tr>\n");
 		for(int c = 0; c < colspansAndDirections.length; c += 2) {
 			if(c > 0) {
@@ -696,7 +696,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void endContent(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes, int[] colspans) throws JspException, IOException {
+	public void endContent(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes, int[] colspans) throws JspException, IOException {
 		int totalColumns = 0;
 		for(int c = 0; c < colspans.length; c++) {
 			if(c > 0) totalColumns += 1;
@@ -716,7 +716,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void endSkin(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+	public void endSkin(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes) throws JspException, IOException {
 		document.out.write("        </td>\n"
 		+ "      </tr>\n"
 		+ "    </table>\n");
@@ -734,7 +734,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException {
+	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String align, String width, boolean nowrap) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
@@ -754,14 +754,14 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
 		document.out.write("</td>\n"
 		+ "  </tr>\n"
 		+ "</table>\n");
 	}
 
 	@Override
-	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document, String align, String width, boolean nowrap) throws JspException, IOException {
+	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String align, String width, boolean nowrap) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
 		width = trimNullIfEmpty(width);
 		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
@@ -781,14 +781,14 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, Document document) throws JspException, IOException {
+	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
 		document.out.write("</td>\n"
 		+ "  </tr>\n"
 		+ "</table>\n");
 	}
 
 	@Override
-	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, Document document, PageAttributes pageAttributes) throws JspException, IOException {
+	public void printAutoIndex(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes) throws JspException, IOException {
 		String urlBase = getUrlBase(req);
 		//Locale locale = resp.getLocale();
 
@@ -837,23 +837,23 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints content below the related pages area on the left.
 	 */
-	public void printBelowRelatedPages(HttpServletRequest req, Document document) throws JspException, IOException {
+	public void printBelowRelatedPages(HttpServletRequest req, DocumentEE document) throws JspException, IOException {
 	}
 
 	/**
 	 * Begins a popup group.
 	 *
-	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
+	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long)
 	 */
 	@Override
-	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
+	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
 		defaultBeginPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of beginPopupGroup.
 	 */
-	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
+	public static void defaultBeginPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
 		String groupIdStr = Long.toString(groupId);
 		document.script().out(script -> script.indent()
 			.append("var popupGroupTimer").append(groupIdStr).append("=null;").nli()
@@ -890,34 +890,34 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup group.
 	 *
-	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long)
+	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long)
 	 */
 	@Override
-	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
+	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
 		defaultEndPopupGroup(req, resp, document, groupId);
 	}
 
 	/**
 	 * Default implementation of endPopupGroup.
 	 */
-	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId) throws JspException, IOException {
+	public static void defaultEndPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
 		// Nothing at the popup group end
 	}
 
 	/**
 	 * Begins a popup that is in a popup group.
 	 *
-	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException {
+	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width) throws JspException, IOException {
 		defaultBeginPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of beginPopup.
 	 */
-	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
+	public static void defaultBeginPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
 		if(groupId < 0) throw new IllegalArgumentException("groupId < 0: " + groupId);
 		final String groupIdStr = Long.toString(groupId);
 
@@ -1029,17 +1029,17 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints a popup close link/image/button for a popup that is part of a popup group.
 	 *
-	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String)
+	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String)
 	 */
 	@Override
-	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId) throws JspException, IOException {
+	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId) throws JspException, IOException {
 		defaultPrintPopupClose(req, resp, document, groupId, popupId, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of printPopupClose.
 	 */
-	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String urlBase) throws JspException, IOException {
+	public static void defaultPrintPopupClose(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String urlBase) throws JspException, IOException {
 		ServletContext servletContext = req.getServletContext();
 		Locale locale = LocaleAction.getLocale(servletContext, req);
 		MessageResources applicationResources = getMessageResources(req);
@@ -1062,17 +1062,17 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup that is in a popup group.
 	 *
-	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.Document, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void endPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width) throws JspException, IOException {
+	public void endPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width) throws JspException, IOException {
 		TextSkin.defaultEndPopup(req, resp, document, groupId, popupId, width, getUrlBase(req));
 	}
 
 	/**
 	 * Default implementation of endPopup.
 	 */
-	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, Document document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
+	public static void defaultEndPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width, String urlBase) throws JspException, IOException {
 		document.out.write("</td>\n"
 		+ "                <td class=\"aoPopupRight\" style=\"background-image:url(");
 		encodeTextInXhtmlAttribute(

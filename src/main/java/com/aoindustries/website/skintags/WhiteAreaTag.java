@@ -58,7 +58,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 		SkinTag.getSkin(pageContext).beginWhiteArea(
 			req,
 			resp,
-			DocumentEE.get(
+			new DocumentEE(
 				pageContext.getServletContext(),
 				req,
 				resp,
@@ -81,7 +81,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 			SkinTag.getSkin(pageContext).endWhiteArea(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

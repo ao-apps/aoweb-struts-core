@@ -29,6 +29,7 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
+import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.Document;
 import com.aoindustries.html.META;
 import com.aoindustries.html.SCRIPT;
@@ -140,7 +141,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 	
 			// Find the locale and related resource bundles
 			Locale userLocale = ThreadLocale.get();
-			String charset = Document.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
+			String charset = AnyDocument.ENCODING.name(); // TODO: US-ASCII with automatic entity encoding
 
 			// Generate the email contents
 			// TODO: Test emails

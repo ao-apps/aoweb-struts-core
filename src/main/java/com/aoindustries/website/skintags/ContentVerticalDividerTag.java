@@ -67,7 +67,7 @@ public class ContentVerticalDividerTag extends TagSupport {
 			SkinTag.getSkin(pageContext).printContentVerticalDivider(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

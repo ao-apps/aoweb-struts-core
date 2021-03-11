@@ -69,7 +69,7 @@ public class ContentTitleTag extends EncodingBufferedTag {
 		SkinTag.getSkin(pageContext).printContentTitle(
 			req,
 			resp,
-			DocumentEE.get(
+			new DocumentEE(
 				pageContext.getServletContext(),
 				req,
 				resp,

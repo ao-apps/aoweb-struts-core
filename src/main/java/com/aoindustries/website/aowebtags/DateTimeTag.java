@@ -24,7 +24,6 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Document;
 import com.aoindustries.html.SPAN_factory;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
@@ -65,7 +64,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(long)
 	 */
-	public static void writeDateTimeJavaScript(long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		String dateTimeString = SQLUtility.formatDateTime(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
@@ -120,7 +119,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.lang.Long)
 	 */
-	public static void writeDateTimeJavaScript(Long date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(Long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateTimeJavaScript(date.longValue(), sequence, factory, scriptOut);
 	}
 
@@ -139,7 +138,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.util.Date)
 	 */
-	public static void writeDateTimeJavaScript(Date date, Sequence sequence, SPAN_factory<?> factory, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(Date date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateTimeJavaScript(date.getTime(), sequence, factory, scriptOut);
 	}
 
@@ -160,7 +159,7 @@ public class DateTimeTag extends BodyTagSupport {
 			if(!millisString.isEmpty()) {
 				Long date = Long.parseLong(millisString);
 				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-				Document document = DocumentEE.get(
+				DocumentEE document = new DocumentEE(
 					pageContext.getServletContext(),
 					request,
 					(HttpServletResponse)pageContext.getResponse(),

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -66,7 +66,7 @@ public class MakePaymentAction extends AuthenticatedAction {
 
 		// Get the list of accounts that are not canceled or have a non-zero balance, or are thisAccount
 		List<Account> allAccounts = aoConn.getAccount().getAccount().getRows();
-		Map<Account,Monies> accountsAndBalances = AoCollections.newLinkedHashMap(allAccounts.size());
+		Map<Account, Monies> accountsAndBalances = AoCollections.newLinkedHashMap(allAccounts.size());
 		for(Account account : allAccounts) {
 			Monies accountBalance = transactionTable.getAccountBalance(account);
 			if(
@@ -95,7 +95,7 @@ public class MakePaymentAction extends AuthenticatedAction {
 			}
 		}
 		if(accountsAndBalances.size() == 1) {
-			Map.Entry<Account,Monies> entry = accountsAndBalances.entrySet().iterator().next();
+			Map.Entry<Account, Monies> entry = accountsAndBalances.entrySet().iterator().next();
 			Monies accountBalance = entry.getValue();
 			Set<Currency> currencies = accountBalance.getCurrencies();
 			if(currencies.size() == 1) {

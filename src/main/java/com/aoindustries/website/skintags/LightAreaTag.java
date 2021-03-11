@@ -59,7 +59,7 @@ public class LightAreaTag extends PageAttributesBodyTag {
 		SkinTag.getSkin(pageContext).beginLightArea(
 			req,
 			resp,
-			DocumentEE.get(
+			new DocumentEE(
 				pageContext.getServletContext(),
 				req,
 				resp,
@@ -82,7 +82,7 @@ public class LightAreaTag extends PageAttributesBodyTag {
 			SkinTag.getSkin(pageContext).endLightArea(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

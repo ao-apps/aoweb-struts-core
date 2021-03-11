@@ -68,7 +68,7 @@ public class ContentLineTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).startContentLine(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,
@@ -94,7 +94,7 @@ public class ContentLineTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).endContentLine(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

@@ -72,7 +72,7 @@ public class ContentTag extends PageAttributesBodyTag {
 		SkinTag.getSkin(pageContext).startContent(
 			req,
 			resp,
-			DocumentEE.get(
+			new DocumentEE(
 				pageContext.getServletContext(),
 				req,
 				resp,
@@ -94,7 +94,7 @@ public class ContentTag extends PageAttributesBodyTag {
 			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
 			SkinTag.getSkin(pageContext).endContent(req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

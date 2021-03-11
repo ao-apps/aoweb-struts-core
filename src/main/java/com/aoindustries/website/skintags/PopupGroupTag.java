@@ -67,7 +67,7 @@ public class PopupGroupTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).beginPopupGroup(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,
@@ -91,7 +91,7 @@ public class PopupGroupTag extends BodyTagSupport {
 			SkinTag.getSkin(pageContext).endPopupGroup(
 				req,
 				resp,
-				DocumentEE.get(
+				new DocumentEE(
 					pageContext.getServletContext(),
 					req,
 					resp,

@@ -26,7 +26,7 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.Serialization;
 import com.aoindustries.encoding.servlet.DoctypeEE;
 import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.lang.LocalizedIllegalArgumentException;
 import com.aoindustries.servlet.ServletUtil;
@@ -214,7 +214,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			response.resetBuffer();
 
 			// Set the content type
-			ServletUtil.setContentType(response, serialization.getContentType(), Document.ENCODING.name());
+			ServletUtil.setContentType(response, serialization.getContentType(), AnyDocument.ENCODING.name());
 
 			// Set the response locale from the Struts locale
 			Locale locale = (Locale)pageContext.getSession().getAttribute(Globals.LOCALE_KEY);
@@ -231,7 +231,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 			SkinTag.getSkin(pageContext).startSkin(
 				request,
 				response,
-				DocumentEE.get(servletContext, request, response, pageContext.getOut(), autonli, indent),
+				new DocumentEE(servletContext, request, response, pageContext.getOut(), autonli, indent),
 				pageAttributes
 			);
 
@@ -248,7 +248,7 @@ public class SkinTag extends PageAttributesBodyTag implements TryCatchFinally {
 		SkinTag.getSkin(pageContext).endSkin(
 			request,
 			response,
-			DocumentEE.get(pageContext.getServletContext(), request, response, pageContext.getOut(), autonli, indent),
+			new DocumentEE(pageContext.getServletContext(), request, response, pageContext.getOut(), autonli, indent),
 			pageAttributes
 		);
 		return EVAL_PAGE;
