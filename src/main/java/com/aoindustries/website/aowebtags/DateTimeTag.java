@@ -24,7 +24,7 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.SPAN_factory;
+import com.aoindustries.html.Union_Palpable_Phrasing;
 import com.aoindustries.html.servlet.DocumentEE;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.sql.SQLUtility;
@@ -64,12 +64,12 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(long)
 	 */
-	public static void writeDateTimeJavaScript(long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
 		String dateTimeString = SQLUtility.formatDateTime(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
 		// Write the element
-		factory.span().id(idAttr -> idAttr.append("chainWriterDateTime").append(idString)).__(dateTimeString);
+		content.span().id(idAttr -> idAttr.append("chainWriterDateTime").append(idString)).__(dateTimeString);
 		// Write the shared script only on first sequence
 		if(id == 1) {
 			scriptOut.append("  function chainWriterUpdateDateTime(id, millis, serverValue) {\n"
@@ -119,8 +119,8 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.lang.Long)
 	 */
-	public static void writeDateTimeJavaScript(Long date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
-		if(date != null) writeDateTimeJavaScript(date.longValue(), sequence, factory, scriptOut);
+	public static void writeDateTimeJavaScript(Long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateTimeJavaScript(date.longValue(), sequence, content, scriptOut);
 	}
 
 	/**
@@ -138,8 +138,8 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.util.Date)
 	 */
-	public static void writeDateTimeJavaScript(Date date, Sequence sequence, SPAN_factory<?, ?> factory, Appendable scriptOut) throws IOException {
-		if(date != null) writeDateTimeJavaScript(date.getTime(), sequence, factory, scriptOut);
+	public static void writeDateTimeJavaScript(Date date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+		if(date != null) writeDateTimeJavaScript(date.getTime(), sequence, content, scriptOut);
 	}
 
 	private static final long serialVersionUID = 1L;
