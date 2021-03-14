@@ -31,11 +31,11 @@ import com.aoindustries.encoding.Doctype;
 import com.aoindustries.encoding.EncodingContext;
 import com.aoindustries.encoding.MediaWriter;
 import com.aoindustries.encoding.Serialization;
-import com.aoindustries.html.AnyDocument;
 import com.aoindustries.html.Document;
-import com.aoindustries.html.META;
-import com.aoindustries.html.SCRIPT;
-import com.aoindustries.html.STYLE;
+import com.aoindustries.html.any.AnyDocument;
+import com.aoindustries.html.any.AnyMETA;
+import com.aoindustries.html.any.AnySCRIPT;
+import com.aoindustries.html.any.AnySTYLE;
 import com.aoindustries.io.FindReplaceWriter;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.io.NativeToUnixWriter;
@@ -294,10 +294,10 @@ final public class ServerConfirmationCompletedActionHelper {
 				document.meta().charset(charset).__();
 			} else {
 				document
-					.meta(META.HttpEquiv.CONTENT_TYPE).content(contentType).__()
+					.meta(AnyMETA.HttpEquiv.CONTENT_TYPE).content(contentType).__()
 					// Default style language
-					.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__()
-					.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__();
+					.meta(AnyMETA.HttpEquiv.CONTENT_STYLE_TYPE).content(AnySTYLE.Type.TEXT_CSS).__()
+					.meta(AnyMETA.HttpEquiv.CONTENT_SCRIPT_TYPE).content(AnySCRIPT.Type.TEXT_JAVASCRIPT).__();
 			}
 			document.out.write("    <title>"); document.text(subject).out.write("</title>\n");
 			// Embed the text-only style sheet

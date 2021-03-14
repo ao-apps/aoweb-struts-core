@@ -24,8 +24,8 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Union_Palpable_Phrasing;
 import com.aoindustries.html.servlet.DocumentEE;
+import com.aoindustries.html.servlet.Union_Palpable_Phrasing;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.util.Sequence;
@@ -64,7 +64,7 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(long)
 	 */
-	public static void writeDateJavaScript(long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateJavaScript(long date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		String dateString = SQLUtility.formatDate(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
@@ -110,7 +110,7 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(java.lang.Long)
 	 */
-	public static void writeDateJavaScript(Long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateJavaScript(Long date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateJavaScript(date.longValue(), sequence, content, scriptOut);
 	}
 
@@ -129,7 +129,7 @@ public class DateTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDate(java.util.Date)
 	 */
-	public static void writeDateJavaScript(Date date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateJavaScript(Date date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateJavaScript(date.getTime(), sequence, content, scriptOut);
 	}
 

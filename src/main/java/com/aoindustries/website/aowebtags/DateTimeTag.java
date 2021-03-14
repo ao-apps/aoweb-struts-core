@@ -24,8 +24,8 @@ package com.aoindustries.website.aowebtags;
 
 import static com.aoindustries.encoding.JavaScriptInXhtmlEncoder.encodeJavaScriptInXhtml;
 import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.Union_Palpable_Phrasing;
 import com.aoindustries.html.servlet.DocumentEE;
+import com.aoindustries.html.servlet.Union_Palpable_Phrasing;
 import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
 import com.aoindustries.sql.SQLUtility;
 import com.aoindustries.util.Sequence;
@@ -64,7 +64,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(long)
 	 */
-	public static void writeDateTimeJavaScript(long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(long date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		String dateTimeString = SQLUtility.formatDateTime(date);
 		long id = sequence.getNextSequenceValue();
 		String idString = Long.toString(id);
@@ -119,7 +119,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.lang.Long)
 	 */
-	public static void writeDateTimeJavaScript(Long date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(Long date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateTimeJavaScript(date.longValue(), sequence, content, scriptOut);
 	}
 
@@ -138,7 +138,7 @@ public class DateTimeTag extends BodyTagSupport {
 	 *
 	 * @see  SQLUtility#formatDateTime(java.util.Date)
 	 */
-	public static void writeDateTimeJavaScript(Date date, Sequence sequence, Union_Palpable_Phrasing<?, ?> content, Appendable scriptOut) throws IOException {
+	public static void writeDateTimeJavaScript(Date date, Sequence sequence, Union_Palpable_Phrasing<?> content, Appendable scriptOut) throws IOException {
 		if(date != null) writeDateTimeJavaScript(date.getTime(), sequence, content, scriptOut);
 	}
 
