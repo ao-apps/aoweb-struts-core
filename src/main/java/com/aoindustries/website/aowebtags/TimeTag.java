@@ -170,7 +170,7 @@ public class TimeTag extends BodyTagSupport {
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
 					writeTimeJavaScript(time, sequence, document, scriptOut);
-					try (MediaWriter script = document.script().out__()) {
+					try (MediaWriter script = document.script()._c()) {
 						scriptOut.writeTo(script);
 					}
 				}

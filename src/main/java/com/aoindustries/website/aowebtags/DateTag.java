@@ -168,7 +168,7 @@ public class DateTag extends BodyTagSupport {
 				} else {
 					CharArrayWriter scriptOut = new CharArrayWriter();
 					writeDateJavaScript(date, sequence, document, scriptOut);
-					try (MediaWriter script = document.script().out__()) {
+					try (MediaWriter script = document.script()._c()) {
 						scriptOut.writeTo(script);
 					}
 				}

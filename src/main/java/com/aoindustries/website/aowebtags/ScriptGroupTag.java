@@ -91,7 +91,7 @@ public class ScriptGroupTag extends BodyTagSupport {
 					false, // Do not add extra newlines to JSP
 					false  // Do not add extra indentation to JSP
 				);
-				try (MediaWriter script = document.script().out__()) {
+				try (MediaWriter script = document.script()._c()) {
 					if("none".equals(onloadMode)) {
 						scriptOut.writeTo(script);
 					} else {

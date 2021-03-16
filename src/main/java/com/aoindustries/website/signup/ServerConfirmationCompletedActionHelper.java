@@ -304,7 +304,7 @@ final public class ServerConfirmationCompletedActionHelper {
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream(TextSkin.TEXTSKIN_CSS.getUri());
 			if(cssIn != null) {
 				try {
-					try (MediaWriter style = document.style().out__()) {
+					try (MediaWriter style = document.style()._c()) {
 						Reader cssReader = new InputStreamReader(cssIn);
 						try {
 							IoUtils.copy(cssReader, style);

@@ -402,7 +402,7 @@ public class TextSkin extends Skin {
 				+ "              "); document.text(applicationResources.getMessage(locale, "TextSkin.layoutPrompt"))
 				.out.write("<select name=\"layout_selector\" onchange=\"selectLayout(this.form.layout_selector.options[this.form.layout_selector.selectedIndex].value);\">\n");
 				for(Skin skin : skins) {
-					document.option().value(skin.getName()).selected(getName().equals(skin.getName())).text__(skin.getDisplay(req));
+					document.option().value(skin.getName()).selected(getName().equals(skin.getName())).__(skin.getDisplay(req));
 				}
 				document.out.write("              </select>\n"
 				+ "            </div></form>"); document.br__();
