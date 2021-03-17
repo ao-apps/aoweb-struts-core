@@ -179,7 +179,7 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
+	// TODO: uncomment once only expected deprecated remains: @SuppressWarnings("deprecation")
 	public void startSkin(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			ServletContext servletContext = req.getServletContext();
@@ -187,7 +187,7 @@ public class TextSkin extends Skin {
 			Brand brand = settings.getBrand();
 			String trackingId = brand.getAowebStrutsGoogleAnalyticsNewTrackingCode();
 			// Write doctype
-			document.xmlDeclaration(resp.getCharacterEncoding());
+			document.xmlDeclaration();
 			document.doctype();
 			// Write <html>
 			HtmlTag.beginHtmlTag(resp, document.out, document.serialization, (GlobalAttributes)null); document.out.write("\n"
