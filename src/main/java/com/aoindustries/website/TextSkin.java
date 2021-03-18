@@ -244,16 +244,17 @@ public class TextSkin extends Skin {
 					)
 				).__();
 			}
-			document.out.write("    <title>");
-			// No more page stack, just show current page only
-			/*
-			List<Parent> parents = pageAttributes.getParents();
-			for(Parent parent : parents) {
-				html.text(parent.getTitle());
-				out.print(" - ");
-			}
-			 */
-			document.text(pageAttributes.getTitle()); document.out.write("</title>\n");
+			document.title__(
+				// No more page stack, just show current page only
+				/*
+				List<Parent> parents = pageAttributes.getParents();
+				for(Parent parent : parents) {
+					html.text(parent.getTitle());
+					out.print(" - ");
+				}
+				 */
+				pageAttributes.getTitle()
+			);
 			String description = pageAttributes.getDescription();
 			if(description != null && !(description = description.trim()).isEmpty()) {
 				document.meta(META.Name.DESCRIPTION).content(description).__();

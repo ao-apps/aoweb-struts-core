@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
@@ -207,55 +207,55 @@ final public class SignupCustomizeManagementActionHelper {
 
 	public static void writeEmailConfirmation(
 		HttpServletRequest request,
-		Document document,
+		Union_TBODY_THEAD_TFOOT<?> tbody,
 		AOServConnector rootConn,
 		SignupCustomizeManagementForm signupCustomizeManagementForm
 	) throws IOException, SQLException {
 		String backupOnsiteOption = getBackupOnsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOnsiteOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(backupOnsiteOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOnsite.prompt"))
+				.td__(backupOnsiteOption)
+			);
 		}
 		String backupOffsiteOption = getBackupOffsiteOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupOffsiteOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(backupOffsiteOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupOffsite.prompt"))
+				.td__(backupOffsiteOption)
+			);
 		}
 		String backupDvdOption = getBackupDvdOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(backupDvdOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(backupDvdOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.backupDvd.prompt"))
+				.td__(backupDvdOption)
+			);
 		}
 		String distributionScanOption = getDistributionScanOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(distributionScanOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(distributionScanOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.distributionScan.prompt"))
+				.td__(distributionScanOption)
+			);
 		}
 		String failoverOption = getFailoverOption(rootConn, signupCustomizeManagementForm);
 		if(!GenericValidator.isBlankOrNull(failoverOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(failoverOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.failover.prompt"))
+				.td__(failoverOption)
+			);
 		}
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(request.getAttribute("totalMonthlyRate")).out.write("</td>\n"
-		+ "    </tr>\n");
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeManagementConfirmation.totalMonthlyRate.prompt"))
+			.td__(request.getAttribute("totalMonthlyRate"))
+		);
 	}
 
 	/**

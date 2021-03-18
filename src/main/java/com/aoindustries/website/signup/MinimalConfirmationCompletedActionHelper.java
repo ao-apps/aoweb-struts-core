@@ -175,7 +175,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 					.meta(AnyMETA.HttpEquiv.CONTENT_STYLE_TYPE).content(AnySTYLE.Type.TEXT_CSS).__()
 					.meta(AnyMETA.HttpEquiv.CONTENT_SCRIPT_TYPE).content(AnySCRIPT.Type.TEXT_JAVASCRIPT).__();
 			}
-			document.out.write("    <title>"); document.text(subject).out.write("</title>\n");
+			document.title__(subject);
 			// Embed the text-only style sheet
 			InputStream cssIn = servlet.getServletContext().getResourceAsStream(TextSkin.TEXTSKIN_CSS.getUri());
 			if(cssIn != null) {

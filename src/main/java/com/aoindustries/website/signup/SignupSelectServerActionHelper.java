@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
@@ -131,11 +131,11 @@ final public class SignupSelectServerActionHelper {
 		request.setAttribute("setup", packageDefinition.getSetupFee());
 	}
 
-	public static void writeEmailConfirmation(Document document, PackageDefinition packageDefinition) throws IOException {
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupSelectServerForm.packageDefinition.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(packageDefinition.getDisplay()).out.write("</td>\n"
-		+ "    </tr>\n");
+	public static void writeEmailConfirmation(Union_TBODY_THEAD_TFOOT<?> tbody, PackageDefinition packageDefinition) throws IOException {
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupSelectServerForm.packageDefinition.prompt"))
+			.td__(packageDefinition.getDisplay())
+		);
 	}
 }

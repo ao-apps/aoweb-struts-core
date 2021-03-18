@@ -24,7 +24,7 @@ package com.aoindustries.website.signup;
 
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.password.PasswordGenerator;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
@@ -90,86 +90,86 @@ final public class SignupTechnicalActionHelper {
 	}
 
 	public static void writeEmailConfirmation(
-		Document document,
+		Union_TBODY_THEAD_TFOOT<?> tbody,
 		AOServConnector rootConn,
 		SignupTechnicalForm signupTechnicalForm
 	) throws IOException, SQLException {
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baName.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaName()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baTitle.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaTitle()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baWorkPhone.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaWorkPhone()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCellPhone.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaCellPhone()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baHomePhone.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaHomePhone()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baFax.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaFax()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baEmail.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaEmail()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress1.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaAddress1()).out.write("</td>\n"
-		+ "    </tr>\n");
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.required"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baName.prompt"))
+			.td__(signupTechnicalForm.getBaName())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baTitle.prompt"))
+			.td__(signupTechnicalForm.getBaTitle())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.required"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baWorkPhone.prompt"))
+			.td__(signupTechnicalForm.getBaWorkPhone())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCellPhone.prompt"))
+			.td__(signupTechnicalForm.getBaCellPhone())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baHomePhone.prompt"))
+			.td__(signupTechnicalForm.getBaHomePhone())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baFax.prompt"))
+			.td__(signupTechnicalForm.getBaFax())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.required"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baEmail.prompt"))
+			.td__(signupTechnicalForm.getBaEmail())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress1.prompt"))
+			.td__(signupTechnicalForm.getBaAddress1())
+		);
 		if(!GenericValidator.isBlankOrNull(signupTechnicalForm.getBaAddress2())) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress2.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(signupTechnicalForm.getBaAddress2()).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baAddress2.prompt"))
+				.td__(signupTechnicalForm.getBaAddress2())
+			);
 		}
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCity.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaCity()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baState.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaState()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCountry.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(getBaCountry(rootConn, signupTechnicalForm)).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baZip.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaZip()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.required")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baUsername.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaUsername()).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baPassword.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(signupTechnicalForm.getBaPassword()).out.write("</td>\n"
-		+ "    </tr>\n");
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCity.prompt"))
+			.td__(signupTechnicalForm.getBaCity())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baState.prompt"))
+			.td__(signupTechnicalForm.getBaState())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baCountry.prompt"))
+			.td__(getBaCountry(rootConn, signupTechnicalForm))
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baZip.prompt"))
+			.td__(signupTechnicalForm.getBaZip())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.required"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baUsername.prompt"))
+			.td__(signupTechnicalForm.getBaUsername())
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupTechnicalForm.baPassword.prompt"))
+			.td__(signupTechnicalForm.getBaPassword())
+		);
 	}
 }

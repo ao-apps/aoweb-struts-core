@@ -26,7 +26,7 @@ import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
-import com.aoindustries.html.Document;
+import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.util.i18n.Money;
 import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
@@ -451,69 +451,69 @@ final public class SignupCustomizeServerActionHelper {
 
 	public static void writeEmailConfirmation(
 		HttpServletRequest request,
-		Document document,
+		Union_TBODY_THEAD_TFOOT<?> tbody,
 		AOServConnector rootConn,
 		PackageDefinition packageDefinition,
 		SignupCustomizeServerForm signupCustomizeServerForm
 	) throws IOException, SQLException {
 		String powerOption = getPowerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(powerOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.power.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(powerOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.power.prompt"))
+				.td__(powerOption)
+			);
 		}
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.cpu.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(getCpuOption(rootConn, signupCustomizeServerForm)).out.write("</td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.ram.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(getRamOption(rootConn, signupCustomizeServerForm)).out.write("</td>\n"
-		+ "    </tr>\n");
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.cpu.prompt"))
+			.td__(getCpuOption(rootConn, signupCustomizeServerForm))
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.ram.prompt"))
+			.td__(getRamOption(rootConn, signupCustomizeServerForm))
+		);
 		String sataControllerOption = getSataControllerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(sataControllerOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.sataController.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(sataControllerOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.sataController.prompt"))
+				.td__(sataControllerOption)
+			);
 		}
 		String scsiControllerOption = getScsiControllerOption(rootConn, signupCustomizeServerForm);
 		if(!GenericValidator.isBlankOrNull(scsiControllerOption)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.scsiController.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(scsiControllerOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.scsiController.prompt"))
+				.td__(scsiControllerOption)
+			);
 		}
 		for(String diskOption : getDiskOptions(rootConn, signupCustomizeServerForm)) {
-			document.out.write("    <tr>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.disk.prompt")); document.out.write("</td>\n"
-			+ "        <td>"); document.text(diskOption).out.write("</td>\n"
-			+ "    </tr>\n");
+			tbody.tr__(tr -> tr
+				.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+				.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.disk.prompt"))
+				.td__(diskOption)
+			);
 		}
-		document.out.write("    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.prompt")); document.out.write("</td>\n"
-		+ "        <td>\n");
-		Money setup = packageDefinition.getSetupFee();
-		if(setup == null) {
-			document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none"));
-		} else {
-			document.text(setup);
-		}
-		document.out.write("        </td>\n"
-		+ "    </tr>\n"
-		+ "    <tr>\n"
-		+ "        <td>"); document.text(PACKAGE_RESOURCES.getMessage("signup.notRequired")); document.out.write("</td>\n"
-		+ "        <td style=\"white-space:nowrap\">"); document.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt")); document.out.write("</td>\n"
-		+ "        <td>"); document.text(request.getAttribute("monthlyRate")).out.write("</td>\n"
-		+ "    </tr>\n");
+		tbody.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.prompt"))
+			.td__(td -> {
+				Money setup = packageDefinition.getSetupFee();
+				if(setup == null) {
+					td.text(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.setup.none"));
+				} else {
+					td.text(setup);
+				}
+			})
+		)
+		.tr__(tr -> tr
+			.td__(PACKAGE_RESOURCES.getMessage("signup.notRequired"))
+			.td().style("white-space:nowrap").__(PACKAGE_RESOURCES.getMessage("signupCustomizeServerConfirmation.monthlyRate.prompt"))
+			.td__(request.getAttribute("monthlyRate"))
+		);
 	}
 
 	/**
