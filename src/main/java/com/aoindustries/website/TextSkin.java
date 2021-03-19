@@ -316,7 +316,6 @@ public class TextSkin extends Skin {
 				req,
 				resp,
 				document,
-				null, // unused
 				true, // registeredActivations
 				null, // No additional activations
 				requestRegistry, // request-scope
