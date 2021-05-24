@@ -34,7 +34,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		title="@{documented.name}"
 		shortTitle="@{documented.shortTitle}"
 		description="@{documented.description}"
-		datePublished="2016-10-17T00:09:00-0500"
+		datePublished="2016-10-17T00:09:00-05:00"
 		dateModified="2021-01-13T01:00:37-06:00"
 	>
 		<core:child page="changelog.jspx" />
