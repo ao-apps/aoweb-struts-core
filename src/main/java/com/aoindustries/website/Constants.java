@@ -73,7 +73,7 @@ public class Constants {
 	 * The session key used to store the current <code>layout</code>.  The layout setting
 	 * affects the per-request skin selection.
 	 */
-	// Matches aoweb-framework/WebSiteRequest.LAYOUT
+	// Matches ao-web-framework/WebSiteRequest.LAYOUT
 	public static final String LAYOUT = "layout";
 
 	/**

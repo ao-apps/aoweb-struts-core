@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -169,7 +169,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 		PaymentType paymentType;
 		{
 			String paymentTypeName;
-			// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
+			// TODO: Move to a card-type microproject API and shared with ao-payments implementation
 			if(
 				cardInfo.startsWith("34")
 				|| cardInfo.startsWith("37")

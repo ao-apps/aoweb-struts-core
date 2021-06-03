@@ -26,27 +26,27 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
 	version="2.1">
 	<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-	<!-- dateModified="2021-02-07T23:29:56-06:00" -->
+	<!-- dateModified="2021-06-01T03:18:06-05:00" -->
 	<description><![CDATA[
 		<p>@{description.html}</p>
 		<hr />
 		<p>
 			This taglib is part of an extensible suite of interoperable, context-aware,
-			<a href="https://aoindustries.com/ao-encoding/">auto-encoding</a> taglibs.
+			<a href="https://oss.aoapps.com/encoding/">auto-encoding</a> taglibs.
 			All auto-encoding tags generate correct output for their context, provide context information for nested
 			tags, and validate the output of nested tags.  For example,
-			<a href="https://aoindustries.com/ao-taglib/ao.tld/tag-message">&lt;ao:message&gt;</a> within
+			<a href="https://oss.aoapps.com/taglib/ao.tld/tag-message">&lt;ao:message&gt;</a> within
 			<a href="@{project.url}aoweb-struts-skin.tld/tag-description">&lt;skin:description&gt;</a> will write its output
-			encoded as <a href="https://aoindustries.com/ao-encoding/apidocs/com/aoindustries/encoding/MediaType.html#TEXT">TEXT</a>,
+			encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoindustries/encoding/MediaType.html#TEXT">TEXT</a>,
 			while within <a href="@{project.url}aoweb-struts-skin.tld/tag-content">&lt;skin:content&gt;</a> (of type "text/html") will write its
-			output encoded as <a href="https://aoindustries.com/ao-encoding/apidocs/com/aoindustries/encoding/MediaType.html#XHTML">XHTML</a>.
+			output encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoindustries/encoding/MediaType.html#XHTML">XHTML</a>.
 		</p>
 		<p>
 			This suite includes, but is not limited to:
 		</p>
 		<ul>
-			<li><a href="https://aoindustries.com/ao-encoding/taglib/ao-encoding.tld/">AO Encoding Taglib</a></li>
-			<li><a href="https://aoindustries.com/ao-taglib/ao.tld/">AO Taglib</a></li>
+			<li><a href="https://oss.aoapps.com/encoding/taglib/ao-encoding.tld/">AO Encoding Taglib</a></li>
+			<li><a href="https://oss.aoapps.com/taglib/ao.tld/">AO Taglib</a></li>
 			<li><a href="@{project.url}aoweb-struts-skin.tld/">AOWeb Struts Core Skin Taglib</a> (this taglib)</li>
 			<li><a href="https://oss.newmediaworks.com/email-taglib/nmw-email.tld/">NMW Email Taglib</a></li>
 			<li><a href="https://oss.newmediaworks.com/payment-taglib/nmw-payment.tld/">NMW Payment Taglib</a></li>
@@ -141,7 +141,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-10T22:36:09-06:00" -->
+		<!-- dateModified="2021-06-01T03:18:06-05:00" -->
 		<description><![CDATA[
 			<p class="semanticcms-tag-reference-summary">
 				Provides a path to its
@@ -157,8 +157,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
 				The path before the first ? will be encoded by this tag.  The preferred approach is to add any
 				necessary parameters using nested
-				<a href="https://aoindustries.com/ao-taglib/ao.tld/tag-param">&lt;ao:param&gt;</a> and
-				<a href="https://aoindustries.com/ao-taglib/ao.tld/tag-params">&lt;ao:params&gt;</a> tags.
+				<a href="https://oss.aoapps.com/taglib/ao.tld/tag-param">&lt;ao:param&gt;</a> and
+				<a href="https://oss.aoapps.com/taglib/ao.tld/tag-params">&lt;ao:params&gt;</a> tags.
 			</p>
 		]]></description>
 		<name>path</name>
@@ -167,7 +167,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2020-03-27T00:33:46-05:00" -->
+		<!-- dateModified="2021-06-01T03:18:06-05:00" -->
 		<description><![CDATA[
 			<p>
 				Provides a meta to its
@@ -180,7 +180,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				In precedence order, the content may be provided as:
 			</p>
 			<ol>
-				<li>Nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag</li>
+				<li>Nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag</li>
 				<li>content attribute</li>
 				<li>Body</li>
 			</ol>
@@ -192,7 +192,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The name of the <a href="@{project.url}apidocs/com/aoindustries/website/skintags/Meta.html">meta information</a>.
-					A nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-name">&lt;ao:name&gt;</a> tag will override this value.
+					A nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-name">&lt;ao:name&gt;</a> tag will override this value.
 				</p>
 			]]></description>
 			<name>name</name>
@@ -204,7 +204,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The content of the <a href="@{project.url}apidocs/com/aoindustries/website/skintags/Meta.html">meta information</a>.
-					A nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag will override this value.
+					A nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag will override this value.
 					A non-empty body may also provide the content.
 				</p>
 			]]></description>
@@ -216,20 +216,20 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2020-07-20T19:59:39-05:00" -->
+		<!-- dateModified="2021-06-01T03:18:06-05:00" -->
 		<description><![CDATA[
 			<p>
 				Adds a link tag to <a href="@{project.url}apidocs/com/aoindustries/website/skintags/PageAttributes.html">this page</a>.
 				In precedence order, the href may be provided as:
 			</p>
 			<ol>
-				<li>Nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag</li>
+				<li>Nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-content">&lt;ao:content&gt;</a> tag</li>
 				<li>href attribute</li>
 				<li>Body</li>
 			</ol>
 			<p>
 				Please note, that any links to stylesheets here are never optimized.  Please
-				prefer the <a href="https://aoindustries.com/ao-web-resources/taglib/">AO Web Resources Taglib</a>.
+				prefer the <a href="https://oss.aoapps.com/web-resources/taglib/">AO Web Resources Taglib</a>.
 			</p>
 		]]></description>
 		<name>link</name>
@@ -239,7 +239,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The rel of the link.
-					A nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-rel">&lt;ao:rel&gt;</a> tag will override this value.
+					A nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-rel">&lt;ao:rel&gt;</a> tag will override this value.
 				</p>
 			]]></description>
 			<name>rel</name>
@@ -251,14 +251,14 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p class="semanticcms-tag-reference-summary">
 					The href of the link.
-					A nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-href">&lt;ao:href&gt;</a> tag will override this value.
+					A nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-href">&lt;ao:href&gt;</a> tag will override this value.
 				</p>
 				<p>
 					Parameters must be properly URL encoded but not XML encoded (with &amp; instead of &amp;amp;).
 					The path before the first ? will be encoded by this tag.  The preferred approach is to add any
 					necessary parameters using nested
-					<a href="https://aoindustries.com/ao-taglib/ao.tld/tag-param">&lt;ao:param&gt;</a> and
-					<a href="https://aoindustries.com/ao-taglib/ao.tld/tag-params">&lt;ao:params&gt;</a> tags.
+					<a href="https://oss.aoapps.com/taglib/ao.tld/tag-param">&lt;ao:param&gt;</a> and
+					<a href="https://oss.aoapps.com/taglib/ao.tld/tag-params">&lt;ao:params&gt;</a> tags.
 				</p>
 			]]></description>
 			<name>href</name>
@@ -270,7 +270,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			<description><![CDATA[
 				<p>
 					The type of the link tag.
-					A nested <a href="https://aoindustries.com/ao-taglib/ao.tld/tag-type">&lt;ao:type&gt;</a> tag will override this value.
+					A nested <a href="https://oss.aoapps.com/taglib/ao.tld/tag-type">&lt;ao:type&gt;</a> tag will override this value.
 				</p>
 			]]></description>
 			<name>type</name>

@@ -22,7 +22,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 -->
 <jsp:root
-	xmlns:ao="https://aoindustries.com/ao-taglib/"
+	xmlns:ao="https://oss.aoapps.com/taglib/"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:changelog="https://semanticcms.com/changelog/taglib/"
 	xmlns:core="https://semanticcms.com/core/taglib/"
@@ -37,7 +37,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T22:25:38-05:00"
-		dateModified="2021-05-26T06:36:49-05:00"
+		dateModified="2021-05-31T08:58:51-05:00"
 	>
 		<c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
 			<changelog:release
@@ -45,6 +45,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				version="@{project.version}"
 				groupId="@{project.groupId}"
 				artifactId="@{documented.artifactId}"
+				repository="https://oss.sonatype.org/content/repositories/snapshots/"
 				scmUrl="@{project.scm.url}"
 			>
 				<ul>
@@ -60,7 +61,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Now supports skin attributes for <code>serialization</code> (default "auto") and <code>doctype</code> (default "HTML5").</li>
 					<li>Skins are now responsible for writing the DOCTYPE and html tag, too.</li>
 					<li>Skins now use the new <code>Html</code> instead of <code>JspWriter</code>.</li>
-					<li>HTML email generators use the new <core:link book="/ao-fluent-html" page="/index.jspx" /> project.</li>
+					<li>HTML email generators use the new <ao:a href="https://oss.aoapps.com/fluent-html/">AO Fluent HTML</ao:a> project.</li>
 					<li>Removed setContentType tag.</li>
 					<li>Removed <code>Skin.getCharacterSet(Locale)</code>, since the default encoding is always <code>UTF-8</code>.</li>
 					<li>
@@ -75,7 +76,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 						<code>@WebListener</code>.  No more <code>LogFactory</code>.  Now just use
 						<code>Logger.getLogger(…)</code> like normal.
 					</li>
-					<li>Integrated with <core:link book="/ao-web-resources" page="/index.jspx" />.</li>
+					<li>Integrated with <ao:a href="https://oss.aoapps.com/web-resources/">AO Web Resources</ao:a>.</li>
 					<li>Added support for <ao:a href="https://developers.google.com/speed/webp">WebP images</ao:a>.</li>
 					<li>Removed support or IE 6, 7, 8, and 9 since all are end-of-life.</li>
 					<li>
@@ -128,8 +129,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{project.scm.url}"
 		>
 			<ul>
-				<li>Updated for compatibility with <core:link book="/ao-lang" page="/changelog.jspx" element="release-notes-3.0.0">ao-lang-3.0.0</core:link>.</li>
-				<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.1.0">aocode-public-3.1.0</core:link>.</li>
+				<li>Updated for compatibility with <ao:a href="https://oss.aoapps.com/lang/changelog#release-notes-3.0.0">ao-lang-3.0.0</ao:a>.</li>
+				<li>Updated for compatibility with <ao:a href="https://oss.aoapps.com/hodgepodge/changelog#release-notes-3.1.0">aocode-public-3.1.0</ao:a>.</li>
 				<li>Updated for compatibility with <core:link book="/aoserv/client" page="/changelog.jspx" element="release-notes-1.83.1">aoserv-client-1.83.1</core:link>.</li>
 				<li>Cookie names, values, comments, and paths are now URI-encoded.</li>
 				<li>No longer URL rewriting <code>file:</code> and <code>data:</code> URLs.</li>
@@ -141,7 +142,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				<li>No longer URL rewriting <code>*.dia</code> URLs.</li>
 				<li>
 					<code>SessionResponseWrapper</code> now supports
-					<ao:a href="https://aoindustries.com/ao-servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>,
+					<ao:a href="https://oss.aoapps.com/servlet-util/apidocs/com/aoindustries/servlet/http/Canonical.html">Canonical URLs</ao:a>,
 					with the following behavior:
 					<ol>
 						<li><code>;jsessionid</code> is never used</li>
@@ -191,7 +192,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				</li>
 				<li>Payment form improvements:
 					<ol>
-						<li>Passing more values to <core:link book="/ao-credit-cards/api" page="/index.jspx">underlying credit card processing API</core:link>:
+						<li>Passing more values to <ao:a href="https://oss.aoapps.com/payments/api/">underlying payment processing API</ao:a>:
 							<ol type="a">
 								<li><code>principalName</code> from authenticated user</li>
 								<li><code>groupName</code> from account name</li>
@@ -228,8 +229,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{project.scm.url}"
 		>
 			<ul>
-				<li>Updated for new <core:link book="/ao-net-types" page="/index.jspx" /> project pulled out of <core:link book="/aoserv/client" page="/index.jspx" />.</li>
-				<li>Updated for validation base moved from <core:link book="/aoserv/client" page="/index.jspx" /> to <core:link book="/ao-lang" page="/index.jspx" />.</li>
+				<li>Updated for new <ao:a href="https://oss.aoapps.com/net-types/">AO Net Types</ao:a> project pulled out of <core:link book="/aoserv/client" page="/index.jspx" />.</li>
+				<li>Updated for validation base moved from <core:link book="/aoserv/client" page="/index.jspx" /> to <ao:a href="https://oss.aoapps.com/lang/">AO Lang</ao:a>.</li>
 				<li>Making more extensive use of self-validating types.</li>
 				<li>Extended network protocol to send randomized command sequences to help ensure stream integrity.</li>
 				<li>Updated dependencies.</li>
@@ -245,7 +246,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{project.scm.url}"
 		>
 			<ul>
-				<li>New <core:link book="/ao-oss-parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
+				<li>New <ao:a href="https://oss.aoapps.com/parent/">AO OSS Parent</ao:a> POM to simplify <code>pom.xml</code> files.</li>
 				<li>Project documentation moved to per-project book in <ao:a href="https://semanticcms.com/">SemanticCMS</ao:a> format.</li>
 				<li>Added changelog as top-level project link.</li>
 				<li>

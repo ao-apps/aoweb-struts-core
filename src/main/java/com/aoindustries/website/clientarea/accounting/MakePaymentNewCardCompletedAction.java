@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -177,7 +177,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		PaymentType paymentType;
 		{
 			String paymentTypeName;
-			// TODO: Move to a card-type microproject API and shared with ao-credit-cards/ao-payments implementation
+			// TODO: Move to a card-type microproject API and shared with ao-payments implementation
 			if(
 				cardNumber.startsWith("34")
 				|| cardNumber.startsWith("37")
@@ -223,7 +223,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		com.aoindustries.aoserv.client.billing.Transaction aoTransaction = rootConn.getBilling().getTransaction().get(transid);
 		if(aoTransaction == null) throw new SQLException("Unable to find Transaction: " + transid);
 
-		// TODO: Store card before sale, and use its stored card ID (once ao-credit-cards can throw ErrorCodeException on store card)
+		// TODO: Store card before sale, and use its stored card ID (once ao-payments can throw ErrorCodeException on store card)
 		// TODO: This currently implementation provides disconnected first payment and stored card in Stripe.
 
 		// 3) Process
