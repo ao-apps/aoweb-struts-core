@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website;
 
+import com.aoapps.net.URIEncoder;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
-import com.aoindustries.net.URIEncoder;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;

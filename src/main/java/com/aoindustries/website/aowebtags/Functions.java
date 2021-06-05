@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2019  AO Industries, Inc.
+ * Copyright (C) 2019, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.aowebtags;
 
-import com.aoindustries.creditcards.CreditCard;
-import com.aoindustries.servlet.filter.FunctionContext;
-import com.aoindustries.util.i18n.CurrencyUtil;
+import com.aoapps.lang.i18n.CurrencyUtil;
+import com.aoapps.payments.CreditCard;
+import com.aoapps.servlet.filter.FunctionContext;
 import java.util.Currency;
 
 /**

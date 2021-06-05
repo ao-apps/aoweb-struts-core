@@ -22,11 +22,11 @@
  */
 package com.aoindustries.website.clientarea.ticket;
 
+import com.aoapps.lang.Strings;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.master.Permission;
 import com.aoindustries.aoserv.client.ticket.Ticket;
-import com.aoindustries.lang.Strings;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;

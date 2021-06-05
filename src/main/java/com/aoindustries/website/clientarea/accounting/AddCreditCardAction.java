@@ -22,12 +22,12 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoapps.payments.CreditCard;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Administrator;
 import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.master.Permission;
-import com.aoindustries.creditcards.CreditCard;
 import com.aoindustries.website.PermissionAction;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;

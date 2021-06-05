@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.encoding.MediaType;
-import com.aoindustries.encoding.taglib.EncodingBufferedTag;
-import com.aoindustries.io.buffer.BufferResult;
+import com.aoapps.encoding.MediaType;
+import com.aoapps.encoding.taglib.EncodingBufferedTag;
+import com.aoapps.io.buffer.BufferResult;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.jsp.JspException;

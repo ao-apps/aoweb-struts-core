@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.servlet.jsp.LocalizedJspTagException;
+import com.aoapps.servlet.jsp.LocalizedJspTagException;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
 import java.util.ArrayList;

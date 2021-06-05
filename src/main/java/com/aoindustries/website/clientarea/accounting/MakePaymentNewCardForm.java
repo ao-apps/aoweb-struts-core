@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,12 +22,12 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoapps.lang.exception.WrappedException;
+import com.aoapps.lang.i18n.CurrencyUtil;
+import com.aoapps.lang.i18n.Money;
+import com.aoapps.lang.i18n.ThreadLocale;
+import com.aoapps.payments.TransactionResult;
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.creditcards.TransactionResult;
-import com.aoindustries.exception.WrappedException;
-import com.aoindustries.util.i18n.CurrencyUtil;
-import com.aoindustries.util.i18n.Money;
-import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.SiteSettings;
 import java.io.IOException;
 import java.io.Serializable;

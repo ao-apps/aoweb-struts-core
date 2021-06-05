@@ -22,17 +22,17 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.exception.WrappedException;
-import com.aoindustries.net.IRI;
-import com.aoindustries.net.MutableURIParameters;
-import com.aoindustries.net.URIParameters;
-import com.aoindustries.net.URIParametersMap;
-import com.aoindustries.net.URIParametersUtils;
-import com.aoindustries.net.URIParser;
-import com.aoindustries.servlet.http.Canonical;
-import com.aoindustries.servlet.http.HttpServletUtil;
-import com.aoindustries.tempfiles.servlet.TempFileContextEE;
-import com.aoindustries.web.resources.servlet.RegistryEE;
+import com.aoapps.lang.exception.WrappedException;
+import com.aoapps.net.IRI;
+import com.aoapps.net.MutableURIParameters;
+import com.aoapps.net.URIParameters;
+import com.aoapps.net.URIParametersMap;
+import com.aoapps.net.URIParametersUtils;
+import com.aoapps.net.URIParser;
+import com.aoapps.servlet.http.Canonical;
+import com.aoapps.servlet.http.HttpServletUtil;
+import com.aoapps.tempfiles.servlet.TempFileContextEE;
+import com.aoapps.web.resources.servlet.RegistryEE;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Enumeration;

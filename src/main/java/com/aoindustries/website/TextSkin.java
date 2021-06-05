@@ -22,41 +22,41 @@
  */
 package com.aoindustries.website;
 
+import com.aoapps.encoding.Doctype;
+import static com.aoapps.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
+import static com.aoapps.encoding.JavaScriptInXhtmlAttributeEncoder.javaScriptInXhtmlAttributeEncoder;
+import com.aoapps.encoding.MediaWriter;
+import com.aoapps.encoding.Serialization;
+import static com.aoapps.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
+import static com.aoapps.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
+import static com.aoapps.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
+import com.aoapps.encoding.servlet.SerializationEE;
+import com.aoapps.hodgepodge.i18n.EditableResourceBundle;
+import com.aoapps.html.LINK;
+import com.aoapps.html.META;
+import com.aoapps.html.SCRIPT;
+import com.aoapps.html.STYLE;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.html.util.GoogleAnalytics;
+import com.aoapps.html.util.ImagePreload;
+import static com.aoapps.lang.Strings.trimNullIfEmpty;
+import com.aoapps.lang.io.NoCloseWriter;
+import com.aoapps.net.AnyURI;
+import com.aoapps.net.EmptyURIParameters;
+import com.aoapps.net.URIEncoder;
+import com.aoapps.servlet.lastmodified.AddLastModified;
+import com.aoapps.servlet.lastmodified.LastModifiedUtil;
+import com.aoapps.style.AoStyle;
+import static com.aoapps.taglib.AttributeUtils.appendWidthStyle;
+import com.aoapps.taglib.GlobalAttributes;
+import com.aoapps.taglib.HtmlTag;
+import com.aoapps.web.resources.registry.Group;
+import com.aoapps.web.resources.registry.Registry;
+import com.aoapps.web.resources.registry.Style;
+import com.aoapps.web.resources.renderer.Renderer;
+import com.aoapps.web.resources.servlet.RegistryEE;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.encoding.Doctype;
-import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.encodeJavaScriptInXhtmlAttribute;
-import static com.aoindustries.encoding.JavaScriptInXhtmlAttributeEncoder.javaScriptInXhtmlAttributeEncoder;
-import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.encoding.Serialization;
-import static com.aoindustries.encoding.TextInJavaScriptEncoder.textInJavaScriptEncoder;
-import static com.aoindustries.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlAttribute;
-import static com.aoindustries.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
-import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.LINK;
-import com.aoindustries.html.META;
-import com.aoindustries.html.SCRIPT;
-import com.aoindustries.html.STYLE;
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.html.util.GoogleAnalytics;
-import com.aoindustries.html.util.ImagePreload;
-import com.aoindustries.io.NoCloseWriter;
-import static com.aoindustries.lang.Strings.trimNullIfEmpty;
-import com.aoindustries.net.AnyURI;
-import com.aoindustries.net.EmptyURIParameters;
-import com.aoindustries.net.URIEncoder;
-import com.aoindustries.servlet.lastmodified.AddLastModified;
-import com.aoindustries.servlet.lastmodified.LastModifiedUtil;
-import com.aoindustries.style.AoStyle;
-import static com.aoindustries.taglib.AttributeUtils.appendWidthStyle;
-import com.aoindustries.taglib.GlobalAttributes;
-import com.aoindustries.taglib.HtmlTag;
-import com.aoindustries.util.i18n.EditableResourceBundle;
-import com.aoindustries.web.resources.registry.Group;
-import com.aoindustries.web.resources.registry.Registry;
-import com.aoindustries.web.resources.registry.Style;
-import com.aoindustries.web.resources.renderer.Renderer;
-import com.aoindustries.web.resources.servlet.RegistryEE;
 import com.aoindustries.website.skintags.Child;
 import com.aoindustries.website.skintags.PageAttributes;
 import com.aoindustries.website.skintags.Parent;
@@ -85,7 +85,7 @@ public class TextSkin extends Skin {
 	public static final String NAME = "Text";
 
 	/**
-	 * The name of the {@linkplain com.aoindustries.web.resources.servlet.RegistryEE.Application application-scope}
+	 * The name of the {@linkplain com.aoapps.web.resources.servlet.RegistryEE.Application application-scope}
 	 * group that will be used for text skin web resources.
 	 */
 	public static final Group.Name RESOURCE_GROUP = new Group.Name(TextSkin.class.getName());
@@ -843,7 +843,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Begins a popup group.
 	 *
-	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long)
+	 * @see  #defaultBeginPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.html.servlet.DocumentEE, long)
 	 */
 	@Override
 	public void beginPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
@@ -890,7 +890,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup group.
 	 *
-	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long)
+	 * @see  #defaultEndPopupGroup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.html.servlet.DocumentEE, long)
 	 */
 	@Override
 	public void endPopupGroup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId) throws JspException, IOException {
@@ -907,7 +907,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Begins a popup that is in a popup group.
 	 *
-	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultBeginPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void beginPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width) throws JspException, IOException {
@@ -1029,7 +1029,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Prints a popup close link/image/button for a popup that is part of a popup group.
 	 *
-	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String)
+	 * @see  #defaultPrintPopupClose(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.html.servlet.DocumentEE, long, long, java.lang.String)
 	 */
 	@Override
 	public void printPopupClose(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId) throws JspException, IOException {
@@ -1062,7 +1062,7 @@ public class TextSkin extends Skin {
 	/**
 	 * Ends a popup that is in a popup group.
 	 *
-	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
+	 * @see  #defaultEndPopup(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.html.servlet.DocumentEE, long, long, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void endPopup(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, long groupId, long popupId, String width) throws JspException, IOException {

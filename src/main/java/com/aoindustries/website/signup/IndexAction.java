@@ -22,10 +22,10 @@
  */
 package com.aoindustries.website.signup;
 
+import com.aoapps.net.URIEncoder;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageCategory;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
-import com.aoindustries.net.URIEncoder;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import com.aoindustries.website.SkinAction;

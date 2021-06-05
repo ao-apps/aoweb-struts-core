@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.lang.Strings;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.lang.Strings;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

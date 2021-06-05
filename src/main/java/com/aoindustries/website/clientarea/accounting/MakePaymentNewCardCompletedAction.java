@@ -22,6 +22,17 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoapps.lang.Strings;
+import com.aoapps.lang.i18n.Money;
+import com.aoapps.lang.validation.ValidationException;
+import com.aoapps.net.Email;
+import com.aoapps.payments.AuthorizationResult;
+import com.aoapps.payments.CaptureResult;
+import com.aoapps.payments.CreditCardProcessor;
+import com.aoapps.payments.TokenizedCreditCard;
+import com.aoapps.payments.Transaction;
+import com.aoapps.payments.TransactionRequest;
+import com.aoapps.payments.TransactionResult;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.account.Profile;
@@ -33,17 +44,6 @@ import com.aoindustries.aoserv.client.schema.Type;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
-import com.aoindustries.creditcards.AuthorizationResult;
-import com.aoindustries.creditcards.CaptureResult;
-import com.aoindustries.creditcards.CreditCardProcessor;
-import com.aoindustries.creditcards.TokenizedCreditCard;
-import com.aoindustries.creditcards.Transaction;
-import com.aoindustries.creditcards.TransactionRequest;
-import com.aoindustries.creditcards.TransactionResult;
-import com.aoindustries.lang.Strings;
-import com.aoindustries.net.Email;
-import com.aoindustries.util.i18n.Money;
-import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.io.IOException;
@@ -130,7 +130,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		String principalName = aoConn.getCurrentAdministrator().getUsername().getUsername().toString();
 		String groupName = account.getName().toString();
 		Profile profile = account.getProfile();
-		com.aoindustries.creditcards.CreditCard newCreditCard = new com.aoindustries.creditcards.CreditCard(
+		com.aoapps.payments.CreditCard newCreditCard = new com.aoapps.payments.CreditCard(
 			null, // persistenceUniqueId
 			principalName,
 			groupName,
@@ -173,7 +173,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		TransactionType paymentTransactionType = rootConn.getBilling().getTransactionType().get(TransactionType.PAYMENT);
 		if(paymentTransactionType == null) throw new SQLException("Unable to find TransactionType: " + TransactionType.PAYMENT);
 		MessageResources applicationResources = (MessageResources)request.getAttribute("/clientarea/accounting/ApplicationResources");
-		String cardInfo = com.aoindustries.creditcards.CreditCard.maskCreditCardNumber(cardNumber);
+		String cardInfo = com.aoapps.payments.CreditCard.maskCreditCardNumber(cardNumber);
 		PaymentType paymentType;
 		{
 			String paymentTypeName;
@@ -181,7 +181,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			if(
 				cardNumber.startsWith("34")
 				|| cardNumber.startsWith("37")
-				|| cardNumber.startsWith("3" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)) {
+				|| cardNumber.startsWith("3" + com.aoapps.payments.CreditCard.UNKNOWN_DIGIT)) {
 				paymentTypeName = PaymentType.AMEX;
 			} else if(cardNumber.startsWith("60")) {
 				paymentTypeName = PaymentType.DISCOVER;
@@ -191,7 +191,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 				|| cardNumber.startsWith("53")
 				|| cardNumber.startsWith("54")
 				|| cardNumber.startsWith("55")
-				|| cardNumber.startsWith("5" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)
+				|| cardNumber.startsWith("5" + com.aoapps.payments.CreditCard.UNKNOWN_DIGIT)
 			) {
 				paymentTypeName = PaymentType.MASTERCARD;
 			} else if(cardNumber.startsWith("4")) {
@@ -216,7 +216,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 			1000,
 			paymentAmount.negate(),
 			paymentType,
-			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
+			com.aoapps.payments.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
@@ -308,7 +308,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 				// Update transaction as failed
 				aoTransaction.declined(
 					Integer.parseInt(transaction.getPersistenceUniqueId()),
-					tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+					tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 				);
 
 				TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
@@ -330,7 +330,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as held
 						aoTransaction.held(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
@@ -376,7 +376,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as declined
 						aoTransaction.declined(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
@@ -396,7 +396,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 									// Update transaction as failed
 									aoTransaction.declined(
 										Integer.parseInt(transaction.getPersistenceUniqueId()),
-										tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+										tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 									);
 
 									TransactionResult.ErrorCode errorCode = authorizationResult.getErrorCode();
@@ -422,7 +422,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 						// Update transaction as successful
 						aoTransaction.approved(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 
 						// Store to request attributes
@@ -470,7 +470,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 		}
 	}
 
-	private void storeCard(CreditCardProcessor rootProcessor, AOServConnectorPrincipal principal, AccountGroup accountGroup, com.aoindustries.creditcards.CreditCard newCreditCard) throws SQLException, IOException {
+	private void storeCard(CreditCardProcessor rootProcessor, AOServConnectorPrincipal principal, AccountGroup accountGroup, com.aoapps.payments.CreditCard newCreditCard) throws SQLException, IOException {
 		rootProcessor.storeCreditCard(
 			principal,
 			accountGroup,
@@ -483,7 +483,7 @@ public class MakePaymentNewCardCompletedAction extends MakePaymentNewCardAction 
 	 *                   Otherwise there is a race condition between the non-root AOServConnector getting the invalidation signal
 	 *                   and this method being called.
 	 */
-	private void setAutomatic(AOServConnector rootConn, com.aoindustries.creditcards.CreditCard newCreditCard, Account account) throws SQLException, IOException {
+	private void setAutomatic(AOServConnector rootConn, com.aoapps.payments.CreditCard newCreditCard, Account account) throws SQLException, IOException {
 		String persistenceUniqueId = newCreditCard.getPersistenceUniqueId();
 		CreditCard creditCard = rootConn.getPayment().getCreditCard().get(Integer.parseInt(persistenceUniqueId));
 		if(creditCard == null) throw new SQLException("Unable to find CreditCard: " + persistenceUniqueId);

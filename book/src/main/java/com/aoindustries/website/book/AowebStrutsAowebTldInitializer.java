@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2017, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.aoindustries.website.book;
 
-import com.aoindustries.validation.ValidationException;
+import com.aoapps.lang.validation.ValidationException;
 import com.semanticcms.tagreference.TagReferenceInitializer;
 
 public class AowebStrutsAowebTldInitializer extends TagReferenceInitializer {

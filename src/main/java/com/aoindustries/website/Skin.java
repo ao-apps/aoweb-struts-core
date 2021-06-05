@@ -22,16 +22,16 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.encoding.Doctype;
-import com.aoindustries.encoding.Serialization;
-import com.aoindustries.encoding.servlet.DoctypeEE;
-import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.LINK;
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.net.AnyURI;
-import com.aoindustries.net.URIEncoder;
-import com.aoindustries.servlet.http.HttpServletUtil;
-import com.aoindustries.web.resources.registry.Registry;
+import com.aoapps.encoding.Doctype;
+import com.aoapps.encoding.Serialization;
+import com.aoapps.encoding.servlet.DoctypeEE;
+import com.aoapps.encoding.servlet.SerializationEE;
+import com.aoapps.html.LINK;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.net.AnyURI;
+import com.aoapps.net.URIEncoder;
+import com.aoapps.servlet.http.HttpServletUtil;
+import com.aoapps.web.resources.registry.Registry;
 import com.aoindustries.website.skintags.PageAttributes;
 import java.io.IOException;
 import java.util.List;
@@ -131,7 +131,7 @@ abstract public class Skin {
 	}
 
 	/**
-	 * Configures the {@linkplain com.aoindustries.web.resources.servlet.RegistryEE.Request request-scope web resources} that this skin uses.
+	 * Configures the {@linkplain com.aoapps.web.resources.servlet.RegistryEE.Request request-scope web resources} that this skin uses.
 	 * <p>
 	 * Implementers should call <code>super.configureResources(…)</code> as a matter of convention, despite this default implementation doing nothing.
 	 * </p>

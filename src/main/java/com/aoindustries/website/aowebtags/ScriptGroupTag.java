@@ -22,11 +22,11 @@
  */
 package com.aoindustries.website.aowebtags;
 
-import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.servlet.jsp.LocalizedJspTagException;
-import com.aoindustries.util.Sequence;
-import com.aoindustries.util.UnsynchronizedSequence;
+import com.aoapps.encoding.MediaWriter;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.lang.util.Sequence;
+import com.aoapps.lang.util.UnsynchronizedSequence;
+import com.aoapps.servlet.jsp.LocalizedJspTagException;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.io.CharArrayWriter;
 import java.io.IOException;

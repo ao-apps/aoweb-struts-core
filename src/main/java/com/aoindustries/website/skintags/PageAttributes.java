@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2007-2009, 2015, 2016, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.lang.LocalizedIllegalArgumentException;
-import com.aoindustries.lang.Strings;
+import com.aoapps.lang.LocalizedIllegalArgumentException;
+import com.aoapps.lang.Strings;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -162,7 +162,7 @@ public class PageAttributes {
 	 * in the order they should be added.
 	 * <p>
 	 * Please note, that any links to stylesheets here are never optimized.  Please
-	 * prefer the {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
+	 * prefer the {@link com.aoapps.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
 	 * </p>
 	 */
 	public List<Link> getLinks() {
@@ -176,7 +176,7 @@ public class PageAttributes {
 	 * in the order they should be added.
 	 * <p>
 	 * Please note, that any links to stylesheets here are never optimized.  Please
-	 * prefer the {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
+	 * prefer the {@link com.aoapps.web.resources.servlet.RegistryEE.Page page-scope web resource registry}.
 	 * </p>
 	 */
 	public void addLink(String rel, String href, String type) {

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2020  AO Industries, Inc.
+ * Copyright (C) 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website;
 
-import com.aoindustries.web.resources.registry.Registry;
-import com.aoindustries.web.resources.servlet.PageServlet;
-import com.aoindustries.web.resources.servlet.RegistryEE;
+import com.aoapps.web.resources.registry.Registry;
+import com.aoapps.web.resources.servlet.PageServlet;
+import com.aoapps.web.resources.servlet.RegistryEE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.Action;
@@ -33,7 +33,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * An action servlet that creates a {@link com.aoindustries.web.resources.servlet.RegistryEE.Page page-scope web resource registry},
+ * An action servlet that creates a {@link com.aoapps.web.resources.servlet.RegistryEE.Page page-scope web resource registry},
  * if not already present.
  *
  * @see  PageServlet
@@ -42,7 +42,7 @@ abstract public class PageAction extends Action {
 
 	/**
 	 * Creates the page-scope registry, if not already present, then invokes
-	 * {@link #execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoindustries.web.resources.registry.Registry)}.
+	 * {@link #execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, com.aoapps.web.resources.registry.Registry)}.
 	 * The registry if left on the request to be available to any forwarding target.
 	 */
 	@Override

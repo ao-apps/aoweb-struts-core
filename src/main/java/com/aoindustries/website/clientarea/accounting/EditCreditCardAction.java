@@ -110,9 +110,9 @@ public class EditCreditCardAction extends PermissionAction {
 
 	protected void initRequestAttributes(HttpServletRequest request, ServletContext context) throws SQLException, IOException {
 		// Build the list of years
-		List<String> expirationYears = new ArrayList<>(1 + com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE);
+		List<String> expirationYears = new ArrayList<>(1 + com.aoapps.payments.CreditCard.EXPIRATION_YEARS_FUTURE);
 		int startYear = new GregorianCalendar().get(Calendar.YEAR);
-		for(int c = 0; c <= com.aoindustries.creditcards.CreditCard.EXPIRATION_YEARS_FUTURE; c++) {
+		for(int c = 0; c <= com.aoapps.payments.CreditCard.EXPIRATION_YEARS_FUTURE; c++) {
 			expirationYears.add(Integer.toString(startYear + c));
 		}
 

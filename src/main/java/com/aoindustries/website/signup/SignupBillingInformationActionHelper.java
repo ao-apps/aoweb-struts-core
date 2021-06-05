@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website.signup;
 
-import com.aoindustries.creditcards.CreditCard;
-import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
+import com.aoapps.html.Union_TBODY_THEAD_TFOOT;
+import com.aoapps.payments.CreditCard;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -22,10 +22,10 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.lang.Strings;
-import com.aoindustries.servlet.jsp.LocalizedJspTagException;
-import com.aoindustries.servlet.jsp.tagext.JspTagUtils;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.lang.Strings;
+import com.aoapps.servlet.jsp.LocalizedJspTagException;
+import com.aoapps.servlet.jsp.tagext.JspTagUtils;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
 import java.io.IOException;

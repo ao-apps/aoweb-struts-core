@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website;
 
+import com.aoapps.lang.validation.ValidationException;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.linux.User;
-import com.aoindustries.validation.ValidationException;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;

@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.signup;
 
+import com.aoapps.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.payment.CountryCode;
-import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;

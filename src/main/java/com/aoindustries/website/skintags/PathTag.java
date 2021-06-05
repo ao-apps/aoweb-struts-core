@@ -22,12 +22,12 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.encoding.MediaType;
-import com.aoindustries.encoding.taglib.EncodingBufferedTag;
-import com.aoindustries.io.buffer.BufferResult;
-import com.aoindustries.net.URIParametersMap;
-import com.aoindustries.net.URIParametersUtils;
-import com.aoindustries.taglib.ParamsAttribute;
+import com.aoapps.encoding.MediaType;
+import com.aoapps.encoding.taglib.EncodingBufferedTag;
+import com.aoapps.io.buffer.BufferResult;
+import com.aoapps.net.URIParametersMap;
+import com.aoapps.net.URIParametersUtils;
+import com.aoapps.taglib.ParamsAttribute;
 import java.io.IOException;
 import java.io.Writer;
 import javax.servlet.jsp.JspException;

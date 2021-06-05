@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.encoding.Doctype;
-import com.aoindustries.encoding.Serialization;
-import com.aoindustries.taglib.HtmlTag;
+import com.aoapps.encoding.Doctype;
+import com.aoapps.encoding.Serialization;
+import com.aoapps.taglib.HtmlTag;
 import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import java.util.ArrayList;

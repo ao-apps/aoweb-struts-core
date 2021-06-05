@@ -22,25 +22,25 @@
  */
 package com.aoindustries.website.signup;
 
+import com.aoapps.encoding.Doctype;
+import com.aoapps.encoding.EncodingContext;
+import com.aoapps.encoding.MediaWriter;
+import com.aoapps.encoding.Serialization;
+import com.aoapps.hodgepodge.io.FindReplaceWriter;
+import com.aoapps.hodgepodge.io.NativeToPosixWriter;
+import com.aoapps.html.Document;
+import com.aoapps.html.any.AnyDocument;
+import com.aoapps.html.any.AnyMETA;
+import com.aoapps.html.any.AnySCRIPT;
+import com.aoapps.html.any.AnySTYLE;
+import com.aoapps.lang.i18n.ThreadLocale;
+import com.aoapps.lang.io.IoUtils;
+import com.aoapps.net.HostAddress;
+import com.aoapps.taglib.GlobalAttributes;
+import com.aoapps.taglib.HtmlTag;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.reseller.Brand;
-import com.aoindustries.encoding.Doctype;
-import com.aoindustries.encoding.EncodingContext;
-import com.aoindustries.encoding.MediaWriter;
-import com.aoindustries.encoding.Serialization;
-import com.aoindustries.html.Document;
-import com.aoindustries.html.any.AnyDocument;
-import com.aoindustries.html.any.AnyMETA;
-import com.aoindustries.html.any.AnySCRIPT;
-import com.aoindustries.html.any.AnySTYLE;
-import com.aoindustries.io.FindReplaceWriter;
-import com.aoindustries.io.IoUtils;
-import com.aoindustries.io.NativeToUnixWriter;
-import com.aoindustries.net.HostAddress;
-import com.aoindustries.taglib.GlobalAttributes;
-import com.aoindustries.taglib.HtmlTag;
-import com.aoindustries.util.i18n.ThreadLocale;
 import com.aoindustries.website.Mailer;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.TextSkin;
@@ -157,7 +157,7 @@ final public class MinimalConfirmationCompletedActionHelper {
 						return Doctype.STRICT;
 					}
 				},
-				NativeToUnixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
+				NativeToPosixWriter.getInstance(new FindReplaceWriter(buffer, "\n", "\r\n"))
 			);
 			document.setAutonli(true);
 			document.setIndent(true);

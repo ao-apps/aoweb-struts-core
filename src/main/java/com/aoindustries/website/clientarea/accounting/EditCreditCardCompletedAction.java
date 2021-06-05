@@ -22,14 +22,14 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoapps.lang.Strings;
+import com.aoapps.payments.CreditCardProcessor;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Profile;
 import com.aoindustries.aoserv.client.payment.CreditCard;
 import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
-import com.aoindustries.creditcards.CreditCardProcessor;
-import com.aoindustries.lang.Strings;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.sql.SQLException;
@@ -125,7 +125,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 			|| !nullOrBlankEquals(editCreditCardForm.getDescription(), creditCard.getDescription())
 		) {
 			// Update all fields except card number and expiration
-			com.aoindustries.creditcards.CreditCard storedCreditCard = CreditCardFactory.getCreditCard(rootCreditCard);
+			com.aoapps.payments.CreditCard storedCreditCard = CreditCardFactory.getCreditCard(rootCreditCard);
 			// Update fields
 			storedCreditCard.setFirstName(editCreditCardForm.getFirstName());
 			storedCreditCard.setLastName(editCreditCardForm.getLastName());
@@ -188,7 +188,7 @@ public class EditCreditCardCompletedAction extends EditCreditCardAction {
 
 		// Set the cardNumber request attribute
 		String cardNumber;
-		if(!GenericValidator.isBlankOrNull(editCreditCardForm.getCardNumber())) cardNumber = com.aoindustries.creditcards.CreditCard.maskCreditCardNumber(editCreditCardForm.getCardNumber());
+		if(!GenericValidator.isBlankOrNull(editCreditCardForm.getCardNumber())) cardNumber = com.aoapps.payments.CreditCard.maskCreditCardNumber(editCreditCardForm.getCardNumber());
 		else cardNumber = creditCard.getCardInfo();
 		request.setAttribute("cardNumber", cardNumber);
 

@@ -1,6 +1,6 @@
 /*
  * aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
- * Copyright (C) 2009, 2016, 2020  AO Industries, Inc.
+ * Copyright (C) 2009, 2016, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -31,8 +31,8 @@ package com.aoindustries.website;
  */
 final public class SiteResources {
 
-	public static final com.aoindustries.i18n.Resources SITE_RESOURCES =
-		com.aoindustries.i18n.Resources.getResources(SiteResources.class.getPackage(), "SiteApplicationResources");
+	public static final com.aoapps.lang.i18n.Resources SITE_RESOURCES =
+		com.aoapps.lang.i18n.Resources.getResources(SiteResources.class.getPackage(), "SiteApplicationResources");
 
 	/**
 	 * Make no instances.

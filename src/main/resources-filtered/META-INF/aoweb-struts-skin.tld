@@ -37,9 +37,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			tags, and validate the output of nested tags.  For example,
 			<a href="https://oss.aoapps.com/taglib/ao.tld/tag-message">&lt;ao:message&gt;</a> within
 			<a href="@{project.url}aoweb-struts-skin.tld/tag-description">&lt;skin:description&gt;</a> will write its output
-			encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoindustries/encoding/MediaType.html#TEXT">TEXT</a>,
+			encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoapps/encoding/MediaType.html#TEXT">TEXT</a>,
 			while within <a href="@{project.url}aoweb-struts-skin.tld/tag-content">&lt;skin:content&gt;</a> (of type "text/html") will write its
-			output encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoindustries/encoding/MediaType.html#XHTML">XHTML</a>.
+			output encoded as <a href="https://oss.aoapps.com/encoding/apidocs/com/aoapps/encoding/MediaType.html#XHTML">XHTML</a>.
 		</p>
 		<p>
 			This suite includes, but is not limited to:
@@ -505,7 +505,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2021-03-15T02:17:03-05:00" -->
+		<!-- dateModified="2021-06-01T03:18:06-05:00" -->
 		<description><![CDATA[
 			<p>
 				Sets up the request and response, then writes all of the HTML
@@ -527,7 +527,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Use the serialization active on the current request.</li>
 					<li>
 						Use the application <a rel="nofollow" href="@{javadoc.link.javaee}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
-						<code>com.aoindustries.encoding.Serialization.default</code>
+						<code>com.aoapps.encoding.Serialization.default</code>
 						that allows an application to control the selection of HTML versus XHTML.
 					</li>
 					<li>
@@ -560,7 +560,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Use the doctype active on the current request.</li>
 					<li>
 						Use the application <a rel="nofollow" href="@{javadoc.link.javaee}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
-						<code>com.aoindustries.encoding.Doctype.default</code>
+						<code>com.aoapps.encoding.Doctype.default</code>
 						that allows an application to control the default doctype.
 					</li>
 					<li>
@@ -585,7 +585,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Use the autonli setting active on the current request.</li>
 					<li>
 						Use the application <a rel="nofollow" href="@{javadoc.link.javaee}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
-						<code>com.aoindustries.html.servlet.DocumentEE.autonli</code>
+						<code>com.aoapps.html.servlet.DocumentEE.autonli</code>
 						that allows an application to control the default autonli setting.
 					</li>
 					<li>
@@ -610,7 +610,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 					<li>Use the indent setting active on the current request.</li>
 					<li>
 						Use the application <a rel="nofollow" href="@{javadoc.link.javaee}javax/servlet/ServletContext.html#getInitParameter(java.lang.String)">context-param</a>
-						<code>com.aoindustries.html.servlet.DocumentEE.indent</code>
+						<code>com.aoapps.html.servlet.DocumentEE.indent</code>
 						that allows an application to control the default indent setting.
 					</li>
 					<li>

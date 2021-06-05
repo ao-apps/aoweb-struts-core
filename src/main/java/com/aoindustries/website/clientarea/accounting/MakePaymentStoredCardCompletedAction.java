@@ -22,6 +22,15 @@
  */
 package com.aoindustries.website.clientarea.accounting;
 
+import com.aoapps.lang.i18n.Money;
+import com.aoapps.lang.validation.ValidationException;
+import com.aoapps.net.URIEncoder;
+import com.aoapps.payments.AuthorizationResult;
+import com.aoapps.payments.CaptureResult;
+import com.aoapps.payments.CreditCardProcessor;
+import com.aoapps.payments.TokenizedCreditCard;
+import com.aoapps.payments.Transaction;
+import com.aoapps.payments.TransactionRequest;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.account.Account;
 import com.aoindustries.aoserv.client.billing.Currency;
@@ -33,15 +42,6 @@ import com.aoindustries.aoserv.creditcards.AOServConnectorPrincipal;
 import com.aoindustries.aoserv.creditcards.AccountGroup;
 import com.aoindustries.aoserv.creditcards.CreditCardFactory;
 import com.aoindustries.aoserv.creditcards.CreditCardProcessorFactory;
-import com.aoindustries.creditcards.AuthorizationResult;
-import com.aoindustries.creditcards.CaptureResult;
-import com.aoindustries.creditcards.CreditCardProcessor;
-import com.aoindustries.creditcards.TokenizedCreditCard;
-import com.aoindustries.creditcards.Transaction;
-import com.aoindustries.creditcards.TransactionRequest;
-import com.aoindustries.net.URIEncoder;
-import com.aoindustries.util.i18n.Money;
-import com.aoindustries.validation.ValidationException;
 import com.aoindustries.website.SiteSettings;
 import com.aoindustries.website.Skin;
 import java.math.BigDecimal;
@@ -173,7 +173,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			if(
 				cardInfo.startsWith("34")
 				|| cardInfo.startsWith("37")
-				|| cardInfo.startsWith("3" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)
+				|| cardInfo.startsWith("3" + com.aoapps.payments.CreditCard.UNKNOWN_DIGIT)
 			) {
 				paymentTypeName = PaymentType.AMEX;
 			} else if(cardInfo.startsWith("60")) {
@@ -184,7 +184,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				|| cardInfo.startsWith("53")
 				|| cardInfo.startsWith("54")
 				|| cardInfo.startsWith("55")
-				|| cardInfo.startsWith("5" + com.aoindustries.creditcards.CreditCard.UNKNOWN_DIGIT)
+				|| cardInfo.startsWith("5" + com.aoapps.payments.CreditCard.UNKNOWN_DIGIT)
 			) {
 				paymentTypeName = PaymentType.MASTERCARD;
 			} else if(cardInfo.startsWith("4")) {
@@ -209,7 +209,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 			1000,
 			paymentAmount.negate(),
 			paymentType,
-			com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(cardInfo),
+			com.aoapps.payments.CreditCard.getCardNumberDisplay(cardInfo),
 			rootAoProcessor,
 			com.aoindustries.aoserv.client.billing.Transaction.WAITING_CONFIRMATION
 		);
@@ -306,7 +306,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 				// Update transaction as failed
 				aoTransaction.declined(
 					Integer.parseInt(transaction.getPersistenceUniqueId()),
-					tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+					tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 				);
 				// Get the list of active credit cards stored for this account
 				List<CreditCard> allCreditCards = account.getCreditCards();
@@ -328,7 +328,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 					{
 						aoTransaction.held(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						request.setAttribute("account", account);
 						request.setAttribute("creditCard", creditCard);
@@ -342,7 +342,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						// Update transaction as declined
 						aoTransaction.declined(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						// Get the list of active credit cards stored for this account
 						List<CreditCard> allCreditCards = account.getCreditCards();
@@ -370,7 +370,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 									// Update transaction as failed
 									aoTransaction.declined(
 										Integer.parseInt(transaction.getPersistenceUniqueId()),
-										tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+										tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 									);
 									// Get the list of active credit cards stored for this account
 									List<CreditCard> allCreditCards = account.getCreditCards();
@@ -397,7 +397,7 @@ public class MakePaymentStoredCardCompletedAction extends MakePaymentStoredCardA
 						// Update transaction as successful
 						aoTransaction.approved(
 							Integer.parseInt(transaction.getPersistenceUniqueId()),
-							tokenizedCreditCard == null ? null : com.aoindustries.creditcards.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
+							tokenizedCreditCard == null ? null : com.aoapps.payments.CreditCard.getCardNumberDisplay(tokenizedCreditCard.getReplacementMaskedCardNumber())
 						);
 						request.setAttribute("account", account);
 						request.setAttribute("creditCard", creditCard);

@@ -22,13 +22,13 @@
  */
 package com.aoindustries.website.signup;
 
+import com.aoapps.html.Union_TBODY_THEAD_TFOOT;
+import com.aoapps.lang.i18n.Money;
+import com.aoapps.lang.i18n.Monies;
 import com.aoindustries.aoserv.client.AOServConnector;
 import com.aoindustries.aoserv.client.billing.PackageDefinition;
 import com.aoindustries.aoserv.client.billing.PackageDefinitionLimit;
 import com.aoindustries.aoserv.client.billing.Resource;
-import com.aoindustries.html.Union_TBODY_THEAD_TFOOT;
-import com.aoindustries.util.i18n.Money;
-import com.aoindustries.util.i18n.Monies;
 import com.aoindustries.website.SiteSettings;
 import static com.aoindustries.website.signup.Resources.PACKAGE_RESOURCES;
 import java.io.IOException;

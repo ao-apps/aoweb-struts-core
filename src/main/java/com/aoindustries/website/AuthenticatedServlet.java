@@ -22,8 +22,8 @@
  */
 package com.aoindustries.website;
 
+import com.aoapps.net.URIEncoder;
 import com.aoindustries.aoserv.client.AOServConnector;
-import com.aoindustries.net.URIEncoder;
 import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

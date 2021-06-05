@@ -22,9 +22,9 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.util.Sequence;
-import com.aoindustries.util.UnsynchronizedSequence;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.lang.util.Sequence;
+import com.aoapps.lang.util.UnsynchronizedSequence;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

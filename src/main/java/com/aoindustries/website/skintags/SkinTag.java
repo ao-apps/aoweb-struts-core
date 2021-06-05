@@ -22,16 +22,16 @@
  */
 package com.aoindustries.website.skintags;
 
-import com.aoindustries.encoding.Doctype;
-import com.aoindustries.encoding.Serialization;
-import com.aoindustries.encoding.servlet.DoctypeEE;
-import com.aoindustries.encoding.servlet.SerializationEE;
-import com.aoindustries.html.any.AnyDocument;
-import com.aoindustries.html.servlet.DocumentEE;
-import com.aoindustries.lang.LocalizedIllegalArgumentException;
-import com.aoindustries.servlet.ServletUtil;
-import com.aoindustries.servlet.jsp.LocalizedJspTagException;
-import com.aoindustries.taglib.HtmlTag;
+import com.aoapps.encoding.Doctype;
+import com.aoapps.encoding.Serialization;
+import com.aoapps.encoding.servlet.DoctypeEE;
+import com.aoapps.encoding.servlet.SerializationEE;
+import com.aoapps.html.any.AnyDocument;
+import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.lang.LocalizedIllegalArgumentException;
+import com.aoapps.servlet.ServletUtil;
+import com.aoapps.servlet.jsp.LocalizedJspTagException;
+import com.aoapps.taglib.HtmlTag;
 import com.aoindustries.website.Constants;
 import static com.aoindustries.website.Resources.PACKAGE_RESOURCES;
 import com.aoindustries.website.Skin;
