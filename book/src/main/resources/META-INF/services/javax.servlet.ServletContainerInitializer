@@ -1,6 +1,6 @@
 #
 # aoweb-struts-core - Core API for legacy Struts-based site framework with AOServ Platform control panels.
-# Copyright (C) 2016, 2020  AO Industries, Inc.
+# Copyright (C) 2016, 2020, 2021  AO Industries, Inc.
 #     support@aoindustries.com
 #     7262 Bull Pen Cir
 #     Mobile, AL 36695
@@ -21,5 +21,5 @@
 # along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-com.aoindustries.website.book.AowebStrutsAowebTldInitializer
-com.aoindustries.website.book.AowebStrutsSkinTldInitializer
+com.aoindustries.web.struts.book.AowebStrutsAowebTldInitializer
+com.aoindustries.web.struts.book.AowebStrutsSkinTldInitializer

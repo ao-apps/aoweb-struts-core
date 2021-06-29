@@ -33,11 +33,11 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 
 	<!-- Filter to write selective values into URL when cookies disabled for SEO purposes. -->
 	<filter>
-		<filter-name>com.aoindustries.website.SessionFilter</filter-name>
-		<filter-class>com.aoindustries.website.SessionFilter</filter-class>
+		<filter-name>com.aoindustries.web.struts.SessionFilter</filter-name>
+		<filter-class>com.aoindustries.web.struts.SessionFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>com.aoindustries.website.SessionFilter</filter-name>
+		<filter-name>com.aoindustries.web.struts.SessionFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>

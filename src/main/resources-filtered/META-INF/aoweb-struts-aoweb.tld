@@ -39,12 +39,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	<uri>@{project.url}aoweb-taglib/</uri>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-07T16:29:23-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>Conditionally includes the body if the resources with the provided path exists.</p>
 		]]></description>
 		<name>exists</name>
-		<tag-class>com.aoindustries.website.aowebtags.ExistsTag</tag-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.ExistsTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -58,12 +58,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-07T16:29:23-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>Conditionally includes the body if the resources with the provided path does not exist.</p>
 		]]></description>
 		<name>notExists</name>
-		<tag-class>com.aoindustries.website.aowebtags.NotExistsTag</tag-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.NotExistsTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -77,7 +77,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-10T22:36:09-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Some scripts may benefit by delaying or batching their execution.  This
@@ -87,8 +87,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>scriptGroup</name>
-		<tag-class>com.aoindustries.website.aowebtags.ScriptGroupTag</tag-class>
-		<tei-class>com.aoindustries.website.aowebtags.ScriptGroupTagTEI</tei-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.ScriptGroupTag</tag-class>
+		<tei-class>com.aoindustries.web.struts.aowebtags.ScriptGroupTagTEI</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -112,7 +112,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-10T22:36:09-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -122,12 +122,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>date</name>
-		<tag-class>com.aoindustries.website.aowebtags.DateTag</tag-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.DateTag</tag-class>
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-10T22:36:09-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local date and time.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -137,12 +137,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>dateTime</name>
-		<tag-class>com.aoindustries.website.aowebtags.DateTimeTag</tag-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.DateTimeTag</tag-class>
 		<body-content>JSP</body-content>
 	</tag>
 	<tag>
 		<!-- datePublished="2016-10-07T16:24:47-05:00" -->
-		<!-- dateModified="2016-11-10T22:36:09-06:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Prints a browser-local time.  The body should evaluate to the number of milliseconds since the Epoch.
@@ -152,12 +152,12 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>time</name>
-		<tag-class>com.aoindustries.website.aowebtags.TimeTag</tag-class>
+		<tag-class>com.aoindustries.web.struts.aowebtags.TimeTag</tag-class>
 		<body-content>JSP</body-content>
 	</tag>
 	<function>
 		<!-- datePublished="2019-05-20T20:26:39-05:00" -->
-		<!-- dateModified="2020-06-09T03:12:48-05:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Formats a card number for display.  The card number may be a full or masked format.
@@ -172,13 +172,13 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>getCardNumberDisplay</name>
-		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
+		<function-class>com.aoindustries.web.struts.aowebtags.Functions</function-class>
 		<function-signature>java.lang.String getCardNumberDisplay(java.lang.String)</function-signature>
 		<example><![CDATA[<code>${aoweb:getCardNumberDisplay(cardNumber)}</code>]]></example>
 	</function>
 	<function>
 		<!-- datePublished="2019-05-20T20:26:39-05:00" -->
-		<!-- dateModified="2019-05-31T17:10:03-05:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Formats a card expiration date for display in "MM / YYYY" format.
@@ -194,19 +194,20 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 			</p>
 		]]></description>
 		<name>getExpirationDisplay</name>
-		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
+		<function-class>com.aoindustries.web.struts.aowebtags.Functions</function-class>
 		<function-signature>java.lang.String getExpirationDisplay(java.lang.Byte,java.lang.Short)</function-signature>
 		<example><![CDATA[<code>${aoweb:getExpirationDisplay(expirationMonth,expirationYear)}</code>]]></example>
 	</function>
 	<function>
 		<!-- datePublished="2019-08-10T10:18:30-05:00" -->
+		<!-- dateModified="2021-06-14T02:28:24-05:00" -->
 		<description><![CDATA[
 			<p>
 				Gets the symbol for a currency in the current response locale.
 			</p>
 		]]></description>
 		<name>getCurrencySymbol</name>
-		<function-class>com.aoindustries.website.aowebtags.Functions</function-class>
+		<function-class>com.aoindustries.web.struts.aowebtags.Functions</function-class>
 		<function-signature>java.lang.String getCurrencySymbol(java.util.Currency)</function-signature>
 		<example><![CDATA[<code>${aoweb:getCurrencySymbol(currency)}</code>]]></example>
 	</function>
