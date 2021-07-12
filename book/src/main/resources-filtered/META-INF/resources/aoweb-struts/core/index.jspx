@@ -34,7 +34,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		title="@{documented.name}"
 		description="@{documented.description}"
 		datePublished="2016-10-17T00:09:00-05:00"
-		dateModified="2021-01-13T01:00:37-06:00"
+		dateModified="2021-07-12T13:25:42-05:00"
 	>
 		<core:child page="changelog.jspx" />
 		<core:child page="aoweb-struts-aoweb.tld/" />
@@ -50,6 +50,8 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 				arg.javaeeVersion="@{documented.javaee.version}"
 				arg.semanticVersioning="2.0.0"
 				arg.license="lgpl-3.0"
+				arg.scmUrl="@{project.scm.url}"
+				arg.githubBuildWorkflow="Build"
 			/>
 		</header>
 		<p>
