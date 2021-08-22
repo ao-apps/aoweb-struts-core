@@ -32,11 +32,15 @@ import static com.aoapps.encoding.TextInXhtmlAttributeEncoder.encodeTextInXhtmlA
 import static com.aoapps.encoding.TextInXhtmlEncoder.textInXhtmlEncoder;
 import com.aoapps.encoding.servlet.SerializationEE;
 import com.aoapps.hodgepodge.i18n.EditableResourceBundle;
-import com.aoapps.html.LINK;
-import com.aoapps.html.META;
-import com.aoapps.html.SCRIPT;
-import com.aoapps.html.STYLE;
+import com.aoapps.html.any.AnyLINK;
+import com.aoapps.html.any.AnyMETA;
+import com.aoapps.html.any.AnySCRIPT;
+import com.aoapps.html.any.AnySTYLE;
 import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.html.servlet.FlowContent;
+import com.aoapps.html.servlet.TABLE_c;
+import com.aoapps.html.servlet.TD_c;
+import com.aoapps.html.servlet.TR_c;
 import com.aoapps.html.util.GoogleAnalytics;
 import com.aoapps.html.util.ImagePreload;
 import static com.aoapps.lang.Strings.trimNullIfEmpty;
@@ -48,6 +52,7 @@ import com.aoapps.servlet.lastmodified.AddLastModified;
 import com.aoapps.servlet.lastmodified.LastModifiedUtil;
 import com.aoapps.style.AoStyle;
 import static com.aoapps.taglib.AttributeUtils.appendWidthStyle;
+import static com.aoapps.taglib.AttributeUtils.getWidthStyle;
 import com.aoapps.taglib.GlobalAttributes;
 import com.aoapps.taglib.HtmlTag;
 import com.aoapps.web.resources.registry.Group;
@@ -208,16 +213,16 @@ public class TextSkin extends Skin {
 			// If this is not the default skin, then robots noindex
 			boolean robotsMetaUsed = false;
 			if(!isOkResponseStatus || !getName().equals(skins.get(0).getName())) {
-				document.meta(META.Name.ROBOTS).content("noindex, nofollow").__();
+				document.meta(AnyMETA.Name.ROBOTS).content("noindex, nofollow").__();
 			}
 			if(document.doctype == Doctype.HTML5) {
 				document.meta().charset(resp.getCharacterEncoding()).__();
 			} else {
 				document
-					.meta(META.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__()
+					.meta(AnyMETA.HttpEquiv.CONTENT_TYPE).content(resp.getContentType()).__()
 					// Default style language
-					.meta(META.HttpEquiv.CONTENT_STYLE_TYPE).content(STYLE.Type.TEXT_CSS).__()
-					.meta(META.HttpEquiv.CONTENT_SCRIPT_TYPE).content(SCRIPT.Type.TEXT_JAVASCRIPT).__();
+					.meta(AnyMETA.HttpEquiv.CONTENT_STYLE_TYPE).content(AnySTYLE.Type.TEXT_CSS).__()
+					.meta(AnyMETA.HttpEquiv.CONTENT_SCRIPT_TYPE).content(AnySCRIPT.Type.TEXT_JAVASCRIPT).__();
 			}
 			if(document.doctype == Doctype.HTML5) {
 				GoogleAnalytics.writeGlobalSiteTag(document, trackingId);
@@ -226,18 +231,18 @@ public class TextSkin extends Skin {
 			}
 			// Mobile support
 			document
-				.meta(META.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__()
-				.meta(META.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__()
-				.meta(META.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__();
+				.meta(AnyMETA.Name.VIEWPORT).content("width=device-width, initial-scale=1.0").__()
+				.meta(AnyMETA.Name.APPLE_MOBILE_WEB_APP_CAPABLE).content("yes").__()
+				.meta(AnyMETA.Name.APPLE_MOBILE_WEB_APP_STATUS_BAR_STYLE).content("black").__();
 			// Authors
 			// TODO: dcterms copyright
 			String author = pageAttributes.getAuthor();
 			if(author != null && !(author = author.trim()).isEmpty()) {
-				document.meta(META.Name.AUTHOR).content(author).__();
+				document.meta(AnyMETA.Name.AUTHOR).content(author).__();
 			}
 			String authorHref = pageAttributes.getAuthorHref();
 			if(authorHref != null && !(authorHref = authorHref.trim()).isEmpty()) {
-				document.link(LINK.Rel.AUTHOR).href(
+				document.link(AnyLINK.Rel.AUTHOR).href(
 					// TODO: RFC 3986-only always?
 					resp.encodeURL(
 						URIEncoder.encodeURI(authorHref)
@@ -257,11 +262,11 @@ public class TextSkin extends Skin {
 			);
 			String description = pageAttributes.getDescription();
 			if(description != null && !(description = description.trim()).isEmpty()) {
-				document.meta(META.Name.DESCRIPTION).content(description).__();
+				document.meta(AnyMETA.Name.DESCRIPTION).content(description).__();
 			}
 			String keywords = pageAttributes.getKeywords();
 			if(keywords != null && !(keywords = keywords.trim()).isEmpty()) {
-				document.meta(META.Name.KEYWORDS).content(keywords).__();
+				document.meta(AnyMETA.Name.KEYWORDS).content(keywords).__();
 			}
 			// TODO: Review HTML 4/HTML 5 differences from here
 			// If this is an authenticated page, redirect to session timeout after one hour
@@ -269,7 +274,7 @@ public class TextSkin extends Skin {
 			HttpSession session = req.getSession(false);
 			//if(session == null) session = req.getSession(false); // Get again, just in case of authentication
 			if(isOkResponseStatus && aoConn != null && session != null) {
-				document.meta(META.HttpEquiv.REFRESH).content(content -> {
+				document.meta(AnyMETA.HttpEquiv.REFRESH).content(content -> {
 					content.write(Integer.toString(Math.max(60, session.getMaxInactiveInterval() - 60)));
 					content.write(";URL=");
 					content.write(
@@ -578,7 +583,7 @@ public class TextSkin extends Skin {
 						AddLastModified.AUTO,
 						false,
 						// TODO: Support canonical flag on link
-						LINK.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
+						AnyLINK.Rel.CANONICAL.toString().equalsIgnoreCase(rel)
 					)
 				)
 				.type(link.getType())
@@ -734,57 +739,93 @@ public class TextSkin extends Skin {
 	}
 
 	@Override
-	public void beginLightArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String align, String width, boolean nowrap) throws JspException, IOException {
+	public <
+		PC extends FlowContent<PC>,
+		__ extends FlowContent<__>
+	> __ beginLightArea(
+		HttpServletRequest req,
+		HttpServletResponse resp,
+		PC pc,
+		String align,
+		String width,
+		boolean nowrap
+	) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
-		width = trimNullIfEmpty(width);
-		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
-		if(width != null) {
-			document.out.write(';');
-			appendWidthStyle(width, document.out);
-		}
-		document.out.write("\">\n"
-		+ "  <tr>\n"
-		+ "    <td class=\"aoLightRow\" style=\"padding:4px");
-		if(align != null) {
-			document.out.write(";text-align:");
-			encodeTextInXhtmlAttribute(align, document.out);
-		}
-		if(nowrap) document.out.write(";white-space:nowrap;");
-		document.out.write("\">");
+		TD_c<TR_c<TABLE_c<PC>>> td = pc.table()
+			.clazz("ao-packed")
+			.style("border:5px outset #a0a0a0", getWidthStyle(width))
+		._c()
+			.tr_c()
+				.td()
+					.clazz("aoLightRow")
+					.style(
+						"padding:4px",
+						(align != null) ? ("text-align:" + align) : null,
+						nowrap ? "white-space:nowrap" : null
+					)
+				._c();
+		@SuppressWarnings("unchecked")
+		__ lightArea = (__)td;
+		return lightArea;
 	}
 
 	@Override
-	public void endLightArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
-		document.out.write("</td>\n"
-		+ "  </tr>\n"
-		+ "</table>\n");
+	public void endLightArea(
+		HttpServletRequest req,
+		HttpServletResponse resp,
+		FlowContent<?> lightArea
+	) throws JspException, IOException {
+		@SuppressWarnings("unchecked")
+		TD_c<? extends TR_c<? extends TABLE_c<?>>> td = (TD_c)lightArea;
+					td
+				.__()
+			.__()
+		.__();
 	}
 
 	@Override
-	public void beginWhiteArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document, String align, String width, boolean nowrap) throws JspException, IOException {
+	public <
+		PC extends FlowContent<PC>,
+		__ extends FlowContent<__>
+	> __ beginWhiteArea(
+		HttpServletRequest req,
+		HttpServletResponse resp,
+		PC pc,
+		String align,
+		String width,
+		boolean nowrap
+	) throws JspException, IOException {
 		align = trimNullIfEmpty(align);
-		width = trimNullIfEmpty(width);
-		document.out.write("<table class=\"ao-packed\" style=\"border:5px outset #a0a0a0");
-		if(width != null) {
-			document.out.write(';');
-			appendWidthStyle(width, document.out);
-		}
-		document.out.write("\">\n"
-		+ "  <tr>\n"
-		+ "    <td class=\"aoWhiteRow\" style=\"padding:4px;");
-		if(align != null) {
-			document.out.write(";text-align:");
-			encodeTextInXhtmlAttribute(align, document.out);
-		}
-		if(nowrap) document.out.write(" white-space:nowrap;");
-		document.out.write("\">");
+		TD_c<TR_c<TABLE_c<PC>>> td = pc.table()
+			.clazz("ao-packed")
+			.style("border:5px outset #a0a0a0", getWidthStyle(width))
+		._c()
+			.tr_c()
+				.td()
+					.clazz("aoWhiteRow")
+					.style(
+						"padding:4px",
+						(align != null) ? ("text-align:" + align) : null,
+						nowrap ? "white-space:nowrap" : null
+					)
+				._c();
+		@SuppressWarnings("unchecked")
+		__ whiteArea = (__)td;
+		return whiteArea;
 	}
 
 	@Override
-	public void endWhiteArea(HttpServletRequest req, HttpServletResponse resp, DocumentEE document) throws JspException, IOException {
-		document.out.write("</td>\n"
-		+ "  </tr>\n"
-		+ "</table>\n");
+	public void endWhiteArea(
+		HttpServletRequest req,
+		HttpServletResponse resp,
+		FlowContent<?> whiteArea
+	) throws JspException, IOException {
+		@SuppressWarnings("unchecked")
+		TD_c<? extends TR_c<? extends TABLE_c<?>>> td = (TD_c)whiteArea;
+					td
+				.__()
+			.__()
+		.__();
 	}
 
 	@Override

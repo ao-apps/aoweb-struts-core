@@ -23,6 +23,7 @@
 package com.aoindustries.web.struts.skintags;
 
 import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.html.servlet.FlowContent;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,7 @@ public class LightAreaTag extends PageAttributesBodyTag {
 	private String align;
 	private String width;
 	private boolean nowrap;
+	private FlowContent<?> lightArea;
 
 	public LightAreaTag() {
 		init();
@@ -50,13 +52,14 @@ public class LightAreaTag extends PageAttributesBodyTag {
 		align = null;
 		width = null;
 		nowrap = false;
+		lightArea = null;
 	}
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).beginLightArea(
+		lightArea = SkinTag.getSkin(pageContext).beginLightArea(
 			req,
 			resp,
 			new DocumentEE(
@@ -77,19 +80,11 @@ public class LightAreaTag extends PageAttributesBodyTag {
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
-			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			assert lightArea != null;
 			SkinTag.getSkin(pageContext).endLightArea(
-				req,
-				resp,
-				new DocumentEE(
-					pageContext.getServletContext(),
-					req,
-					resp,
-					pageContext.getOut(),
-					false, // Do not add extra newlines to JSP
-					false  // Do not add extra indentation to JSP
-				)
+				(HttpServletRequest)pageContext.getRequest(),
+				(HttpServletResponse)pageContext.getResponse(),
+				lightArea
 			);
 			return EVAL_PAGE;
 		} finally {

@@ -23,6 +23,7 @@
 package com.aoindustries.web.struts.skintags;
 
 import com.aoapps.html.servlet.DocumentEE;
+import com.aoapps.html.servlet.FlowContent;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ import javax.servlet.jsp.JspException;
  *
  * @author  AO Industries, Inc.
  */
+// TODO: Convert these to TryCatchFinally when have init()
 public class WhiteAreaTag extends PageAttributesBodyTag {
 
 	private static final long serialVersionUID = 1L;
@@ -40,6 +42,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	private String align;
 	private String width;
 	private boolean nowrap;
+	private FlowContent<?> whiteArea;
 
 	public WhiteAreaTag() {
 		init();
@@ -49,13 +52,14 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 		align = null;
 		width = null;
 		nowrap = false;
+		whiteArea = null;
 	}
 
 	@Override
 	public int doStartTag(PageAttributes pageAttributes) throws JspException, IOException {
 		HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
 		HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
-		SkinTag.getSkin(pageContext).beginWhiteArea(
+		whiteArea = SkinTag.getSkin(pageContext).beginWhiteArea(
 			req,
 			resp,
 			new DocumentEE(
@@ -76,19 +80,11 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	@Override
 	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
-			HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-			HttpServletResponse resp = (HttpServletResponse)pageContext.getResponse();
+			assert whiteArea != null;
 			SkinTag.getSkin(pageContext).endWhiteArea(
-				req,
-				resp,
-				new DocumentEE(
-					pageContext.getServletContext(),
-					req,
-					resp,
-					pageContext.getOut(),
-					false, // Do not add extra newlines to JSP
-					false  // Do not add extra indentation to JSP
-				)
+				(HttpServletRequest)pageContext.getRequest(),
+				(HttpServletResponse)pageContext.getResponse(),
+				whiteArea
 			);
 			return EVAL_PAGE;
 		} finally {
