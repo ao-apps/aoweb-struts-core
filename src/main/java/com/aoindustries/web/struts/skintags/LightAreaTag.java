@@ -81,6 +81,7 @@ public class LightAreaTag extends PageAttributesBodyTag {
 	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			assert lightArea != null;
+			lightArea.getDocument().setOut(pageContext.getOut());
 			SkinTag.getSkin(pageContext).endLightArea(
 				(HttpServletRequest)pageContext.getRequest(),
 				(HttpServletResponse)pageContext.getResponse(),

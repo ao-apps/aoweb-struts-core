@@ -81,6 +81,7 @@ public class WhiteAreaTag extends PageAttributesBodyTag {
 	public int doEndTag(PageAttributes pageAttributes) throws JspException, IOException {
 		try {
 			assert whiteArea != null;
+			whiteArea.getDocument().setOut(pageContext.getOut());
 			SkinTag.getSkin(pageContext).endWhiteArea(
 				(HttpServletRequest)pageContext.getRequest(),
 				(HttpServletResponse)pageContext.getResponse(),
