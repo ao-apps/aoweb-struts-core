@@ -34,7 +34,7 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		title="@{documented.name}"
 		description="@{documented.description}"
 		datePublished="2016-10-17T00:09:00-05:00"
-		dateModified="2021-07-16T03:48:08-05:00"
+		dateModified="2021-09-05T20:46:19-05:00"
 	>
 		<core:child page="changelog.jspx" />
 		<core:child page="aoweb-struts-aoweb.tld/" />
@@ -43,9 +43,9 @@ along with aoweb-struts-core.  If not, see <http://www.gnu.org/licenses />.
 		<header>
 			<ao:include
 				page="/ao-badges/badges.inc.jspx"
-				arg.projectStatus="current-stable"
-				arg.managementStatus="production"
-				arg.packagingStatus="active"
+				arg.projectStatus="end-of-life"
+				arg.managementStatus="cleanup"
+				arg.packagingStatus="unsupported"
 				arg.javaseVersion="@{documented.javase.version}"
 				arg.javaeeVersion="@{documented.javaee.version}"
 				arg.semanticVersioning="2.0.0"

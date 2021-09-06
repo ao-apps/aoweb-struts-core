@@ -1,8 +1,8 @@
 # [<img src="ao-logo.png" alt="AO Logo" width="35" height="40">](https://github.com/aoindustries) [AOWeb Struts](https://github.com/aoindustries/aoweb-struts) / [Core](https://github.com/aoindustries/aoweb-struts-core)
 
-[![project: current stable](https://aoindustries.com/ao-badges/project-current-stable.svg)](https://aoindustries.com/life-cycle#project-current-stable)
-[![management: production](https://aoindustries.com/ao-badges/management-production.svg)](https://aoindustries.com/life-cycle#management-production)
-[![packaging: active](https://aoindustries.com/ao-badges/packaging-active.svg)](https://aoindustries.com/life-cycle#packaging-active)  
+[![project: end of life](https://aoindustries.com/ao-badges/project-end-of-life.svg)](https://aoindustries.com/life-cycle#project-end-of-life)
+[![management: cleanup](https://aoindustries.com/ao-badges/management-cleanup.svg)](https://aoindustries.com/life-cycle#management-cleanup)
+[![packaging: unsupported](https://aoindustries.com/ao-badges/packaging-unsupported.svg)](https://aoindustries.com/life-cycle#packaging-unsupported)  
 [![java: &gt;= 11](https://aoindustries.com/ao-badges/java-11.svg)](https://docs.oracle.com/en/java/javase/11/docs/api/)
 [![java ee: &gt;= 7](https://aoindustries.com/ao-badges/javaee-7.svg)](https://docs.oracle.com/javaee/7/api/)
 [![semantic versioning: 2.0.0](https://aoindustries.com/ao-badges/semver-2.0.0.svg)](http://semver.org/spec/v2.0.0.html)
@@ -18,6 +18,11 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?branch=master&project=com.aoapps.platform%3Aaoapps-brands-core&metric=coverage)](https://sonarcloud.io/component_measures?branch=master&id=com.aoapps.platform%3Aaoapps-brands-core&metric=Coverage)
 
 Core API for legacy Struts-based site framework with [AOServ Platform](https://aoindustries.com/aoserv/) control panels.
+
+## End of Life
+This module is end-of-life and has been merged into [AOWeb Struts](https://github.com/aoindustries/aoweb-struts) directly.
+This streamlines development by allowing automatic redeploys of AOWeb Struts.  Furthermore, AOWeb Struts is now used via
+Maven overlay instead of jar dependencies.
 
 ## Project Links
 * [Project Home](https://aoindustries.com/aoweb-struts/core/)
